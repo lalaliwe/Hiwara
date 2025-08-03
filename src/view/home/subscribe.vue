@@ -5,7 +5,7 @@ const tab = ref(0)
 </script>
 <template>
   <div class="container">
-    <div>
+    <div class="tabs">
       <v-layout>
         <v-tabs v-model="tab" align-tabs="center" color="#00796B" base-color="#616161" grow>
           <v-tab :value="0">视频</v-tab>
@@ -50,6 +50,10 @@ const tab = ref(0)
       overflow: auto;
     }
   }
+}
+
+.tabs {
+  background-color: #fff;
 }
 
 .content {

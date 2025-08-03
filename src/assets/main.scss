@@ -7,19 +7,17 @@ body {
   height: 100%;
   // scrollbar-width: none;
   margin: 0;
-  padding: 
-    env(safe-area-inset-top) 
-    env(safe-area-inset-right) 
-    env(safe-area-inset-bottom) 
-    env(safe-area-inset-left);
+  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+  background-color: #00796b;
 }
 
 #app {
   height: 100%;
+  background-color: #fff;
 }
 
 @font-face {
   font-display: block;
   font-family: riwenlogo;
-  src: url('../assets/fonts/riwenlogo.ttf');
+  src: url("../assets/fonts/riwenlogo.ttf");
 }
