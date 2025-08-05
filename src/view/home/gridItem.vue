@@ -5,7 +5,7 @@ const props = defineProps<{
 }>()
 </script>
 <template>
-  <v-lazy class="grid-item">
+  <div class="grid-item">
     <div>
       <v-img class="preview" cover src="/src/static/img/not-img.jpg">
         <template v-slot:placeholder>
@@ -58,7 +58,7 @@ const props = defineProps<{
         </div>
       </div>
     </div>
-  </v-lazy>
+  </div>
 </template>
 <style lang="scss" scoped>
 .grid-item {
@@ -111,7 +111,7 @@ const props = defineProps<{
     bottom: 0;
     color: #fff;
     // text-shadow: 0.05rem 0.05rem 0.1rem #616161;
-    filter: drop-shadow(0.1rem 0.1rem 0.04rem #616161);
+    filter: drop-shadow(0.05rem 0.05rem 0.05rem #757575);
 
     .duration,
     .imgNum {
