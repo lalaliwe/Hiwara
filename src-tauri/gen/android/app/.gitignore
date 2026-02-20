@@ -1,4 +1,4 @@
-/src/main/java/net/hiwara/qisato/generated
+/src/main/java/com/qisato/hiwara/generated
 /src/main/jniLibs/**/*.so
 /src/main/assets/tauri.conf.json
 /tauri.build.gradle.kts

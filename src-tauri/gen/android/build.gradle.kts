@@ -1,7 +1,5 @@
 buildscript {
     repositories {
-        maven("https://maven.aliyun.com/repository/public/")
-        maven("https://maven.aliyun.com/repository/google/")
         google()
         mavenCentral()
     }
@@ -13,8 +11,6 @@ buildscript {
 
 allprojects {
     repositories {
-        maven("https://maven.aliyun.com/repository/public/")
-        maven("https://maven.aliyun.com/repository/google/")
         google()
         mavenCentral()
     }
@@ -23,3 +19,4 @@ allprojects {
 tasks.register("clean").configure {
     delete("build")
 }
+

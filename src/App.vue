@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import { RouterView } from 'vue-router'
+import topView from './component/topView.vue';
 </script>
 
 <template>
-  <RouterView />
+  <div>
+    <topView />
+  </div>
 </template>
 
-<style scoped>
-</style>
+<style scoped></style>
