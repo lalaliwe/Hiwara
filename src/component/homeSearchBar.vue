@@ -28,8 +28,6 @@
 }
 
 .top-view {
-  position: fixed;
-  top: 0;
   background-color: #00796B;
   color: #fff;
   height: calc(60px + env(safe-area-inset-top, 0));

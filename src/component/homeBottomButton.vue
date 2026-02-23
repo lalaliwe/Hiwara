@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import {
   Video as iconVideo,
   Pic as iconPic,
@@ -7,11 +7,26 @@ import {
   Comments as iconComments,
   User as iconUser
 } from '@icon-park/vue-next';
-const value = ref("subscribe")
+
+// 定义emit事件
+const emit = defineEmits<{
+  (e: 'update:tab', value: string): void
+}>()
+
+const props = defineProps<{
+  modelValue?: string
+}>()
+
+const value = ref(props.modelValue || "subscribe")
 const btnFontSize = ref(24)
+
+// 监听value变化并emit事件
+watch(value, (newValue: string) => {
+  emit('update:tab', newValue)
+})
 </script>
 <template>
-  <v-layout class="bottomView">
+  <v-layout>
     <v-bottom-navigation grow class="bottomNavigation" v-model="value" color="#00796B" :mandatory="true">
       <v-btn value="video">
         <iconVideo theme="outline" :size="btnFontSize" :fill="value === 'video' ? '#00796B' : '#616161'" />
@@ -43,7 +58,6 @@ const btnFontSize = ref(24)
 }
 
 .v-btn {
-  letter-spacing: 0;
   color: #424242;
 }
 </style>

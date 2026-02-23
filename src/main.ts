@@ -21,6 +21,8 @@ import { fas } from '@fortawesome/free-solid-svg-icons'
 import { far } from '@fortawesome/free-regular-svg-icons'
 import { fab } from '@fortawesome/free-brands-svg-icons'
 
+import Hammer from 'hammerjs';
+
 const app = createApp(App);
 
 app.use(router);
@@ -29,4 +31,5 @@ install(app);
 install(app, 'i');
 library.add(fas, far, fab)
 app.component('font-awesome-icon', FontAwesomeIcon);
+app.config.globalProperties.$hammer = Hammer;
 app.mount("#app");
