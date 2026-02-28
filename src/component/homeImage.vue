@@ -4,7 +4,7 @@ import test1Img from '../static/img/test1.jpg';
 import { ref } from 'vue';
 const tab = ref('video');
 const imageList = [];
-for (let i = 0; i < 100; i++) {
+for (let i = 0; i < 20; i++) {
   imageList.push({
     title: `测试标题${i + 1}`,
     img: test1Img,
@@ -26,7 +26,7 @@ for (let i = 0; i < 100; i++) {
     <v-divider></v-divider>
   </div>
   <v-tabs-window v-model="tab" class="tabs-window">
-    <v-tabs-window-item value="image">
+    <v-tabs-window-item value="video">
       <v-infinite-scroll color="#00796B">
         <div class="grid">
           <template v-for="(item, index) in imageList">

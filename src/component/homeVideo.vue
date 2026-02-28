@@ -4,7 +4,7 @@ import test1Img from '../static/img/test1.jpg';
 import { ref } from 'vue';
 const tab = ref('video');
 const videoList = [];
-for (let i = 0; i < 100; i++) {
+for (let i = 0; i < 20; i++) {
   videoList.push({
     title: `测试标题${i + 1}`,
     img: test1Img,

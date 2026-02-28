@@ -1,11 +1,18 @@
 <script setup lang="ts">
 import cardButton from '../component/cardButton.vue';
 import test1Img from '../static/img/test1.jpg';
-import { ref } from 'vue';
+import { ref, onDeactivated, onActivated, onMounted } from 'vue';
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
+
+const videoListView = ref();
+const imageListView = ref();
+
 const tab = ref('video');
-const videoList = [];
+const videoList: { title: string; img: string; author: string; time: string; viewNum: string; likeNum: string; longNum: string; isR18: boolean; }[] = [];
 const imageList = [];
-for (let i = 0; i < 100; i++) {
+for (let i = 0; i < 20; i++) {
   videoList.push({
     title: `测试标题${i + 1}`,
     img: test1Img,
@@ -27,7 +34,35 @@ for (let i = 0; i < 100; i++) {
     isR18: false,
   });
 }
+let videoScrollTop = 0;
+let imageScrollTop = 0;
 
+onDeactivated(() => {
+  // console.log('deactivated');
+});
+onActivated(() => {
+  // console.log('activated');
+  if (videoListView.value && typeof videoListView.value.scrollTo === 'function') {
+    console.log(videoScrollTop);
+    videoListView.value.scrollTo({ top: videoScrollTop });
+  }
+  if (imageListView.value && typeof imageListView.value.scrollTo === 'function') {
+    console.log(imageScrollTop);
+    imageListView.value.scrollTo({ top: imageScrollTop });
+  }
+});
+function handleVideoScroll(event: any): void {
+  // console.log('scroll', event.target.scrollTop);
+  videoScrollTop = event.target.scrollTop;
+}
+function handleImageScroll(event: any): void {
+  // console.log('scroll', event.target.scrollTop);
+  imageScrollTop = event.target.scrollTop;
+}
+function clickCard() {
+  console.log('clickCard');
+  router.push('/player');
+}
 </script>
 <template>
   <div class="tabs">
@@ -39,24 +74,30 @@ for (let i = 0; i < 100; i++) {
   </div>
   <v-tabs-window v-model="tab" class="tabs-window">
     <v-tabs-window-item value="video">
-      <v-infinite-scroll color="#00796B">
-        <div class="grid">
-          <template v-for="(item, index) in videoList">
-            <cardButton type="video" :title="item.title" :img="item.img" :author="item.author" :time="item.time"
-              :viewNum="item.viewNum" :likeNum="item.likeNum" :longNum="item.longNum" :isR18="item.isR18" />
-          </template>
-        </div>
-      </v-infinite-scroll>
+      <div class="list-view" ref="videoListView" @scroll="handleVideoScroll">
+        <v-infinite-scroll color="#00796B">
+          <div class="grid">
+            <template v-for="(item, index) in videoList">
+              <cardButton type="video" :title="item.title" :img="item.img" :author="item.author" :time="item.time"
+                :viewNum="item.viewNum" :likeNum="item.likeNum" :longNum="item.longNum" :isR18="item.isR18"
+                @click="clickCard" />
+            </template>
+          </div>
+        </v-infinite-scroll>
+      </div>
     </v-tabs-window-item>
     <v-tabs-window-item value="image">
-      <v-infinite-scroll color="#00796B">
-        <div class="grid">
-          <template v-for="(item, index) in imageList">
-            <cardButton type="image" :title="item.title" :img="item.img" :author="item.author" :time="item.time"
-              :viewNum="item.viewNum" :likeNum="item.likeNum" :longNum="item.longNum" :isR18="item.isR18" />
-          </template>
-        </div>
-      </v-infinite-scroll>
+      <div class="list-view" ref="imageListView" @scroll="handleImageScroll">
+        <v-infinite-scroll color="#00796B">
+          <div class="grid">
+            <template v-for="(item, index) in imageList">
+              <cardButton type="image" :title="item.title" :img="item.img" :author="item.author" :time="item.time"
+                :viewNum="item.viewNum" :likeNum="item.likeNum" :longNum="item.longNum" :isR18="item.isR18"
+                @click="clickCard" />
+            </template>
+          </div>
+        </v-infinite-scroll>
+      </div>
     </v-tabs-window-item>
   </v-tabs-window>
 </template>
@@ -71,6 +112,10 @@ for (let i = 0; i < 100; i++) {
   }
 
   .v-window-item {
+    height: 100%;
+  }
+
+  .list-view {
     height: 100%;
     overflow: auto;
   }

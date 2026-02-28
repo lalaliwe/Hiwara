@@ -27,7 +27,8 @@ watch(value, (newValue: string) => {
 </script>
 <template>
   <v-layout>
-    <v-bottom-navigation grow class="bottomNavigation" v-model="value" color="#00796B" :mandatory="true">
+    <v-bottom-navigation grow class="bottomNavigation" v-model="value" color="#00796B" :absolute="true"
+      :mandatory="true">
       <v-btn value="video">
         <iconVideo theme="outline" :size="btnFontSize" :fill="value === 'video' ? '#00796B' : '#616161'" />
         <span>视频</span>
@@ -53,8 +54,8 @@ watch(value, (newValue: string) => {
 </template>
 <style lang="scss" scoped>
 .bottomNavigation {
-  padding-bottom: env(safe-area-inset-bottom, 0);
-  height: 75px !important;
+  height: calc(60px + env(safe-area-inset-bottom, 0)) !important;
+  padding: 0 env(safe-area-inset-right, 0) env(safe-area-inset-bottom, 0) env(safe-area-inset-left, 0);
 }
 
 .v-btn {
