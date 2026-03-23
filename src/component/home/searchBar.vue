@@ -1,18 +1,26 @@
 <script setup lang="ts">
-
+import { ref } from 'vue';
+const isAI = ref(false)
+function toggleAI() {
+  isAI.value = !isAI.value
+}
 </script>
 
 <template>
   <div class="top-view">
     <div class="avatar">
-      <img src="../static/img/default-avatar.jpg" alt="Avatar" />
+      <img src="../../static/img/default-avatar.jpg" alt="Avatar" />
     </div>
     <div class="search">
-
       <div class="input"></div>
     </div>
-    <div class="logo">
-      Hiwara
+    <div class="logo" @click="toggleAI">
+      <span v-if="isAI">
+        Hiwara AI
+      </span>
+      <span v-else>
+        Hiwara
+      </span>
     </div>
   </div>
 </template>

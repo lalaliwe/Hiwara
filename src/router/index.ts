@@ -46,7 +46,7 @@ router.beforeEach((to, from) => {
     // 前进时保留来源页面
     if (from.name && !cachedPages.includes(from.name as string)) {
       cachedPages.push(from.name as string)
-      console.log('✅ 路由守卫：前进导航，缓存页面:', from.name)
+      // console.log('✅ 路由守卫：前进导航，缓存页面:', from.name)
     }
   } else if (toDepth < fromDepth) {
     // 后退导航
@@ -59,7 +59,7 @@ router.beforeEach((to, from) => {
       return pageDepth <= toDepth
     })
     if (oldLength !== cachedPages.length) {
-      console.log('✅ 路由守卫：后退导航，清理缓存')
+      // console.log('✅ 路由守卫：后退导航，清理缓存')
     }
   } else {
     // 同级导航
@@ -78,7 +78,7 @@ export function getCachedPages(): string[] {
       pages.push('Home')
     }
   }
-  console.log('✅ 获取缓存页面列表:', pages)
+  // console.log('✅ 获取缓存页面列表:', pages)
   return pages
 }
 

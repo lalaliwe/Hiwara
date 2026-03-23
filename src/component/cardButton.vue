@@ -3,6 +3,9 @@ import notImg from '../static/img/not-img.jpg';
 import placeholder from '../static/img/placeholder.png';
 import placeholderDark from '../static/img/placeholder-dark.png';
 import { computed } from 'vue';
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
 
 const props = defineProps({
   type: { type: String, default: 'video' },
@@ -79,10 +82,16 @@ const formatNumber = (numStr: string): string => {
 const formattedViewNum = computed(() => formatNumber(props.viewNum || '0'));
 const formattedLikeNum = computed(() => formatNumber(props.likeNum || '0'));
 const formattedLongNum = computed(() => formatNumber(props.longNum || '0'));
+
+function clickCard() {
+  if (props.type === 'video') {
+    router.push('/player');
+  }
+}
 </script>
 
 <template>
-  <v-card v-ripple>
+  <v-card v-ripple @click="clickCard">
     <v-img :src="img" cover class="card-image">
       <div class="info1">
         <div></div>
@@ -178,7 +187,8 @@ const formattedLongNum = computed(() => formatNumber(props.longNum || '0'));
       font-size: 0.7rem;
       color: #fff;
       text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
-      svg{
+
+      svg {
         filter: drop-shadow(1px 1px 1px rgba(0, 0, 0, 0.4));
       }
     }

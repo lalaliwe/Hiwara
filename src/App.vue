@@ -20,7 +20,7 @@ const updateCachedPages = async () => {
   await nextTick()
   const pages = getCachedPages()
   cachedPages.value = pages
-  console.log('✅ App.vue缓存更新:', pages)
+  // console.log('✅ App.vue缓存更新:', pages)
 }
 
 // 监听路由变化

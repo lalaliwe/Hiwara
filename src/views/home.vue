@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import homeSearchBar from '../component/homeSearchBar.vue';
-import homeBottomButton from '../component/homeBottomButton.vue';
-import homeVideo from '../component/homeVideo.vue';
-import homeImage from '../component/homeImage.vue';
-import homeSubscribe from '../component/homeSubscribe.vue';
-import homeForum from '../component/homeForum.vue';
-import homeMy from '../component/homeMy.vue';
+import homeSearchBar from '../component/home/searchBar.vue';
+import homeBottomButton from '../component/home/bottomButton.vue';
+import homeVideo from '../component/home/video.vue';
+import homeImage from '../component/home/image.vue';
+import homeSubscribe from '../component/home/subscribe.vue';
+import homeForum from '../component/home/forum.vue';
+import homeMy from '../component/home/my.vue';
 import { ref, onMounted, onBeforeUnmount } from 'vue';
 import { on } from 'hammerjs';
 
@@ -17,17 +17,16 @@ defineOptions({
 const isTab = ref("subscribe");
 
 onMounted(() => {
-  console.log('✅ Home mounted');
+  // console.log('✅ Home mounted');
 })
 
 onBeforeUnmount(() => {
-  console.log('❌ Home unmounted');
+  // console.log('❌ Home unmounted');
 })
 
 // 处理底部按钮tab变化
 const handleTabChange = (tab: string) => {
   isTab.value = tab;
-  console.log('HomeAsb changed to:', tab);
 }
 </script>
 

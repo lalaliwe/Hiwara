@@ -1,16 +1,23 @@
 <script setup lang="ts">
-import cardButton from '../component/cardButton.vue';
-import test1Img from '../static/img/test1.jpg';
-import { ref, onDeactivated, onActivated, onMounted } from 'vue';
-import { useRouter } from 'vue-router';
-
-const router = useRouter();
+import cardButton from '../../component/cardButton.vue';
+import test1Img from '../../static/img/test1.jpg';
+import { ref, onActivated } from 'vue';
 
 const videoListView = ref();
 const imageListView = ref();
 
 const tab = ref('video');
-const videoList: { title: string; img: string; author: string; time: string; viewNum: string; likeNum: string; longNum: string; isR18: boolean; }[] = [];
+interface ItemList {
+  title: string;
+  img: string;
+  author: string;
+  time: string;
+  viewNum: string;
+  likeNum: string;
+  longNum: string;
+  isR18: boolean;
+}
+let videoList: ItemList[] = [];
 const imageList = [];
 for (let i = 0; i < 20; i++) {
   videoList.push({
@@ -37,36 +44,26 @@ for (let i = 0; i < 20; i++) {
 let videoScrollTop = 0;
 let imageScrollTop = 0;
 
-onDeactivated(() => {
-  // console.log('deactivated');
-});
 onActivated(() => {
-  // console.log('activated');
   if (videoListView.value && typeof videoListView.value.scrollTo === 'function') {
-    console.log(videoScrollTop);
+    // console.log(videoScrollTop);
     videoListView.value.scrollTo({ top: videoScrollTop });
   }
   if (imageListView.value && typeof imageListView.value.scrollTo === 'function') {
-    console.log(imageScrollTop);
+    // console.log(imageScrollTop);
     imageListView.value.scrollTo({ top: imageScrollTop });
   }
 });
 function handleVideoScroll(event: any): void {
-  // console.log('scroll', event.target.scrollTop);
   videoScrollTop = event.target.scrollTop;
 }
 function handleImageScroll(event: any): void {
-  // console.log('scroll', event.target.scrollTop);
   imageScrollTop = event.target.scrollTop;
-}
-function clickCard() {
-  console.log('clickCard');
-  router.push('/player');
 }
 </script>
 <template>
   <div class="tabs">
-    <v-tabs v-model="tab" color="#00796B" align-tabs="center" fixed-tabs>
+    <v-tabs v-model="tab" color="#00796B" align-tabs="center" density="compact" grow>
       <v-tab value="video">视频</v-tab>
       <v-tab value="image">插画</v-tab>
     </v-tabs>
@@ -79,8 +76,7 @@ function clickCard() {
           <div class="grid">
             <template v-for="(item, index) in videoList">
               <cardButton type="video" :title="item.title" :img="item.img" :author="item.author" :time="item.time"
-                :viewNum="item.viewNum" :likeNum="item.likeNum" :longNum="item.longNum" :isR18="item.isR18"
-                @click="clickCard" />
+                :viewNum="item.viewNum" :likeNum="item.likeNum" :longNum="item.longNum" :isR18="item.isR18" />
             </template>
           </div>
         </v-infinite-scroll>
@@ -92,8 +88,7 @@ function clickCard() {
           <div class="grid">
             <template v-for="(item, index) in imageList">
               <cardButton type="image" :title="item.title" :img="item.img" :author="item.author" :time="item.time"
-                :viewNum="item.viewNum" :likeNum="item.likeNum" :longNum="item.longNum" :isR18="item.isR18"
-                @click="clickCard" />
+                :viewNum="item.viewNum" :likeNum="item.likeNum" :longNum="item.longNum" :isR18="item.isR18" />
             </template>
           </div>
         </v-infinite-scroll>
@@ -105,7 +100,7 @@ function clickCard() {
 .tabs {}
 
 .tabs-window {
-  height: calc(100% - 48.8px);
+  height: calc(100% - 36px);
 
   :deep(.v-window__container) {
     height: 100%;
