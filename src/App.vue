@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref, watch, nextTick } from 'vue'
+import { computed, ref, watch, nextTick, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { getCachedPages } from './router/index'
 
@@ -37,6 +37,10 @@ watch(
 router.afterEach(() => {
   setTimeout(updateCachedPages, 0)
 })
+
+onMounted(() => {
+
+})
 </script>
 
 <template>
@@ -44,11 +48,7 @@ router.afterEach(() => {
     <router-view v-slot="{ Component }">
       <transition :name="transitionName" appear>
         <keep-alive :include="cachedPages" :max="10">
-          <component 
-            :is="Component" 
-            :key="route.fullPath"
-            v-if="Component"
-          />
+          <component :is="Component" :key="route.fullPath" v-if="Component" />
         </keep-alive>
       </transition>
     </router-view>

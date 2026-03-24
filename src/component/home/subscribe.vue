@@ -7,7 +7,8 @@ const videoListView = ref();
 const imageListView = ref();
 
 const tab = ref('video');
-interface ItemList {
+interface ListItem {
+  id: string;
   title: string;
   img: string;
   author: string;
@@ -17,10 +18,11 @@ interface ItemList {
   longNum: string;
   isR18: boolean;
 }
-let videoList: ItemList[] = [];
+let videoList: ListItem[] = [];
 const imageList = [];
 for (let i = 0; i < 20; i++) {
   videoList.push({
+    id: Math.random().toString(36).slice(2),
     title: `测试标题${i + 1}`,
     img: test1Img,
     author: '测试作者',
@@ -31,6 +33,7 @@ for (let i = 0; i < 20; i++) {
     isR18: false,
   });
   imageList.push({
+    id: Math.random().toString(36).slice(2),
     title: `测试标题${i + 1}`,
     img: test1Img,
     author: '测试作者',
@@ -75,8 +78,9 @@ function handleImageScroll(event: any): void {
         <v-infinite-scroll color="#00796B">
           <div class="grid">
             <template v-for="(item, index) in videoList">
-              <cardButton type="video" :title="item.title" :img="item.img" :author="item.author" :time="item.time"
-                :viewNum="item.viewNum" :likeNum="item.likeNum" :longNum="item.longNum" :isR18="item.isR18" />
+              <cardButton type="video" :id="item.id" :title="item.title" :img="item.img" :author="item.author"
+                :time="item.time" :viewNum="item.viewNum" :likeNum="item.likeNum" :longNum="item.longNum"
+                :isR18="item.isR18" />
             </template>
           </div>
         </v-infinite-scroll>
@@ -87,8 +91,9 @@ function handleImageScroll(event: any): void {
         <v-infinite-scroll color="#00796B">
           <div class="grid">
             <template v-for="(item, index) in imageList">
-              <cardButton type="image" :title="item.title" :img="item.img" :author="item.author" :time="item.time"
-                :viewNum="item.viewNum" :likeNum="item.likeNum" :longNum="item.longNum" :isR18="item.isR18" />
+              <cardButton type="image" :id="item.id" :title="item.title" :img="item.img" :author="item.author"
+                :time="item.time" :viewNum="item.viewNum" :likeNum="item.likeNum" :longNum="item.longNum"
+                :isR18="item.isR18" />
             </template>
           </div>
         </v-infinite-scroll>

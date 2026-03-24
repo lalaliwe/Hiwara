@@ -9,6 +9,7 @@ const router = useRouter();
 
 const props = defineProps({
   type: { type: String, default: 'video' },
+  id: { type: String },
   title: { type: String },
   img: { type: String },
   author: { type: String },
@@ -85,7 +86,19 @@ const formattedLongNum = computed(() => formatNumber(props.longNum || '0'));
 
 function clickCard() {
   if (props.type === 'video') {
-    router.push('/player');
+    // 使用 query 方式传参
+    // 跳转后的 URL 格式为: /player?id=xxxx
+    if (props.id) {
+      router.push({
+        path: '/player',
+        query: {
+          id: props.id
+        }
+      });
+    } else {
+      // 如果没有ID，仅跳转路径（容错处理）
+      router.push('/player');
+    }
   }
 }
 </script>

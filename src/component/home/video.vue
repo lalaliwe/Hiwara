@@ -10,7 +10,8 @@ const tabArray = [
   { value: 'mostViews', text: '观看量' },
   { value: 'mostLikes', text: '点赞量' },
 ]
-interface ItemList {
+interface ListItem {
+  id: string;
   title: string;
   img: string;
   author: string;
@@ -20,10 +21,11 @@ interface ItemList {
   longNum: string;
   isR18: boolean;
 }
-let videoList: ItemList[][] = Array.from({ length: tabArray.length }, () => []);
+let videoList: ListItem[][] = Array.from({ length: tabArray.length }, () => []);
 for (let i = 0; i < tabArray.length; i++) {
   for (let j = 0; j < 20; j++) {
     videoList[i].push({
+      id: Math.random().toString(36).slice(2),
       title: `${tabArray[i].text}${j + 1}`,
       img: test1Img,
       author: '测试作者',
@@ -80,8 +82,9 @@ onActivated(() => {
         <v-infinite-scroll color="#00796B">
           <div class="grid">
             <template v-for="(item, index) in videoList[i]">
-              <cardButton type="video" :title="item.title" :img="item.img" :author="item.author" :time="item.time"
-                :viewNum="item.viewNum" :likeNum="item.likeNum" :longNum="item.longNum" :isR18="item.isR18" />
+              <cardButton type="video" :id="item.id" :title="item.title" :img="item.img" :author="item.author"
+                :time="item.time" :viewNum="item.viewNum" :likeNum="item.likeNum" :longNum="item.longNum"
+                :isR18="item.isR18" />
             </template>
           </div>
         </v-infinite-scroll>

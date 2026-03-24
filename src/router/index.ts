@@ -1,5 +1,4 @@
 import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router'
-
 import home from '../views/home.vue'
 import player from '../views/player.vue'
 
@@ -12,13 +11,17 @@ interface RouteMeta {
 // 页面缓存栈 - 存储应该被缓存的页面名称
 let cachedPages: string[] = []
 
+// [新增] 历史记录栈 - 用于判断同级路由的前进/后退
+const historyStack: string[] = []
+
 const routes: Array<RouteRecordRaw & { meta?: RouteMeta }> = [
   {
     path: '/',
     name: 'Home',
     component: home,
     meta: { transition: 'stack', depth: 0 },
-  }, {
+  },
+  {
     path: '/player',
     name: 'Player',
     component: player,
@@ -35,56 +38,78 @@ const router = createRouter({
 router.beforeEach((to, from) => {
   const toDepth = (to.meta?.depth as number) || 0
   const fromDepth = (from.meta?.depth as number) || 0
-  
+
+  // [新增] 判断是否为后退行为
+  let isBack = false
+  // 检查历史栈中倒数第二个是否为目标路由（fullPath匹配）
+  if (historyStack.length > 1 && historyStack[historyStack.length - 2] === to.fullPath) {
+    isBack = true
+  }
+
   // 设置过渡方向
   if (from.name === undefined) {
     // 初始导航
     to.meta.transition = 'stack'
+    historyStack.push(to.fullPath) // 记录初始路径
   } else if (toDepth > fromDepth) {
-    // 前进导航
+    // --- 跨层级前进 (例如 Home -> Player) ---
     to.meta.transition = 'stack'
-    // 前进时保留来源页面
+    historyStack.push(to.fullPath) // 入栈
+
     if (from.name && !cachedPages.includes(from.name as string)) {
       cachedPages.push(from.name as string)
-      // console.log('✅ 路由守卫：前进导航，缓存页面:', from.name)
     }
   } else if (toDepth < fromDepth) {
-    // 后退导航
+    // --- 跨层级后退 (例如 Player -> Home) ---
     to.meta.transition = 'stack-reverse'
-    // 后退时清理深层页面
+    historyStack.pop() // 出栈
+
+    // 清理深层页面缓存
     const oldLength = cachedPages.length
     cachedPages = cachedPages.filter(pageName => {
       const pageRoute = routes.find(route => route.name === pageName)
       const pageDepth = (pageRoute?.meta?.depth as number) || 0
       return pageDepth <= toDepth
     })
-    if (oldLength !== cachedPages.length) {
-      // console.log('✅ 路由守卫：后退导航，清理缓存')
-    }
   } else {
-    // 同级导航
-    to.meta.transition = 'fade'
+    // --- 同层级导航 (Query 改变场景) ---
+    if (isBack) {
+      // 后退 (例如 Player?id=2 -> Player?id=1)
+      to.meta.transition = 'stack-reverse'
+      historyStack.pop() // 出栈
+
+      // 注意：这里不需要修改 cachedPages。
+      // 因为 keep-alive 结合 :key="fullPath" 已经缓存了旧实例。
+      // 当我们后退时，旧实例会被恢复；当前实例会被隐藏。
+    } else {
+      // 前进 (例如 Player?id=1 -> Player?id=2)
+      to.meta.transition = 'stack'
+      historyStack.push(to.fullPath) // 入栈
+
+      // 确保当前组件名在缓存列表中
+      if (to.name && !cachedPages.includes(to.name as string)) {
+        cachedPages.push(to.name as string)
+      }
+    }
   }
 })
 
 // 获取缓存页面列表
 export function getCachedPages(): string[] {
-  // 确保返回非空数组，至少包含Home作为默认缓存
   const pages = [...cachedPages]
   if (pages.length === 0) {
-    // 初始状态下确保Home被缓存
     const homeRoute = routes.find(r => r.name === 'Home')
     if (homeRoute && !pages.includes('Home')) {
       pages.push('Home')
     }
   }
-  // console.log('✅ 获取缓存页面列表:', pages)
   return pages
 }
 
 // 重置方法
 export const resetNavigationHistory = () => {
   cachedPages = []
+  historyStack.length = 0 // 清空历史栈
 }
 
 export default router

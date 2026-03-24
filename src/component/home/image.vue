@@ -10,7 +10,8 @@ const tabArray = [
   { value: 'mostViews', text: '观看量' },
   { value: 'mostLikes', text: '点赞量' },
 ]
-interface ItemList {
+interface ListItem {
+  id: string;
   title: string;
   img: string;
   author: string;
@@ -20,10 +21,11 @@ interface ItemList {
   longNum: string;
   isR18: boolean;
 }
-let imageList: ItemList[][] = Array.from({ length: tabArray.length }, () => []);
+let imageList: ListItem[][] = Array.from({ length: tabArray.length }, () => []);
 for (let i = 0; i < tabArray.length; i++) {
   for (let j = 0; j < 20; j++) {
     imageList[i].push({
+      id: Math.random().toString(36).slice(2),
       title: `${tabArray[i].text}${j + 1}`,
       img: test1Img,
       author: '测试作者',
@@ -79,9 +81,10 @@ onActivated(() => {
       <div class="list-view" :ref="(el) => setListRef(el, i)" @scroll="(e) => handleScroll(i, e)">
         <v-infinite-scroll color="#00796B">
           <div class="grid">
-            <template v-for="(imageItem, index) in imageList[i]" :key="index">
-              <cardButton type="image" :title="imageItem.title" :img="imageItem.img" :author="imageItem.author" :time="imageItem.time"
-                :viewNum="imageItem.viewNum" :likeNum="imageItem.likeNum" :longNum="imageItem.longNum" :isR18="imageItem.isR18" />
+            <template v-for="(item, index) in imageList[i]" :key="index">
+              <cardButton type="image" :id="item.id" :title="item.title" :img="item.img" :author="item.author"
+                :time="item.time" :viewNum="item.viewNum" :likeNum="item.likeNum"
+                :longNum="item.longNum" :isR18="item.isR18" />
             </template>
           </div>
         </v-infinite-scroll>
