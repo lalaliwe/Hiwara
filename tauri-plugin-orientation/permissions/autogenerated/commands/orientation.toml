@@ -1,0 +1,33 @@
+# Automatically generated - DO NOT EDIT!
+
+"$schema" = "../../schemas/schema.json"
+
+[[permission]]
+identifier = "allow-ping"
+description = "Enables the ping command without any pre-configured scope."
+commands.allow = ["ping"]
+
+[[permission]]
+identifier = "deny-ping"
+description = "Denies the ping command without any pre-configured scope."
+commands.deny = ["ping"]
+
+[[permission]]
+identifier = "allow-lock-orientation"
+description = "Enables the lock_orientation command without any pre-configured scope."
+commands.allow = ["lock_orientation"]
+
+[[permission]]
+identifier = "deny-lock-orientation"
+description = "Denies the lock_orientation command without any pre-configured scope."
+commands.deny = ["lock_orientation"]
+
+[[permission]]
+identifier = "allow-unlock-orientation"
+description = "Enables the unlock_orientation command without any pre-configured scope."
+commands.allow = ["unlock_orientation"]
+
+[[permission]]
+identifier = "deny-unlock-orientation"
+description = "Denies the unlock_orientation command without any pre-configured scope."
+commands.deny = ["unlock_orientation"]
