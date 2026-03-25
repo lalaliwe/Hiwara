@@ -21,9 +21,4 @@ impl<R: Runtime> Immersive<R> {
     pub fn exit_immersive(&self) -> crate::Result<ImmersiveResponse> {
         Ok(ImmersiveResponse { success: true })
     }
-    
-    // 原来的 ping 方法可以保留或删除
-    pub fn ping(&self, payload: PingRequest) -> crate::Result<PingResponse> {
-        Ok(PingResponse { value: payload.value })
-    }
 }

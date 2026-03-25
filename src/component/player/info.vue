@@ -347,7 +347,7 @@ function clickLike() {
 
   .titleExpandHeight {
     padding: 5px 15px 5px 10px;
-    font-size: 1rem;
+    font-size: 1.1rem;
   }
 
   .synopsisHeight {

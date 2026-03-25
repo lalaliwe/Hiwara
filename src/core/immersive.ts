@@ -7,7 +7,7 @@ import { invoke } from '@tauri-apps/api/core';
 export async function enterImmersive(): Promise<void> {
   try {
     await invoke('plugin:immersive|enter_immersive');
-    console.log('[Immersive] Entered immersive mode');
+    // console.log('[Immersive] Entered immersive mode');
   } catch (error) {
     console.error('[Immersive] Failed to enter immersive mode:', error);
     throw error; // 继续抛出错误，以便调用者可以处理
@@ -21,7 +21,7 @@ export async function enterImmersive(): Promise<void> {
 export async function exitImmersive(): Promise<void> {
   try {
     await invoke('plugin:immersive|exit_immersive');
-    console.log('[Immersive] Exited immersive mode');
+    // console.log('[Immersive] Exited immersive mode');
   } catch (error) {
     console.error('[Immersive] Failed to exit immersive mode:', error);
     throw error;

@@ -84,12 +84,14 @@ onUnmounted(() => {
     <video src="https://ro.qisato.top:2096/public/VID_20220416_033049_395.mp4"></video>
     <!-- 使用 fullscreenState 控制显示 -->
     <div v-if="fullscreenState" class="control-fullscreen">
-      全屏
-      <v-btn @click="toggleFullscreen">退出全屏</v-btn>
+      <div class="top">
+        
+      </div>
+      <div class="middle"></div>
+      <div class="bottom"></div>
     </div>
     <div v-else class="control">
-      半屏
-      <v-btn @click="toggleFullscreen">全屏</v-btn>
+
     </div>
   </div>
 </template>
@@ -110,27 +112,26 @@ onUnmounted(() => {
   .control {
     height: 100%;
     width: 100%;
-    background-color: aqua;
     position: absolute;
     top: 0;
     left: 0;
     z-index: 10;
     display: flex;
-    justify-content: center;
-    align-items: center;
+    flex-direction: column;
+    .top{}
+    .middle{
+      flex: 1;
+    }
+    .bottom{}
   }
 
   .control-fullscreen {
     height: 100%;
     width: 100%;
-    background-color: chartreuse;
     position: absolute;
     top: 0;
     left: 0;
     z-index: 10;
-    display: flex;
-    justify-content: center;
-    align-items: center;
   }
 }
 </style>

@@ -18,7 +18,7 @@ const lockOrientation = async (orientation: OrientationType): Promise<boolean> =
     const result = await invoke<OrientationResponse>('plugin:orientation|lock_orientation', {
       payload: { orientation }
     });
-    console.log(`屏幕已锁定：${orientation}`, result);
+    // console.log(`屏幕已锁定：${orientation}`, result);
     return result.success;
   } catch (error) {
     console.error('锁定屏幕方向失败:', error);
@@ -42,7 +42,7 @@ export const lockLandscape = async (): Promise<boolean> => lockOrientation('land
 export const unlockOrientation = async (): Promise<boolean> => {
   try {
     const result = await invoke<OrientationResponse>('plugin:orientation|unlock_orientation');
-    console.log('屏幕已解锁', result);
+    // console.log('屏幕已解锁', result);
     return result.success;
   } catch (error) {
     console.error('解锁屏幕方向失败:', error);

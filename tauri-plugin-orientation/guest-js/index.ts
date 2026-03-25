@@ -1,9 +1,16 @@
 import { invoke } from '@tauri-apps/api/core'
 
-export async function ping(value: string): Promise<string | null> {
-  return await invoke<{value?: string}>('plugin:orientation|ping', {
-    payload: {
-      value,
-    },
-  }).then((r) => (r.value ? r.value : null));
+export interface LockOrientationOptions {
+  /** 'portrait' 或 'landscape' */
+  orientation?: string;
+}
+
+export async function lockOrientation(options?: LockOrientationOptions): Promise<{ success: boolean }> {
+  return await invoke('plugin:orientation|lock_orientation', {
+    payload: options || {},
+  });
+}
+
+export async function unlockOrientation(): Promise<{ success: boolean }> {
+  return await invoke('plugin:orientation|unlock_orientation');
 }

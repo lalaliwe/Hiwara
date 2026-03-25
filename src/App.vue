@@ -3,8 +3,12 @@ import { computed, ref, watch, nextTick } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { getCachedPages } from './router/index'
 import { lockPortrait } from './core/useOrientation'
+import { setNavBarStyle } from './core/navbarStyle'
 
+// 固定竖屏
 lockPortrait()
+// 设置导航栏样式
+setNavBarStyle({ style: 'light' })
 
 const route = useRoute()
 const router = useRouter()

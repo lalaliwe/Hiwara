@@ -84,7 +84,7 @@ function goBack() {
 
 .video-player {
   width: 100%;
-  aspect-ratio: 4 / 3;
+  aspect-ratio: 16 / 9;
 }
 
 .tabs {
@@ -112,7 +112,6 @@ function goBack() {
 
 .tabs-content {
   flex: 1;
-  padding-bottom: env(safe-area-inset-bottom, 0);
   overflow: hidden;
 
   .tabs-window {
@@ -125,6 +124,7 @@ function goBack() {
     .v-window-item {
       height: 100%;
       overflow: auto;
+      padding-bottom: env(safe-area-inset-bottom, 0);
     }
   }
 }
