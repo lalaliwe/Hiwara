@@ -1,8 +1,10 @@
 <script setup lang="ts">
-import { computed, ref, watch, nextTick, onMounted } from 'vue'
+import { computed, ref, watch, nextTick } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { getCachedPages } from './router/index'
-import { useOrientation } from './core/useOrientation'
+import { lockPortrait } from './core/useOrientation'
+
+lockPortrait()
 
 const route = useRoute()
 const router = useRouter()
@@ -37,14 +39,6 @@ watch(
 // 额外监听路由变化事件
 router.afterEach(() => {
   setTimeout(updateCachedPages, 0)
-})
-
-const { lockPortrait, unlockOrientation } = useOrientation();
-onMounted(async () => {
-  const success = await lockPortrait();
-  if (success) {
-    console.log('初始化竖屏成功');
-  }
 })
 </script>
 

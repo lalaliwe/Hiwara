@@ -9,55 +9,43 @@ interface OrientationResponse {
 }
 
 /**
- * 屏幕方向控制 Hook
+ * 锁定屏幕方向
+ * @param orientation 方向类型：'portrait' (竖屏) 或 'landscape' (横屏)
  */
-export function useOrientation() {
+const lockOrientation = async (orientation: OrientationType): Promise<boolean> => {
+  try {
+    // 调用 Tauri 插件命令
+    const result = await invoke<OrientationResponse>('plugin:orientation|lock_orientation', {
+      payload: { orientation }
+    });
+    console.log(`屏幕已锁定：${orientation}`, result);
+    return result.success;
+  } catch (error) {
+    console.error('锁定屏幕方向失败:', error);
+    return false;
+  }
+};
 
-  /**
-   * 锁定屏幕方向
-   * @param orientation 方向类型：'portrait' (竖屏) 或 'landscape' (横屏)
-   */
-  const lockOrientation = async (orientation: OrientationType): Promise<boolean> => {
-    try {
-      // 调用 Tauri 插件命令
-      const result = await invoke<OrientationResponse>('plugin:orientation|lock_orientation', {
-        payload: { orientation }
-      });
-      console.log(`屏幕已锁定: ${orientation}`, result);
-      return result.success;
-    } catch (error) {
-      console.error('锁定屏幕方向失败:', error);
-      return false;
-    }
-  };
+/**
+ * 锁定竖屏
+ */
+export const lockPortrait = async (): Promise<boolean> => lockOrientation('portrait');
 
-  /**
-   * 锁定竖屏
-   */
-  const lockPortrait = () => lockOrientation('portrait');
+/**
+ * 锁定横屏
+ */
+export const lockLandscape = async (): Promise<boolean> => lockOrientation('landscape');
 
-  /**
-   * 锁定横屏
-   */
-  const lockLandscape = () => lockOrientation('landscape');
-
-  /**
-   * 解锁屏幕方向 (恢复自动旋转)
-   */
-  const unlockOrientation = async (): Promise<boolean> => {
-    try {
-      const result = await invoke<OrientationResponse>('plugin:orientation|unlock_orientation');
-      console.log('屏幕已解锁', result);
-      return result.success;
-    } catch (error) {
-      console.error('解锁屏幕方向失败:', error);
-      return false;
-    }
-  };
-
-  return {
-    lockPortrait,
-    lockLandscape,
-    unlockOrientation,
-  };
-}
+/**
+ * 解锁屏幕方向 (恢复自动旋转)
+ */
+export const unlockOrientation = async (): Promise<boolean> => {
+  try {
+    const result = await invoke<OrientationResponse>('plugin:orientation|unlock_orientation');
+    console.log('屏幕已解锁', result);
+    return result.success;
+  } catch (error) {
+    console.error('解锁屏幕方向失败:', error);
+    return false;
+  }
+};
