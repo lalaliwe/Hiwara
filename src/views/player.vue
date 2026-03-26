@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { useRouter } from 'vue-router';
 import { ref, onMounted, onUnmounted } from 'vue';
 import videoPlayer from '../component/player/videoPlayer.vue';
 import infoView from '../component/player/info.vue';
@@ -10,8 +9,6 @@ import commentView from '../component/player/comment.vue';
 defineOptions({
   name: 'Player'
 })
-
-const router = useRouter();
 
 const tab = ref('info');
 
@@ -33,9 +30,6 @@ onMounted(() => {
 onUnmounted(() => {
   console.log('❌ Player unmounted');
 })
-function goBack() {
-  router.push('/');
-}
 </script>
 <template>
   <div class="page">
@@ -48,6 +42,9 @@ function goBack() {
           <v-tab value="comment">评论</v-tab>
         </v-tabs>
         <div class="right">
+          <span>
+            <font-awesome-icon icon="fa-solid fa-server" />hiwara
+          </span>
           <span>
             <font-awesome-icon icon="fa-solid fa-film" />1080P
           </span>
@@ -97,15 +94,19 @@ function goBack() {
 
     .left {
       flex: 1;
-      padding: 0 0.6rem;
+      padding: 0 14px;
     }
 
     .right {
-      padding: 0 1rem;
+      padding: 0 10px;
       display: flex;
       align-items: center;
       color: #616161;
       font-size: 0.9rem;
+
+      span {
+        padding: 0 4px;
+      }
     }
   }
 }
