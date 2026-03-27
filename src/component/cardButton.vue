@@ -159,6 +159,8 @@ function clickCard() {
 <style lang="scss" scoped>
 .card-image {
   aspect-ratio: 16 / 10;
+  cursor: pointer;
+  user-select: none;
 }
 
 .info1 {

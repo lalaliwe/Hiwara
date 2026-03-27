@@ -8,6 +8,9 @@
     "opener:default",
     "orientation:default",
     "immersive:default",
-    "navbar-style:default"
+    "navbar-style:default",
+    "device-info:allow-getDeviceInfo",
+    "device-info:allow-getNetworkInfo",
+    "device-info:allow-getBatteryInfo"
   ]
 }

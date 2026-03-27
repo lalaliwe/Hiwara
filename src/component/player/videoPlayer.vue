@@ -3,6 +3,7 @@ import { ref, onMounted, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router';
 import { lockPortrait, lockLandscape } from '../../core/useOrientation'
 import { enterImmersive, exitImmersive } from '../../core/immersive'
+import { getNetworkInfo,getBatteryInfo } from '../../core/deviceInfo'
 import customRange from './customRange.vue';
 
 const fullscreenState = ref(false); // 内部维护的全屏状态
@@ -139,7 +140,15 @@ const handlePopState = () => {
 };
 
 // 挂载/卸载监听
-onMounted(() => {
+onMounted(async () => {
+  try {
+    // 获取设备信息
+    console.log(await getNetworkInfo());
+    console.log(await getBatteryInfo());
+  } catch (error) {
+    console.error('获取设备信息失败:', error);
+  }
+
   document.addEventListener('fullscreenchange', handleFullscreenChange);
   window.addEventListener('popstate', handlePopState);
 
@@ -158,7 +167,7 @@ onMounted(() => {
     });
     videoRef.value.addEventListener('timeupdate', updateTime);
     videoRef.value.addEventListener('loadedmetadata', updateTime);
-    
+
     // 监听缓冲事件
     videoRef.value.addEventListener('waiting', () => {
       isLoading.value = true; // 数据不足，显示加载指示器
@@ -212,7 +221,8 @@ function goHome() {
       @click="togglePlay"></video>
     <!-- 仅在缓冲时显示加载指示器 -->
     <div v-if="isLoading" class="msg-view">
-      <v-progress-circular color="#00796B" bg-color="#ffffff66" :size="70" :width="7" indeterminate></v-progress-circular>
+      <v-progress-circular color="#00796B" bg-color="#ffffff66" :size="70" :width="7"
+        indeterminate></v-progress-circular>
     </div>
     <!-- 使用 fullscreenState 控制显示 -->
     <div v-if="fullscreenState" class="control-fullscreen">
