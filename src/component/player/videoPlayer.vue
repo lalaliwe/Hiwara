@@ -3,13 +3,12 @@ import { ref, onMounted, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router';
 import { lockPortrait, lockLandscape } from '../../core/useOrientation'
 import { enterImmersive, exitImmersive } from '../../core/immersive'
-import { getNetworkInfo,getBatteryInfo } from '../../core/deviceInfo'
+import { getNetworkInfo, getBatteryInfo } from '../../core/deviceInfo'
 import customRange from './customRange.vue';
 
 const fullscreenState = ref(false); // 内部维护的全屏状态
 const videoPlayerRef = ref<HTMLElement | null>(null);
 const videoRef = ref<HTMLVideoElement | null>(null);
-
 const isPlaying = ref(false);
 const progress = ref<number>(0);
 const buffered = ref<number>(0);
@@ -41,6 +40,50 @@ const formatCurrentTime = (): string => {
 const updateSystemTime = () => {
   currentSystemTime.value = formatCurrentTime();
 };
+
+type NetworkType = 'wifi' | 'cellular' | 'ethernet' | 'other' | 'none' | 'unknown' | 'loading'
+const networkState = ref<NetworkType>('loading');
+const batteryLevel = ref<number | 'none'>('none');
+const isCharging = ref(false);
+
+// 获取网络信息
+const fetchNetworkInfo = async () => {
+  const timeoutMs = 5000; // 5 秒超时
+  const timeoutPromise = new Promise<never>((_, reject) => {
+    setTimeout(() => reject(new Error('获取网络信息超时')), timeoutMs);
+  });
+
+  try {
+    const msg = await Promise.race([getNetworkInfo(), timeoutPromise]);
+    networkState.value = msg.networkType;
+  } catch (error) {
+    console.error('获取网络信息失败:', error);
+    // 优雅降级：失败时设置为 unknown
+    networkState.value = 'unknown';
+  }
+};
+// 获取设备电量
+const fetchBatteryInfo = async () => {
+  const timeoutMs = 5000; // 5 秒超时
+  const timeoutPromise = new Promise<never>((_, reject) => {
+    setTimeout(() => reject(new Error('获取设备电量信息超时')), timeoutMs);
+  });
+  try {
+    const msg = await Promise.race([getBatteryInfo(), timeoutPromise]);
+    batteryLevel.value = msg.level;
+    isCharging.value = msg.isCharging;
+  } catch (error) {
+    console.error('获取设备电量信息失败:', error);
+    // 优雅降级：失败时设置为 0.5
+    batteryLevel.value = 'none';
+  }
+};
+
+// 在组件挂载时获取网络信息
+onMounted(() => {
+  fetchNetworkInfo();
+  fetchBatteryInfo();
+});
 
 // 更新视频时间
 const updateTime = () => {
@@ -80,6 +123,7 @@ const onProgressChange = (value: number) => {
 
 // 进入全屏
 const enterFullscreen = async () => {
+  fetchNetworkInfo();
   if (!videoPlayerRef.value) return;
   try {
     // 进入沉浸式
@@ -141,14 +185,6 @@ const handlePopState = () => {
 
 // 挂载/卸载监听
 onMounted(async () => {
-  try {
-    // 获取设备信息
-    console.log(await getNetworkInfo());
-    console.log(await getBatteryInfo());
-  } catch (error) {
-    console.error('获取设备信息失败:', error);
-  }
-
   document.addEventListener('fullscreenchange', handleFullscreenChange);
   window.addEventListener('popstate', handlePopState);
 
@@ -211,7 +247,7 @@ function goBack() {
 }
 // 回到主界面
 function goHome() {
-  router.push('/');
+  router.replace('/');
 }
 </script>
 
@@ -239,11 +275,48 @@ function goHome() {
           </div>
         </div>
         <div class="status">
-          <span>
-            <font-awesome-icon icon="fa-solid fa-wifi" /> WiFi
+          <span v-if="networkState === 'wifi'">
+            <font-awesome-icon icon="fa-solid fa-wifi" />
+            WiFi
           </span>
-          <span>
-            <font-awesome-icon icon="fa-solid fa-battery-full" />
+          <span v-else-if="networkState === 'cellular'">
+            <font-awesome-icon icon="fa-solid fa-signal" />
+            移动数据
+          </span>
+          <span v-else-if="networkState === 'ethernet'">
+            <font-awesome-icon icon="fa-solid fa-ethernet" />
+            有线连接
+          </span>
+          <span v-else-if="networkState === 'other'">
+            <font-awesome-icon icon="fa-solid fa-network-wired" />
+            其他
+          </span>
+          <span v-else-if="networkState === 'none'">
+            <font-awesome-icon icon="fa-solid fa-wifi" />
+            <span style="position: relative;left: -1.25rem;width: 0;display: inline-block;">
+              <font-awesome-icon icon="fa-solid fa-slash" />
+            </span>
+            无网络
+          </span>
+          <span v-else-if="networkState === 'unknown'">
+            <font-awesome-icon icon="fa-solid fa-network-wired" />
+            未知网络
+          </span>
+          <span v-if="batteryLevel != 'none'">
+            <font-awesome-icon v-if="batteryLevel >= 100" icon="fa-solid fa-battery-full"
+              :style="{ color: isCharging ? '#00E676' : 'auto' }" />
+            <font-awesome-icon v-else-if="batteryLevel >= 60 && batteryLevel < 100"
+              icon="fa-solid fa-battery-three-quarters" :style="{ color: isCharging ? '#00E676' : 'auto' }" />
+            <font-awesome-icon v-else-if="batteryLevel >= 40 && batteryLevel < 60" icon="fa-solid fa-battery-half"
+              :style="{ color: isCharging ? '#00E676' : 'auto' }" />
+            <font-awesome-icon v-else-if="batteryLevel >= 20 && batteryLevel < 40" icon="fa-solid fa-battery-quarter"
+              :style="{ color: isCharging ? '#00E676' : 'auto' }" />
+            <font-awesome-icon v-else-if="batteryLevel < 20" icon="fa-solid fa-battery-empty"
+              :style="{ color: isCharging ? '#00E676' : '#FF3D00' }" />
+            <span v-if="isCharging"
+              style="position: relative;left: -1.1rem;top:-0.1rem;width: 0;display: inline-block;color:#FFFF00;font-size: 0.8rem;">
+              <font-awesome-icon icon="fa-solid fa-bolt" />
+            </span>
           </span>
           <span>{{ currentSystemTime }}</span>
         </div>
@@ -483,7 +556,8 @@ function goHome() {
       .time {
         display: flex;
         align-items: center;
-        justify-content: center;
+        justify-content: start;
+        padding-left: 4px;
         width: 140px;
       }
 

@@ -238,6 +238,8 @@ function clickCard() {
 .info2 {
   padding: 0rem 0.625rem 0.4rem 0.625rem;
   font-size: 0.8rem;
+  cursor: pointer;
+  user-select: none;
 
   .content {
     display: grid;

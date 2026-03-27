@@ -41,7 +41,7 @@ router.beforeEach((to, from) => {
 
   // [新增] 判断是否为后退行为
   let isBack = false
-  // 检查历史栈中倒数第二个是否为目标路由（fullPath匹配）
+  // 检查历史栈中倒数第二个是否为目标路由（fullPath 匹配）
   if (historyStack.length > 1 && historyStack[historyStack.length - 2] === to.fullPath) {
     isBack = true
   }
@@ -91,6 +91,16 @@ router.beforeEach((to, from) => {
         cachedPages.push(to.name as string)
       }
     }
+  }
+  
+  // [新增] 特殊处理：当回到主页时，重置历史栈
+  // 这样在主页按返回键不会回到上一个页面
+  if (to.path === '/' && from.path !== '/') {
+    // 无论通过何种方式回到主页，都清空历史栈，只保留主页
+    historyStack.length = 0
+    historyStack.push(to.fullPath)
+    // 清理所有深层页面缓存
+    cachedPages = []
   }
 })
 
