@@ -24,15 +24,17 @@ const props = defineProps<{
 }>()
 
 const expand = ref(false);
+const titleRef = ref<HTMLElement | null>(null);
 const titleCollapseHeightRef = ref<HTMLElement | null>(null);
 const titleExpandHeightRef = ref<HTMLElement | null>(null);
 const synopsisHeightRef = ref<HTMLElement | null>(null);
-const heights = {
+
+// 高度缓存对象
+const heights = ref({
   titleCollapse: 0,
   titleExpand: 0,
   synopsis: 0
-};
-const titleRef = ref<HTMLElement | null>(null);
+});
 
 interface ListItem {
   id: string;
@@ -45,10 +47,13 @@ interface ListItem {
   longNum: string;
   isR18: boolean;
 }
-let authorOtherVideoList: ListItem[] = [];
-let recommendVideoList: ListItem[] = [];
+
+// 初始化列表数据
+const authorOtherVideoList = ref<ListItem[]>([]);
+const recommendVideoList = ref<ListItem[]>([]);
+// 测试数据生成
 for (let i = 0; i < 5; i++) {
-  authorOtherVideoList.push({
+  authorOtherVideoList.value.push({
     id: Math.random().toString(36).slice(2),
     title: '作者测试标题',
     img: test1Img,
@@ -59,7 +64,7 @@ for (let i = 0; i < 5; i++) {
     longNum: '10',
     isR18: false,
   });
-  recommendVideoList.push({
+  recommendVideoList.value.push({
     id: Math.random().toString(36).slice(2),
     title: '推荐测试标题',
     img: test1Img,
@@ -72,56 +77,43 @@ for (let i = 0; i < 5; i++) {
   });
 }
 
-onMounted(async () => {
-  await nextTick();
+onMounted(() => {
   calculateHeights();
   if (titleRef.value) {
-    titleRef.value.style.height = heights.titleCollapse + 'px';
+    titleRef.value.style.height = heights.value.titleCollapse + 'px';
     titleRef.value.style.whiteSpace = 'nowrap';
   }
 })
-watch(expand, (val) => {
-  if (titleRef.value) {
-    if (val) {
-      // === 展开逻辑 ===
-      titleRef.value.style.whiteSpace = 'normal';
-      titleRef.value.style.height = heights.titleExpand + 'px';
-    } else {
-      // === 折叠逻辑 (修改部分) ===
-      const el = titleRef.value;
-      // 1. 先执行第一条：设置高度（触发折叠动画）
-      el.style.height = heights.titleCollapse + 'px';
-      // 定义回调函数
-      const onTransitionEnd = (e: { propertyName: string; }) => {
-        // 确保监听的是 height 的变化，而不是其他属性（如 opacity 等）
-        if (e.propertyName !== 'height') return;
-        // 2. 动画结束后执行第二条：设置不换行
-        // 只有当 expand 仍然为 false 时才执行（防止快速点击导致状态错乱）
-        if (!expand.value) {
-          el.style.whiteSpace = 'nowrap';
-        }
-        // 3. 移除监听器，避免内存泄漏
-        el.removeEventListener('transitionend', onTransitionEnd);
-      };
-      // 添加监听器
-      el.addEventListener('transitionend', onTransitionEnd);
-    }
+
+// 简化 watch 逻辑，使用 nextTick 确保 DOM 更新后设置样式
+watch(expand, async (val) => {
+  if (!titleRef.value) return;
+  
+  if (val) {
+    // === 展开逻辑 ===
+    titleRef.value.style.whiteSpace = 'normal';
+    titleRef.value.style.height = heights.value.titleExpand + 'px';
+  } else {
+    // === 折叠逻辑 ===
+    const el = titleRef.value;
+    el.style.height = heights.value.titleCollapse + 'px';
+    
+    // 等待一帧让浏览器应用 height 变化，然后设置 whiteSpace
+    await nextTick();
+    setTimeout(() => {
+      if (!expand.value) {
+        el.style.whiteSpace = 'nowrap';
+      }
+    }, 300); // 与 transition 时间匹配
   }
-})
+}, { immediate: true });
 
 function calculateHeights() {
-  if (titleCollapseHeightRef.value) {
-    heights.titleCollapse = titleCollapseHeightRef.value.offsetHeight;
-  }
-  if (titleExpandHeightRef.value) {
-    heights.titleExpand = titleExpandHeightRef.value.offsetHeight;
-  }
-  if (synopsisHeightRef.value) {
-    heights.synopsis = synopsisHeightRef.value.offsetHeight;
-  }
-  console.log('高度信息：', heights);
-  return heights;
+  heights.value.titleCollapse = titleCollapseHeightRef.value?.offsetHeight || 0;
+  heights.value.titleExpand = titleExpandHeightRef.value?.offsetHeight || 0;
+  heights.value.synopsis = synopsisHeightRef.value?.offsetHeight || 0;
 }
+
 // 关注
 function clickFollow() {
 }

@@ -99,6 +99,18 @@ function clickCard() {
       // 如果没有ID，仅跳转路径（容错处理）
       router.push('/player');
     }
+  } else if (props.type === 'image') {
+    if (props.id) {
+      router.push({
+        path: '/image',
+        query: {
+          id: props.id
+        }
+      });
+    } else {
+      // 如果没有ID，仅跳转路径（容错处理）
+      router.push('/image');
+    }
   }
 }
 </script>

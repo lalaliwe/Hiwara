@@ -8,6 +8,8 @@ import homeForum from '../component/home/forum.vue';
 import homeMy from '../component/home/my.vue';
 import { ref, onMounted, onBeforeUnmount } from 'vue';
 import { on } from 'hammerjs';
+import { lockPortrait } from '../core/useOrientation'
+import { setNavBarStyle } from '../core/navbarStyle'
 
 // 设置组件名称，确保与路由name一致
 defineOptions({
@@ -16,14 +18,18 @@ defineOptions({
 
 const isTab = ref("subscribe");
 
+// 固定竖屏
+lockPortrait()
+// 设置导航栏样式
+setNavBarStyle({ style: 'light' })
+
+
 onMounted(() => {
   // console.log('✅ Home mounted');
 })
-
 onBeforeUnmount(() => {
   // console.log('❌ Home unmounted');
 })
-
 // 处理底部按钮tab变化
 const handleTabChange = (tab: string) => {
   isTab.value = tab;

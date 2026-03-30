@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router'
 import home from '../views/home.vue'
 import player from '../views/player.vue'
+import image from '../views/image.vue'
 
 // 定义路由元信息接口
 interface RouteMeta {
@@ -26,6 +27,11 @@ const routes: Array<RouteRecordRaw & { meta?: RouteMeta }> = [
     name: 'Player',
     component: player,
     meta: { transition: 'stack', depth: 1 },
+  }, {
+    path: '/image',
+    name: 'Image',
+    component: image,
+    meta: { transition: 'stack', depth: 2 },
   }
 ]
 
@@ -92,7 +98,7 @@ router.beforeEach((to, from) => {
       }
     }
   }
-  
+
   // [新增] 特殊处理：当回到主页时，重置历史栈
   // 这样在主页按返回键不会回到上一个页面
   if (to.path === '/' && from.path !== '/') {
