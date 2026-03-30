@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, nextTick, watch } from 'vue';
+import { ref, onMounted, nextTick, watch, onUnmounted } from 'vue';
 import {
   Like as iconLike,
   ShareOne as iconShareOne,
@@ -77,12 +77,25 @@ for (let i = 0; i < 5; i++) {
   });
 }
 
+// 处理窗口大小改变
+function handleResize() {
+  calculateHeights();
+}
+
 onMounted(() => {
   calculateHeights();
   if (titleRef.value) {
     titleRef.value.style.height = heights.value.titleCollapse + 'px';
     titleRef.value.style.whiteSpace = 'nowrap';
   }
+  
+  // 监听窗口大小改变事件
+  window.addEventListener('resize', handleResize);
+})
+
+onUnmounted(() => {
+  // 移除窗口大小改变监听器
+  window.removeEventListener('resize', handleResize);
 })
 
 // 简化 watch 逻辑，使用 nextTick 确保 DOM 更新后设置样式

@@ -1,8 +1,13 @@
 <script setup lang="ts">
 import { ref } from 'vue';
+import { useRouter } from 'vue-router';
+const router = useRouter();
 const isAI = ref(false)
 function toggleAI() {
   isAI.value = !isAI.value
+}
+function toSearch() {
+  router.push('/search')
 }
 </script>
 
@@ -11,8 +16,13 @@ function toggleAI() {
     <div class="avatar">
       <img src="../../static/img/default-avatar.jpg" alt="Avatar" />
     </div>
-    <div class="search">
-      <div class="input"></div>
+    <div class="search" @click="toSearch">
+      <div class="input">
+        <span>
+          <font-awesome-icon icon="fa-solid fa-magnifying-glass" />
+          搜索
+        </span>
+      </div>
     </div>
     <div class="logo" @click="toggleAI">
       <span v-if="isAI">
@@ -55,6 +65,25 @@ function toggleAI() {
   flex: 1;
   display: flex;
   align-items: center;
+  user-select: none;
+  cursor: pointer;
+
+  .input {
+    background-color: #fff;
+    border-radius: 30px;
+    flex: 1;
+    height: 32px;
+    color: #616161;
+    display: flex;
+    justify-content: start;
+    align-items: center;
+
+    span {
+      display: inline-block;
+      padding: 0 10px;
+      font-size: 0.9rem;
+    }
+  }
 }
 
 .avatar {
@@ -71,13 +100,7 @@ function toggleAI() {
   }
 }
 
-.input {
-  background-color: #fff;
-  border-radius: 30px;
-  flex: 1;
-  height: 32px;
-  align-self: center;
-}
+
 
 .logo {
   font-family: 'riwenlogo', sans-serif;

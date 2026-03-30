@@ -113,6 +113,11 @@ const tagsContainerHeight = computed(() => {
   }
 });
 
+// 处理窗口大小改变
+function handleResize() {
+  calculateHeights();
+}
+
 onMounted(() => {
   calculateHeights();
   if (titleRef.value) {
@@ -125,6 +130,9 @@ onMounted(() => {
   if (container) {
     container.addEventListener('scroll', handleScroll);
   }
+  
+  // 监听窗口大小改变事件
+  window.addEventListener('resize', handleResize);
 })
 
 onUnmounted(() => {
@@ -133,6 +141,8 @@ onUnmounted(() => {
   if (container) {
     container.removeEventListener('scroll', handleScroll);
   }
+  // 移除窗口大小改变监听器
+  window.removeEventListener('resize', handleResize);
 })
 
 // 处理滚动事件

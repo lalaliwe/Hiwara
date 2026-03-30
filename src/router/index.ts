@@ -2,6 +2,7 @@ import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router'
 import home from '../views/home.vue'
 import player from '../views/player.vue'
 import image from '../views/image.vue'
+import search from '../views/search.vue'
 
 // 定义路由元信息接口
 interface RouteMeta {
@@ -31,7 +32,12 @@ const routes: Array<RouteRecordRaw & { meta?: RouteMeta }> = [
     path: '/image',
     name: 'Image',
     component: image,
-    meta: { transition: 'stack', depth: 2 },
+    meta: { transition: 'stack', depth: 1 },
+  }, {
+    path: '/search',
+    name: 'Search',
+    component: search,
+    meta: { transition: 'stack', depth: 1 },
   }
 ]
 

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import homeSearchBar from '../component/home/searchBar.vue';
+import homeTopBar from '../component/home/topBar.vue';
 import homeBottomButton from '../component/home/bottomButton.vue';
 import homeVideo from '../component/home/video.vue';
 import homeImage from '../component/home/image.vue';
@@ -38,7 +38,7 @@ const handleTabChange = (tab: string) => {
 
 <template>
   <div id="home">
-    <homeSearchBar />
+    <homeTopBar />
     <div class="main">
       <homeVideo v-if="isTab === 'video'" />
       <homeImage v-else-if="isTab === 'image'" />
