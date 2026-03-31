@@ -23,6 +23,12 @@ import { fab } from '@fortawesome/free-brands-svg-icons'
 
 import Hammer from 'hammerjs';
 
+// 检测是否为桌面端（非触摸设备）
+const isDesktop = !window.matchMedia('(pointer: coarse)').matches;
+if (isDesktop) {
+  document.documentElement.classList.add('desktop-only');
+}
+
 const app = createApp(App);
 
 app.use(router);
@@ -33,3 +39,8 @@ library.add(fas, far, fab)
 app.component('font-awesome-icon', FontAwesomeIcon);
 app.config.globalProperties.$hammer = Hammer;
 app.mount("#app");
+
+/** 测试代码 */
+import { getDeviceInfo } from "./core/deviceInfo";
+const deviceInfo = await getDeviceInfo();
+console.log(deviceInfo);

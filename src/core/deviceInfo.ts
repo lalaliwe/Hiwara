@@ -8,6 +8,8 @@ export interface DeviceInfo {
   osVersion: string;
   deviceModel: string;
   deviceManufacturer: string;
+  webkitType: string;
+  kernelVersion: string;
 }
 
 /**
@@ -43,10 +45,69 @@ export interface BatteryInfo {
  */
 export async function getDeviceInfo(): Promise<DeviceInfo> {
   try {
-    return await invoke('plugin:device-info|getDeviceInfo');
+    const rawDeviceInfo = await invoke('plugin:device-info|getDeviceInfo');
+    
+    // 确保 rawDeviceInfo 是对象类型
+    const deviceInfo = typeof rawDeviceInfo === 'object' && rawDeviceInfo !== null 
+      ? rawDeviceInfo as Record<string, any>
+      : {};
+    
+    // 添加 WebKit 类型和内核版本的检测（基于浏览器环境）
+    const userAgent = navigator.userAgent;
+    let webkitType = 'unknown';
+    let kernelVersion = 'unknown';
+    
+    // 检测 WebKit 类型
+    if (userAgent.includes('WebKit')) {
+      if (userAgent.includes('Chrome') || userAgent.includes('CriOS')) {
+        webkitType = 'Blink'; // Chrome 使用 Blink 引擎（基于 WebKit）
+      } else if (userAgent.includes('Safari') && !userAgent.includes('Chrome')) {
+        webkitType = 'WebKit';
+      } else {
+        webkitType = 'WebKit';
+      }
+    } else if (userAgent.includes('Gecko')) {
+      webkitType = 'Gecko';
+    } else if (userAgent.includes('Trident') || userAgent.includes('MSIE')) {
+      webkitType = 'Trident';
+    }
+    
+    // 提取内核版本
+    const versionMatch = userAgent.match(/(?:AppleWebKit|Gecko|Trident|Edge)\/([\d.]+)/);
+    if (versionMatch) {
+      kernelVersion = versionMatch[1];
+    } else {
+      // 尝试其他方式提取版本
+      const chromeMatch = userAgent.match(/Chrome\/([\d.]+)/);
+      if (chromeMatch) {
+        kernelVersion = chromeMatch[1];
+      } else {
+        const safariMatch = userAgent.match(/Version\/([\d.]+)/);
+        if (safariMatch) {
+          kernelVersion = safariMatch[1];
+        }
+      }
+    }
+    
+    return {
+      osName: deviceInfo.osName || 'unknown',
+      osVersion: deviceInfo.osVersion || 'unknown',
+      deviceModel: deviceInfo.deviceModel || 'unknown',
+      deviceManufacturer: deviceInfo.deviceManufacturer || 'unknown',
+      webkitType,
+      kernelVersion,
+    };
   } catch (error) {
     console.error('[Device] Failed to get device info:', error);
-    throw error; // 继续抛出错误，以便调用者可以处理
+    // 优雅降级：返回默认值
+    return {
+      osName: 'unknown',
+      osVersion: 'unknown',
+      deviceModel: 'unknown',
+      deviceManufacturer: 'unknown',
+      webkitType: 'unknown',
+      kernelVersion: 'unknown',
+    };
   }
 }
 

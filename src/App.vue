@@ -3,9 +3,6 @@ import { computed, ref, watch, nextTick } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { getCachedPages } from './router/index'
 
-
-
-
 const route = useRoute()
 const router = useRouter()
 

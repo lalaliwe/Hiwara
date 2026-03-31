@@ -64,7 +64,6 @@ const changeValue = (newValue: string) => {
   display: flex;
   background-color: #fafafa;
   box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
-  padding-bottom: env(safe-area-inset-bottom, 0);
 
   .btn {
     flex: 1;
@@ -72,7 +71,7 @@ const changeValue = (newValue: string) => {
     user-select: none;
     text-align: center;
     font-size: 0.8rem;
-    padding: 8px 0;
+    padding: 8px 0 calc(env(safe-area-inset-bottom, 0) + 8px) 0;
     transition: background-color 0.2s ease-in-out;
 
     &.active {

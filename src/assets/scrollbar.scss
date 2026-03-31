@@ -1,0 +1,41 @@
+.desktop-only {
+  /* 隐藏滚动条的上下按钮（箭头） */
+  ::-webkit-scrollbar-button {
+    display: none !important;
+  }
+
+  /* WebKit 浏览器滚动条基础设置 */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  /* 滚动条轨道 - 完全透明 */
+  ::-webkit-scrollbar-track {
+    background: transparent;
+    border-radius: 0;
+  }
+
+  /* 滚动条滑块 - 半透明效果 */
+  ::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 4px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 0, 0, 0.3);
+  }
+
+  /* Firefox 浏览器样式 */
+  @supports (-moz-appearance: none) {
+    * {
+      scrollbar-width: thin;
+      scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
+    }
+    
+    /* 隐藏 Firefox 的滚动条按钮 */
+    scrollbarbutton {
+      display: none !important;
+    }
+  }
+}

@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { ref, onActivated } from 'vue';
+import { ref } from 'vue';
 import topBar from '../component/search/topBar.vue';
 import empty from '../component/search/empty.vue';
 import SearchLoading from '../component/search/loading.vue';
-import cardButton from '../component/cardButton.vue';
+import searchResult from '../component/search/searchResult.vue';
 
-const searching = ref<'empty' | 'loading' | 'result'>('result');
+const searching = ref<'empty' | 'loading' | 'result'>('empty');
 const tab = ref('video');
 
 const searchHistory = ref<string[]>([]);
@@ -53,71 +53,18 @@ for (let i = 0; i < 100; i++) {
     isR18: false
   });
 }
-
-const videoListView = ref();
-const imageListView = ref();
-let videoScrollTop = 0;
-let imageScrollTop = 0;
-
-onActivated(() => {
-  if (videoListView.value && typeof videoListView.value.scrollTo === 'function') {
-    videoListView.value.scrollTo({ top: videoScrollTop });
-  }
-  if (imageListView.value && typeof imageListView.value.scrollTo === 'function') {
-    imageListView.value.scrollTo({ top: imageScrollTop });
-  }
-});
-
-function handleVideoScroll(event: any): void {
-  videoScrollTop = event.target.scrollTop;
-}
-
-function handleImageScroll(event: any): void {
-  imageScrollTop = event.target.scrollTop;
-}
 </script>
 <template>
   <div id="search">
     <topBar />
     <empty v-if="searching === 'empty'" :search-history="searchHistory" :search-recommend="searchRecommend" />
     <SearchLoading v-else-if="searching === 'loading'" />
-    <div v-else-if="searching === 'result'" class="content result">
-      <div class="tabs">
-        <v-tabs v-model="tab" color="#00796B" align-tabs="center" density="compact" grow>
-          <v-tab value="video">视频</v-tab>
-          <v-tab value="image">插画</v-tab>
-        </v-tabs>
-        <v-divider></v-divider>
-      </div>
-      <v-tabs-window v-model="tab" class="tabs-window">
-        <v-tabs-window-item value="video">
-          <div class="list-view" ref="videoListView" @scroll="handleVideoScroll">
-            <v-infinite-scroll color="#00796B">
-              <div class="grid">
-                <template v-for="item in videoResult" :key="item.id">
-                  <cardButton type="video" :id="item.id" :title="item.title" :img="item.img" :author="item.author"
-                    :time="item.time" :viewNum="item.viewNum" :likeNum="item.likeNum" :longNum="item.longNum"
-                    :isR18="item.isR18" />
-                </template>
-              </div>
-            </v-infinite-scroll>
-          </div>
-        </v-tabs-window-item>
-        <v-tabs-window-item value="image">
-          <div class="list-view" ref="imageListView" @scroll="handleImageScroll">
-            <v-infinite-scroll color="#00796B">
-              <div class="grid">
-                <template v-for="item in imageResult" :key="item.id">
-                  <cardButton type="image" :id="item.id" :title="item.title" :img="item.img" :author="item.author"
-                    :time="item.time" :viewNum="item.viewNum" :likeNum="item.likeNum" :longNum="item.longNum"
-                    :isR18="item.isR18" />
-                </template>
-              </div>
-            </v-infinite-scroll>
-          </div>
-        </v-tabs-window-item>
-      </v-tabs-window>
-    </div>
+    <searchResult 
+      v-else-if="searching === 'result'" 
+      :video-result="videoResult" 
+      :image-result="imageResult"
+      v-model:tab="tab"
+    />
   </div>
 </template>
 <style lang="scss" scoped>
