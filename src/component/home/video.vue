@@ -63,36 +63,43 @@ onActivated(() => {
 
 </script>
 <template>
-  <div class="tabs">
-    <div class="tabs-elements">
-      <v-tabs class="left" v-model="tab" color="#00796B" align-tabs="center" density="compact" grow>
-        <v-tab v-for="item in tabArray" :value="item.value" :key="`tabs_${item.value}`">
-          {{ item.text }}
-        </v-tab>
-      </v-tabs>
-      <div class="rigth">
-        <font-awesome-icon icon="fa-solid fa-align-right" />
+  <div id="videoView">
+    <div class="tabs">
+      <div class="tabs-elements">
+        <v-tabs class="left" v-model="tab" color="#00796B" align-tabs="center" density="compact" grow>
+          <v-tab v-for="item in tabArray" :value="item.value" :key="`tabs_${item.value}`">
+            {{ item.text }}
+          </v-tab>
+        </v-tabs>
+        <div class="rigth">
+          <font-awesome-icon icon="fa-solid fa-align-right" />
+        </div>
       </div>
+      <v-divider></v-divider>
     </div>
-    <v-divider></v-divider>
+    <v-tabs-window v-model="tab" class="tabs-window">
+      <v-tabs-window-item v-for="(item, i) in tabArray" :value="item.value" :key="`tabs-window_${item.value}`">
+        <div class="list-view" :ref="(el) => setListRef(el, i)" @scroll="(e) => handleScroll(i, e)">
+          <v-infinite-scroll color="#00796B">
+            <div class="grid">
+              <template v-for="(item, index) in videoList[i]">
+                <cardButton type="video" :id="item.id" :title="item.title" :img="item.img" :author="item.author"
+                  :time="item.time" :viewNum="item.viewNum" :likeNum="item.likeNum" :longNum="item.longNum"
+                  :isR18="item.isR18" />
+              </template>
+            </div>
+          </v-infinite-scroll>
+        </div>
+      </v-tabs-window-item>
+    </v-tabs-window>
   </div>
-  <v-tabs-window v-model="tab" class="tabs-window">
-    <v-tabs-window-item v-for="(item, i) in tabArray" :value="item.value" :key="`tabs-window_${item.value}`">
-      <div class="list-view" :ref="(el) => setListRef(el, i)" @scroll="(e) => handleScroll(i, e)">
-        <v-infinite-scroll color="#00796B">
-          <div class="grid">
-            <template v-for="(item, index) in videoList[i]">
-              <cardButton type="video" :id="item.id" :title="item.title" :img="item.img" :author="item.author"
-                :time="item.time" :viewNum="item.viewNum" :likeNum="item.likeNum" :longNum="item.longNum"
-                :isR18="item.isR18" />
-            </template>
-          </div>
-        </v-infinite-scroll>
-      </div>
-    </v-tabs-window-item>
-  </v-tabs-window>
 </template>
 <style lang="scss" scoped>
+#videoView {
+  display: flex;
+  flex-direction: column;
+}
+
 .tabs {
   .tabs-elements {
     display: flex;
@@ -115,24 +122,23 @@ onActivated(() => {
 }
 
 .tabs-window {
-  height: calc(100% - 36px);
+  flex: 1;
 
   :deep(.v-window__container) {
     height: 100%;
-  }
 
-  .v-window-item {
-    height: 100%;
-    overflow: auto;
+    .v-window-item {
+      height: 100%;
+    }
   }
 
   .list-view {
     height: 100%;
-    overflow: auto;
-  }
+    overflow-y: auto;
 
-  :deep(.v-infinite-scroll__side) {
-    margin: 5px 0;
+    .v-infinite-scroll {
+      padding-top: 10px;
+    }
   }
 }
 

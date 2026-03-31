@@ -88,7 +88,7 @@ onMounted(() => {
     titleRef.value.style.height = heights.value.titleCollapse + 'px';
     titleRef.value.style.whiteSpace = 'nowrap';
   }
-  
+
   // 监听窗口大小改变事件
   window.addEventListener('resize', handleResize);
 })
@@ -101,7 +101,7 @@ onUnmounted(() => {
 // 简化 watch 逻辑，使用 nextTick 确保 DOM 更新后设置样式
 watch(expand, async (val) => {
   if (!titleRef.value) return;
-  
+
   if (val) {
     // === 展开逻辑 ===
     titleRef.value.style.whiteSpace = 'normal';
@@ -110,7 +110,7 @@ watch(expand, async (val) => {
     // === 折叠逻辑 ===
     const el = titleRef.value;
     el.style.height = heights.value.titleCollapse + 'px';
-    
+
     // 等待一帧让浏览器应用 height 变化，然后设置 whiteSpace
     await nextTick();
     setTimeout(() => {
@@ -334,6 +334,9 @@ function clickLike() {
 
     .tag {
       margin: 2px 2px 2px 0;
+      color: #000;
+      user-select: none;
+      cursor: pointer;
     }
   }
 }
@@ -343,34 +346,16 @@ function clickLike() {
   height: 0;
 
   .titleCollapseHeight {
-    padding: 5px 15px 5px 10px;
+    @extend .title;
     white-space: nowrap;
-    text-overflow: ellipsis;
-    overflow: hidden;
-    font-size: 1.1rem;
   }
 
   .titleExpandHeight {
-    padding: 5px 15px 5px 10px;
-    font-size: 1.1rem;
+    @extend .title;
   }
 
   .synopsisHeight {
-    padding: 0 10px;
-    color: #616161;
-    font-size: 0.8rem;
-
-    .text {
-      padding: 4px 0 2px 0;
-    }
-
-    .tags {
-      padding: 2px 0 4px 0;
-
-      .tag {
-        margin: 2px 2px 2px 0;
-      }
-    }
+    @extend .synopsis;
   }
 }
 

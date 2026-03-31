@@ -59,6 +59,7 @@ function toSearch() {
   // padding-bottom: env(safe-area-inset-bottom, 0);
   padding: env(safe-area-inset-top, 0) env(safe-area-inset-right, 0) 0 env(safe-area-inset-left, 0);
   display: flex;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
 .search {

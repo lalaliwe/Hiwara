@@ -65,63 +65,70 @@ function handleImageScroll(event: any): void {
 }
 </script>
 <template>
-  <div class="tabs">
-    <v-tabs v-model="tab" color="#00796B" align-tabs="center" density="compact" grow>
-      <v-tab value="video">视频</v-tab>
-      <v-tab value="image">插画</v-tab>
-    </v-tabs>
-    <v-divider></v-divider>
+  <div id="subscribe">
+    <div class="tabs">
+      <v-tabs v-model="tab" color="#00796B" align-tabs="center" density="compact" grow>
+        <v-tab value="video">视频</v-tab>
+        <v-tab value="image">插画</v-tab>
+      </v-tabs>
+      <v-divider></v-divider>
+    </div>
+    <v-tabs-window v-model="tab" class="tabs-window">
+      <v-tabs-window-item value="video">
+        <div class="list-view" ref="videoListView" @scroll="handleVideoScroll">
+          <v-infinite-scroll color="#00796B">
+            <div class="grid">
+              <template v-for="(item, index) in videoList">
+                <cardButton type="video" :id="item.id" :title="item.title" :img="item.img" :author="item.author"
+                  :time="item.time" :viewNum="item.viewNum" :likeNum="item.likeNum" :longNum="item.longNum"
+                  :isR18="item.isR18" />
+              </template>
+            </div>
+          </v-infinite-scroll>
+        </div>
+      </v-tabs-window-item>
+      <v-tabs-window-item value="image">
+        <div class="list-view" ref="imageListView" @scroll="handleImageScroll">
+          <v-infinite-scroll color="#00796B">
+            <div class="grid">
+              <template v-for="(item, index) in imageList">
+                <cardButton type="image" :id="item.id" :title="item.title" :img="item.img" :author="item.author"
+                  :time="item.time" :viewNum="item.viewNum" :likeNum="item.likeNum" :longNum="item.longNum"
+                  :isR18="item.isR18" />
+              </template>
+            </div>
+          </v-infinite-scroll>
+        </div>
+      </v-tabs-window-item>
+    </v-tabs-window>
   </div>
-  <v-tabs-window v-model="tab" class="tabs-window">
-    <v-tabs-window-item value="video">
-      <div class="list-view" ref="videoListView" @scroll="handleVideoScroll">
-        <v-infinite-scroll color="#00796B">
-          <div class="grid">
-            <template v-for="(item, index) in videoList">
-              <cardButton type="video" :id="item.id" :title="item.title" :img="item.img" :author="item.author"
-                :time="item.time" :viewNum="item.viewNum" :likeNum="item.likeNum" :longNum="item.longNum"
-                :isR18="item.isR18" />
-            </template>
-          </div>
-        </v-infinite-scroll>
-      </div>
-    </v-tabs-window-item>
-    <v-tabs-window-item value="image">
-      <div class="list-view" ref="imageListView" @scroll="handleImageScroll">
-        <v-infinite-scroll color="#00796B">
-          <div class="grid">
-            <template v-for="(item, index) in imageList">
-              <cardButton type="image" :id="item.id" :title="item.title" :img="item.img" :author="item.author"
-                :time="item.time" :viewNum="item.viewNum" :likeNum="item.likeNum" :longNum="item.longNum"
-                :isR18="item.isR18" />
-            </template>
-          </div>
-        </v-infinite-scroll>
-      </div>
-    </v-tabs-window-item>
-  </v-tabs-window>
 </template>
 <style lang="scss" scoped>
+#subscribe {
+  display: flex;
+  flex-direction: column;
+}
+
 .tabs {}
 
 .tabs-window {
-  height: calc(100% - 36px);
+  flex: 1;
 
   :deep(.v-window__container) {
     height: 100%;
-  }
 
-  .v-window-item {
-    height: 100%;
+    .v-window-item {
+      height: 100%;
+    }
   }
 
   .list-view {
     height: 100%;
-    overflow: auto;
-  }
+    overflow-y: auto;
 
-  :deep(.v-infinite-scroll__side) {
-    margin: 5px 0;
+    .v-infinite-scroll {
+      padding-top: 10px;
+    }
   }
 }
 

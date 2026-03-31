@@ -1,10 +1,16 @@
 <script setup lang="ts">
 import { ref } from 'vue';
+import { useRouter } from 'vue-router';
+const router = useRouter();
+// 返回
+function goBack() {
+  router.back();
+}
 </script>
 
 <template>
   <div class="top-view">
-    <div class="goback">
+    <div class="goback" @click="goBack">
       <font-awesome-icon icon="fa-solid fa-angle-left" />
     </div>
     <div class="search">
@@ -34,7 +40,8 @@ import { ref } from 'vue';
   padding: env(safe-area-inset-top, 0) env(safe-area-inset-right, 0) 0 env(safe-area-inset-left, 0);
   display: flex;
 }
-.goback{
+
+.goback {
   width: 45px;
   height: 60px;
   color: #fff;
@@ -42,6 +49,7 @@ import { ref } from 'vue';
   align-items: center;
   justify-content: center;
   cursor: pointer;
+  user-select: none;
   font-size: 1.4rem;
 }
 
@@ -77,6 +85,7 @@ import { ref } from 'vue';
     pointer-events: none;
   }
 }
+
 .submit-btn {
   height: 60px;
   color: #fff;

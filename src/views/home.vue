@@ -38,15 +38,16 @@ const handleTabChange = (tab: string) => {
 
 <template>
   <div id="home">
-    <homeTopBar />
-    <div class="main">
-      <homeVideo v-if="isTab === 'video'" />
-      <homeImage v-else-if="isTab === 'image'" />
-      <homeSubscribe v-else-if="isTab === 'subscribe'" />
-      <homeForum v-else-if="isTab === 'forum'" />
-      <homeMy v-else-if="isTab === 'my'" />
-    </div>
-    <homeBottomButton :model-value="isTab" @update:tab="handleTabChange" />
+    <!-- 导航栏 -->
+    <homeTopBar class="top" />
+    <!-- 主内容区域 -->
+    <homeVideo class="main" v-if="isTab === 'video'" />
+    <homeImage class="main" v-else-if="isTab === 'image'" />
+    <homeSubscribe class="main" v-else-if="isTab === 'subscribe'" />
+    <homeForum class="main" v-else-if="isTab === 'forum'" />
+    <homeMy class="main" v-else-if="isTab === 'my'" />
+    <!-- 底部按钮 -->
+    <homeBottomButton class="bottom" :model-value="isTab" @update:tab="handleTabChange" />
   </div>
 </template>
 
@@ -54,11 +55,24 @@ const handleTabChange = (tab: string) => {
 #home {
   height: 100%;
   background-color: #fafafa; // Material Design背景色
+  display: flex;
+  flex-direction: column;
+}
+
+.top {
+  z-index: 400;
 }
 
 .main {
-  height: calc(100% - 60px - 60px - env(safe-area-inset-top, 0) - env(safe-area-inset-bottom, 0));
-  padding: 0 env(safe-area-inset-right, 0) 0 env(safe-area-inset-left, 0);
+  // height: calc(100% - 60px - 60px - env(safe-area-inset-top, 0) - env(safe-area-inset-bottom, 0));
+  // padding: 0 env(safe-area-inset-right, 0) 0 env(safe-area-inset-left, 0);
   background-color: #fafafa;
+  flex: 1;
+  z-index: 1;
+  overflow: hidden;
+}
+
+.bottom {
+  z-index: 500;
 }
 </style>
