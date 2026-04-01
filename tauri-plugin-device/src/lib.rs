@@ -1,0 +1,48 @@
+use tauri::{
+  plugin::{Builder, TauriPlugin},
+  Manager, Runtime,
+};
+
+pub use models::*;
+
+#[cfg(desktop)]
+mod desktop;
+#[cfg(mobile)]
+mod mobile;
+
+mod commands;
+mod error;
+mod models;
+
+pub use error::{Error, Result};
+
+#[cfg(desktop)]
+use desktop::Device;
+#[cfg(mobile)]
+use mobile::Device;
+
+/// Extensions to [`tauri::App`], [`tauri::AppHandle`] and [`tauri::Window`] to access the device APIs.
+pub trait DeviceExt<R: Runtime> {
+  fn device(&self) -> &Device<R>;
+}
+
+impl<R: Runtime, T: Manager<R>> crate::DeviceExt<R> for T {
+  fn device(&self) -> &Device<R> {
+    self.state::<Device<R>>().inner()
+  }
+}
+
+/// Initializes the plugin.
+pub fn init<R: Runtime>() -> TauriPlugin<R> {
+  Builder::new("device")
+    .invoke_handler(tauri::generate_handler![commands::ping])
+    .setup(|app, api| {
+      #[cfg(mobile)]
+      let device = mobile::init(app, api)?;
+      #[cfg(desktop)]
+      let device = desktop::init(app, api)?;
+      app.manage(device);
+      Ok(())
+    })
+    .build()
+}
