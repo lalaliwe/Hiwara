@@ -6,8 +6,8 @@ import homeImage from '../component/home/image.vue';
 import homeSubscribe from '../component/home/subscribe.vue';
 import homeForum from '../component/home/forum.vue';
 import homeMy from '../component/home/my.vue';
-import { ref, onMounted, onBeforeUnmount } from 'vue';
-import { on } from 'hammerjs';
+import { ref, onMounted, onBeforeUnmount, onActivated } from 'vue';
+// import { on } from 'hammerjs';
 import { lockPortrait } from '../plugins/useOrientation'
 import { setNavBarStyle } from '../plugins/navbarStyle'
 
@@ -18,11 +18,21 @@ defineOptions({
 
 const isTab = ref("subscribe");
 
-// 固定竖屏
-lockPortrait()
-// 设置导航栏样式
-setNavBarStyle({ style: 'light' })
+// 应用页面设置的函数
+const applyPageSettings = () => {
+  // 固定竖屏
+  lockPortrait()
+  // 设置导航栏样式
+  setNavBarStyle({ style: 'light' })
+}
 
+// 初始加载时应用设置
+applyPageSettings()
+
+// 当页面被激活时（从 keep-alive 缓存中恢复）也应用设置
+onActivated(() => {
+  applyPageSettings()
+})
 
 onMounted(() => {
   // console.log('✅ Home mounted');

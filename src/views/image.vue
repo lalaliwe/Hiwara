@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue';
+import { ref, onMounted, onUnmounted, onActivated } from 'vue';
 import test1img from '../static/img/test1.jpg';
 import { setNavBarStyle } from '../plugins/navbarStyle'
 import { useRouter } from 'vue-router';
@@ -11,8 +11,20 @@ defineOptions({
   name: 'Image'
 })
 
-setNavBarStyle({ style: 'dark' })
 const router = useRouter();
+
+// 应用页面设置的函数
+const applyPageSettings = () => {
+  setNavBarStyle({ style: 'dark' })
+}
+
+// 初始加载时应用设置
+applyPageSettings()
+
+// 当页面被激活时（从 keep-alive 缓存中恢复）也应用设置
+onActivated(() => {
+  applyPageSettings()
+})
 
 // 插画图片数据
 const illustrationImages = ref<string[]>([test1img]);
