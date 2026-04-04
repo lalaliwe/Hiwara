@@ -15,7 +15,7 @@ pub fn init<R: Runtime, C: DeserializeOwned>(
   api: PluginApi<R, C>,
 ) -> crate::Result<Device<R>> {
   #[cfg(target_os = "android")]
-  let handle = api.register_android_plugin("com.plugin.device", "ExamplePlugin")?;
+  let handle = api.register_android_plugin("com.plugin.device", "DevicePlugin")?;
   #[cfg(target_os = "ios")]
   let handle = api.register_ios_plugin(init_plugin_device)?;
   Ok(Device(handle))
@@ -29,6 +29,62 @@ impl<R: Runtime> Device<R> {
     self
       .0
       .run_mobile_plugin("ping", payload)
+      .map_err(Into::into)
+  }
+
+  pub fn get_device_info(&self) -> crate::Result<DeviceInfoResponse> {
+    self
+      .0
+      .run_mobile_plugin("getDeviceInfo", ())
+      .map_err(Into::into)
+  }
+
+  pub fn get_network_info(&self) -> crate::Result<NetworkInfoResponse> {
+    self
+      .0
+      .run_mobile_plugin("getNetworkInfo", ())
+      .map_err(Into::into)
+  }
+
+  pub fn get_battery_info(&self) -> crate::Result<BatteryInfoResponse> {
+    self
+      .0
+      .run_mobile_plugin("getBatteryInfo", ())
+      .map_err(Into::into)
+  }
+
+  pub fn enter_immersive(&self) -> crate::Result<ImmersiveResponse> {
+    self
+      .0
+      .run_mobile_plugin("enterImmersive", ())
+      .map_err(Into::into)
+  }
+
+  pub fn exit_immersive(&self) -> crate::Result<ImmersiveResponse> {
+    self
+      .0
+      .run_mobile_plugin("exitImmersive", ())
+      .map_err(Into::into)
+  }
+
+  pub fn set_bar_style(&self, payload: SetStyleRequest) -> crate::Result<SetStyleResponse> {
+    self
+      .0
+      .run_mobile_plugin("setBarStyle", payload)
+      .map_err(Into::into)
+  }
+
+  pub fn lock_orientation(&self, payload: LockOrientationRequest) -> crate::Result<OrientationResponse> {
+    self
+      .0
+      .run_mobile_plugin("lockOrientation", payload)
+      .map_err(Into::into)
+  }
+
+  pub fn unlock_orientation(&self) -> crate::Result<OrientationResponse> {
+    self
+      .0
+      .run_mobile_plugin("unlockOrientation", ())
       .map_err(Into::into)
   }
 }

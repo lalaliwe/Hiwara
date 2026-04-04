@@ -18,7 +18,7 @@ interface SetStyleOptions {
  */
 export async function setNavBarStyle(options: SetStyleOptions): Promise<void> {
   try {
-    await invoke('plugin:navbar-style|set_bar_style', {
+    await invoke('plugin:device|set_bar_style', {
       payload: {
         style: options.style,
         target: options.target || 'all',

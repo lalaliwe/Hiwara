@@ -35,7 +35,17 @@ impl<R: Runtime, T: Manager<R>> crate::DeviceExt<R> for T {
 /// Initializes the plugin.
 pub fn init<R: Runtime>() -> TauriPlugin<R> {
   Builder::new("device")
-    .invoke_handler(tauri::generate_handler![commands::ping])
+    .invoke_handler(tauri::generate_handler![
+      commands::ping,
+      commands::get_device_info,
+      commands::get_network_info,
+      commands::get_battery_info,
+      commands::enter_immersive,
+      commands::exit_immersive,
+      commands::set_bar_style,
+      commands::lock_orientation,
+      commands::unlock_orientation,
+    ])
     .setup(|app, api| {
       #[cfg(mobile)]
       let device = mobile::init(app, api)?;

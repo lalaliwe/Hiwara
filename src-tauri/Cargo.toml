@@ -23,7 +23,4 @@ tauri-plugin-opener = "2"
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 
-tauri-plugin-orientation = { path = "../tauri-plugin-orientation" }
-tauri-plugin-immersive = { path = "../tauri-plugin-immersive" }
-tauri-plugin-navbar-style = { path = "../tauri-plugin-navbar-style" }
-tauri-plugin-device-info = { path = "../tauri-plugin-device-info" }
+tauri-plugin-device = { path = "../tauri-plugin-device" }

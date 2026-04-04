@@ -45,7 +45,7 @@ export interface BatteryInfo {
  */
 export async function getDeviceInfo(): Promise<DeviceInfo> {
   try {
-    const rawDeviceInfo = await invoke('plugin:device-info|getDeviceInfo');
+    const rawDeviceInfo = await invoke('plugin:device|get_device_info');
     
     // 确保 rawDeviceInfo 是对象类型
     const deviceInfo = typeof rawDeviceInfo === 'object' && rawDeviceInfo !== null 
@@ -117,7 +117,7 @@ export async function getDeviceInfo(): Promise<DeviceInfo> {
  */
 export async function getNetworkInfo(): Promise<NetworkInfo> {
   try {
-    return await invoke('plugin:device-info|getNetworkInfo');
+    return await invoke('plugin:device|get_network_info');
   } catch (error) {
     console.error('[Device] Failed to get network info:', error);
     // 优雅降级：返回默认值
@@ -134,7 +134,7 @@ export async function getNetworkInfo(): Promise<NetworkInfo> {
  */
 export async function getBatteryInfo(): Promise<BatteryInfo> {
   try {
-    return await invoke('plugin:device-info|getBatteryInfo');
+    return await invoke('plugin:device|get_battery_info');
   } catch (error) {
     console.error('[Device] Failed to get battery info:', error);
     // 优雅降级：返回默认值

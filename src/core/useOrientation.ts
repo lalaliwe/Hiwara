@@ -15,7 +15,7 @@ interface OrientationResponse {
 const lockOrientation = async (orientation: OrientationType): Promise<boolean> => {
   try {
     // 调用 Tauri 插件命令
-    const result = await invoke<OrientationResponse>('plugin:orientation|lock_orientation', {
+    const result = await invoke<OrientationResponse>('plugin:device|lock_orientation', {
       payload: { orientation }
     });
     // console.log(`屏幕已锁定：${orientation}`, result);
@@ -41,7 +41,7 @@ export const lockLandscape = async (): Promise<boolean> => lockOrientation('land
  */
 export const unlockOrientation = async (): Promise<boolean> => {
   try {
-    const result = await invoke<OrientationResponse>('plugin:orientation|unlock_orientation');
+    const result = await invoke<OrientationResponse>('plugin:device|unlock_orientation');
     // console.log('屏幕已解锁', result);
     return result.success;
   } catch (error) {

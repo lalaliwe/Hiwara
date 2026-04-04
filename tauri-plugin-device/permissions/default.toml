@@ -1,3 +1,13 @@
 [default]
 description = "Default permissions for the plugin"
-permissions = ["allow-ping"]
+permissions = [
+    "allow-ping",
+    "allow-get-device-info",
+    "allow-get-network-info",
+    "allow-get-battery-info",
+    "allow-enter-immersive",
+    "allow-exit-immersive",
+    "allow-set-bar-style",
+    "allow-lock-orientation",
+    "allow-unlock-orientation",
+]

@@ -1,0 +1,93 @@
+# Automatically generated - DO NOT EDIT!
+
+"$schema" = "../../schemas/schema.json"
+
+[[permission]]
+identifier = "allow-ping"
+description = "Enables the ping command without any pre-configured scope."
+commands.allow = ["ping"]
+
+[[permission]]
+identifier = "deny-ping"
+description = "Denies the ping command without any pre-configured scope."
+commands.deny = ["ping"]
+
+[[permission]]
+identifier = "allow-get-device-info"
+description = "Enables the get_device_info command without any pre-configured scope."
+commands.allow = ["get_device_info"]
+
+[[permission]]
+identifier = "deny-get-device-info"
+description = "Denies the get_device_info command without any pre-configured scope."
+commands.deny = ["get_device_info"]
+
+[[permission]]
+identifier = "allow-get-network-info"
+description = "Enables the get_network_info command without any pre-configured scope."
+commands.allow = ["get_network_info"]
+
+[[permission]]
+identifier = "deny-get-network-info"
+description = "Denies the get_network_info command without any pre-configured scope."
+commands.deny = ["get_network_info"]
+
+[[permission]]
+identifier = "allow-get-battery-info"
+description = "Enables the get_battery_info command without any pre-configured scope."
+commands.allow = ["get_battery_info"]
+
+[[permission]]
+identifier = "deny-get-battery-info"
+description = "Denies the get_battery_info command without any pre-configured scope."
+commands.deny = ["get_battery_info"]
+
+[[permission]]
+identifier = "allow-enter-immersive"
+description = "Enables the enter_immersive command without any pre-configured scope."
+commands.allow = ["enter_immersive"]
+
+[[permission]]
+identifier = "deny-enter-immersive"
+description = "Denies the enter_immersive command without any pre-configured scope."
+commands.deny = ["enter_immersive"]
+
+[[permission]]
+identifier = "allow-exit-immersive"
+description = "Enables the exit_immersive command without any pre-configured scope."
+commands.allow = ["exit_immersive"]
+
+[[permission]]
+identifier = "deny-exit-immersive"
+description = "Denies the exit_immersive command without any pre-configured scope."
+commands.deny = ["exit_immersive"]
+
+[[permission]]
+identifier = "allow-set-bar-style"
+description = "Enables the set_bar_style command without any pre-configured scope."
+commands.allow = ["set_bar_style"]
+
+[[permission]]
+identifier = "deny-set-bar-style"
+description = "Denies the set_bar_style command without any pre-configured scope."
+commands.deny = ["set_bar_style"]
+
+[[permission]]
+identifier = "allow-lock-orientation"
+description = "Enables the lock_orientation command without any pre-configured scope."
+commands.allow = ["lock_orientation"]
+
+[[permission]]
+identifier = "deny-lock-orientation"
+description = "Denies the lock_orientation command without any pre-configured scope."
+commands.deny = ["lock_orientation"]
+
+[[permission]]
+identifier = "allow-unlock-orientation"
+description = "Enables the unlock_orientation command without any pre-configured scope."
+commands.allow = ["unlock_orientation"]
+
+[[permission]]
+identifier = "deny-unlock-orientation"
+description = "Denies the unlock_orientation command without any pre-configured scope."
+commands.deny = ["unlock_orientation"]
