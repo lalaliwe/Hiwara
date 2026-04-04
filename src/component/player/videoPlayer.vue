@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router';
-import { lockPortrait, lockLandscape } from '../../core/useOrientation'
-import { enterImmersive, exitImmersive } from '../../core/immersive'
-import { getNetworkInfo, getBatteryInfo } from '../../core/deviceInfo'
+import { lockPortrait, lockLandscape } from '../../plugins/useOrientation'
+import { enterImmersive, exitImmersive } from '../../plugins/immersive'
+import { getNetworkInfo, getBatteryInfo } from '../../plugins/deviceInfo'
 import customRange from './customRange.vue';
 
 const fullscreenState = ref(false); // 内部维护的全屏状态

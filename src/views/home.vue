@@ -8,8 +8,8 @@ import homeForum from '../component/home/forum.vue';
 import homeMy from '../component/home/my.vue';
 import { ref, onMounted, onBeforeUnmount } from 'vue';
 import { on } from 'hammerjs';
-import { lockPortrait } from '../core/useOrientation'
-import { setNavBarStyle } from '../core/navbarStyle'
+import { lockPortrait } from '../plugins/useOrientation'
+import { setNavBarStyle } from '../plugins/navbarStyle'
 
 // 设置组件名称，确保与路由name一致
 defineOptions({

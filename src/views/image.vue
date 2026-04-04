@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue';
 import test1img from '../static/img/test1.jpg';
-import { setNavBarStyle } from '../core/navbarStyle'
+import { setNavBarStyle } from '../plugins/navbarStyle'
 import { useRouter } from 'vue-router';
 import ImageInfo from '../component/image/info.vue';
 import RecommendList from '../component/image/recommendList.vue';

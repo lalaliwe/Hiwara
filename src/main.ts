@@ -41,6 +41,6 @@ app.config.globalProperties.$hammer = Hammer;
 app.mount("#app");
 
 /** 测试代码 */
-import { getDeviceInfo } from "./core/deviceInfo";
+import { getDeviceInfo } from "./plugins/deviceInfo";
 const deviceInfo = await getDeviceInfo();
 console.log(deviceInfo);

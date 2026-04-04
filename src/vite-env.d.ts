@@ -5,3 +5,8 @@ declare module "*.vue" {
   const component: DefineComponent<{}, {}, any>;
   export default component;
 }
+
+declare module 'vuetify/styles' {
+  const styles: any;
+  export default styles;
+}
