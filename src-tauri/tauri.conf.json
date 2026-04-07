@@ -33,6 +33,11 @@
     ],
     "resources": [
       "../public/fonts/*"
-    ]
+    ],
+    "android": {
+      "autoIncrementVersionCode": false,
+      "minSdkVersion": 24,
+      "versionCode": 1
+    }
   }
 }

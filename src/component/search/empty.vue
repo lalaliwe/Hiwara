@@ -74,7 +74,7 @@ onMounted(() => {
   nextTick(() => {
     calculateHeights();
   });
-  
+
   // 监听窗口大小改变事件
   window.addEventListener('resize', handleResize);
 });
@@ -102,43 +102,45 @@ function toggleRecommendExpand() {
 </script>
 
 <template>
-  <div class="content empty">
-    <div class="label" @click="toggleHistoryExpand">
-      搜索历史
-      <font-awesome-icon icon="fa-solid fa-angle-down" :class="{ expanded: historyExpand }" />
-    </div>
-    <div class="tags" :style="{ height: historyContainerHeight }">
-      <v-chip v-for="tag in searchHistory" size="small" class="tag">
-        {{ tag }}
-      </v-chip>
-    </div>
-    <div class="label" @click="toggleRecommendExpand">
-      搜索发现
-      <font-awesome-icon icon="fa-solid fa-angle-down" :class="{ expanded: recommendExpand }" />
-    </div>
-    <div class="tags" :style="{ height: recommendContainerHeight }">
-      <v-chip v-for="tag in searchRecommend" size="small" class="tag">
-        {{ tag }}
-      </v-chip>
-    </div>
-    
-    <!-- 高度计算元素 - 放在.content内部以确保相同的宽度约束 -->
-    <div class="calculateHeight">
-      <div class="historyCollapseHeight" ref="historyCollapseHeightRef">
-        <v-chip size="small" class="tag">{{ searchHistory[0] }}</v-chip>
+  <div class="content">
+    <div class="empty">
+      <div class="label" @click="toggleHistoryExpand">
+        搜索历史
+        <font-awesome-icon icon="fa-solid fa-angle-down" :class="{ expanded: historyExpand }" />
       </div>
-      <div class="historyExpandHeight" ref="historyExpandHeightRef">
+      <div class="tags" :style="{ height: historyContainerHeight }">
         <v-chip v-for="tag in searchHistory" size="small" class="tag">
           {{ tag }}
         </v-chip>
       </div>
-      <div class="recommendCollapseHeight" ref="recommendCollapseHeightRef">
-        <v-chip size="small" class="tag">{{ searchRecommend[0] }}</v-chip>
+      <div class="label" @click="toggleRecommendExpand">
+        搜索发现
+        <font-awesome-icon icon="fa-solid fa-angle-down" :class="{ expanded: recommendExpand }" />
       </div>
-      <div class="recommendExpandHeight" ref="recommendExpandHeightRef">
+      <div class="tags" :style="{ height: recommendContainerHeight }">
         <v-chip v-for="tag in searchRecommend" size="small" class="tag">
           {{ tag }}
         </v-chip>
+      </div>
+
+      <!-- 高度计算元素 - 放在.content内部以确保相同的宽度约束 -->
+      <div class="calculateHeight">
+        <div class="historyCollapseHeight" ref="historyCollapseHeightRef">
+          <v-chip size="small" class="tag">{{ searchHistory[0] }}</v-chip>
+        </div>
+        <div class="historyExpandHeight" ref="historyExpandHeightRef">
+          <v-chip v-for="tag in searchHistory" size="small" class="tag">
+            {{ tag }}
+          </v-chip>
+        </div>
+        <div class="recommendCollapseHeight" ref="recommendCollapseHeightRef">
+          <v-chip size="small" class="tag">{{ searchRecommend[0] }}</v-chip>
+        </div>
+        <div class="recommendExpandHeight" ref="recommendExpandHeightRef">
+          <v-chip v-for="tag in searchRecommend" size="small" class="tag">
+            {{ tag }}
+          </v-chip>
+        </div>
       </div>
     </div>
   </div>
@@ -147,10 +149,11 @@ function toggleRecommendExpand() {
 <style lang="scss" scoped>
 .content {
   flex: 1;
-  overflow: auto;
+  overflow: auto !important;
 
-  &.empty {
+  .empty {
     padding: 6px 10px 12px 10px;
+
     .label {
       padding: 8px 0;
       font-size: 0.9rem;
@@ -186,11 +189,11 @@ function toggleRecommendExpand() {
         user-select: none;
       }
     }
-    
+
     .calculateHeight {
       overflow: hidden;
       height: 0;
-      
+
       .historyCollapseHeight,
       .historyExpandHeight,
       .recommendCollapseHeight,
@@ -198,7 +201,7 @@ function toggleRecommendExpand() {
         overflow: hidden;
         transition: height 0.3s ease-in-out;
         margin: 4px 0 8px 0;
-        
+
         .tag {
           margin: 2px 2px 2px 0;
           cursor: pointer;
