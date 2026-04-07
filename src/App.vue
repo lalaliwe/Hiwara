@@ -44,25 +44,50 @@ router.afterEach(() => {
 // =====================
 
 let backListener: PluginListener | null = null
+// 添加双击返回检测相关变量
+let lastBackPressedTime: number | null = null;
+const DOUBLE_BACK_PRESS_TIMEOUT = 2000; // 2秒内再次按下返回键则退出
 
 onMounted(async () => {
   // 只在 Android 上有效；桌面端不会触发
   backListener = await onBackButtonPress(async ({ canGoBack }) => {
+    // 检查是否为双击返回
+    const currentTime = Date.now();
+
     // 1. 如果当前在首页
     if (route.path === '/') {
-      // 在首页按返回 → 直接退出应用
-      await exit(0);
-      return
+      // 双击返回退出应用
+      if (lastBackPressedTime && currentTime - lastBackPressedTime <= DOUBLE_BACK_PRESS_TIMEOUT) {
+        await exit(0);
+        return;
+      } else {
+        // 第一次点击，提示用户再按一次退出
+        lastBackPressedTime = currentTime;
+        // 替换原来的console.log，使用toast提示
+        console.log('再按一次返回键退出应用');
+        return;
+      }
     }
-    // 2. 不在首页：希望“回退到上一页”
+
+    // 2. 不在首页：希望"回退到上一页"
     // 优先用 Tauri 提供的 canGoBack 信息
     if (canGoBack) {
       router.back()
       return
     }
+
     // 3. 极端情况：不在首页，且 WebHistory 已经回退到底
     // 再按返回，就直接退出应用
-    ; (window as any).__TAURI_INTERNALS?.exit(0)
+    if (lastBackPressedTime && currentTime - lastBackPressedTime <= DOUBLE_BACK_PRESS_TIMEOUT) {
+      await exit(0);
+      return;
+    } else {
+      // 提示用户再按一次退出
+      lastBackPressedTime = currentTime;
+      // 替换原来的console.log，使用toast提示
+      console.log('再按一次返回键退出应用');
+      return;
+    }
   })
 })
 
