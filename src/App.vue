@@ -1,6 +1,10 @@
 <script setup lang="ts">
-import { computed, ref, watch, nextTick } from 'vue'
+import { computed, ref, watch, nextTick, onMounted, onUnmounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+// 官方 API：Android 返回键
+import { onBackButtonPress } from '@tauri-apps/api/app'
+import type { PluginListener } from '@tauri-apps/api/core'
+import { exit } from '@tauri-apps/plugin-process';
 import { getCachedPages } from './router/index'
 
 const route = useRoute()
@@ -20,22 +24,51 @@ const updateCachedPages = async () => {
   await nextTick()
   const pages = getCachedPages()
   cachedPages.value = pages
-  // console.log('✅ App.vue缓存更新:', pages)
 }
 
 // 监听路由变化
 watch(
   () => route.path,
   () => {
-    // 立即更新缓存
     setTimeout(updateCachedPages, 0)
   },
   { immediate: true }
 )
 
-// 额外监听路由变化事件
 router.afterEach(() => {
   setTimeout(updateCachedPages, 0)
+})
+
+// =====================
+// Android 返回键处理（Tauri v2 官方 API）
+// =====================
+
+let backListener: PluginListener | null = null
+
+onMounted(async () => {
+  // 只在 Android 上有效；桌面端不会触发
+  backListener = await onBackButtonPress(async ({ canGoBack }) => {
+    // 1. 如果当前在首页
+    if (route.path === '/') {
+      // 在首页按返回 → 直接退出应用
+      await exit(0);
+      return
+    }
+    // 2. 不在首页：希望“回退到上一页”
+    // 优先用 Tauri 提供的 canGoBack 信息
+    if (canGoBack) {
+      router.back()
+      return
+    }
+    // 3. 极端情况：不在首页，且 WebHistory 已经回退到底
+    // 再按返回，就直接退出应用
+    ; (window as any).__TAURI_INTERNALS?.exit(0)
+  })
+})
+
+onUnmounted(() => {
+  // 取消监听，防止内存泄漏
+  backListener?.unregister()
 })
 </script>
 
@@ -65,10 +98,7 @@ router.afterEach(() => {
   transition: opacity 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.fade-enter-from {
-  opacity: 0;
-}
-
+.fade-enter-from,
 .fade-leave-to {
   opacity: 0;
 }
