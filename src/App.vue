@@ -5,6 +5,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { onBackButtonPress } from '@tauri-apps/api/app'
 import type { PluginListener } from '@tauri-apps/api/core'
 import { exit } from '@tauri-apps/plugin-process';
+import { showShortToast } from './plugins/toast'
 import { getCachedPages } from './router/index'
 
 const route = useRoute()
@@ -64,7 +65,8 @@ onMounted(async () => {
         // 第一次点击，提示用户再按一次退出
         lastBackPressedTime = currentTime;
         // 替换原来的console.log，使用toast提示
-        console.log('再按一次返回键退出应用');
+        // console.log('再按一次返回键退出应用');
+        showShortToast('再按一次返回键退出应用')
         return;
       }
     }
