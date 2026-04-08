@@ -17,37 +17,20 @@ const placeholderImg = '../static/img/placeholder.png';
 <template>
   <div class="illustrationView">
     <!-- 主图 -->
-    <v-img 
-      v-if="images.length > 0" 
-      cover 
-      :src="images[0]"
-    >
+    <v-img v-if="images.length > 0" cover :src="images[0]">
       <template v-slot:placeholder>
         <v-img cover :src="placeholderImg"></v-img>
       </template>
     </v-img>
     <!-- 占位图（如果没有主图） -->
-    <v-img 
-      v-else 
-      cover 
-      :src="placeholderImg"
-    ></v-img>
-    
+    <v-img v-else cover :src="placeholderImg"></v-img>
+
     <!-- 额外的图片（展开时显示） -->
-    <v-img 
-      v-if="imageExpand && images.length > 1" 
-      v-for="(img, index) in images.slice(1)" 
-      :key="index" 
-      cover 
-      :src="img"
-    ></v-img>
-    
+    <div v-if="imageExpand && images.length > 1">
+      <v-img v-for="(img, index) in images.slice(1)" :key="index" cover :src="img"></v-img>
+    </div>
     <!-- 展开/收起按钮（只有多张图片时才显示） -->
-    <span 
-      v-if="images.length > 1"
-      class="expand-btn" 
-      @click="imageExpand = !imageExpand"
-    >
+    <span v-if="images.length > 1" class="expand-btn" @click="imageExpand = !imageExpand">
       {{ imageExpand ? '收起' : '展开全部' }}
     </span>
   </div>

@@ -13,6 +13,7 @@ Default permissions for the plugin
 - `allow-set-bar-style`
 - `allow-lock-orientation`
 - `allow-unlock-orientation`
+- `allow-show-toast`
 
 ## Permission Table
 
@@ -279,6 +280,32 @@ Enables the ping command without any pre-configured scope.
 <td>
 
 Denies the ping command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`device:allow-show-toast`
+
+</td>
+<td>
+
+Enables the show_toast command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`device:deny-show-toast`
+
+</td>
+<td>
+
+Denies the show_toast command without any pre-configured scope.
 
 </td>
 </tr>

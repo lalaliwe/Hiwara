@@ -12,6 +12,7 @@ import com.plugin.device.handlers.DeviceInfoHandler
 import com.plugin.device.handlers.ImmersiveHandler
 import com.plugin.device.handlers.NavbarStyleHandler
 import com.plugin.device.handlers.OrientationHandler
+import com.plugin.device.handlers.ToastHandler
 
 @InvokeArg
 class PingArgs {
@@ -24,6 +25,7 @@ class DevicePlugin(private val activity: Activity): Plugin(activity) {
     private val immersiveHandler = ImmersiveHandler(activity)
     private val navbarStyleHandler = NavbarStyleHandler(activity)
     private val orientationHandler = OrientationHandler(activity)
+    private val toastHandler = ToastHandler(activity)
 
     override fun load(webView: WebView) {
         super.load(webView)
@@ -77,5 +79,10 @@ class DevicePlugin(private val activity: Activity): Plugin(activity) {
     @Command
     fun unlockOrientation(invoke: Invoke) {
         orientationHandler.unlockOrientation(invoke)
+    }
+
+    @Command
+    fun showToast(invoke: Invoke) {
+        toastHandler.showToast(invoke)
     }
 }

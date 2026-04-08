@@ -1,8 +1,8 @@
-use tauri::{AppHandle, command, Runtime};
+use tauri::{command, AppHandle, Runtime};
 
 use crate::models::*;
-use crate::Result;
 use crate::DeviceExt;
+use crate::Result;
 
 #[command]
 pub(crate) async fn ping<R: Runtime>(
@@ -13,37 +13,27 @@ pub(crate) async fn ping<R: Runtime>(
 }
 
 #[command]
-pub(crate) async fn get_device_info<R: Runtime>(
-    app: AppHandle<R>,
-) -> Result<DeviceInfoResponse> {
+pub(crate) async fn get_device_info<R: Runtime>(app: AppHandle<R>) -> Result<DeviceInfoResponse> {
     app.device().get_device_info()
 }
 
 #[command]
-pub(crate) async fn get_network_info<R: Runtime>(
-    app: AppHandle<R>,
-) -> Result<NetworkInfoResponse> {
+pub(crate) async fn get_network_info<R: Runtime>(app: AppHandle<R>) -> Result<NetworkInfoResponse> {
     app.device().get_network_info()
 }
 
 #[command]
-pub(crate) async fn get_battery_info<R: Runtime>(
-    app: AppHandle<R>,
-) -> Result<BatteryInfoResponse> {
+pub(crate) async fn get_battery_info<R: Runtime>(app: AppHandle<R>) -> Result<BatteryInfoResponse> {
     app.device().get_battery_info()
 }
 
 #[command]
-pub(crate) async fn enter_immersive<R: Runtime>(
-    app: AppHandle<R>,
-) -> Result<ImmersiveResponse> {
+pub(crate) async fn enter_immersive<R: Runtime>(app: AppHandle<R>) -> Result<ImmersiveResponse> {
     app.device().enter_immersive()
 }
 
 #[command]
-pub(crate) async fn exit_immersive<R: Runtime>(
-    app: AppHandle<R>,
-) -> Result<ImmersiveResponse> {
+pub(crate) async fn exit_immersive<R: Runtime>(app: AppHandle<R>) -> Result<ImmersiveResponse> {
     app.device().exit_immersive()
 }
 
@@ -68,4 +58,12 @@ pub(crate) async fn unlock_orientation<R: Runtime>(
     app: AppHandle<R>,
 ) -> Result<OrientationResponse> {
     app.device().unlock_orientation()
+}
+
+#[command]
+pub(crate) async fn show_toast<R: Runtime>(
+    app: AppHandle<R>,
+    payload: ShowToastRequest,
+) -> Result<ShowToastResponse> {
+    app.device().show_toast(payload)
 }

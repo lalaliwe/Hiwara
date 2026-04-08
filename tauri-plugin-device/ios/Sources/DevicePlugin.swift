@@ -12,6 +12,7 @@ class DevicePlugin: Plugin {
   private let immersiveHandler = ImmersiveHandler()
   private let navbarStyleHandler = NavbarStyleHandler()
   private let orientationHandler = OrientationHandler()
+  private let toastHandler = ToastHandler()
 
   @objc public func ping(_ invoke: Invoke) throws {
     let args = try invoke.parseArgs(PingArgs.self)
@@ -52,6 +53,10 @@ class DevicePlugin: Plugin {
   
   @objc public func unlockOrientation(_ invoke: Invoke) throws {
     try orientationHandler.unlockOrientation(invoke)
+  }
+  
+  @objc public func showToast(_ invoke: Invoke) throws {
+    try toastHandler.showToast(invoke)
   }
 }
 

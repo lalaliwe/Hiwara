@@ -87,4 +87,11 @@ impl<R: Runtime> Device<R> {
       .run_mobile_plugin("unlockOrientation", ())
       .map_err(Into::into)
   }
+
+  pub fn show_toast(&self, payload: ShowToastRequest) -> crate::Result<ShowToastResponse> {
+    self
+      .0
+      .run_mobile_plugin("showToast", payload)
+      .map_err(Into::into)
+  }
 }

@@ -84,3 +84,17 @@ pub struct LockOrientationRequest {
 pub struct OrientationResponse {
   pub success: bool,
 }
+
+// ========== Toast 相关 =========
+#[derive(Debug, Deserialize, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct ShowToastRequest {
+  pub message: String,
+  pub duration: Option<String>, // "short" or "long"
+}
+
+#[derive(Debug, Clone, Default, Deserialize, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct ShowToastResponse {
+  pub success: bool,
+}

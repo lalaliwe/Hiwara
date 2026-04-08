@@ -102,4 +102,9 @@ impl<R: Runtime> Device<R> {
   pub fn unlock_orientation(&self) -> crate::Result<OrientationResponse> {
     Ok(OrientationResponse { success: true })
   }
+
+  pub fn show_toast(&self, _payload: ShowToastRequest) -> crate::Result<ShowToastResponse> {
+    // On desktop platforms, we can't show native toasts, so we return success without doing anything
+    Ok(ShowToastResponse { success: true })
+  }
 }
