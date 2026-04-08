@@ -27,12 +27,12 @@ Default permissions for the plugin
 <tr>
 <td>
 
-`device:allow-ping`
+`device:allow-get-battery-info`
 
 </td>
 <td>
 
-Enables the ping command without any pre-configured scope.
+Enables the get_battery_info command without any pre-configured scope.
 
 </td>
 </tr>
@@ -40,12 +40,12 @@ Enables the ping command without any pre-configured scope.
 <tr>
 <td>
 
-`device:deny-ping`
+`device:deny-get-battery-info`
 
 </td>
 <td>
 
-Denies the ping command without any pre-configured scope.
+Denies the get_battery_info command without any pre-configured scope.
 
 </td>
 </tr>
@@ -72,58 +72,6 @@ Enables the get_device_info command without any pre-configured scope.
 <td>
 
 Denies the get_device_info command without any pre-configured scope.
-
-</td>
-</tr>
-
-<tr>
-<td>
-
-`device:allow-get-network-info`
-
-</td>
-<td>
-
-Enables the get_network_info command without any pre-configured scope.
-
-</td>
-</tr>
-
-<tr>
-<td>
-
-`device:deny-get-network-info`
-
-</td>
-<td>
-
-Denies the get_network_info command without any pre-configured scope.
-
-</td>
-</tr>
-
-<tr>
-<td>
-
-`device:allow-get-battery-info`
-
-</td>
-<td>
-
-Enables the get_battery_info command without any pre-configured scope.
-
-</td>
-</tr>
-
-<tr>
-<td>
-
-`device:deny-get-battery-info`
-
-</td>
-<td>
-
-Denies the get_battery_info command without any pre-configured scope.
 
 </td>
 </tr>
@@ -202,6 +150,32 @@ Enables the set_bar_style command without any pre-configured scope.
 <td>
 
 Denies the set_bar_style command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`device:allow-get-network-info`
+
+</td>
+<td>
+
+Enables the get_network_info command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`device:deny-get-network-info`
+
+</td>
+<td>
+
+Denies the get_network_info command without any pre-configured scope.
 
 </td>
 </tr>

@@ -1,0 +1,23 @@
+# Automatically generated - DO NOT EDIT!
+
+"$schema" = "../../schemas/schema.json"
+
+[[permission]]
+identifier = "allow-enter-immersive"
+description = "Enables the enter_immersive command without any pre-configured scope."
+commands.allow = ["enter_immersive"]
+
+[[permission]]
+identifier = "deny-enter-immersive"
+description = "Denies the enter_immersive command without any pre-configured scope."
+commands.deny = ["enter_immersive"]
+
+[[permission]]
+identifier = "allow-exit-immersive"
+description = "Enables the exit_immersive command without any pre-configured scope."
+commands.allow = ["exit_immersive"]
+
+[[permission]]
+identifier = "deny-exit-immersive"
+description = "Denies the exit_immersive command without any pre-configured scope."
+commands.deny = ["exit_immersive"]
