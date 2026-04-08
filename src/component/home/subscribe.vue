@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import searchBar from '../../component/home/searchBar.vue';
 import cardButton from '../../component/cardButton.vue';
 import test1Img from '../../static/img/test1.jpg';
 import { ref, onActivated } from 'vue';
@@ -65,7 +66,8 @@ function handleImageScroll(event: any): void {
 }
 </script>
 <template>
-  <div id="subscribe">
+  <div class="top">
+    <searchBar />
     <div class="tabs">
       <v-tabs v-model="tab" color="#00796B" align-tabs="center" density="compact" grow>
         <v-tab value="video">视频</v-tab>
@@ -73,46 +75,56 @@ function handleImageScroll(event: any): void {
       </v-tabs>
       <v-divider></v-divider>
     </div>
-    <v-tabs-window v-model="tab" class="tabs-window">
-      <v-tabs-window-item value="video">
-        <div class="list-view" ref="videoListView" @scroll="handleVideoScroll">
-          <v-infinite-scroll color="#00796B">
-            <div class="grid">
-              <template v-for="(item, index) in videoList">
-                <cardButton type="video" :id="item.id" :title="item.title" :img="item.img" :author="item.author"
-                  :time="item.time" :viewNum="item.viewNum" :likeNum="item.likeNum" :longNum="item.longNum"
-                  :isR18="item.isR18" />
-              </template>
-            </div>
-          </v-infinite-scroll>
-        </div>
-      </v-tabs-window-item>
-      <v-tabs-window-item value="image">
-        <div class="list-view" ref="imageListView" @scroll="handleImageScroll">
-          <v-infinite-scroll color="#00796B">
-            <div class="grid">
-              <template v-for="(item, index) in imageList">
-                <cardButton type="image" :id="item.id" :title="item.title" :img="item.img" :author="item.author"
-                  :time="item.time" :viewNum="item.viewNum" :likeNum="item.likeNum" :longNum="item.longNum"
-                  :isR18="item.isR18" />
-              </template>
-            </div>
-          </v-infinite-scroll>
-        </div>
-      </v-tabs-window-item>
-    </v-tabs-window>
   </div>
+  <v-tabs-window v-model="tab" class="tabs-window">
+    <v-tabs-window-item value="video">
+      <div class="list-view" ref="videoListView" @scroll="handleVideoScroll">
+        <v-infinite-scroll color="#00796B">
+          <div class="grid">
+            <template v-for="(item, index) in videoList">
+              <cardButton type="video" :id="item.id" :title="item.title" :img="item.img" :author="item.author"
+                :time="item.time" :viewNum="item.viewNum" :likeNum="item.likeNum" :longNum="item.longNum"
+                :isR18="item.isR18" />
+            </template>
+          </div>
+        </v-infinite-scroll>
+      </div>
+    </v-tabs-window-item>
+    <v-tabs-window-item value="image">
+      <div class="list-view" ref="imageListView" @scroll="handleImageScroll">
+        <v-infinite-scroll color="#00796B">
+          <div class="grid">
+            <template v-for="(item, index) in imageList">
+              <cardButton type="image" :id="item.id" :title="item.title" :img="item.img" :author="item.author"
+                :time="item.time" :viewNum="item.viewNum" :likeNum="item.likeNum" :longNum="item.longNum"
+                :isR18="item.isR18" />
+            </template>
+          </div>
+        </v-infinite-scroll>
+      </div>
+    </v-tabs-window-item>
+  </v-tabs-window>
 </template>
 <style lang="scss" scoped>
-#subscribe {
-  display: flex;
-  flex-direction: column;
+.top {
+  position: fixed;
+  width: 100%;
+  top: 0;
+  z-index: 500;
+  backdrop-filter: blur(10px);
+
+  .tabs {
+    background-color: rgba(255, 255, 255, 0.8);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+    .v-tabs--density-compact {
+      --v-tabs-height: 36px;
+    }
+  }
 }
 
-.tabs {}
-
 .tabs-window {
-  flex: 1;
+  z-index: 1;
 
   :deep(.v-window__container) {
     height: 100%;
@@ -126,8 +138,12 @@ function handleImageScroll(event: any): void {
     height: 100%;
     overflow-y: auto;
 
+    &::-webkit-scrollbar-track {
+      margin: calc(60px + 36px + 1px + env(safe-area-inset-top, 0) + 4px) 0 calc(60px + env(safe-area-inset-bottom, 0) + 4px);
+    }
+
     .v-infinite-scroll {
-      padding-top: 10px;
+      padding: calc(60px + 36px + 1px + 10px + env(safe-area-inset-top, 0)) 0 calc(60px + env(safe-area-inset-bottom, 0)) 0;
     }
   }
 }

@@ -157,7 +157,7 @@ onUnmounted(() => {
 })
 </script>
 <template>
-  <div class="image-container" ref="imageContainerRef">
+  <div id="imageView" ref="imageContainerRef">
     <div class="top" :class="{ 'top-green': isTopGreen }" @click="scrollToTop">
       <span class="btn" @click.stop="goBack">
         <font-awesome-icon icon="fa-solid fa-angle-left" />
@@ -194,7 +194,7 @@ onUnmounted(() => {
   </div>
 </template>
 <style lang="scss" scoped>
-.image-container {
+#imageView {
   height: 100%;
   overflow: auto;
   background-color: #fff;

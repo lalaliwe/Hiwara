@@ -33,49 +33,63 @@ const changeValue = (newValue: string) => {
 <template>
   <div class="tabs">
     <div class="btn" :class="{ active: value === 'video' }" @click="changeValue('video')" v-ripple>
-      <iconVideo theme="outline" :size="btnFontSize" :fill="value === 'video' ? '#00796B' : '#616161'" />
-      <br>
-      <span>视频</span>
+      <div>
+        <iconVideo theme="outline" :size="btnFontSize" :fill="value === 'video' ? '#00796B' : '#616161'" />
+        <br>
+        <span>视频</span>
+      </div>
     </div>
     <div class="btn" :class="{ active: value === 'image' }" @click="changeValue('image')" v-ripple>
-      <iconPic theme="outline" :size="btnFontSize" :fill="value === 'image' ? '#00796B' : '#616161'" />
-      <br>
-      <span>插画</span>
+      <div>
+        <iconPic theme="outline" :size="btnFontSize" :fill="value === 'image' ? '#00796B' : '#616161'" />
+        <br>
+        <span>插画</span>
+      </div>
     </div>
     <div class="btn" :class="{ active: value === 'subscribe' }" @click="changeValue('subscribe')" v-ripple>
-      <iconRss theme="outline" :size="btnFontSize" :fill="value === 'subscribe' ? '#00796B' : '#616161'" />
-      <br>
-      <span>订阅</span>
+      <div>
+        <iconRss theme="outline" :size="btnFontSize" :fill="value === 'subscribe' ? '#00796B' : '#616161'" />
+        <br>
+        <span>订阅</span>
+      </div>
     </div>
     <div class="btn" :class="{ active: value === 'forum' }" @click="changeValue('forum')" v-ripple>
-      <iconComments theme="outline" :size="btnFontSize" :fill="value === 'forum' ? '#00796B' : '#616161'" />
-      <br>
-      <span>论坛</span>
+      <div>
+        <iconComments theme="outline" :size="btnFontSize" :fill="value === 'forum' ? '#00796B' : '#616161'" />
+        <br>
+        <span>论坛</span>
+      </div>
     </div>
     <div class="btn" :class="{ active: value === 'my' }" @click="changeValue('my')" v-ripple>
-      <iconUser theme="outline" :size="btnFontSize" :fill="value === 'my' ? '#00796B' : '#616161'" />
-      <br>
-      <span>我的</span>
+      <div>
+        <iconUser theme="outline" :size="btnFontSize" :fill="value === 'my' ? '#00796B' : '#616161'" />
+        <br>
+        <span>我的</span>
+      </div>
     </div>
   </div>
 </template>
 <style lang="scss" scoped>
 .tabs {
   display: flex;
-  background-color: #fafafa;
+  background-color: rgba(255, 255, 255, 0.8);
   box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(10px);
+  padding-bottom: env(safe-area-inset-bottom, 0);
 
   .btn {
     flex: 1;
     cursor: pointer;
     user-select: none;
-    text-align: center;
     font-size: 0.8rem;
-    padding: 8px 0 calc(env(safe-area-inset-bottom, 0) + 8px) 0;
     transition: background-color 0.2s ease-in-out;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 60px;
 
     &.active {
-      background-color: #d6e9e7;
+      background-color: rgba(0, 121, 107, 0.2);
       color: #00796B;
     }
   }

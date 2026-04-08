@@ -55,7 +55,7 @@ for (let i = 0; i < 100; i++) {
 }
 </script>
 <template>
-  <div id="search">
+  <div id="searchView">
     <topBar />
     <empty v-if="searching === 'empty'" :search-history="searchHistory" :search-recommend="searchRecommend" />
     <SearchLoading v-else-if="searching === 'loading'" />
@@ -68,7 +68,7 @@ for (let i = 0; i < 100; i++) {
   </div>
 </template>
 <style lang="scss" scoped>
-#search {
+#searchView {
   background-color: #fff;
   height: 100%;
   display: flex;

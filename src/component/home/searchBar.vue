@@ -46,7 +46,7 @@ function toSearch() {
 }
 
 .top-view {
-  background-color: #00796B;
+  background-color: rgba(0, 121, 107, 0.9);
   color: #fff;
   height: calc(60px + env(safe-area-inset-top, 0));
   width: 100%;
