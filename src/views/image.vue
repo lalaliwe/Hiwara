@@ -215,6 +215,7 @@ onUnmounted(() => {
 }
 
 .top-green {
-  background-color: #00796B;
+  background-color: rgba(0, 121, 107, 0.9);
+  backdrop-filter: blur(10px);
 }
 </style>
