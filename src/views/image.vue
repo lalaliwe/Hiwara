@@ -182,7 +182,6 @@ onUnmounted(() => {
 </template>
 <style lang="scss" scoped>
 #imageView {
-  height: 100%;
   overflow: auto;
   background-color: #fff;
   position: relative;

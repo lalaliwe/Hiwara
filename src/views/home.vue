@@ -62,7 +62,6 @@ const handleTabChange = (tab: string) => {
 
 <style lang="scss" scoped>
 #homeView {
-  height: 100%;
   background-color: #fafafa;
   display: flex;
   flex-direction: column;

@@ -66,7 +66,6 @@ for (let i = 0; i < 100; i++) {
 <style lang="scss" scoped>
 #searchView {
   background-color: #fff;
-  height: 100%;
   display: flex;
   flex-direction: column;
   z-index: 1

@@ -116,30 +116,21 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div class="app-container">
-    <router-view v-slot="{ Component }">
-      <transition :name="transitionName" appear>
-        <keep-alive :include="cachedPages" :max="10">
-          <component :is="Component" :key="route.fullPath" v-if="Component" />
-        </keep-alive>
-      </transition>
-    </router-view>
+  <router-view v-slot="{ Component }">
+    <transition :name="transitionName" appear>
+      <keep-alive :include="cachedPages" :max="10">
+        <component :is="Component" :key="route.fullPath" v-if="Component" />
+      </keep-alive>
+    </transition>
+  </router-view>
 
-    <!-- Vuetify Snackbar -->
-    <v-snackbar v-model="snackbar" :timeout="snackbarTimeout" :color="snackbarColor" top centered class="snackbar">
-      {{ snackbarText }}
-    </v-snackbar>
-  </div>
+  <!-- Vuetify Snackbar -->
+  <v-snackbar v-model="snackbar" :timeout="snackbarTimeout" :color="snackbarColor" top centered class="snackbar">
+    {{ snackbarText }}
+  </v-snackbar>
 </template>
 
 <style lang="scss" scoped>
-.app-container {
-  height: 100%;
-  position: relative;
-  overflow: hidden;
-  background-color: #fafafa;
-}
-
 // 基础过渡样式
 .fade-enter-active,
 .fade-leave-active {

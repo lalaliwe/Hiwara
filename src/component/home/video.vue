@@ -3,7 +3,7 @@ import searchBar from '../../component/home/searchBar.vue';
 import cardButton from '../../component/cardButton.vue';
 import test1Img from '../../static/img/test1.jpg';
 import { ref, onActivated } from 'vue';
-const tab = ref('latest');
+const tab = ref<'latest' | 'trending' | 'popularity' | 'mostViews' | 'mostLikes'>('latest');
 const tabArray = [
   { value: 'latest', text: '最新' },
   { value: 'trending', text: '流行' },
