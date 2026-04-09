@@ -3,7 +3,7 @@ import { ref, onMounted, onUnmounted } from 'vue';
 import videoPlayer from '../component/player/videoPlayer.vue';
 import infoView from '../component/player/info.vue';
 import commentView from '../component/player/comment.vue';
-import { setNavBarStyle } from '../plugins/navbarStyle'
+import { setStatusBarTextStyle } from '../plugins/navbarStyle'
 
 // 设置组件名称，确保与路由name一致
 defineOptions({
@@ -24,8 +24,8 @@ const fansNum = 100;
 const videoNum = 10;
 const isFollow = ref(false);
 
-// 设置导航栏样式
-setNavBarStyle({ style: 'light' })
+// 设置状态栏白色文字
+setStatusBarTextStyle('light')
 
 onMounted(() => {
   console.log('✅ Player mounted');

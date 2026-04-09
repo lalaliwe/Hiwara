@@ -9,11 +9,20 @@ import androidx.core.view.WindowInsetsControllerCompat
 import app.tauri.plugin.Invoke
 import app.tauri.plugin.JSObject
 
-class SetStyleArgs {
+class SetStatusBarTextStyleArgs {
     var style: String? = null
-    var target: String? = null
-    var statusBarColor: String? = null
-    var navigationBarColor: String? = null
+}
+
+class SetNavigationBarButtonStyleArgs {
+    var style: String? = null
+}
+
+class SetStatusBarBackgroundColorArgs {
+    var color: String? = null
+}
+
+class SetNavigationBarBackgroundColorArgs {
+    var color: String? = null
 }
 
 class NavbarStyleHandler(private val activity: Activity) {
@@ -26,49 +35,92 @@ class NavbarStyleHandler(private val activity: Activity) {
         }
     }
 
-    fun setBarStyle(invoke: Invoke) {
-        val args = invoke.parseArgs(SetStyleArgs::class.java)
+    fun setStatusBarTextStyle(invoke: Invoke) {
+        val args = invoke.parseArgs(SetStatusBarTextStyleArgs::class.java)
         val style = args.style ?: "dark"
-        val target = args.target ?: "all"
-        val statusBarColor = args.statusBarColor
-        val navigationBarColor = args.navigationBarColor
 
         activity.runOnUiThread {
             try {
                 activity.window?.let { window ->
                     val isLight = style == "dark"
+                    insetsController?.isAppearanceLightStatusBars = isLight
 
-                    if (target == "status" || target == "all") {
-                        insetsController?.isAppearanceLightStatusBars = isLight
+                    val ret = JSObject()
+                    ret.put("success", true)
+                    invoke.resolve(ret)
+                }
+            } catch (e: Exception) {
+                invoke.reject(e.message ?: "Unknown error")
+            }
+        }
+    }
+
+    fun setNavigationBarButtonStyle(invoke: Invoke) {
+        val args = invoke.parseArgs(SetNavigationBarButtonStyleArgs::class.java)
+        val style = args.style ?: "dark"
+
+        activity.runOnUiThread {
+            try {
+                activity.window?.let { window ->
+                    val isLight = style == "dark"
+                    
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                        insetsController?.isAppearanceLightNavigationBars = isLight
+                    }
+
+                    val ret = JSObject()
+                    ret.put("success", true)
+                    invoke.resolve(ret)
+                }
+            } catch (e: Exception) {
+                invoke.reject(e.message ?: "Unknown error")
+            }
+        }
+    }
+
+    fun setStatusBarBackgroundColor(invoke: Invoke) {
+        val args = invoke.parseArgs(SetStatusBarBackgroundColorArgs::class.java)
+        val colorHex = args.color
+
+        activity.runOnUiThread {
+            try {
+                activity.window?.let { window ->
+                    if (colorHex != null) {
+                        val color = parseColor(colorHex)
+                        window.statusBarColor = color
                         
-                        if (statusBarColor != null) {
-                            val color = parseColor(statusBarColor)
-                            window.statusBarColor = color
-                            
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                                if (isDarkColor(color)) {
-                                    insetsController?.isAppearanceLightStatusBars = false
-                                } else {
-                                    insetsController?.isAppearanceLightStatusBars = true
-                                }
-                            }
+                        // 根据背景色亮度自动调整文字颜色
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                            val isDark = isDarkColor(color)
+                            insetsController?.isAppearanceLightStatusBars = !isDark
                         }
                     }
-                    
-                    if (target == "navigation" || target == "all") {
-                        insetsController?.isAppearanceLightNavigationBars = isLight
+
+                    val ret = JSObject()
+                    ret.put("success", true)
+                    invoke.resolve(ret)
+                }
+            } catch (e: Exception) {
+                invoke.reject(e.message ?: "Unknown error")
+            }
+        }
+    }
+
+    fun setNavigationBarBackgroundColor(invoke: Invoke) {
+        val args = invoke.parseArgs(SetNavigationBarBackgroundColorArgs::class.java)
+        val colorHex = args.color
+
+        activity.runOnUiThread {
+            try {
+                activity.window?.let { window ->
+                    if (colorHex != null) {
+                        val color = parseColor(colorHex)
+                        window.navigationBarColor = color
                         
-                        if (navigationBarColor != null) {
-                            val color = parseColor(navigationBarColor)
-                            window.navigationBarColor = color
-                            
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                                if (isDarkColor(color)) {
-                                    insetsController?.isAppearanceLightNavigationBars = false
-                                } else {
-                                    insetsController?.isAppearanceLightNavigationBars = true
-                                }
-                            }
+                        // 根据背景色亮度自动调整按钮颜色
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                            val isDark = isDarkColor(color)
+                            insetsController?.isAppearanceLightNavigationBars = !isDark
                         }
                     }
 

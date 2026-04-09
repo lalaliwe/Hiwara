@@ -38,11 +38,35 @@ pub(crate) async fn exit_immersive<R: Runtime>(app: AppHandle<R>) -> Result<Imme
 }
 
 #[command]
-pub(crate) async fn set_bar_style<R: Runtime>(
+pub(crate) async fn set_status_bar_text_style<R: Runtime>(
     app: AppHandle<R>,
-    payload: SetStyleRequest,
+    payload: SetStatusBarTextStyleRequest,
 ) -> Result<SetStyleResponse> {
-    app.device().set_bar_style(payload)
+    app.device().set_status_bar_text_style(payload)
+}
+
+#[command]
+pub(crate) async fn set_navigation_bar_button_style<R: Runtime>(
+    app: AppHandle<R>,
+    payload: SetNavigationBarButtonStyleRequest,
+) -> Result<SetStyleResponse> {
+    app.device().set_navigation_bar_button_style(payload)
+}
+
+#[command]
+pub(crate) async fn set_status_bar_background_color<R: Runtime>(
+    app: AppHandle<R>,
+    payload: SetStatusBarBackgroundColorRequest,
+) -> Result<SetStyleResponse> {
+    app.device().set_status_bar_background_color(payload)
+}
+
+#[command]
+pub(crate) async fn set_navigation_bar_background_color<R: Runtime>(
+    app: AppHandle<R>,
+    payload: SetNavigationBarBackgroundColorRequest,
+) -> Result<SetStyleResponse> {
+    app.device().set_navigation_bar_background_color(payload)
 }
 
 #[command]

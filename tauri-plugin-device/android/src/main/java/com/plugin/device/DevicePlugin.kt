@@ -67,8 +67,23 @@ class DevicePlugin(private val activity: Activity): Plugin(activity) {
     }
 
     @Command
-    fun setBarStyle(invoke: Invoke) {
-        navbarStyleHandler.setBarStyle(invoke)
+    fun setStatusBarTextStyle(invoke: Invoke) {
+        navbarStyleHandler.setStatusBarTextStyle(invoke)
+    }
+
+    @Command
+    fun setNavigationBarButtonStyle(invoke: Invoke) {
+        navbarStyleHandler.setNavigationBarButtonStyle(invoke)
+    }
+
+    @Command
+    fun setStatusBarBackgroundColor(invoke: Invoke) {
+        navbarStyleHandler.setStatusBarBackgroundColor(invoke)
+    }
+
+    @Command
+    fun setNavigationBarBackgroundColor(invoke: Invoke) {
+        navbarStyleHandler.setNavigationBarBackgroundColor(invoke)
     }
 
     @Command

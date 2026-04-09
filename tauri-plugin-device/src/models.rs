@@ -59,11 +59,26 @@ pub struct ImmersiveResponse {
 // ========== Navbar Style 相关 =========
 #[derive(Debug, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
-pub struct SetStyleRequest {
-  pub style: Option<String>,
-  pub target: Option<String>,
-  pub status_bar_color: Option<String>,
-  pub navigation_bar_color: Option<String>,
+pub struct SetStatusBarTextStyleRequest {
+  pub style: String, // "light" or "dark"
+}
+
+#[derive(Debug, Deserialize, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct SetNavigationBarButtonStyleRequest {
+  pub style: String, // "light" or "dark"
+}
+
+#[derive(Debug, Deserialize, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct SetStatusBarBackgroundColorRequest {
+  pub color: String, // hex color code
+}
+
+#[derive(Debug, Deserialize, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct SetNavigationBarBackgroundColorRequest {
+  pub color: String, // hex color code
 }
 
 #[derive(Debug, Clone, Default, Deserialize, Serialize)]

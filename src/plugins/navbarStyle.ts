@@ -1,65 +1,63 @@
-// src/utils/navbar.ts
 import { invoke } from '@tauri-apps/api/core';
 
 export type BarStyle = 'light' | 'dark'; // light=白字，dark=黑字
-export type BarTarget = 'status' | 'navigation' | 'all';
-
-interface SetStyleOptions {
-  style: BarStyle;
-  target?: BarTarget; // 默认为 'all'
-  /** 状态栏背景颜色（可选），格式为十六进制颜色码，如 "#FF0000" */
-  statusBarColor?: string;
-  /** 导航栏背景颜色（可选），格式为十六进制颜色码，如 "#FFFFFF" */
-  navigationBarColor?: string;
-}
 
 /**
- * 动态设置系统栏文字颜色和背景颜色
+ * 设置顶部状态栏文字明暗主题
+ * @param style - 'light' 白色文字（深色背景），'dark' 黑色文字（浅色背景）
  */
-export async function setNavBarStyle(options: SetStyleOptions): Promise<void> {
+export async function setStatusBarTextStyle(style: BarStyle): Promise<void> {
   try {
-    await invoke('plugin:device|set_bar_style', {
-      payload: {
-        style: options.style,
-        target: options.target || 'all',
-        statusBarColor: options.statusBarColor,
-        navigationBarColor: options.navigationBarColor,
-      }
+    await invoke('plugin:device|set_status_bar_text_style', {
+      payload: { style }
     });
   } catch (error) {
-    console.error('设置导航栏样式失败:', error);
+    console.error('设置状态栏文字样式失败:', error);
     throw error;
   }
 }
 
 /**
- * 快捷方法：设置深色主题（白字深色背景）
+ * 设置底部导航栏按钮明暗主题
+ * @param style - 'light' 白色按钮（深色背景），'dark' 黑色按钮（浅色背景）
  */
-export async function setDarkTheme(
-  target: BarTarget = 'all',
-  statusBarColor?: string,
-  navigationBarColor?: string
-): Promise<void> {
-  return setNavBarStyle({
-    style: 'light',
-    target,
-    statusBarColor: statusBarColor || '#000000',
-    navigationBarColor: navigationBarColor || '#000000',
-  });
+export async function setNavigationBarButtonStyle(style: BarStyle): Promise<void> {
+  try {
+    await invoke('plugin:device|set_navigation_bar_button_style', {
+      payload: { style }
+    });
+  } catch (error) {
+    console.error('设置导航栏按钮样式失败:', error);
+    throw error;
+  }
 }
 
 /**
- * 快捷方法：设置浅色主题（黑字浅色背景）
+ * 设置顶部状态栏背景颜色
+ * @param color - 十六进制颜色码，如 "#FF0000" 或 "FF0000"
  */
-export async function setLightTheme(
-  target: BarTarget = 'all',
-  statusBarColor?: string,
-  navigationBarColor?: string
-): Promise<void> {
-  return setNavBarStyle({
-    style: 'dark',
-    target,
-    statusBarColor: statusBarColor || '#FFFFFF',
-    navigationBarColor: navigationBarColor || '#FFFFFF',
-  });
+export async function setStatusBarBackgroundColor(color: string): Promise<void> {
+  try {
+    await invoke('plugin:device|set_status_bar_background_color', {
+      payload: { color }
+    });
+  } catch (error) {
+    console.error('设置状态栏背景色失败:', error);
+    throw error;
+  }
+}
+
+/**
+ * 设置底部导航栏背景颜色
+ * @param color - 十六进制颜色码，如 "#FFFFFF" 或 "FFFFFF"
+ */
+export async function setNavigationBarBackgroundColor(color: string): Promise<void> {
+  try {
+    await invoke('plugin:device|set_navigation_bar_background_color', {
+      payload: { color }
+    });
+  } catch (error) {
+    console.error('设置导航栏背景色失败:', error);
+    throw error;
+  }
 }

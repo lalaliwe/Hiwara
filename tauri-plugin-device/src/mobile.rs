@@ -67,10 +67,31 @@ impl<R: Runtime> Device<R> {
       .map_err(Into::into)
   }
 
-  pub fn set_bar_style(&self, payload: SetStyleRequest) -> crate::Result<SetStyleResponse> {
+  pub fn set_status_bar_text_style(&self, payload: SetStatusBarTextStyleRequest) -> crate::Result<SetStyleResponse> {
     self
       .0
-      .run_mobile_plugin("setBarStyle", payload)
+      .run_mobile_plugin("setStatusBarTextStyle", payload)
+      .map_err(Into::into)
+  }
+
+  pub fn set_navigation_bar_button_style(&self, payload: SetNavigationBarButtonStyleRequest) -> crate::Result<SetStyleResponse> {
+    self
+      .0
+      .run_mobile_plugin("setNavigationBarButtonStyle", payload)
+      .map_err(Into::into)
+  }
+
+  pub fn set_status_bar_background_color(&self, payload: SetStatusBarBackgroundColorRequest) -> crate::Result<SetStyleResponse> {
+    self
+      .0
+      .run_mobile_plugin("setStatusBarBackgroundColor", payload)
+      .map_err(Into::into)
+  }
+
+  pub fn set_navigation_bar_background_color(&self, payload: SetNavigationBarBackgroundColorRequest) -> crate::Result<SetStyleResponse> {
+    self
+      .0
+      .run_mobile_plugin("setNavigationBarBackgroundColor", payload)
       .map_err(Into::into)
   }
 

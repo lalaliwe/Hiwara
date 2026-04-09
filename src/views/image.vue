@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted, onActivated } from 'vue';
 import test1img from '../static/img/test1.jpg';
-import { setNavBarStyle } from '../plugins/navbarStyle'
+import { setStatusBarTextStyle } from '../plugins/navbarStyle'
 import { useRouter } from 'vue-router';
 import ImageInfo from '../component/image/info.vue';
 import RecommendList from '../component/image/recommendList.vue';
@@ -15,7 +15,8 @@ const router = useRouter();
 
 // 应用页面设置的函数
 const applyPageSettings = () => {
-  setNavBarStyle({ style: 'dark' })
+  // 设置状态栏黑色文字
+  setStatusBarTextStyle('dark')
 }
 
 // 初始加载时应用设置
@@ -171,26 +172,12 @@ onUnmounted(() => {
     <IllustrationView :images="illustrationImages" />
 
     <!-- 第二部分：插画信息区域（已拆分为子组件） -->
-    <ImageInfo 
-      :title="title"
-      :view-count="viewCount"
-      :created-at="createdAt"
-      :illustration-id="illustrationId"
-      :resolution="resolution"
-      :synopsis="synopsis"
-      :tags="tags"
-      :authorname="authorname"
-      :fans-num="fansNum"
-      :image-num="imageNum"
-      :is-follow="isFollow"
-      @follow-click="handleFollowClick"
-    />
+    <ImageInfo :title="title" :view-count="viewCount" :created-at="createdAt" :illustration-id="illustrationId"
+      :resolution="resolution" :synopsis="synopsis" :tags="tags" :authorname="authorname" :fans-num="fansNum"
+      :image-num="imageNum" :is-follow="isFollow" @follow-click="handleFollowClick" />
 
     <!-- 第三部分：推荐列表（已拆分为子组件） -->
-    <RecommendList 
-      :author-other-video-list="authorOtherVideoList"
-      :recommend-video-list="recommendVideoList"
-    />
+    <RecommendList :author-other-video-list="authorOtherVideoList" :recommend-video-list="recommendVideoList" />
   </div>
 </template>
 <style lang="scss" scoped>

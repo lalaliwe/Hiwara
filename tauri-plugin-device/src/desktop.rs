@@ -91,7 +91,19 @@ impl<R: Runtime> Device<R> {
     Ok(ImmersiveResponse { success: true })
   }
 
-  pub fn set_bar_style(&self, _payload: SetStyleRequest) -> crate::Result<SetStyleResponse> {
+  pub fn set_status_bar_text_style(&self, _payload: SetStatusBarTextStyleRequest) -> crate::Result<SetStyleResponse> {
+    Ok(SetStyleResponse { success: true })
+  }
+
+  pub fn set_navigation_bar_button_style(&self, _payload: SetNavigationBarButtonStyleRequest) -> crate::Result<SetStyleResponse> {
+    Ok(SetStyleResponse { success: true })
+  }
+
+  pub fn set_status_bar_background_color(&self, _payload: SetStatusBarBackgroundColorRequest) -> crate::Result<SetStyleResponse> {
+    Ok(SetStyleResponse { success: true })
+  }
+
+  pub fn set_navigation_bar_background_color(&self, _payload: SetNavigationBarBackgroundColorRequest) -> crate::Result<SetStyleResponse> {
     Ok(SetStyleResponse { success: true })
   }
 

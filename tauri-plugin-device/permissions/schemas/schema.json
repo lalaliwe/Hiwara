@@ -355,16 +355,28 @@
           "markdownDescription": "Denies the move_task_to_back command without any pre-configured scope."
         },
         {
-          "description": "Enables the set_bar_style command without any pre-configured scope.",
+          "description": "Enables the set_navigation_bar_background_color command without any pre-configured scope.",
           "type": "string",
-          "const": "allow-set-bar-style",
-          "markdownDescription": "Enables the set_bar_style command without any pre-configured scope."
+          "const": "allow-set-navigation-bar-background-color",
+          "markdownDescription": "Enables the set_navigation_bar_background_color command without any pre-configured scope."
         },
         {
-          "description": "Denies the set_bar_style command without any pre-configured scope.",
+          "description": "Denies the set_navigation_bar_background_color command without any pre-configured scope.",
           "type": "string",
-          "const": "deny-set-bar-style",
-          "markdownDescription": "Denies the set_bar_style command without any pre-configured scope."
+          "const": "deny-set-navigation-bar-background-color",
+          "markdownDescription": "Denies the set_navigation_bar_background_color command without any pre-configured scope."
+        },
+        {
+          "description": "Enables the set_navigation_bar_button_style command without any pre-configured scope.",
+          "type": "string",
+          "const": "allow-set-navigation-bar-button-style",
+          "markdownDescription": "Enables the set_navigation_bar_button_style command without any pre-configured scope."
+        },
+        {
+          "description": "Denies the set_navigation_bar_button_style command without any pre-configured scope.",
+          "type": "string",
+          "const": "deny-set-navigation-bar-button-style",
+          "markdownDescription": "Denies the set_navigation_bar_button_style command without any pre-configured scope."
         },
         {
           "description": "Enables the get_network_info command without any pre-configured scope.",
@@ -427,10 +439,34 @@
           "markdownDescription": "Denies the show_toast command without any pre-configured scope."
         },
         {
-          "description": "Default permissions for the plugin\n#### This default permission set includes:\n\n- `allow-ping`\n- `allow-get-device-info`\n- `allow-get-network-info`\n- `allow-get-battery-info`\n- `allow-enter-immersive`\n- `allow-exit-immersive`\n- `allow-set-bar-style`\n- `allow-lock-orientation`\n- `allow-unlock-orientation`\n- `allow-show-toast`\n- `allow-move-task-to-back`",
+          "description": "Enables the set_status_bar_background_color command without any pre-configured scope.",
+          "type": "string",
+          "const": "allow-set-status-bar-background-color",
+          "markdownDescription": "Enables the set_status_bar_background_color command without any pre-configured scope."
+        },
+        {
+          "description": "Denies the set_status_bar_background_color command without any pre-configured scope.",
+          "type": "string",
+          "const": "deny-set-status-bar-background-color",
+          "markdownDescription": "Denies the set_status_bar_background_color command without any pre-configured scope."
+        },
+        {
+          "description": "Enables the set_status_bar_text_style command without any pre-configured scope.",
+          "type": "string",
+          "const": "allow-set-status-bar-text-style",
+          "markdownDescription": "Enables the set_status_bar_text_style command without any pre-configured scope."
+        },
+        {
+          "description": "Denies the set_status_bar_text_style command without any pre-configured scope.",
+          "type": "string",
+          "const": "deny-set-status-bar-text-style",
+          "markdownDescription": "Denies the set_status_bar_text_style command without any pre-configured scope."
+        },
+        {
+          "description": "Default permissions for the plugin\n#### This default permission set includes:\n\n- `allow-ping`\n- `allow-get-device-info`\n- `allow-get-network-info`\n- `allow-get-battery-info`\n- `allow-enter-immersive`\n- `allow-exit-immersive`\n- `allow-set-status-bar-text-style`\n- `allow-set-navigation-bar-button-style`\n- `allow-set-status-bar-background-color`\n- `allow-set-navigation-bar-background-color`\n- `allow-lock-orientation`\n- `allow-unlock-orientation`\n- `allow-show-toast`\n- `allow-move-task-to-back`",
           "type": "string",
           "const": "default",
-          "markdownDescription": "Default permissions for the plugin\n#### This default permission set includes:\n\n- `allow-ping`\n- `allow-get-device-info`\n- `allow-get-network-info`\n- `allow-get-battery-info`\n- `allow-enter-immersive`\n- `allow-exit-immersive`\n- `allow-set-bar-style`\n- `allow-lock-orientation`\n- `allow-unlock-orientation`\n- `allow-show-toast`\n- `allow-move-task-to-back`"
+          "markdownDescription": "Default permissions for the plugin\n#### This default permission set includes:\n\n- `allow-ping`\n- `allow-get-device-info`\n- `allow-get-network-info`\n- `allow-get-battery-info`\n- `allow-enter-immersive`\n- `allow-exit-immersive`\n- `allow-set-status-bar-text-style`\n- `allow-set-navigation-bar-button-style`\n- `allow-set-status-bar-background-color`\n- `allow-set-navigation-bar-background-color`\n- `allow-lock-orientation`\n- `allow-unlock-orientation`\n- `allow-show-toast`\n- `allow-move-task-to-back`"
         }
       ]
     }

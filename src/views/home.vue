@@ -8,7 +8,7 @@ import homeMy from '../component/home/my.vue';
 import { ref, onMounted, onBeforeUnmount, onActivated } from 'vue';
 // import { on } from 'hammerjs';
 import { lockPortrait } from '../plugins/useOrientation'
-import { setNavBarStyle } from '../plugins/navbarStyle'
+import { setStatusBarTextStyle, setNavigationBarButtonStyle } from '../plugins/navbarStyle'
 
 // 设置组件名称，确保与路由name一致
 defineOptions({
@@ -21,8 +21,10 @@ const isTab = ref("subscribe");
 const applyPageSettings = () => {
   // 固定竖屏
   lockPortrait()
-  // 设置导航栏样式
-  setNavBarStyle({ style: 'light' })
+  // 设置状态栏白色文字
+  setStatusBarTextStyle('light')
+  // 设置导航栏黑色按钮
+  setNavigationBarButtonStyle('dark')
 }
 
 // 初始加载时应用设置

@@ -10,7 +10,10 @@ Default permissions for the plugin
 - `allow-get-battery-info`
 - `allow-enter-immersive`
 - `allow-exit-immersive`
-- `allow-set-bar-style`
+- `allow-set-status-bar-text-style`
+- `allow-set-navigation-bar-button-style`
+- `allow-set-status-bar-background-color`
+- `allow-set-navigation-bar-background-color`
 - `allow-lock-orientation`
 - `allow-unlock-orientation`
 - `allow-show-toast`
@@ -158,12 +161,12 @@ Denies the move_task_to_back command without any pre-configured scope.
 <tr>
 <td>
 
-`device:allow-set-bar-style`
+`device:allow-set-navigation-bar-background-color`
 
 </td>
 <td>
 
-Enables the set_bar_style command without any pre-configured scope.
+Enables the set_navigation_bar_background_color command without any pre-configured scope.
 
 </td>
 </tr>
@@ -171,12 +174,38 @@ Enables the set_bar_style command without any pre-configured scope.
 <tr>
 <td>
 
-`device:deny-set-bar-style`
+`device:deny-set-navigation-bar-background-color`
 
 </td>
 <td>
 
-Denies the set_bar_style command without any pre-configured scope.
+Denies the set_navigation_bar_background_color command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`device:allow-set-navigation-bar-button-style`
+
+</td>
+<td>
+
+Enables the set_navigation_bar_button_style command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`device:deny-set-navigation-bar-button-style`
+
+</td>
+<td>
+
+Denies the set_navigation_bar_button_style command without any pre-configured scope.
 
 </td>
 </tr>
@@ -307,6 +336,58 @@ Enables the show_toast command without any pre-configured scope.
 <td>
 
 Denies the show_toast command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`device:allow-set-status-bar-background-color`
+
+</td>
+<td>
+
+Enables the set_status_bar_background_color command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`device:deny-set-status-bar-background-color`
+
+</td>
+<td>
+
+Denies the set_status_bar_background_color command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`device:allow-set-status-bar-text-style`
+
+</td>
+<td>
+
+Enables the set_status_bar_text_style command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`device:deny-set-status-bar-text-style`
+
+</td>
+<td>
+
+Denies the set_status_bar_text_style command without any pre-configured scope.
 
 </td>
 </tr>
