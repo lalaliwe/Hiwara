@@ -94,4 +94,11 @@ impl<R: Runtime> Device<R> {
       .run_mobile_plugin("showToast", payload)
       .map_err(Into::into)
   }
+
+  pub fn move_task_to_back(&self) -> crate::Result<MoveTaskToBackResponse> {
+    self
+      .0
+      .run_mobile_plugin("moveTaskToBack", ())
+      .map_err(Into::into)
+  }
 }

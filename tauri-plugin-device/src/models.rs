@@ -98,3 +98,10 @@ pub struct ShowToastRequest {
 pub struct ShowToastResponse {
   pub success: bool,
 }
+
+// ========== Move Task To Back 相关 =========
+#[derive(Debug, Clone, Default, Deserialize, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct MoveTaskToBackResponse {
+  pub success: bool,
+}
