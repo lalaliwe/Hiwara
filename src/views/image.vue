@@ -171,26 +171,12 @@ onUnmounted(() => {
     <IllustrationView :images="illustrationImages" />
 
     <!-- 第二部分：插画信息区域（已拆分为子组件） -->
-    <ImageInfo 
-      :title="title"
-      :view-count="viewCount"
-      :created-at="createdAt"
-      :illustration-id="illustrationId"
-      :resolution="resolution"
-      :synopsis="synopsis"
-      :tags="tags"
-      :authorname="authorname"
-      :fans-num="fansNum"
-      :image-num="imageNum"
-      :is-follow="isFollow"
-      @follow-click="handleFollowClick"
-    />
+    <ImageInfo :title="title" :view-count="viewCount" :created-at="createdAt" :illustration-id="illustrationId"
+      :resolution="resolution" :synopsis="synopsis" :tags="tags" :authorname="authorname" :fans-num="fansNum"
+      :image-num="imageNum" :is-follow="isFollow" @follow-click="handleFollowClick" />
 
     <!-- 第三部分：推荐列表（已拆分为子组件） -->
-    <RecommendList 
-      :author-other-video-list="authorOtherVideoList"
-      :recommend-video-list="recommendVideoList"
-    />
+    <RecommendList :author-other-video-list="authorOtherVideoList" :recommend-video-list="recommendVideoList" />
   </div>
 </template>
 <style lang="scss" scoped>
@@ -228,6 +214,7 @@ onUnmounted(() => {
 }
 
 .top-green {
-  background-color: #00796B;
+  background-color: rgba(0, 121, 107, 0.9);
+  backdrop-filter: blur(10px);
 }
 </style>
