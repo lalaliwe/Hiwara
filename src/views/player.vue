@@ -35,7 +35,7 @@ onUnmounted(() => {
 })
 </script>
 <template>
-  <div class="page">
+  <div id="playerView">
     <div class="statusBarPlaceholder"></div>
     <videoPlayer class="video-player" />
     <div class="tabs">
@@ -70,7 +70,7 @@ onUnmounted(() => {
   </div>
 </template>
 <style lang="scss" scoped>
-.page {
+#playerView {
   display: flex;
   flex-direction: column;
   height: 100%;

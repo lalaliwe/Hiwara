@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import searchBar from '../../component/home/searchBar.vue';
 import cardButton from '../../component/cardButton.vue';
 import test1Img from '../../static/img/test1.jpg';
 import { ref, onActivated } from 'vue';
@@ -63,7 +64,8 @@ onActivated(() => {
 
 </script>
 <template>
-  <div id="videoView">
+  <div class="top">
+    <searchBar />
     <div class="tabs">
       <div class="tabs-elements">
         <v-tabs class="left" v-model="tab" color="#00796B" align-tabs="center" density="compact" grow>
@@ -77,52 +79,63 @@ onActivated(() => {
       </div>
       <v-divider></v-divider>
     </div>
-    <v-tabs-window v-model="tab" class="tabs-window">
-      <v-tabs-window-item v-for="(item, i) in tabArray" :value="item.value" :key="`tabs-window_${item.value}`">
-        <div class="list-view" :ref="(el) => setListRef(el, i)" @scroll="(e) => handleScroll(i, e)">
-          <v-infinite-scroll color="#00796B">
-            <div class="grid">
-              <template v-for="(item, index) in videoList[i]">
-                <cardButton type="video" :id="item.id" :title="item.title" :img="item.img" :author="item.author"
-                  :time="item.time" :viewNum="item.viewNum" :likeNum="item.likeNum" :longNum="item.longNum"
-                  :isR18="item.isR18" />
-              </template>
-            </div>
-          </v-infinite-scroll>
-        </div>
-      </v-tabs-window-item>
-    </v-tabs-window>
   </div>
+  <v-tabs-window v-model="tab" class="tabs-window">
+    <v-tabs-window-item v-for="(item, i) in tabArray" :value="item.value" :key="`tabs-window_${item.value}`">
+      <div class="list-view" :ref="(el) => setListRef(el, i)" @scroll="(e) => handleScroll(i, e)">
+        <v-infinite-scroll color="#00796B">
+          <div class="grid">
+            <template v-for="(item, index) in videoList[i]">
+              <cardButton type="video" :id="item.id" :title="item.title" :img="item.img" :author="item.author"
+                :time="item.time" :viewNum="item.viewNum" :likeNum="item.likeNum" :longNum="item.longNum"
+                :isR18="item.isR18" />
+            </template>
+          </div>
+        </v-infinite-scroll>
+      </div>
+    </v-tabs-window-item>
+  </v-tabs-window>
+
 </template>
 <style lang="scss" scoped>
-#videoView {
-  display: flex;
-  flex-direction: column;
-}
+.top {
+  position: fixed;
+  width: 100%;
+  top: 0;
+  z-index: 500;
+  backdrop-filter: blur(10px);
 
-.tabs {
-  .tabs-elements {
-    display: flex;
+  .tabs {
+    background-color: rgba(255, 255, 255, 0.8);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 
-    .left {
-      flex: 1;
-    }
-
-    .rigth {
-      width: 36px;
+    .tabs-elements {
       display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-  }
 
-  .v-tab {
-    min-width: 0 !important;
+      .left {
+        flex: 1;
+      }
+
+      .rigth {
+        width: 36px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+    }
+
+    .v-tabs--density-compact {
+      --v-tabs-height: 36px;
+    }
+
+    .v-tab {
+      min-width: 0 !important;
+    }
   }
 }
 
 .tabs-window {
-  flex: 1;
+  z-index: 1;
 
   :deep(.v-window__container) {
     height: 100%;
@@ -136,8 +149,12 @@ onActivated(() => {
     height: 100%;
     overflow-y: auto;
 
+    &::-webkit-scrollbar-track {
+      margin: calc(60px + 36px + 1px + env(safe-area-inset-top, 0) + 4px) 0 calc(60px + env(safe-area-inset-bottom, 0) + 4px);
+    }
+
     .v-infinite-scroll {
-      padding-top: 10px;
+      padding: calc(60px + 36px + 1px + 10px + env(safe-area-inset-top, 0)) 0 calc(60px + env(safe-area-inset-bottom, 0)) 0;
     }
   }
 }

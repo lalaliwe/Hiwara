@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import homeTopBar from '../component/home/topBar.vue';
 import homeBottomButton from '../component/home/bottomButton.vue';
 import homeVideo from '../component/home/video.vue';
 import homeImage from '../component/home/image.vue';
@@ -47,10 +46,8 @@ const handleTabChange = (tab: string) => {
 </script>
 
 <template>
-  <div id="home">
-    <!-- 导航栏 -->
-    <homeTopBar class="top" />
-    <!-- 主内容区域 -->
+  <div id="homeView">
+    <!-- 内容区域 -->
     <homeVideo class="main" v-if="isTab === 'video'" />
     <homeImage class="main" v-else-if="isTab === 'image'" />
     <homeSubscribe class="main" v-else-if="isTab === 'subscribe'" />
@@ -62,27 +59,23 @@ const handleTabChange = (tab: string) => {
 </template>
 
 <style lang="scss" scoped>
-#home {
+#homeView {
   height: 100%;
-  background-color: #fafafa; // Material Design背景色
+  background-color: #fafafa;
   display: flex;
   flex-direction: column;
 }
 
-.top {
-  z-index: 400;
-}
-
 .main {
-  // height: calc(100% - 60px - 60px - env(safe-area-inset-top, 0) - env(safe-area-inset-bottom, 0));
-  // padding: 0 env(safe-area-inset-right, 0) 0 env(safe-area-inset-left, 0);
-  background-color: #fafafa;
   flex: 1;
-  z-index: 1;
   overflow: hidden;
+  z-index: 1;
 }
 
 .bottom {
-  z-index: 500;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  z-index: 400;
 }
 </style>
