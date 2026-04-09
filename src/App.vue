@@ -5,7 +5,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { onBackButtonPress } from '@tauri-apps/api/app'
 import type { PluginListener } from '@tauri-apps/api/core'
 import { exit } from '@tauri-apps/plugin-process';
-import { showShortToast } from './plugins/toast'
+import { showShortToast } from './core/toast'
 import { getCachedPages } from './router/index'
 
 const route = useRoute()
@@ -41,17 +41,24 @@ router.afterEach(() => {
 })
 
 // =====================
-// Android 返回键处理（Tauri v2 官方 API）
+// Toast / Snackbar 状态
 // =====================
+const snackbar = ref(false)
+const snackbarText = ref('')
+const snackbarTimeout = ref(2000)
+const snackbarColor = ref('info')
 
-let backListener: PluginListener | null = null
-// 添加双击返回检测相关变量
-let lastBackPressedTime: number | null = null;
-const DOUBLE_BACK_PRESS_TIMEOUT = 2000; // 2秒内再次按下返回键则退出
+// 监听自定义事件来显示 snackbar
+onMounted(() => {
+  window.addEventListener('show-snackbar', (event: any) => {
+    snackbarText.value = event.detail.message
+    snackbarTimeout.value = event.detail.timeout || 2000
+    snackbarColor.value = event.detail.color || 'info'
+    snackbar.value = true
+  })
 
-onMounted(async () => {
   // 只在 Android 上有效；桌面端不会触发
-  backListener = await onBackButtonPress(async ({ canGoBack }) => {
+  onBackButtonPress(async ({ canGoBack }) => {
     // 检查是否为双击返回
     const currentTime = Date.now();
 
@@ -87,11 +94,22 @@ onMounted(async () => {
       // 提示用户再按一次退出
       lastBackPressedTime = currentTime;
       // 替换原来的console.log，使用toast提示
-      console.log('再按一次返回键退出应用');
+      showShortToast('再按一次返回键退出应用');
       return;
     }
+  }).then(listener => {
+    backListener = listener;
   })
 })
+
+// =====================
+// Android 返回键处理（Tauri v2 官方 API）
+// =====================
+
+let backListener: PluginListener | null = null
+// 添加双击返回检测相关变量
+let lastBackPressedTime: number | null = null;
+const DOUBLE_BACK_PRESS_TIMEOUT = 2000; // 2秒内再次按下返回键则退出
 
 onUnmounted(() => {
   // 取消监听，防止内存泄漏
@@ -108,6 +126,17 @@ onUnmounted(() => {
         </keep-alive>
       </transition>
     </router-view>
+    
+    <!-- Vuetify Snackbar -->
+    <v-snackbar
+      v-model="snackbar"
+      :timeout="snackbarTimeout"
+      :color="snackbarColor"
+      top
+      centered
+    >
+      {{ snackbarText }}
+    </v-snackbar>
   </div>
 </template>
 

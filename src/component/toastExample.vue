@@ -1,16 +1,16 @@
 <template>
   <div class="toast-example">
-    <h3>Toast 示例</h3>
-    <div class="button-group">
-      <button @click="showShort" class="btn btn-primary">显示短时 Toast</button>
-      <button @click="showLong" class="btn btn-primary">显示长时 Toast</button>
-      <button @click="showCustom" class="btn btn-secondary">显示自定义 Toast</button>
+    <h2>Toast 示例</h2>
+    <div class="buttons">
+      <v-btn @click="showShort">短时 Toast</v-btn>
+      <v-btn @click="showLong">长时 Toast</v-btn>
+      <v-btn @click="showCustom">自定义 Toast</v-btn>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { showShortToast, showLongToast, showToast } from '../plugins/toast';
+import { showShortToast, showLongToast, showToast } from '../core/toast';
 
 const showShort = () => {
   showShortToast('这是一个短时 Toast');
@@ -22,8 +22,8 @@ const showLong = () => {
 
 const showCustom = () => {
   showToast({
-    message: '这是自定义 Toast',
-    duration: 'long'
+    message: '这是自定义 Toast，持续时间较长',
+    duration: 'long',
   });
 };
 </script>
@@ -31,32 +31,15 @@ const showCustom = () => {
 <style scoped>
 .toast-example {
   padding: 20px;
-  text-align: center;
 }
 
-.button-group {
+.buttons {
   display: flex;
   flex-direction: column;
   gap: 10px;
-  align-items: center;
 }
 
-.btn {
-  padding: 10px 20px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
+.v-btn {
   margin: 5px;
-  font-size: 16px;
-}
-
-.btn-primary {
-  background-color: #2196F3;
-  color: white;
-}
-
-.btn-secondary {
-  background-color: #9E9E9E;
-  color: white;
 }
 </style>
