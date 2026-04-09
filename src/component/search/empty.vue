@@ -103,7 +103,7 @@ function toggleRecommendExpand() {
 
 <template>
   <div class="content">
-    <div class="empty">
+    <div class="tagsContainer">
       <div class="label" @click="toggleHistoryExpand">
         搜索历史
         <font-awesome-icon icon="fa-solid fa-angle-down" :class="{ expanded: historyExpand }" />
@@ -151,8 +151,8 @@ function toggleRecommendExpand() {
   flex: 1;
   overflow: auto !important;
 
-  .empty {
-    padding: 6px 10px 12px 10px;
+  .tagsContainer {
+    padding: calc(60px + 6px + env(safe-area-inset-top, 0)) 10px 12px 10px;
 
     .label {
       padding: 8px 0;

@@ -15,7 +15,7 @@ export interface ToastOptions {
    * Toast 显示的消息内容
    */
   message: string;
-  
+
   /**
    * Toast 显示时长
    * - 'short': 短时间显示 (约2秒)
@@ -40,7 +40,7 @@ async function isDesktop(): Promise<boolean> {
   if (!isTauri()) {
     return true;
   }
-  
+
   // 在 Tauri 环境中，使用 deviceInfo 插件检测平台
   try {
     const { getDeviceInfo } = await import('../plugins/deviceInfo');

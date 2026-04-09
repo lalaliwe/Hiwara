@@ -46,14 +46,14 @@ router.afterEach(() => {
 const snackbar = ref(false)
 const snackbarText = ref('')
 const snackbarTimeout = ref(2000)
-const snackbarColor = ref('info')
+const snackbarColor = ref('#00796B')
 
 // 监听自定义事件来显示 snackbar
 onMounted(() => {
   window.addEventListener('show-snackbar', (event: any) => {
     snackbarText.value = event.detail.message
     snackbarTimeout.value = event.detail.timeout || 2000
-    snackbarColor.value = event.detail.color || 'info'
+    snackbarColor.value = event.detail.color || '#00796B'
     snackbar.value = true
   })
 
@@ -71,8 +71,6 @@ onMounted(() => {
       } else {
         // 第一次点击，提示用户再按一次退出
         lastBackPressedTime = currentTime;
-        // 替换原来的console.log，使用toast提示
-        // console.log('再按一次返回键退出应用');
         showShortToast('再按一次返回键退出应用')
         return;
       }
@@ -126,15 +124,9 @@ onUnmounted(() => {
         </keep-alive>
       </transition>
     </router-view>
-    
+
     <!-- Vuetify Snackbar -->
-    <v-snackbar
-      v-model="snackbar"
-      :timeout="snackbarTimeout"
-      :color="snackbarColor"
-      top
-      centered
-    >
+    <v-snackbar v-model="snackbar" :timeout="snackbarTimeout" :color="snackbarColor" top centered class="snackbar">
       {{ snackbarText }}
     </v-snackbar>
   </div>
@@ -258,5 +250,10 @@ onUnmounted(() => {
 
 .slide-horizontal-leave-to {
   transform: translateX(-100%);
+}
+
+.snackbar {
+  // 向上平移80px
+  transform: translateY(calc(-80px - env(safe-area-inset-bottom, 0)));
 }
 </style>

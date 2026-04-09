@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import homeBottomButton from '../component/home/bottomButton.vue';
+import homeNavigation from '../component/home/navigation.vue';
 import homeVideo from '../component/home/video.vue';
 import homeImage from '../component/home/image.vue';
 import homeSubscribe from '../component/home/subscribe.vue';
@@ -56,7 +56,7 @@ const handleTabChange = (tab: string) => {
     <homeForum class="main" v-else-if="isTab === 'forum'" />
     <homeMy class="main" v-else-if="isTab === 'my'" />
     <!-- 底部按钮 -->
-    <homeBottomButton class="bottom" :model-value="isTab" @update:tab="handleTabChange" />
+    <homeNavigation class="bottom" :model-value="isTab" @update:tab="handleTabChange" />
   </div>
 </template>
 
@@ -75,7 +75,7 @@ const handleTabChange = (tab: string) => {
 }
 
 .bottom {
-  position: fixed;
+  position: absolute;
   bottom: 0;
   width: 100%;
   z-index: 400;

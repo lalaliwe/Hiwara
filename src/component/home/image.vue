@@ -98,7 +98,7 @@ onActivated(() => {
 </template>
 <style lang="scss" scoped>
 .top {
-  position: fixed;
+  position: absolute;
   width: 100%;
   top: 0;
   z-index: 500;

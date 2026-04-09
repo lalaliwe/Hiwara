@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue';
+import { useRouter } from 'vue-router';
 import videoPlayer from '../component/player/videoPlayer.vue';
 import infoView from '../component/player/info.vue';
 import commentView from '../component/player/comment.vue';
@@ -10,8 +11,9 @@ defineOptions({
   name: 'Player'
 })
 
-const tab = ref('info');
+const router = useRouter();
 
+const tab = ref('info');
 const title = '测试标题';
 const synopsis = '测试简介';
 const playNum = 100;
@@ -33,10 +35,25 @@ onMounted(() => {
 onUnmounted(() => {
   console.log('❌ Player unmounted');
 })
+// 返回
+function goBack() {
+  router.back();
+}
+// 回到主界面
+function goHome() {
+  router.replace('/');
+}
 </script>
 <template>
   <div id="playerView">
-    <div class="statusBarPlaceholder"></div>
+    <div class="topBar">
+      <span class="btn" @click="goBack">
+        <font-awesome-icon icon="fa-solid fa-angle-left" />
+      </span>
+      <span class="btn" @click="goHome">
+        <font-awesome-icon icon="fa-regular fa-house" />
+      </span>
+    </div>
     <videoPlayer class="video-player" />
     <div class="tabs">
       <div class="tabs-elements">
@@ -77,13 +94,39 @@ onUnmounted(() => {
   background-color: #fff;
 }
 
-.statusBarPlaceholder {
-  height: env(safe-area-inset-top, 0);
-  background-color: #000;
+.topBar {
+  // padding-top: env(safe-area-inset-top, 0);
+  // background-color: rgba(0, 0, 0, 0.2);
+  position: absolute;
+  top: 0;
+  width: 100%;
+  z-index: 400;
+  color: #fff;
+
+  .btn {
+    display: inline-flex;
+    margin: 4px;
+    width: 40px;
+    height: 40px;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.2rem;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  &::before {
+    content: '';
+    display: block;
+    height: env(safe-area-inset-top, 0);
+    width: 100%;
+    background-color: #000;
+  }
 }
 
 .video-player {
   width: 100%;
+  margin-top: env(safe-area-inset-top, 0);
   aspect-ratio: 16 / 9;
 }
 
