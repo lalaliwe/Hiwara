@@ -217,7 +217,7 @@ const goBack = () => {
   position: fixed;
   top: 0;
   width: 100%;
-  z-index: 10;
+  z-index: 400;
 
   .topBar {
     padding-top: env(safe-area-inset-top, 0);
@@ -226,6 +226,7 @@ const goBack = () => {
     color: #fff;
     display: flex;
     align-items: center;
+    user-select: none;
 
     .goback {
       padding: 0 16px;
@@ -245,7 +246,8 @@ const goBack = () => {
     }
 
     .label {
-      user-select: none;
+      font-size: 1.1rem;
+      font-weight: 500;
     }
   }
 

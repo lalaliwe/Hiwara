@@ -4,6 +4,7 @@ import player from '../views/player.vue'
 import image from '../views/image.vue'
 import search from '../views/search.vue'
 import friends from '../views/friends.vue'
+import setup from '../views/setup.vue'
 
 // 定义路由元信息接口
 interface RouteMeta {
@@ -46,6 +47,12 @@ const routes: Array<RouteRecordRaw & { meta?: RouteMeta }> = [
     path: '/friends',
     name: 'Friends',
     component: friends,
+    meta: { transition: 'stack', depth: 1 },
+  },
+  {
+    path: '/setup',
+    name: 'Setup',
+    component: setup,
     meta: { transition: 'stack', depth: 1 },
   },
 ]
