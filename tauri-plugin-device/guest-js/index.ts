@@ -73,3 +73,11 @@ export async function lockOrientation(orientation: 'portrait' | 'landscape'): Pr
 export async function unlockOrientation(): Promise<void> {
   await invoke('plugin:device|unlock_orientation');
 }
+
+export interface MoveTaskToBackResponse {
+  success: boolean;
+}
+
+export async function moveTaskToBack(): Promise<MoveTaskToBackResponse> {
+  return await invoke('plugin:device|move_task_to_back');
+}

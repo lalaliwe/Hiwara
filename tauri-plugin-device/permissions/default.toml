@@ -11,4 +11,5 @@ permissions = [
     "allow-lock-orientation",
     "allow-unlock-orientation",
     "allow-show-toast",
+    "allow-move-task-to-back",
 ]

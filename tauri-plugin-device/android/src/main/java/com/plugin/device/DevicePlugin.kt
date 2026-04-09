@@ -85,4 +85,18 @@ class DevicePlugin(private val activity: Activity): Plugin(activity) {
     fun showToast(invoke: Invoke) {
         toastHandler.showToast(invoke)
     }
+
+    @Command
+    fun moveTaskToBack(invoke: Invoke) {
+        try {
+            // Move the task to the background (minimize app)
+            val result = activity.moveTaskToBack(true)
+            
+            val response = JSObject()
+            response.put("success", result)
+            invoke.resolve(response)
+        } catch (e: Exception) {
+            invoke.reject(e.message)
+        }
+    }
 }

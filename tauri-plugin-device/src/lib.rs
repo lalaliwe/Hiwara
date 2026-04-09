@@ -46,6 +46,7 @@ pub fn init<R: Runtime>() -> TauriPlugin<R> {
       commands::lock_orientation,
       commands::unlock_orientation,
       commands::show_toast,
+      commands::move_task_to_back,
     ])
     .setup(|app, api| {
       #[cfg(mobile)]

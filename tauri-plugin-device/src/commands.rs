@@ -67,3 +67,10 @@ pub(crate) async fn show_toast<R: Runtime>(
 ) -> Result<ShowToastResponse> {
     app.device().show_toast(payload)
 }
+
+#[command]
+pub(crate) async fn move_task_to_back<R: Runtime>(
+    app: AppHandle<R>,
+) -> Result<MoveTaskToBackResponse> {
+    app.device().move_task_to_back()
+}

@@ -14,6 +14,7 @@ Default permissions for the plugin
 - `allow-lock-orientation`
 - `allow-unlock-orientation`
 - `allow-show-toast`
+- `allow-move-task-to-back`
 
 ## Permission Table
 
@@ -124,6 +125,32 @@ Enables the exit_immersive command without any pre-configured scope.
 <td>
 
 Denies the exit_immersive command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`device:allow-move-task-to-back`
+
+</td>
+<td>
+
+Enables the move_task_to_back command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`device:deny-move-task-to-back`
+
+</td>
+<td>
+
+Denies the move_task_to_back command without any pre-configured scope.
 
 </td>
 </tr>

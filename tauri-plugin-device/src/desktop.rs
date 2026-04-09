@@ -107,4 +107,9 @@ impl<R: Runtime> Device<R> {
     // On desktop platforms, we can't show native toasts, so we return success without doing anything
     Ok(ShowToastResponse { success: true })
   }
+
+  pub fn move_task_to_back(&self) -> crate::Result<MoveTaskToBackResponse> {
+    // On desktop platforms, this is a no-op
+    Ok(MoveTaskToBackResponse { success: true })
+  }
 }
