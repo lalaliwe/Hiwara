@@ -193,7 +193,7 @@ function clickCard() {
       background: #ff3c00b0;
       text-shadow: 0 0 2px rgba(0, 0, 0, 0.25);
       font-size: 0.6rem;
-      font-weight: bold;
+      font-weight: 500;
       padding: 1px 4px;
       color: #fff;
       font-family: sans-serif;

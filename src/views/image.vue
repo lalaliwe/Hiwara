@@ -182,7 +182,6 @@ onUnmounted(() => {
 </template>
 <style lang="scss" scoped>
 #imageView {
-  height: 100%;
   overflow: auto;
   background-color: #fff;
   position: relative;
@@ -192,7 +191,7 @@ onUnmounted(() => {
 .top {
   position: fixed;
   top: 0;
-  z-index: 300;
+  z-index: 400;
   padding-top: env(safe-area-inset-top, 0);
   color: #fff;
   filter: drop-shadow(1px 1px 1px rgba(0, 0, 0, 0.5));

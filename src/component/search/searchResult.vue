@@ -100,9 +100,22 @@ function handleImageScroll(event: any): void {
   flex-direction: column;
 }
 
-.tabs {}
+.tabs {
+  position: absolute;
+  top: calc(60px + env(safe-area-inset-top, 0));
+  z-index: 400;
+  width: 100%;
+  background-color: rgba(255, 255, 255, 0.8);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(10px);
+
+  .v-tabs--density-compact {
+    --v-tabs-height: 36px;
+  }
+}
 
 .tabs-window {
+  z-index: 1;
   flex: 1;
 
   :deep(.v-window__container) {
@@ -122,7 +135,7 @@ function handleImageScroll(event: any): void {
     padding: 0;
 
     .v-infinite-scroll {
-      padding: 10px 0 env(safe-area-inset-bottom, 0) 0;
+      padding: calc(60px + 36px + 1px + 10px + env(safe-area-inset-top, 0)) 0 env(safe-area-inset-bottom, 0) 0;
     }
   }
 }

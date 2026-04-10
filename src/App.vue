@@ -4,8 +4,8 @@ import { useRoute, useRouter } from 'vue-router'
 // 官方 API：Android 返回键
 import { onBackButtonPress } from '@tauri-apps/api/app'
 import type { PluginListener } from '@tauri-apps/api/core'
-import { exit } from '@tauri-apps/plugin-process';
-import { showShortToast } from './plugins/toast'
+import { showShortToast } from './core/toast'
+import { moveTaskToBack } from './plugins/appControl'
 import { getCachedPages } from './router/index'
 
 const route = useRoute()
@@ -41,34 +41,32 @@ router.afterEach(() => {
 })
 
 // =====================
-// Android 返回键处理（Tauri v2 官方 API）
+// Toast / Snackbar 状态
 // =====================
+const snackbar = ref(false)
+const snackbarText = ref('')
+const snackbarTimeout = ref(2000)
+const snackbarColor = ref('#00796B')
 
-let backListener: PluginListener | null = null
-// 添加双击返回检测相关变量
-let lastBackPressedTime: number | null = null;
-const DOUBLE_BACK_PRESS_TIMEOUT = 2000; // 2秒内再次按下返回键则退出
+// 监听自定义事件来显示 snackbar
+onMounted(() => {
+  window.addEventListener('show-snackbar', (event: any) => {
+    snackbarText.value = event.detail.message
+    snackbarTimeout.value = event.detail.timeout || 2000
+    snackbarColor.value = event.detail.color || '#00796B'
+    snackbar.value = true
+  })
 
-onMounted(async () => {
   // 只在 Android 上有效；桌面端不会触发
-  backListener = await onBackButtonPress(async ({ canGoBack }) => {
+  onBackButtonPress(async ({ canGoBack }) => {
     // 检查是否为双击返回
     const currentTime = Date.now();
 
     // 1. 如果当前在首页
     if (route.path === '/') {
-      // 双击返回退出应用
-      if (lastBackPressedTime && currentTime - lastBackPressedTime <= DOUBLE_BACK_PRESS_TIMEOUT) {
-        await exit(0);
-        return;
-      } else {
-        // 第一次点击，提示用户再按一次退出
-        lastBackPressedTime = currentTime;
-        // 替换原来的console.log，使用toast提示
-        // console.log('再按一次返回键退出应用');
-        showShortToast('再按一次返回键退出应用')
-        return;
-      }
+      // 发送自定义事件到Home组件处理
+      window.dispatchEvent(new CustomEvent('home-back-pressed'));
+      return;
     }
 
     // 2. 不在首页：希望"回退到上一页"
@@ -81,17 +79,28 @@ onMounted(async () => {
     // 3. 极端情况：不在首页，且 WebHistory 已经回退到底
     // 再按返回，就直接退出应用
     if (lastBackPressedTime && currentTime - lastBackPressedTime <= DOUBLE_BACK_PRESS_TIMEOUT) {
-      await exit(0);
+      moveTaskToBack();
       return;
     } else {
       // 提示用户再按一次退出
       lastBackPressedTime = currentTime;
       // 替换原来的console.log，使用toast提示
-      console.log('再按一次返回键退出应用');
+      showShortToast('再按一次返回键退出应用');
       return;
     }
+  }).then(listener => {
+    backListener = listener;
   })
 })
+
+// =====================
+// Android 返回键处理（Tauri v2 官方 API）
+// =====================
+
+let backListener: PluginListener | null = null
+// 添加双击返回检测相关变量
+let lastBackPressedTime: number | null = null;
+const DOUBLE_BACK_PRESS_TIMEOUT = 2000; // 2秒内再次按下返回键则退出
 
 onUnmounted(() => {
   // 取消监听，防止内存泄漏
@@ -100,25 +109,21 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div class="app-container">
-    <router-view v-slot="{ Component }">
-      <transition :name="transitionName" appear>
-        <keep-alive :include="cachedPages" :max="10">
-          <component :is="Component" :key="route.fullPath" v-if="Component" />
-        </keep-alive>
-      </transition>
-    </router-view>
-  </div>
+  <router-view v-slot="{ Component }">
+    <transition :name="transitionName" appear>
+      <keep-alive :include="cachedPages" :max="10">
+        <component :is="Component" :key="route.fullPath" v-if="Component" />
+      </keep-alive>
+    </transition>
+  </router-view>
+
+  <!-- Vuetify Snackbar -->
+  <v-snackbar v-model="snackbar" :timeout="snackbarTimeout" :color="snackbarColor" top centered class="snackbar">
+    {{ snackbarText }}
+  </v-snackbar>
 </template>
 
 <style lang="scss" scoped>
-.app-container {
-  height: 100%;
-  position: relative;
-  overflow: hidden;
-  background-color: #4DB6AC;
-}
-
 // 基础过渡样式
 .fade-enter-active,
 .fade-leave-active {
@@ -229,5 +234,10 @@ onUnmounted(() => {
 
 .slide-horizontal-leave-to {
   transform: translateX(-100%);
+}
+
+.snackbar {
+  // 向上平移80px
+  transform: translateY(calc(-80px - env(safe-area-inset-bottom, 0)));
 }
 </style>

@@ -27,7 +27,9 @@ function goBack() {
 
 <style lang="scss" scoped>
 .top-view {
-  background-color: #00796B;
+  // background-color: #00796B;
+  background-color: rgba(0, 121, 107, 0.9);
+  backdrop-filter: blur(10px);
   height: calc(60px + env(safe-area-inset-top, 0));
   width: 100%;
   /* 安全区域适配 - 避免状态栏遮挡内容 */

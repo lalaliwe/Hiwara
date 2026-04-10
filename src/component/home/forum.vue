@@ -1,17 +1,31 @@
 <script setup lang="ts">
-import { moveTaskToBack } from '../../plugins/appControl'
-const handleMinimize = async () => {
-  const result = await moveTaskToBack()
-  if (result.success) {
-    console.log('应用已最小化到后台')
-  }
-}
+
 </script>
 <template>
-  <div>
-    <v-btn @click="handleMinimize">
-      关闭程序
-    </v-btn>
+  <div class="topBar">
+    <div class="label">
+      论坛
+    </div>
   </div>
 </template>
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.topBar {
+  backdrop-filter: blur(10px);
+  position: absolute;
+  top: 0;
+  width: 100%;
+  z-index: 400;
+  padding: env(safe-area-inset-top, 0) 16px 0 16px;
+  height: calc(60px + env(safe-area-inset-top, 0));
+  background-color: rgba(0, 121, 107, 0.9);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  user-select: none;
+
+  .label {
+    font-size: 1.2rem;
+    font-weight: bold;
+  }
+}
+</style>

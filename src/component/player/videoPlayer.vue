@@ -368,7 +368,7 @@ function goHome() {
     </div>
     <div v-else class="control">
       <!-- 非全屏模式 -->
-      <div class="top">
+      <div class="top" v-if="false">
         <div>
           <span class="btn" @click="goBack">
             <font-awesome-icon icon="fa-solid fa-angle-left" />

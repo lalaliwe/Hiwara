@@ -3,7 +3,7 @@ import searchBar from '../../component/home/searchBar.vue';
 import cardButton from '../../component/cardButton.vue';
 import test1Img from '../../static/img/test1.jpg';
 import { ref, onActivated } from 'vue';
-const tab = ref('latest');
+const tab = ref<'latest' | 'trending' | 'popularity' | 'mostViews' | 'mostLikes'>('latest');
 const tabArray = [
   { value: 'latest', text: '最新' },
   { value: 'trending', text: '流行' },
@@ -99,7 +99,7 @@ onActivated(() => {
 </template>
 <style lang="scss" scoped>
 .top {
-  position: fixed;
+  position: absolute;
   width: 100%;
   top: 0;
   z-index: 500;
@@ -125,7 +125,7 @@ onActivated(() => {
     }
 
     .v-tabs--density-compact {
-      --v-tabs-height: 36px;
+      --v-tabs-height: 40px;
     }
 
     .v-tab {
@@ -150,11 +150,11 @@ onActivated(() => {
     overflow-y: auto;
 
     &::-webkit-scrollbar-track {
-      margin: calc(60px + 36px + 1px + env(safe-area-inset-top, 0) + 4px) 0 calc(60px + env(safe-area-inset-bottom, 0) + 4px);
+      margin: calc(60px + 40px + 1px + env(safe-area-inset-top, 0) + 4px) 0 calc(60px + env(safe-area-inset-bottom, 0) + 4px);
     }
 
     .v-infinite-scroll {
-      padding: calc(60px + 36px + 1px + 10px + env(safe-area-inset-top, 0)) 0 calc(60px + env(safe-area-inset-bottom, 0)) 0;
+      padding: calc(60px + 40px + 1px + 10px + env(safe-area-inset-top, 0)) 0 calc(60px + env(safe-area-inset-bottom, 0)) 0;
     }
   }
 }

@@ -56,64 +56,24 @@ for (let i = 0; i < 100; i++) {
 </script>
 <template>
   <div id="searchView">
-    <topBar />
+    <topBar class="topBar" />
     <empty v-if="searching === 'empty'" :search-history="searchHistory" :search-recommend="searchRecommend" />
     <SearchLoading v-else-if="searching === 'loading'" />
-    <searchResult 
-      v-else-if="searching === 'result'" 
-      :video-result="videoResult" 
-      :image-result="imageResult"
-      v-model:tab="tab"
-    />
+    <searchResult v-else-if="searching === 'result'" :video-result="videoResult" :image-result="imageResult"
+      v-model:tab="tab" />
   </div>
 </template>
 <style lang="scss" scoped>
 #searchView {
   background-color: #fff;
-  height: 100%;
   display: flex;
   flex-direction: column;
-  // 移除安全区域padding以避免底部空白
+  z-index: 1
 }
 
-.content {
-  flex: 1;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-}
-
-.tabs {}
-
-.tabs-window {
-  flex: 1;
-
-  :deep(.v-window__container) {
-    height: 100%;
-  }
-
-  .v-window-item {
-    height: 100%;
-    overflow: hidden;
-  }
-
-  .list-view {
-    height: 100%;
-    overflow: auto;
-    // 确保列表视图占据完整高度，无额外margin
-    margin: 0;
-    padding: 0;
-
-    .v-infinite-scroll {
-      padding: 10px 0 env(safe-area-inset-bottom, 0) 0;
-    }
-  }
-}
-
-.grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 10px;
-  padding: 0 10px 0 10px;
+.topBar {
+  position: absolute;
+  top: 0;
+  z-index: 500;
 }
 </style>
