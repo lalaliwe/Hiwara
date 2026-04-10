@@ -3,6 +3,10 @@ import App from "./App.vue";
 import router from "./router";
 import "./assets/style.scss";
 
+// 在 Vue 挂载前立即设置背景色，防止闪烁
+document.documentElement.style.backgroundColor = '#4DB6AC';
+document.body.style.backgroundColor = '#4DB6AC';
+
 import 'vuetify/styles'
 import { createVuetify } from 'vuetify'
 import * as components from 'vuetify/components'
@@ -38,7 +42,15 @@ install(app, 'i');
 library.add(fas, far, fab)
 app.component('font-awesome-icon', FontAwesomeIcon);
 app.config.globalProperties.$hammer = Hammer;
-app.mount("#app");
+
+// 在 Vue 应用挂载完成后隐藏加载遮罩
+app.mount("#app", true); // 确保 DOM 已准备好
+
+// 隐藏加载遮罩
+const loadingElement = document.getElementById('loading');
+if (loadingElement) {
+  loadingElement.classList.add('hidden');
+}
 
 /** 测试代码 */
 import { getDeviceInfo } from "./plugins/deviceInfo";

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+  <!-- 1. 纯色背景（必须和你前端的背景色完全一致） -->
+  <item android:drawable="@android:color/white" />
+  <!-- 2. 居中的 Logo -->
+  <item>
+    <bitmap
+      android:gravity="center"
+      android:src="@drawable/my_logo" />
+  </item>
+</layer-list>

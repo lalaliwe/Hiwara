@@ -2,5 +2,13 @@
     <!-- Base application theme. -->
     <style name="Theme.hiwara" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Customize your theme here. -->
+        <item name="android:windowBackground">#00897B</item>
+    </style>
+    <!-- 暗色模式启动页主题 -->
+    <style name="Theme.Hiwara.Splash" parent="Theme.AppCompat.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <!-- 暗色背景 -->
+        <item name="android:windowBackground">#00897B</item>
     </style>
 </resources>

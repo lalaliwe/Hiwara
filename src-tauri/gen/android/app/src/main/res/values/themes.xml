@@ -4,5 +4,14 @@
         <!-- Customize your theme here. -->
         <item name="android:navigationBarColor">@color/navigation_bar_color</item>
         <item name="android:windowLightNavigationBar" tools:targetApi="o_mr1">false</item>
+        <!-- 设置窗口背景色与启动图一致 -->
+        <item name="android:windowBackground">#4DB6AC</item>
+    </style>
+    <!-- 亮色模式启动页主题 -->
+    <style name="Theme.Hiwara.Splash" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <!-- 亮色背景 -->
+        <item name="android:windowBackground">#4DB6AC</item>
     </style>
 </resources>

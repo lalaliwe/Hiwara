@@ -5,9 +5,41 @@
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Tauri + Vue + Typescript App</title>
+    <style>
+      /* 设置初始背景色与启动图保持一致 */
+      body {
+        margin: 0;
+        background-color: #4DB6AC;
+      }
+      #app {
+        min-height: 100vh;
+        background-color: #4DB6AC;
+      }
+      
+      /* 启动遮罩层 */
+      #loading {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: #4DB6AC;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 9999;
+      }
+      
+      #loading.hidden {
+        display: none;
+      }
+    </style>
   </head>
 
   <body>
+    <div id="loading">
+      <!-- 可以在这里放置一个简单 logo 或加载指示器 -->
+    </div>
     <div id="app"></div>
     <script type="module" src="/src/main.ts"></script>
   </body>

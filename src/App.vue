@@ -116,7 +116,7 @@ onUnmounted(() => {
   height: 100%;
   position: relative;
   overflow: hidden;
-  background-color: #fafafa;
+  background-color: #4DB6AC;
 }
 
 // 基础过渡样式

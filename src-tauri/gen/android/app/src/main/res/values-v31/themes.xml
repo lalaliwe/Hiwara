@@ -1,0 +1,12 @@
+<resources>
+  <!-- Android 12+ 专用的 SplashScreen API -->
+  <style name="Theme.Hiwara.Splash" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+    <!-- 启动页背景色（必须是纯色） -->
+    <item name="android:windowSplashScreenBackground">#4DB6AC</item>
+    <!-- 中心 Logo 图标（矢量图） -->
+    <item name="android:windowSplashScreenAnimatedIcon">@drawable/splash_icon</item>
+    <!-- 确保兼容 AppCompat -->
+    <item name="windowActionBar">false</item>
+    <item name="windowNoTitle">true</item>
+  </style>
+</resources>
