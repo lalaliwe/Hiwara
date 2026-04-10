@@ -9,7 +9,7 @@ const goBack = () => {
 
 <template>
   <div id="setupView">
-    <div class="topBar" style="border-top: solid 1px #BDBDBD;">
+    <div class="topBar">
       <div class="goback" @click="goBack">
         <font-awesome-icon icon="fa-solid fa-angle-left" />
       </div>
@@ -18,7 +18,7 @@ const goBack = () => {
       </div>
     </div>
     <!-- 内容区域 -->
-    <div class="item autoplay">
+    <div class="item autoplay" style="border-top: solid 1px #BDBDBD;">
       <div class="label">
         自动播放
       </div>
@@ -57,6 +57,7 @@ const goBack = () => {
 #setupView {
   overflow-y: auto;
   padding: calc(60px + env(safe-area-inset-top, 0)) 0 env(safe-area-inset-bottom, 0) 0;
+  background-color: #fafafa;
 }
 
 .topBar {
@@ -66,7 +67,7 @@ const goBack = () => {
   width: 100%;
   z-index: 400;
   padding-top: env(safe-area-inset-top, 0);
-  height: 60px;
+  height: calc(env(safe-area-inset-top, 0) + 60px);
   background-color: rgba(0, 121, 107, 0.9);
   color: #fff;
   display: flex;
@@ -91,7 +92,7 @@ const goBack = () => {
   }
 
   .label {
-    font-size: 1.1rem;
+    font-size: 1.2rem;
     font-weight: 500;
   }
 }

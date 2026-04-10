@@ -4,8 +4,8 @@ import { useRoute, useRouter } from 'vue-router'
 // 官方 API：Android 返回键
 import { onBackButtonPress } from '@tauri-apps/api/app'
 import type { PluginListener } from '@tauri-apps/api/core'
-import { exit } from '@tauri-apps/plugin-process';
 import { showShortToast } from './core/toast'
+import { moveTaskToBack } from './plugins/appControl'
 import { getCachedPages } from './router/index'
 
 const route = useRoute()
@@ -64,16 +64,9 @@ onMounted(() => {
 
     // 1. 如果当前在首页
     if (route.path === '/') {
-      // 双击返回退出应用
-      if (lastBackPressedTime && currentTime - lastBackPressedTime <= DOUBLE_BACK_PRESS_TIMEOUT) {
-        await exit(0);
-        return;
-      } else {
-        // 第一次点击，提示用户再按一次退出
-        lastBackPressedTime = currentTime;
-        showShortToast('再按一次返回键退出应用')
-        return;
-      }
+      // 发送自定义事件到Home组件处理
+      window.dispatchEvent(new CustomEvent('home-back-pressed'));
+      return;
     }
 
     // 2. 不在首页：希望"回退到上一页"
@@ -86,7 +79,7 @@ onMounted(() => {
     // 3. 极端情况：不在首页，且 WebHistory 已经回退到底
     // 再按返回，就直接退出应用
     if (lastBackPressedTime && currentTime - lastBackPressedTime <= DOUBLE_BACK_PRESS_TIMEOUT) {
-      await exit(0);
+      moveTaskToBack();
       return;
     } else {
       // 提示用户再按一次退出

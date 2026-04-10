@@ -17,6 +17,10 @@ defineOptions({
 
 const isTab = ref("subscribe");
 
+// 添加双击返回检测相关变量
+let lastBackPressedTime: number | null = null;
+const DOUBLE_BACK_PRESS_TIMEOUT = 2000; // 2秒内再次按下返回键则退出
+
 // 应用页面设置的函数
 const applyPageSettings = () => {
   // 固定竖屏
@@ -36,15 +40,47 @@ onActivated(() => {
 })
 
 onMounted(() => {
+  // 监听来自App.vue的返回键事件
+  window.addEventListener('home-back-pressed', handleBackPressed);
   // console.log('✅ Home mounted');
 })
 onBeforeUnmount(() => {
+  // 移除事件监听器
+  window.removeEventListener('home-back-pressed', handleBackPressed);
   // console.log('❌ Home unmounted');
 })
 // 处理底部按钮tab变化
 const handleTabChange = (tab: string) => {
   isTab.value = tab;
 }
+
+// 处理返回键事件，将tab切换到subscribe
+const handleBackPressed = () => {
+  const currentTime = Date.now();
+  
+  if(isTab.value !== 'subscribe') {
+    // 如果不在订阅页面，则切换到订阅页面
+    isTab.value = 'subscribe';
+    // 记录点击时间，以便实现双击退出
+    showShortToast('再按一次返回键退出应用');
+    lastBackPressedTime = currentTime;
+  } else {
+    // 如果已经在订阅页面，执行双击退出逻辑
+    if (lastBackPressedTime && currentTime - lastBackPressedTime <= DOUBLE_BACK_PRESS_TIMEOUT) {
+      moveTaskToBack(); // 执行退出
+    } else {
+      // 第一次点击，提示用户再按一次退出
+      showShortToast('再按一次返回键退出应用');
+      lastBackPressedTime = currentTime;
+    }
+  }
+}
+
+// 导入showShortToast函数
+import { showShortToast } from '../core/toast';
+
+// 导入moveTaskToBack函数
+import { moveTaskToBack } from '../plugins/appControl';
 </script>
 
 <template>

@@ -124,7 +124,7 @@ onActivated(() => {
     }
 
     .v-tabs--density-compact {
-      --v-tabs-height: 36px;
+      --v-tabs-height: 40px;
     }
 
     .v-tab {
@@ -149,11 +149,11 @@ onActivated(() => {
     overflow-y: auto;
 
     &::-webkit-scrollbar-track {
-      margin: calc(60px + 36px + 1px + env(safe-area-inset-top, 0) + 4px) 0 calc(60px + env(safe-area-inset-bottom, 0) + 4px);
+      margin: calc(60px + 40px + 1px + env(safe-area-inset-top, 0) + 4px) 0 calc(60px + env(safe-area-inset-bottom, 0) + 4px);
     }
 
     .v-infinite-scroll {
-      padding: calc(60px + 36px + 1px + 10px + env(safe-area-inset-top, 0)) 0 calc(60px + env(safe-area-inset-bottom, 0)) 0;
+      padding: calc(60px + 40px + 1px + 10px + env(safe-area-inset-top, 0)) 0 calc(60px + env(safe-area-inset-bottom, 0)) 0;
     }
   }
 }

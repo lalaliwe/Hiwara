@@ -20,6 +20,13 @@ const props = defineProps<{
 const value = ref(props.modelValue || "subscribe")
 const btnFontSize = ref(24)
 
+// 监听props.modelValue变化，确保与父组件保持同步
+watch(() => props.modelValue, (newVal) => {
+  if (newVal !== undefined && value.value !== newVal) {
+    value.value = newVal
+  }
+})
+
 // 监听value变化并emit事件
 watch(value, (newValue: string) => {
   emit('update:tab', newValue)
@@ -30,6 +37,7 @@ const changeValue = (newValue: string) => {
   value.value = newValue
 }
 </script>
+
 <template>
   <div class="tabs">
     <div class="btn" :class="{ active: value === 'video' }" @click="changeValue('video')" v-ripple>
@@ -69,6 +77,7 @@ const changeValue = (newValue: string) => {
     </div>
   </div>
 </template>
+
 <style lang="scss" scoped>
 .tabs {
   display: flex;

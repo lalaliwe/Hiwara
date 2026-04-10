@@ -1,9 +1,16 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { useRouter } from 'vue-router'
-const router = useRouter()
+import { useRouter, useRoute } from 'vue-router'
 
-const tab = ref<'follow' | 'fans' | 'friend'>('follow')
+defineOptions({
+  name: 'Friends'
+})
+
+const router = useRouter()
+const route = useRoute()
+
+const tab = ref<'follow' | 'fans' | 'friend'>()
+tab.value = route.query.type as 'follow' | 'fans' | 'friend'
 
 // 定义标签页数据
 const tabs = [
@@ -164,7 +171,7 @@ const goBack = () => {
         </div>
       </div>
       <div class="tabs">
-        <v-tabs v-model="tab" color="#00796B" align-tabs="center" density="compact">
+        <v-tabs v-model="tab" color="#00796B" align-tabs="center" density="compact" grow>
           <v-tab v-for="item in tabs" :key="item.value" :value="item.value">
             {{ item.title }}
           </v-tab>
@@ -210,6 +217,7 @@ const goBack = () => {
 #friendsView {
   display: flex;
   flex-direction: column;
+  background-color: #fafafa;
 }
 
 .top {
@@ -221,7 +229,7 @@ const goBack = () => {
 
   .topBar {
     padding-top: env(safe-area-inset-top, 0);
-    height: 60px;
+    height: calc(env(safe-area-inset-top, 0) + 60px);
     background-color: rgba(0, 121, 107, 0.9);
     color: #fff;
     display: flex;
@@ -246,7 +254,7 @@ const goBack = () => {
     }
 
     .label {
-      font-size: 1.1rem;
+      font-size: 1.2rem;
       font-weight: 500;
     }
   }
@@ -256,18 +264,18 @@ const goBack = () => {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 
     .v-tabs--density-compact {
-      --v-tabs-height: 36px;
+      --v-tabs-height: 40px;
     }
   }
 }
 
 .tabs-window {
-  padding-top: calc(60px + 36px + 1px + env(safe-area-inset-top, 0));
+  padding: calc(60px + 40px + 1px + env(safe-area-inset-top, 0)) 0 env(safe-area-inset-bottom, 0) 0;
   flex: 1;
   overflow-y: auto;
 
   &::-webkit-scrollbar-track {
-    margin: calc(60px + 36px + 1px + env(safe-area-inset-top, 0) + 4px) 0 calc(env(safe-area-inset-bottom, 0) + 4px) 0;
+    margin: calc(60px + 40px + 1px + env(safe-area-inset-top, 0) + 4px) 0 calc(env(safe-area-inset-bottom, 0) + 4px) 0;
   }
 
   .list-item {

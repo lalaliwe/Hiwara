@@ -3,6 +3,18 @@ import {
   Moon as iconMoon,
   Theme as iconTheme
 } from '@icon-park/vue-next';
+import { useRouter } from 'vue-router'
+const router = useRouter()
+function routerGoTo(path: string, query?: any) {
+  if (query) {
+    router.push({
+      path: path,
+      query: query
+    });
+  } else {
+    router.push(path);
+  }
+}
 </script>
 <template>
   <div class="top">
@@ -31,13 +43,13 @@ import {
     </div>
     <div class="friendsNum">
       <div class="fill">
-        <div class="btn">
+        <div class="btn" @click="routerGoTo('/friends', { type: 'follow' })">
           <div class="num">100</div>
           <div class="label">关注</div>
         </div>
       </div>
       <div class="fill last">
-        <div class="btn">
+        <div class="btn" @click="routerGoTo('/friends', { type: 'fans' })">
           <div class="num">100</div>
           <div class="label">粉丝</div>
         </div>
@@ -96,7 +108,7 @@ import {
           </div>
           <div class="text">通知</div>
         </div>
-        <div class="btn">
+        <div class="btn" @click="routerGoTo('/friends', { type: 'friend' })">
           <div class="icon">
             <font-awesome-icon icon="fa-solid fa-user-group" />
           </div>
@@ -108,7 +120,7 @@ import {
           </div>
           <div class="text">私信</div>
         </div>
-        <div class="btn">
+        <div class="btn" @click="routerGoTo('/setup')">
           <div class="icon">
             <font-awesome-icon icon="fa-solid fa-gear" />
           </div>
@@ -182,17 +194,17 @@ import {
   }
 
   .user {
-    padding: 0 10px;
+    padding: 0 14px;
     display: flex;
-    height: 50px;
+    height: 90px;
 
     .avatar {
       display: flex;
       align-items: center;
 
       .img {
-        width: 48px;
-        height: 48px;
+        width: 64px;
+        height: 64px;
         border-radius: 50%;
         border: #fff 2px solid;
       }
@@ -273,11 +285,11 @@ import {
   z-index: 1;
   flex: 1;
   position: relative;
-  padding: calc(175px + env(safe-area-inset-top, 0)) 0 env(safe-area-inset-bottom, 0) 0;
+  padding: calc(215px + env(safe-area-inset-top, 0)) 0 env(safe-area-inset-bottom, 0) 0;
 
   .card {
     margin: 10px;
-    box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.2);
+    box-shadow: 1px 1px 6px rgba(0, 0, 0, 0.15);
     border-radius: 4px;
     overflow: hidden;
     padding: 6px 0;
@@ -346,7 +358,7 @@ import {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
 
-      // gap: 15px;
+      gap: 10px;
       .btn {
         text-align: center;
         color: #424242;
