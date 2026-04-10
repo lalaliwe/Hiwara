@@ -111,5 +111,7 @@ function toSearch() {
   align-items: center;
   justify-content: center;
   padding: 0 16px;
+  cursor: pointer;
+  user-select: none;
 }
 </style>
