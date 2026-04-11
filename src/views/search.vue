@@ -1,9 +1,25 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { onActivated, ref } from 'vue';
 import topBar from '../component/search/topBar.vue';
 import empty from '../component/search/empty.vue';
 import SearchLoading from '../component/search/loading.vue';
 import searchResult from '../component/search/searchResult.vue';
+import { setStatusBarTextStyle } from '../plugins/navbarStyle'
+
+defineOptions({
+  name: 'Search'
+})
+
+// 应用页面设置的函数
+const applyPageSettings = () => {
+  // 设置状态栏白色文字
+  setStatusBarTextStyle('light')
+}
+applyPageSettings()
+// 进入页面时，重新应用页面设置
+onActivated(() => {
+  applyPageSettings()
+})
 
 const searching = ref<'empty' | 'loading' | 'result'>('empty');
 const tab = ref('video');

@@ -10,6 +10,7 @@ import setup from '../views/setup.vue'
 interface RouteMeta {
   transition?: string
   depth?: number
+  isFirstLoad?: boolean  // 添加标识是否是首次加载
 }
 
 // 页面缓存栈 - 存储应该被缓存的页面名称
@@ -62,8 +63,22 @@ const router = createRouter({
   routes
 })
 
+// 标识是否是首次加载应用
+let isFirstLoad = true;
+
 // 导航守卫
 router.beforeEach((to, from) => {
+  // 如果是首次加载并且访问的是首页，则不使用过渡动画
+  if (isFirstLoad && to.path === '/') {
+    to.meta!.isFirstLoad = true;
+    to.meta!.transition = '';  // 设置为空字符串，不使用过渡动画
+    isFirstLoad = false;      // 重置标识
+  } else if (isFirstLoad) {
+    // 如果是首次加载但不是首页（比如直接访问某个深层页面），也需要设置标识
+    to.meta!.isFirstLoad = true;
+    isFirstLoad = false;
+  }
+
   const toDepth = (to.meta?.depth as number) || 0
   const fromDepth = (from.meta?.depth as number) || 0
 
@@ -73,10 +88,10 @@ router.beforeEach((to, from) => {
   }
 
   if (from.name === undefined) {
-    to.meta.transition = 'stack'
+    to.meta.transition = to.meta?.isFirstLoad ? '' : 'stack'
     historyStack.push(to.fullPath)
   } else if (toDepth > fromDepth) {
-    to.meta.transition = 'stack'
+    to.meta.transition = to.meta?.isFirstLoad ? '' : 'stack'
     historyStack.push(to.fullPath)
     if (from.name && !cachedPages.includes(from.name as string)) {
       cachedPages.push(from.name as string)
@@ -94,7 +109,7 @@ router.beforeEach((to, from) => {
       to.meta.transition = 'stack-reverse'
       historyStack.pop()
     } else {
-      to.meta.transition = 'stack'
+      to.meta.transition = to.meta?.isFirstLoad ? '' : 'stack'
       historyStack.push(to.fullPath)
       if (to.name && !cachedPages.includes(to.name as string)) {
         cachedPages.push(to.name as string)

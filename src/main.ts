@@ -4,8 +4,8 @@ import router from "./router";
 import "./assets/style.scss";
 
 // 在 Vue 挂载前立即设置背景色，防止闪烁
-document.documentElement.style.backgroundColor = '#4DB6AC';
-document.body.style.backgroundColor = '#4DB6AC';
+// document.documentElement.style.backgroundColor = '#4DB6AC';
+// document.body.style.backgroundColor = '#4DB6AC';
 
 import 'vuetify/styles'
 import { createVuetify } from 'vuetify'

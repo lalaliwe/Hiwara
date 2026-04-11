@@ -8,7 +8,7 @@ import homeMy from '../component/home/my.vue';
 import { ref, onMounted, onBeforeUnmount, onActivated } from 'vue';
 // import { on } from 'hammerjs';
 import { lockPortrait } from '../plugins/useOrientation'
-import { setStatusBarTextStyle, setNavigationBarButtonStyle } from '../plugins/navbarStyle'
+import { setStatusBarTextStyle} from '../plugins/navbarStyle'
 
 // 设置组件名称，确保与路由name一致
 defineOptions({
@@ -27,11 +27,7 @@ const applyPageSettings = () => {
   lockPortrait()
   // 设置状态栏白色文字
   setStatusBarTextStyle('light')
-  // 设置导航栏黑色按钮
-  setNavigationBarButtonStyle('dark')
 }
-
-// 初始加载时应用设置
 applyPageSettings()
 
 // 当页面被激活时（从 keep-alive 缓存中恢复）也应用设置
@@ -57,8 +53,8 @@ const handleTabChange = (tab: string) => {
 // 处理返回键事件，将tab切换到subscribe
 const handleBackPressed = () => {
   const currentTime = Date.now();
-  
-  if(isTab.value !== 'subscribe') {
+
+  if (isTab.value !== 'subscribe') {
     // 如果不在订阅页面，则切换到订阅页面
     isTab.value = 'subscribe';
     // 记录点击时间，以便实现双击退出

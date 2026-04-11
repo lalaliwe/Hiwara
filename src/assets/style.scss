@@ -6,7 +6,6 @@ body {
   padding: 0;
   height: 100%;
   overflow-y: hidden !important;
-  background-color: #4db6ac !important;
 }
 
 #app {
@@ -15,7 +14,6 @@ body {
   flex-direction: column;
   position: relative;
   overflow: hidden;
-  background-color: #4db6ac;
   > div {
     flex: 1;
     height: 100%;

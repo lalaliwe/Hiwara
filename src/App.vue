@@ -14,9 +14,23 @@ const router = useRouter()
 // 存储需要缓存的页面名称
 const cachedPages = ref<string[]>([])
 
+// 检测是否是首次加载（冷启动）
+const isFirstLoad = ref(true)
+
+// 监听路由变化，标记非首次加载
+watch(() => route.path, () => {
+  isFirstLoad.value = false
+}, { immediate: true })
+
 // 计算过渡名称
 const transitionName = computed(() => {
+  // 如果是首次加载首页，则不使用过渡动画
+  if (isFirstLoad.value && route.path === '/') {
+    return ''
+  }
+  
   const transition = route.meta?.transition
+  // 当过渡名称为空字符串时，不会应用任何过渡效果
   return typeof transition === 'string' ? transition : 'fade'
 })
 

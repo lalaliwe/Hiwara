@@ -18,8 +18,6 @@ const applyPageSettings = () => {
   // 设置状态栏黑色文字
   setStatusBarTextStyle('dark')
 }
-
-// 初始加载时应用设置
 applyPageSettings()
 
 // 当页面被激活时（从 keep-alive 缓存中恢复）也应用设置

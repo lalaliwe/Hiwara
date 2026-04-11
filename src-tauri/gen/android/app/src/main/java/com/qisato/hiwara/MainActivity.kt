@@ -15,21 +15,14 @@ class MainActivity : TauriActivity() {
     enableEdgeToEdge()
     super.onCreate(savedInstanceState)
     
-    // 设置 WebView 背景色与启动图保持一致（青绿色）
-    window.decorView.setBackgroundColor(getColor(R.color.initial_color))
-    
-    // 设置导航栏颜色为
-    window.navigationBarColor = getColor(R.color.initial_color)
-    
-    // 设置导航栏和状态栏图标颜色为白色（因为背景是深色）
-    val controller = WindowInsetsControllerCompat(window, window.decorView)
-    controller.isAppearanceLightNavigationBars = false
-    controller.isAppearanceLightStatusBars = false
+    // 设置 WebView 背景色，与启动画面背景色保持一致
+    window.decorView.setBackgroundColor(getColor(R.color.bg_color))
   }
   
   override fun onWebViewCreate(webView: WebView) {
     super.onWebViewCreate(webView)
-    // 确保 WebView 初始背景色为青绿色
-    webView.setBackgroundColor(getColor(R.color.initial_color))
+    
+    // 确保 WebView 背景色与启动画面一致，避免出现黑屏或白屏闪烁
+    webView.setBackgroundColor(getColor(R.color.bg_color))
   }
 }

@@ -1,9 +1,21 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { onActivated, ref } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
+import { setStatusBarTextStyle } from '../plugins/navbarStyle'
 
 defineOptions({
   name: 'Friends'
+})
+
+// 应用页面设置的函数
+const applyPageSettings = () => {
+  // 设置状态栏白色文字
+  setStatusBarTextStyle('light')
+}
+applyPageSettings()
+// 进入页面时，重新应用页面设置
+onActivated(() => {
+  applyPageSettings()
 })
 
 const router = useRouter()

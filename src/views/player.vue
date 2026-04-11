@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue';
+import { ref, onMounted, onUnmounted, onActivated } from 'vue';
 import { useRouter } from 'vue-router';
 import videoPlayer from '../component/player/videoPlayer.vue';
 import infoView from '../component/player/info.vue';
@@ -26,8 +26,12 @@ const fansNum = 100;
 const videoNum = 10;
 const isFollow = ref(false);
 
-// 设置状态栏白色文字
-setStatusBarTextStyle('light')
+// 应用页面设置的函数
+const applyPageSettings = () => {
+  // 设置状态栏白色文字
+  setStatusBarTextStyle('light')
+}
+applyPageSettings()
 
 onMounted(() => {
   console.log('✅ Player mounted');
@@ -35,6 +39,10 @@ onMounted(() => {
 onUnmounted(() => {
   console.log('❌ Player unmounted');
 })
+onActivated(() => {
+  applyPageSettings()
+})
+
 // 返回
 function goBack() {
   router.back();

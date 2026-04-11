@@ -1,46 +1,90 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Tauri + Vue + Typescript App</title>
-    <style>
-      /* 设置初始背景色与启动图保持一致 */
-      body {
-        margin: 0;
-        background-color: #4DB6AC;
-      }
-      #app {
-        min-height: 100vh;
-        background-color: #4DB6AC;
-      }
-      
-      /* 启动遮罩层 */
-      #loading {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: #4DB6AC;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        z-index: 9999;
-      }
-      
-      #loading.hidden {
-        display: none;
-      }
-    </style>
-  </head>
 
-  <body>
-    <div id="loading">
-      <!-- 可以在这里放置一个简单 logo 或加载指示器 -->
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tauri + Vue + Typescript App</title>
+  <style>
+    body {
+      margin: 0;
+      background-color: #fafafa;
+    }
+
+    #app {
+      min-height: 100vh;
+    }
+
+    /* 启动遮罩层 */
+    #loading {
+      background-color: #fafafa;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 9999;
+    }
+
+    #loading.hidden {
+      display: none;
+    }
+
+    #loading-content {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 120px;
+    }
+
+    #loading-logo-wrapper {
+      width: 65px;
+      height: 65px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      border-radius: 10px;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    #loading-logo-img {
+      width: calc(100% + 40px);
+      height: calc(100% + 40px);
+    }
+
+    @font-face {
+      font-family: 'riwenlogo';
+      /* 优先使用相对路径（Android assets目录） */
+      src: url('/fonts/riwenlogo.ttf') format('truetype');
+      font-weight: normal;
+      font-style: normal;
+    }
+
+    #loading-title {
+      font-family: 'riwenlogo';
+      font-size: 1.6rem;
+      color: #414141;
+      padding: 12px;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="loading">
+    <div id="loading-content">
+      <div id="loading-logo-wrapper">
+        <img id="loading-logo-img" src="./app-icon-square.png" alt="">
+      </div>
+      <div id="loading-title">Hiwara</div>
     </div>
-    <div id="app"></div>
-    <script type="module" src="/src/main.ts"></script>
-  </body>
+  </div>
+  <div id="app"></div>
+  <script type="module" src="/src/main.ts"></script>
+</body>
+
 </html>
