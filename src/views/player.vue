@@ -1,10 +1,13 @@
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted, onActivated } from 'vue';
+import { ref, onMounted, onUnmounted, onActivated, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import videoPlayer from '../component/player/videoPlayer.vue';
 import infoView from '../component/player/info.vue';
 import commentView from '../component/player/comment.vue';
-import { setStatusBarTextStyle } from '../plugins/navbarStyle'
+import { setStatusBarTextStyle } from '../plugins/navbarStyle';
+import { Swiper, SwiperSlide } from 'swiper/vue';
+import type { Swiper as SwiperType } from 'swiper';
+import 'swiper/css';
 
 // 设置组件名称，确保与路由name一致
 defineOptions({
@@ -25,6 +28,28 @@ const authorname = '测试用户';
 const fansNum = 100;
 const videoNum = 10;
 const isFollow = ref(false);
+
+// --- Swiper 联动逻辑 ---
+const swiperInstance = ref<SwiperType | null>(null);
+
+const onSwiper = (swiper: SwiperType) => {
+  swiperInstance.value = swiper;
+};
+
+watch(tab, (newVal) => {
+  if (swiperInstance.value) {
+    const targetIndex = newVal === 'info' ? 0 : 1;
+    if (swiperInstance.value.activeIndex !== targetIndex) {
+      swiperInstance.value.slideTo(targetIndex);
+    }
+  }
+});
+
+const onSlideChange = (swiper: SwiperType) => {
+  tab.value = swiper.activeIndex === 0 ? 'info' : 'comment';
+};
+// --- End Swiper 联动逻辑 ---
+
 
 // 应用页面设置的函数
 const applyPageSettings = () => {
@@ -52,6 +77,7 @@ function goHome() {
   router.replace('/');
 }
 </script>
+
 <template>
   <div id="playerView">
     <div class="topBar">
@@ -81,19 +107,22 @@ function goHome() {
       <v-divider></v-divider>
     </div>
     <div class="tabs-content">
-      <v-tabs-window v-model="tab" class="tabs-window">
-        <v-tabs-window-item value="info">
+      <!-- 替换为 Swiper -->
+      <swiper class="tabs-window" :slides-per-view="1" :space-between="0" @swiper="onSwiper"
+        @slide-change="onSlideChange">
+        <swiper-slide>
           <infoView :title="title" :synopsis="synopsis" :playNum="playNum" :likeNum="likeNum" :createdAt="createdAt"
             :isLike="isLike" :tags="tags" :authorname="authorname" :fansNum="fansNum" :videoNum="videoNum"
             :isFollow="isFollow" />
-        </v-tabs-window-item>
-        <v-tabs-window-item value="comment">
+        </swiper-slide>
+        <swiper-slide>
           <commentView />
-        </v-tabs-window-item>
-      </v-tabs-window>
+        </swiper-slide>
+      </swiper>
     </div>
   </div>
 </template>
+
 <style lang="scss" scoped>
 #playerView {
   display: flex;
@@ -102,8 +131,6 @@ function goHome() {
 }
 
 .topBar {
-  // padding-top: env(safe-area-inset-top, 0);
-  // background-color: rgba(0, 0, 0, 0.2);
   position: absolute;
   top: 0;
   width: 100%;
@@ -171,14 +198,15 @@ function goHome() {
   .tabs-window {
     height: 100%;
 
-    :deep(.v-window__container) {
+    // 让 Swiper 内部结构继承 100% 高度
+    :deep(.swiper-wrapper) {
       height: 100%;
     }
 
-    .v-window-item {
+    // 替代原 .v-window-item 的功能：高度100% + 内部滚动
+    :deep(.swiper-slide) {
       height: 100%;
       overflow: auto;
-      padding-bottom: env(safe-area-inset-bottom, 0);
     }
   }
 }

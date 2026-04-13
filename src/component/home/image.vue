@@ -2,7 +2,11 @@
 import searchBar from '../../component/home/searchBar.vue';
 import cardButton from '../../component/cardButton.vue';
 import test1Img from '../../static/img/test1.jpg';
-import { ref, onActivated } from 'vue';
+import { ref, onActivated, watch } from 'vue';
+import { Swiper, SwiperSlide } from 'swiper/vue';
+import type { Swiper as SwiperType } from 'swiper';
+import 'swiper/css';
+
 const tab = ref<'latest' | 'trending' | 'popularity' | 'mostViews' | 'mostLikes'>('latest');
 const tabArray = [
   { value: 'latest', text: '最新' },
@@ -10,7 +14,8 @@ const tabArray = [
   { value: 'popularity', text: '人气' },
   { value: 'mostViews', text: '观看量' },
   { value: 'mostLikes', text: '点赞量' },
-]
+];
+
 interface ListItem {
   id: string;
   title: string;
@@ -22,6 +27,7 @@ interface ListItem {
   longNum: string;
   isR18: boolean;
 }
+
 let imageList: ListItem[][] = Array.from({ length: tabArray.length }, () => []);
 for (let i = 0; i < tabArray.length; i++) {
   for (let j = 0; j < 20; j++) {
@@ -41,28 +47,57 @@ for (let i = 0; i < tabArray.length; i++) {
 
 const listRefs = ref<HTMLElement[]>([]);
 let scrollTopArray: number[] = new Array(tabArray.length).fill(0);
+
 const setListRef = (el: any, index: number) => {
   if (el) {
     listRefs.value[index] = el as HTMLElement;
   }
 };
+
 const handleScroll = (index: number, event: Event) => {
   const target = event.target as HTMLElement;
   if (target) {
     scrollTopArray[index] = target.scrollTop;
   }
 };
+
+// --- Swiper 联动逻辑 ---
+const swiperInstance = ref<SwiperType | null>(null);
+
+const onSwiper = (swiper: SwiperType) => {
+  swiperInstance.value = swiper;
+};
+
+// 1. 监听 tab 变化，控制 Swiper 切换
+watch(tab, (newVal) => {
+  if (swiperInstance.value) {
+    const targetIndex = tabArray.findIndex(item => item.value === newVal);
+    if (targetIndex !== -1 && swiperInstance.value.activeIndex !== targetIndex) {
+      swiperInstance.value.slideTo(targetIndex);
+    }
+  }
+});
+
+// 2. 监听 Swiper 滑动，反控 tab 变化
+const onSlideChange = (swiper: SwiperType) => {
+  const targetItem = tabArray[swiper.activeIndex];
+  if (targetItem && tab.value !== targetItem.value) {
+    tab.value = targetItem.value as any;
+  }
+};
+// --- End Swiper 联动逻辑 ---
+
+
 onActivated(() => {
   // 遍历所有 tab，恢复其保存的位置
   listRefs.value.forEach((el, index) => {
     if (el && typeof el.scrollTo === 'function') {
-      // 使用 scrollTo 方法恢复位置
       el.scrollTo({ top: scrollTopArray[index] });
     }
   });
 });
-
 </script>
+
 <template>
   <div class="top">
     <searchBar />
@@ -80,22 +115,25 @@ onActivated(() => {
       <v-divider></v-divider>
     </div>
   </div>
-  <v-tabs-window v-model="tab" class="tabs-window">
-    <v-tabs-window-item v-for="(item, i) in tabArray" :value="item.value" :key="`tabs-window_${item.value}`">
+
+  <!-- 替换为 Swiper -->
+  <swiper class="tabs-window" :slides-per-view="1" :space-between="0" @swiper="onSwiper" @slide-change="onSlideChange">
+    <swiper-slide v-for="(item, i) in tabArray" :key="`tabs-window_${item.value}`">
       <div class="list-view" :ref="(el) => setListRef(el, i)" @scroll="(e) => handleScroll(i, e)">
         <v-infinite-scroll color="#00796B">
           <div class="grid">
-            <template v-for="(item, index) in imageList[i]" :key="index">
-              <cardButton type="image" :id="item.id" :title="item.title" :img="item.img" :author="item.author"
-                :time="item.time" :viewNum="item.viewNum" :likeNum="item.likeNum" :longNum="item.longNum"
-                :isR18="item.isR18" />
+            <template v-for="listItem in imageList[i]" :key="listItem.id">
+              <cardButton type="image" :id="listItem.id" :title="listItem.title" :img="listItem.img"
+                :author="listItem.author" :time="listItem.time" :viewNum="listItem.viewNum" :likeNum="listItem.likeNum"
+                :longNum="listItem.longNum" :isR18="listItem.isR18" />
             </template>
           </div>
         </v-infinite-scroll>
       </div>
-    </v-tabs-window-item>
-  </v-tabs-window>
+    </swiper-slide>
+  </swiper>
 </template>
+
 <style lang="scss" scoped>
 .top {
   position: absolute;
@@ -133,19 +171,23 @@ onActivated(() => {
   }
 }
 
+/* Swiper 容器样式替换原 .tabs-window */
 .tabs-window {
   z-index: 1;
+  width: 100%;
+  height: 100%;
 
-  :deep(.v-window__container) {
+  :deep(.swiper-wrapper) {
     height: 100%;
+  }
 
-    .v-window-item {
-      height: 100%;
-    }
+  :deep(.swiper-slide) {
+    height: auto;
+    overflow: hidden;
   }
 
   .list-view {
-    height: 100%;
+    height: 100vh;
     overflow-y: auto;
 
     &::-webkit-scrollbar-track {

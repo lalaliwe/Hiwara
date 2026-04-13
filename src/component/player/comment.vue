@@ -37,30 +37,32 @@ const toggleExpand = (id: string) => {
 </script>
 
 <template>
-  <div class="commentItem" v-for="item in commentList" :key="item.id">
-    <div class="avatar">
-      <img :src="item.avatar" alt="">
-    </div>
+  <div class="commentView">
+    <div class="commentItem" v-for="item in commentList" :key="item.id">
+      <div class="avatar">
+        <img :src="item.avatar" alt="">
+      </div>
 
-    <div class="elements">
-      <div class="username">{{ item.username }}</div>
+      <div class="elements">
+        <div class="username">{{ item.username }}</div>
 
-      <div class="content-wrapper">
-        <div class="content" :class="{ fold: needToggle(item.content) && !expandedMap[item.id] }">
-          {{ item.content }}
-        </div>
-
-        <!-- 底部操作栏：始终显示 -->
-        <div class="action-bar">
-          <!-- 发布时间 -->
-          <div class="created-time">{{ item.createdAt }}</div>
-          <!-- 回复按钮 -->
-          <div class="reply-btn">
-            <font-awesome-icon icon="fa-regular fa-comment" /> 回复
+        <div class="content-wrapper">
+          <div class="content" :class="{ fold: needToggle(item.content) && !expandedMap[item.id] }">
+            {{ item.content }}
           </div>
-          <!-- 展开/收起按钮 (仅长文本显示) -->
-          <div class="toggle-btn" v-if="needToggle(item.content)" @click="toggleExpand(item.id)">
-            {{ expandedMap[item.id] ? '收起' : '展开' }}
+
+          <!-- 底部操作栏：始终显示 -->
+          <div class="action-bar">
+            <!-- 发布时间 -->
+            <div class="created-time">{{ item.createdAt }}</div>
+            <!-- 回复按钮 -->
+            <div class="reply-btn">
+              <font-awesome-icon icon="fa-regular fa-comment" /> 回复
+            </div>
+            <!-- 展开/收起按钮 (仅长文本显示) -->
+            <div class="toggle-btn" v-if="needToggle(item.content)" @click="toggleExpand(item.id)">
+              {{ expandedMap[item.id] ? '收起' : '展开' }}
+            </div>
           </div>
         </div>
       </div>
@@ -69,6 +71,10 @@ const toggleExpand = (id: string) => {
 </template>
 
 <style lang="scss" scoped>
+.commentView {
+  padding-bottom: env(safe-area-inset-bottom, 0);
+}
+
 .commentItem {
   display: flex;
   padding: 10px;
@@ -136,7 +142,7 @@ const toggleExpand = (id: string) => {
       .reply-btn {
         color: #616161;
         cursor: pointer;
-        padding:0 4px;
+        padding: 0 4px;
       }
 
       .toggle-btn {

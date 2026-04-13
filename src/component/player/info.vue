@@ -135,52 +135,38 @@ function clickLike() {
 }
 </script>
 <template>
-  <div class="author">
-    <div class="avatar">
-      <img src="../../static/img/default-avatar.jpg" alt="">
+  <div class="infoView">
+    <div class="author">
+      <div class="avatar">
+        <img src="../../static/img/default-avatar.jpg" alt="">
+      </div>
+      <div class="userinfo">
+        <div class="authorname">{{ authorname }}</div>
+        <div class="userdata">{{ fansNum }}粉丝 {{ videoNum }}视频</div>
+      </div>
+      <div class="follow">
+        <v-btn class="btn" :color="isFollow ? '#E0E0E0' : '#00796B'" @click="clickFollow">
+          <span v-if="isFollow">
+            <font-awesome-icon icon="fa-solid fa-bars" /> 已关注
+          </span>
+          <span v-else>
+            <font-awesome-icon icon="fa-solid fa-plus" /> 关注
+          </span>
+        </v-btn>
+      </div>
     </div>
-    <div class="userinfo">
-      <div class="authorname">{{ authorname }}</div>
-      <div class="userdata">{{ fansNum }}粉丝 {{ videoNum }}视频</div>
+    <div class="more" :class="{ expanded: expand }">
+      <font-awesome-icon icon="fa-solid fa-angle-down" />
     </div>
-    <div class="follow">
-      <v-btn class="btn" :color="isFollow ? '#E0E0E0' : '#00796B'" @click="clickFollow">
-        <span v-if="isFollow">
-          <font-awesome-icon icon="fa-solid fa-bars" /> 已关注
-        </span>
-        <span v-else>
-          <font-awesome-icon icon="fa-solid fa-plus" /> 关注
-        </span>
-      </v-btn>
-    </div>
-  </div>
-  <div class="more" :class="{ expanded: expand }">
-    <font-awesome-icon icon="fa-solid fa-angle-down" />
-  </div>
-  <div class="title" ref="titleRef" @click="expand = !expand">
-    {{ title }}
-  </div>
-  <div class="infomsg">
-    <font-awesome-icon icon="fa-regular fa-circle-play" /> {{ playNum }}
-    &nbsp;
-    <font-awesome-icon icon="fa-regular fa-clock" /> {{ createdAt }}
-  </div>
-  <div class="synopsis" :style="{ height: expand ? `${heights.synopsis}px` : 0 }">
-    <div class="text">
-      {{ synopsis }}
-    </div>
-    <div class="tags">
-      <v-chip class="tag" v-for="tag in tags" size="small">{{ tag }}</v-chip>
-    </div>
-  </div>
-  <div class="calculateHeight">
-    <div class="titleCollapseHeight" ref="titleCollapseHeightRef">
+    <div class="title" ref="titleRef" @click="expand = !expand">
       {{ title }}
     </div>
-    <div class="titleExpandHeight" ref="titleExpandHeightRef">
-      {{ title }}
+    <div class="infomsg">
+      <font-awesome-icon icon="fa-regular fa-circle-play" /> {{ playNum }}
+      &nbsp;
+      <font-awesome-icon icon="fa-regular fa-clock" /> {{ createdAt }}
     </div>
-    <div class="synopsisHeight" ref="synopsisHeightRef">
+    <div class="synopsis" :style="{ height: expand ? `${heights.synopsis}px` : 0 }">
       <div class="text">
         {{ synopsis }}
       </div>
@@ -188,55 +174,75 @@ function clickLike() {
         <v-chip class="tag" v-for="tag in tags" size="small">{{ tag }}</v-chip>
       </div>
     </div>
-  </div>
-  <div class="operation">
-    <div @click="clickLike">
-      <iconLike v-if="isLike" theme="filled" size="22" fill="#FF3D00" />
-      <iconLike v-else theme="outline" size="22" fill="#212121" />
-      <br>
-      <span v-if="isLike">已点赞</span>
-      <span v-else>点赞</span>
-    </div>
-    <div>
-      <iconShareOne theme="two-tone" size="22" :fill="['#424242', '#00796B']" />
-      <br>
-      分享
-    </div>
-    <div>
-      <iconDownloadFour theme="two-tone" size="22" :fill="['#424242', '#00796B']" />
-      <br>
-      缓存
-    </div>
-    <div>
-      <iconCopyLink theme="multi-color" size="22" :fill="['#424242', '#00796B', '#FFF', '#00796B']" />
-      <br>
-      下载链接
-    </div>
-  </div>
-  <div class="recommend">
-    <div class="label">
-      该作者其他视频
-    </div>
-    <div class="lists">
-      <div v-for="(item, index) in authorOtherVideoList">
-        <cardButton type="video" :id="item.id" :title="item.title" :img="item.img" :author="item.author"
-          :time="item.time" :viewNum="item.viewNum" :likeNum="item.likeNum" :longNum="item.longNum"
-          :isR18="item.isR18" />
+    <div class="calculateHeight">
+      <div class="titleCollapseHeight" ref="titleCollapseHeightRef">
+        {{ title }}
+      </div>
+      <div class="titleExpandHeight" ref="titleExpandHeightRef">
+        {{ title }}
+      </div>
+      <div class="synopsisHeight" ref="synopsisHeightRef">
+        <div class="text">
+          {{ synopsis }}
+        </div>
+        <div class="tags">
+          <v-chip class="tag" v-for="tag in tags" size="small">{{ tag }}</v-chip>
+        </div>
       </div>
     </div>
-    <div class="label">
-      更多推荐
+    <div class="operation">
+      <div @click="clickLike">
+        <iconLike v-if="isLike" theme="filled" size="22" fill="#FF3D00" />
+        <iconLike v-else theme="outline" size="22" fill="#212121" />
+        <br>
+        <span v-if="isLike">已点赞</span>
+        <span v-else>点赞</span>
+      </div>
+      <div>
+        <iconShareOne theme="two-tone" size="22" :fill="['#424242', '#00796B']" />
+        <br>
+        分享
+      </div>
+      <div>
+        <iconDownloadFour theme="two-tone" size="22" :fill="['#424242', '#00796B']" />
+        <br>
+        缓存
+      </div>
+      <div>
+        <iconCopyLink theme="multi-color" size="22" :fill="['#424242', '#00796B', '#FFF', '#00796B']" />
+        <br>
+        下载链接
+      </div>
     </div>
-    <div class="lists">
-      <div v-for="(item, index) in authorOtherVideoList">
-        <cardButton type="video" :id="item.id" :title="item.title" :img="item.img" :author="item.author"
-          :time="item.time" :viewNum="item.viewNum" :likeNum="item.likeNum" :longNum="item.longNum"
-          :isR18="item.isR18" />
+    <div class="recommend">
+      <div class="label">
+        该作者其他视频
+      </div>
+      <div class="lists">
+        <div v-for="(item, index) in authorOtherVideoList">
+          <cardButton type="video" :id="item.id" :title="item.title" :img="item.img" :author="item.author"
+            :time="item.time" :viewNum="item.viewNum" :likeNum="item.likeNum" :longNum="item.longNum"
+            :isR18="item.isR18" />
+        </div>
+      </div>
+      <div class="label">
+        更多推荐
+      </div>
+      <div class="lists">
+        <div v-for="(item, index) in authorOtherVideoList">
+          <cardButton type="video" :id="item.id" :title="item.title" :img="item.img" :author="item.author"
+            :time="item.time" :viewNum="item.viewNum" :likeNum="item.likeNum" :longNum="item.longNum"
+            :isR18="item.isR18" />
+        </div>
       </div>
     </div>
   </div>
 </template>
 <style lang="scss" scoped>
+.infoView {
+  padding-bottom: env(safe-area-inset-bottom, 0);
+}
+
 .author {
   display: flex;
 
