@@ -3,6 +3,7 @@ import home from '../views/home.vue'
 import player from '../views/player.vue'
 import image from '../views/image.vue'
 import search from '../views/search.vue'
+import zone from '../views/zone.vue'
 import friends from '../views/friends.vue'
 import setup from '../views/setup.vue'
 
@@ -42,6 +43,12 @@ const routes: Array<RouteRecordRaw & { meta?: RouteMeta }> = [
     path: '/search',
     name: 'Search',
     component: search,
+    meta: { transition: 'stack', depth: 1 },
+  },
+  {
+    path: '/zone',
+    name: 'Zone',
+    component: zone,
     meta: { transition: 'stack', depth: 1 },
   },
   {

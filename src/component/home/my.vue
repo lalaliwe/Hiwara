@@ -26,7 +26,7 @@ function routerGoTo(path: string, query?: any) {
         <iconMoon theme="outline" size="22" fill="#ffffff" />
       </span>
     </div>
-    <div class="user">
+    <div class="user" @click="routerGoTo('/zone'), { myself: true }">
       <div class="avatar">
         <v-img class="img" cover src="https://cdn.vuetifyjs.com/images/parallax/material.jpg"></v-img>
       </div>
@@ -359,6 +359,7 @@ function routerGoTo(path: string, query?: any) {
       grid-template-columns: repeat(4, 1fr);
 
       gap: 10px;
+
       .btn {
         text-align: center;
         color: #424242;
