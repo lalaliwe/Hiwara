@@ -25,6 +25,12 @@
       width: 100%;
       height: 100%;
       z-index: 9999;
+      overflow: hidden;
+    }
+
+    #loading.fade{
+      opacity: 0;
+      transition: opacity 0.2s ease-in-out;
     }
 
     #loading.hidden {
@@ -38,8 +44,43 @@
       position: absolute;
       left: 0;
       right: 0;
-      bottom: 120px;
+      bottom: 100px;
+      transform: translateY(170px);
+      /* 纯位移配合普通的 ease-out */
+      animation: jumpOutY 0.8s ease-out forwards;
     }
+
+    @keyframes jumpOutY {
+      0% {
+        transform: translateY(170px);
+      }
+
+      /* 30%的时间就到达最高点，体现起跳的爆发力 */
+      30% {
+        transform: translateY(-25px);
+      }
+
+      /* 30%到55%的时间都在下落，模拟重力带来的滞空感 */
+      55% {
+        transform: translateY(5px);
+        /* 故意掉到比0还低一点，像真实落地 */
+      }
+
+      /* 落地后的微小二次弹跳 */
+      72% {
+        transform: translateY(-5px);
+      }
+
+      85% {
+        transform: translateY(2px);
+      }
+
+      100% {
+        transform: translateY(0);
+      }
+    }
+
+
 
     #loading-logo-wrapper {
       width: 65px;
@@ -68,8 +109,10 @@
     #loading-title {
       font-family: 'riwenlogo';
       font-size: 1.6rem;
+      line-height: 1.6rem;
       color: #414141;
-      padding: 12px;
+      width: 110px;
+      text-align: right;
     }
   </style>
 </head>

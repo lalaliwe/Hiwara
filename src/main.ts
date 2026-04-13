@@ -43,14 +43,18 @@ library.add(fas, far, fab)
 app.component('font-awesome-icon', FontAwesomeIcon);
 app.config.globalProperties.$hammer = Hammer;
 
-// 在 Vue 应用挂载完成后隐藏加载遮罩
-app.mount("#app", true); // 确保 DOM 已准备好
+app.mount("#app")
 
-// 隐藏加载遮罩
-const loadingElement = document.getElementById('loading');
-if (loadingElement) {
-  loadingElement.classList.add('hidden');
-}
+router.isReady().then(() => {
+  // 隐藏加载遮罩
+  const loadingElement = document.getElementById('loading');
+  if (loadingElement) {
+    loadingElement.classList.add('fade');
+    setTimeout(() => {
+      loadingElement.classList.add('hidden');
+    }, 200);
+  }
+});
 
 /** 测试代码 */
 import { getDeviceInfo } from "./plugins/deviceInfo";
