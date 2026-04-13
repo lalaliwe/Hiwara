@@ -15,6 +15,7 @@ const nickname = ref('测试用户')
 const userSignature = '测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名'
 const followNum = ref(100)
 const fansNum = ref(100)
+const tab = ref<'video' | 'image' | 'publish'>('video')
 
 // 顶部导航栏颜色状态
 const isTopGreen = ref(false);
@@ -106,7 +107,15 @@ function handleResize() {
     <div class="content">
       <UserInfo :nickname="nickname" :userSignature="userSignature" :followNum="followNum" :fansNum="fansNum"
         @navigate-to="routerGoTo" />
-      <div style="height: 10000px;"></div>
+      <div class="tabs">
+        <v-tabs v-model="tab" color="#00796B">
+          <v-tab value="video">视频</v-tab>
+          <v-tab value="image">插画</v-tab>
+          <v-tab value="publish">发布</v-tab>
+        </v-tabs>
+        <v-divider></v-divider>
+      </div>
+
     </div>
   </div>
 </template>
@@ -123,6 +132,7 @@ function handleResize() {
   position: fixed;
   top: 0;
   z-index: 400;
+  height: calc(48px + env(safe-area-inset-top, 0));
   padding-top: env(safe-area-inset-top, 0);
   color: #fff;
   filter: drop-shadow(1px 1px 1px rgba(0, 0, 0, 0.5));
@@ -159,5 +169,11 @@ function handleResize() {
   background-repeat: no-repeat;
   background-color: #BDBDBD;
   z-index: 0;
+}
+
+.tabs {
+  margin-top: 10px;
+  position: sticky;
+  top: calc(env(safe-area-inset-top, 0) + 48px);
 }
 </style>

@@ -199,19 +199,13 @@ function clickLike() {
         <span v-else>点赞</span>
       </div>
       <div>
-        <iconShareOne theme="two-tone" size="22" :fill="['#424242', '#00796B']" />
-        <br>
-        分享
+        <iconShareOne theme="two-tone" size="22" :fill="['#424242', '#00796B']" /><br>分享
       </div>
       <div>
-        <iconDownloadFour theme="two-tone" size="22" :fill="['#424242', '#00796B']" />
-        <br>
-        缓存
+        <iconDownloadFour theme="two-tone" size="22" :fill="['#424242', '#00796B']" /><br>缓存
       </div>
       <div>
-        <iconCopyLink theme="multi-color" size="22" :fill="['#424242', '#00796B', '#FFF', '#00796B']" />
-        <br>
-        下载链接
+        <iconCopyLink theme="multi-color" size="22" :fill="['#424242', '#00796B', '#FFF', '#00796B']" /><br>下载链接
       </div>
     </div>
     <div class="recommend">

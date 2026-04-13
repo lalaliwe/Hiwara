@@ -136,6 +136,7 @@ function goHome() {
   width: 100%;
   z-index: 400;
   color: #fff;
+  height: calc(48px + env(safe-area-inset-top, 0));
 
   .btn {
     display: inline-flex;

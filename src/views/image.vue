@@ -190,6 +190,7 @@ onUnmounted(() => {
   position: fixed;
   top: 0;
   z-index: 400;
+  height: calc(48px + env(safe-area-inset-top, 0));
   padding-top: env(safe-area-inset-top, 0);
   color: #fff;
   filter: drop-shadow(1px 1px 1px rgba(0, 0, 0, 0.5));
