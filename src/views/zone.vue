@@ -5,6 +5,9 @@ import { Swiper, SwiperSlide } from 'swiper/vue';
 import type { Swiper as SwiperType } from 'swiper';
 import 'swiper/css';
 import UserInfo from '../component/zone/userInfo.vue'
+import VideoList from '../component/zone/videoList.vue'
+import ImageList from '../component/zone/imageList.vue'
+import PublishList from '../component/zone/publishList.vue'
 
 defineOptions({
   name: 'Zone'
@@ -15,9 +18,11 @@ const router = useRouter()
 
 const myself = ref<boolean>(route.query.myself == 'true')
 const nickname = ref('测试用户')
-const userSignature = '测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名'
+const userSignature = ref('测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名')
 const followNum = ref(100)
 const fansNum = ref(100)
+const isMyFollow = ref(false)
+const isMyFans = ref(false)
 const tab = ref<'video' | 'image' | 'publish'>('video')
 
 // 顶部导航栏颜色状态
@@ -66,7 +71,7 @@ function routerGoTo(path: string, query?: any) {
   }
 }
 
-// 保存当前标签页的滚动位置
+// 保存当前滚动位置
 function saveCurrentScrollPosition() {
   const container = zoneContainerRef.value;
   if (!container) return;
@@ -277,7 +282,7 @@ onUnmounted(() => {
     <div class="zone-info" ref="zoneInfoRef">
       <div class="zone-bg"></div>
       <UserInfo :nickname="nickname" :userSignature="userSignature" :followNum="followNum" :fansNum="fansNum"
-        @navigate-to="routerGoTo" />
+        :isMyFollow="isMyFollow" :isMyFans="isMyFans" :myself="myself" @navigate-to="routerGoTo" />
     </div>
 
     <!-- 独立吸顶的 tabs 区域，修复滚动后 tabs 被移出页面的问题 -->
@@ -295,25 +300,13 @@ onUnmounted(() => {
     <swiper class="tabs-window" :slides-per-view="1" :space-between="0" @swiper="onSwiper"
       @slide-change="onSlideChange">
       <swiper-slide>
-        <div class="list-content">
-          <v-infinite-scroll color="#00796B">
-            <div v-for="i in 1000" :key="i">这是视频{{ i }}</div>
-          </v-infinite-scroll>
-        </div>
+        <VideoList />
       </swiper-slide>
       <swiper-slide>
-        <div class="list-content">
-          <v-infinite-scroll color="#00796B">
-            <div v-for="i in 1000" :key="i">这是插画{{ i }}</div>
-          </v-infinite-scroll>
-        </div>
+        <ImageList />
       </swiper-slide>
       <swiper-slide>
-        <div class="list-content">
-          <v-infinite-scroll color="#00796B">
-            <div v-for="i in 1000" :key="i">这是发布{{ i }}</div>
-          </v-infinite-scroll>
-        </div>
+        <PublishList />
       </swiper-slide>
     </swiper>
   </div>
@@ -400,10 +393,6 @@ onUnmounted(() => {
   :deep(.swiper-slide) {
     height: auto;
     overflow: visible;
-  }
-
-  .list-content {
-    padding-bottom: 20px;
   }
 }
 </style>

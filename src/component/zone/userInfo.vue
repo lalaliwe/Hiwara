@@ -1,45 +1,3 @@
-<template>
-  <div class="userInfo">
-    <div class="avatar">
-      <v-img class="img" cover src="https://cdn.vuetifyjs.com/images/parallax/material.jpg"></v-img>
-    </div>
-    <div class="userInfoBtn">
-      <div class="numBtns">
-        <div class="fill">
-          <div class="btn" @click="$emit('navigateTo', '/friends', { type: 'follow' })">
-            <div class="num">{{ followNum }}</div>
-            <div class="label">关注</div>
-          </div>
-        </div>
-        <div class="fill last">
-          <div class="btn" @click="$emit('navigateTo', '/friends', { type: 'fans' })">
-            <div class="num">{{ fansNum }}</div>
-            <div class="label">粉丝</div>
-          </div>
-        </div>
-      </div>
-      <div>
-        <v-btn variant="outlined" color="#00796B" style="width: 100%;">编辑资料</v-btn>
-      </div>
-    </div>
-    <div class="username" @click="expand = !expand">
-      <div class="name fold" ref="usernameRef">{{
-        nickname
-      }}</div>
-      <div class="detail">详情</div>
-    </div>
-    <div class="userSignature fold" ref="userSignatureRef">
-      {{
-        userSignature }}</div>
-    <div class="calculateHeight">
-      <div class="usernameHeigth fold" ref="usernameFoldHeightRef">{{ nickname }}</div>
-      <div class="usernameHeigth" ref="usernameExpandHeightRef">{{ nickname }}</div>
-      <div class="userSignatureHeigth fold" ref="userSignatureFoldHeightRef">{{ userSignature }}</div>
-      <div class="userSignatureHeigth" ref="userSignatureExpandHeightRef">{{ userSignature }}</div>
-    </div>
-  </div>
-</template>
-
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted, watch, nextTick } from 'vue'
 
@@ -49,13 +7,19 @@ interface Props {
   userSignature: string;
   followNum: number;
   fansNum: number;
+  myself: boolean;
+  isMyFollow: boolean;
+  isMyFans: boolean;
 }
 
 withDefaults(defineProps<Props>(), {
   nickname: '默认用户名',
   userSignature: '默认个性签名',
   followNum: 0,
-  fansNum: 0
+  fansNum: 0,
+  myself: false,
+  isMyFollow: false,
+  isMyFans: false
 });
 
 // 定义 emits
@@ -127,9 +91,80 @@ onMounted(() => {
   if (userSignatureRef.value)
     userSignatureRef.value.style.height = heights.value.userSignatureFoldHeight + 'px';
 })
-
+// 关注
+function handleFollow(follow: boolean) {
+  // emit('navigateTo', '/follow');
+}
 </script>
-
+<template>
+  <div class="userInfo">
+    <div class="avatar">
+      <v-img class="img" cover src="https://cdn.vuetifyjs.com/images/parallax/material.jpg"></v-img>
+    </div>
+    <div class="userInfoBtn">
+      <div class="numBtns">
+        <div class="fill">
+          <div class="btn" @click="$emit('navigateTo', '/friends', { type: 'follow' })">
+            <div class="num">{{ followNum }}</div>
+            <div class="label">关注</div>
+          </div>
+        </div>
+        <div class="fill last">
+          <div class="btn" @click="$emit('navigateTo', '/friends', { type: 'fans' })">
+            <div class="num">{{ fansNum }}</div>
+            <div class="label">粉丝</div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <span v-if="myself">
+          <v-btn variant="outlined" color="#00796B" style="width: 100%;">编辑资料</v-btn>
+        </span>
+        <span v-else>
+          <!-- 未关注时显示关注按钮 -->
+          <v-btn v-if="!isMyFollow && !isMyFans" variant="flat" color="#00796B" style="width: 100%;"
+            @click="handleFollow(true)">
+            <font-awesome-icon icon="fa-solid fa-plus" />
+            关注
+          </v-btn>
+          <!-- 已关注但未互粉时显示已关注按钮 -->
+          <v-btn v-else-if="isMyFollow && !isMyFans" variant="outlined" color="#00796B" style="width: 100%;"
+            @click="handleFollow(false)">
+            <font-awesome-icon icon="fa-solid fa-bars" />
+            已关注
+          </v-btn>
+          <!-- 已互粉时显示互粉按钮 -->
+          <v-btn v-else-if="isMyFollow && isMyFans" variant="outlined" color="#00796B" style="width: 100%;"
+            @click="handleFollow(false)">
+            <font-awesome-icon icon="fa-solid fa-bars" />
+            已互粉
+          </v-btn>
+          <!-- 是粉丝但未关注时显示回关按钮 -->
+          <v-btn v-else-if="!isMyFollow && isMyFans" variant="flat" color="#00796B" style="width: 100%;"
+            @click="handleFollow(true)">
+            <font-awesome-icon icon="fa-solid fa-plus" />
+            回关
+          </v-btn>
+        </span>
+      </div>
+    </div>
+    <div class="username" @click="expand = !expand">
+      <div class="name fold" ref="usernameRef">{{
+        nickname
+        }}</div>
+      <div class="detail">详情</div>
+    </div>
+    <div class="userSignature fold" ref="userSignatureRef">
+      {{
+        userSignature }}</div>
+    <div class="calculateHeight">
+      <div class="usernameHeigth fold" ref="usernameFoldHeightRef">{{ nickname }}</div>
+      <div class="usernameHeigth" ref="usernameExpandHeightRef">{{ nickname }}</div>
+      <div class="userSignatureHeigth fold" ref="userSignatureFoldHeightRef">{{ userSignature }}</div>
+      <div class="userSignatureHeigth" ref="userSignatureExpandHeightRef">{{ userSignature }}</div>
+    </div>
+  </div>
+</template>
 <style lang="scss" scoped>
 .userInfo {
   position: relative;

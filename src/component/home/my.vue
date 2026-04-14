@@ -26,7 +26,7 @@ function routerGoTo(path: string, query?: any) {
         <iconMoon theme="outline" size="22" fill="#ffffff" />
       </span>
     </div>
-    <div class="user" @click="routerGoTo('/zone'), { myself: true }">
+    <div class="user" @click="routerGoTo('/zone', { myself: true })">
       <div class="avatar">
         <v-img class="img" cover src="https://cdn.vuetifyjs.com/images/parallax/material.jpg"></v-img>
       </div>
