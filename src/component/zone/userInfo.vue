@@ -208,6 +208,8 @@ onMounted(() => {
       position: absolute;
       top: 12px;
       right: 16px;
+      user-select: none;
+      cursor: pointer;
     }
   }
 
