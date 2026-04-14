@@ -1,59 +1,3 @@
-<template>
-  <div id="zoneView" ref="zoneContainerRef" @scroll="handleGlobalScroll">
-    <div class="top" :class="{ 'top-green': isTopGreen }" @click="scrollToTop">
-      <span class="btn" @click.stop="goBack">
-        <font-awesome-icon icon="fa-solid fa-angle-left" />
-      </span>
-      <span class="btn" @click.stop="goHome">
-        <font-awesome-icon icon="fa-regular fa-house" />
-      </span>
-    </div>
-
-    <div class="zone-info" ref="zoneInfoRef">
-      <div class="zone-bg"></div>
-      <UserInfo :nickname="nickname" :userSignature="userSignature" :followNum="followNum" :fansNum="fansNum"
-        @navigate-to="routerGoTo" />
-    </div>
-
-    <!-- 独立吸顶的 tabs 区域，修复滚动后 tabs 被移出页面的问题 -->
-    <div class="tabs-sticky">
-      <div class="tabs">
-        <v-tabs v-model="tab" color="#00796B">
-          <v-tab value="video">视频</v-tab>
-          <v-tab value="image">插画</v-tab>
-          <v-tab value="publish">发布</v-tab>
-        </v-tabs>
-        <v-divider></v-divider>
-      </div>
-    </div>
-
-    <swiper class="tabs-window" :slides-per-view="1" :space-between="0" @swiper="onSwiper"
-      @slide-change="onSlideChange">
-      <swiper-slide>
-        <div class="list-content">
-          <v-infinite-scroll color="#00796B">
-            <div v-for="i in 1000" :key="i">这是视频{{ i }}</div>
-          </v-infinite-scroll>
-        </div>
-      </swiper-slide>
-      <swiper-slide>
-        <div class="list-content">
-          <v-infinite-scroll color="#00796B">
-            <div v-for="i in 1000" :key="i">这是插画{{ i }}</div>
-          </v-infinite-scroll>
-        </div>
-      </swiper-slide>
-      <swiper-slide>
-        <div class="list-content">
-          <v-infinite-scroll color="#00796B">
-            <div v-for="i in 1000" :key="i">这是发布{{ i }}</div>
-          </v-infinite-scroll>
-        </div>
-      </swiper-slide>
-    </swiper>
-  </div>
-</template>
-
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted, watch, nextTick } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
@@ -319,7 +263,61 @@ onUnmounted(() => {
   }
 });
 </script>
+<template>
+  <div id="zoneView" ref="zoneContainerRef" @scroll="handleGlobalScroll">
+    <div class="top" :class="{ 'top-green': isTopGreen }" @click="scrollToTop">
+      <span class="btn" @click.stop="goBack">
+        <font-awesome-icon icon="fa-solid fa-angle-left" />
+      </span>
+      <span class="btn" @click.stop="goHome">
+        <font-awesome-icon icon="fa-regular fa-house" />
+      </span>
+    </div>
 
+    <div class="zone-info" ref="zoneInfoRef">
+      <div class="zone-bg"></div>
+      <UserInfo :nickname="nickname" :userSignature="userSignature" :followNum="followNum" :fansNum="fansNum"
+        @navigate-to="routerGoTo" />
+    </div>
+
+    <!-- 独立吸顶的 tabs 区域，修复滚动后 tabs 被移出页面的问题 -->
+    <div class="tabs-sticky">
+      <div class="tabs">
+        <v-tabs v-model="tab" color="#00796B">
+          <v-tab value="video">视频</v-tab>
+          <v-tab value="image">插画</v-tab>
+          <v-tab value="publish">发布</v-tab>
+        </v-tabs>
+        <v-divider></v-divider>
+      </div>
+    </div>
+
+    <swiper class="tabs-window" :slides-per-view="1" :space-between="0" @swiper="onSwiper"
+      @slide-change="onSlideChange">
+      <swiper-slide>
+        <div class="list-content">
+          <v-infinite-scroll color="#00796B">
+            <div v-for="i in 1000" :key="i">这是视频{{ i }}</div>
+          </v-infinite-scroll>
+        </div>
+      </swiper-slide>
+      <swiper-slide>
+        <div class="list-content">
+          <v-infinite-scroll color="#00796B">
+            <div v-for="i in 1000" :key="i">这是插画{{ i }}</div>
+          </v-infinite-scroll>
+        </div>
+      </swiper-slide>
+      <swiper-slide>
+        <div class="list-content">
+          <v-infinite-scroll color="#00796B">
+            <div v-for="i in 1000" :key="i">这是发布{{ i }}</div>
+          </v-infinite-scroll>
+        </div>
+      </swiper-slide>
+    </swiper>
+  </div>
+</template>
 <style lang="scss" scoped>
 #zoneView {
   overflow-y: auto;
