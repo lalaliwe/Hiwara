@@ -18,7 +18,7 @@ const router = useRouter()
 
 const myself = ref<boolean>(route.query.myself == 'true')
 const nickname = ref('测试用户')
-const userSignature = ref('测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名')
+const userSignature = ref('测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名')
 const followNum = ref(100)
 const fansNum = ref(100)
 const isMyFollow = ref(false)
@@ -56,11 +56,23 @@ function scrollToTop() {
 
 // 返回
 function goBack() {
+  // 清除所有状态
+  clearZoneStates();
   router.back();
 }
 // 回到主界面
 function goHome() {
+  // 清除所有状态
+  clearZoneStates();
   router.replace('/');
+}
+
+// 清除zone页面的所有本地存储状态
+function clearZoneStates() {
+  localStorage.removeItem('zoneTabState');
+  localStorage.removeItem('zoneVideoScrollTop');
+  localStorage.removeItem('zoneImageScrollTop');
+  localStorage.removeItem('zonePublishScrollTop');
 }
 
 function routerGoTo(path: string, query?: any) {
@@ -308,6 +320,8 @@ onUnmounted(() => {
 
 // 组件失活时也要保存状态
 onDeactivated(() => {
+  // 只有在不是通过goBack或goHome方法离开页面时才保存状态
+  // 这里我们无法区分离开原因，所以仍保存状态，实际状态清理在goBack/goHome中处理
   saveCurrentScrollPosition();
 });
 </script>
