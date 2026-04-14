@@ -138,10 +138,13 @@ onUnmounted(() => {
 </template>
 
 <style lang="scss" scoped>
+// 定义动画时间变量
+$transition-duration: 0.25s;
+
 // 基础过渡样式
 .fade-enter-active,
 .fade-leave-active {
-  transition: opacity 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: opacity $transition-duration cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .fade-enter-from,
@@ -151,7 +154,7 @@ onUnmounted(() => {
 
 // 前进动画 - 新页面从右侧滑入并覆盖（同时执行）
 .stack-enter-active {
-  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all $transition-duration cubic-bezier(0.4, 0, 0.2, 1);
   position: absolute;
   width: 100%;
   height: 100%;
@@ -173,7 +176,7 @@ onUnmounted(() => {
 
 // 前进动画 - 旧页面向左移动（同时执行）
 .stack-leave-active {
-  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all $transition-duration cubic-bezier(0.4, 0, 0.2, 1);
   position: absolute;
   width: 100%;
   height: 100%;
@@ -193,7 +196,7 @@ onUnmounted(() => {
 
 // 后退动画 - 底层页面从左侧进入（同时执行）
 .stack-reverse-enter-active {
-  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all $transition-duration cubic-bezier(0.4, 0, 0.2, 1);
   position: absolute;
   width: 100%;
   height: 100%;
@@ -213,7 +216,7 @@ onUnmounted(() => {
 
 // 后退动画 - 顶层页面向右侧滑出（同时执行）
 .stack-reverse-leave-active {
-  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all $transition-duration cubic-bezier(0.4, 0, 0.2, 1);
   position: absolute;
   width: 100%;
   height: 100%;
@@ -236,7 +239,7 @@ onUnmounted(() => {
 // 传统水平滑动（用于同级页面）
 .slide-horizontal-enter-active,
 .slide-horizontal-leave-active {
-  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all $transition-duration cubic-bezier(0.4, 0, 0.2, 1);
   position: absolute;
   width: 100%;
   will-change: transform;

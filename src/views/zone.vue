@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted, watch, nextTick } from 'vue'
+import { ref, onMounted, onUnmounted, watch, nextTick, onDeactivated, onActivated } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { Swiper, SwiperSlide } from 'swiper/vue';
 import type { Swiper as SwiperType } from 'swiper';
@@ -18,21 +18,24 @@ const router = useRouter()
 
 const myself = ref<boolean>(route.query.myself == 'true')
 const nickname = ref('测试用户')
-const userSignature = ref('测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名')
+const userSignature = ref('测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名')
 const followNum = ref(100)
 const fansNum = ref(100)
 const isMyFollow = ref(false)
 const isMyFans = ref(false)
-const tab = ref<'video' | 'image' | 'publish'>('video')
+
+// 使用localStorage保存tab状态，以便在页面离开后返回时能恢复状态
+const savedTab = localStorage.getItem('zoneTabState') || 'video'
+const tab = ref<'video' | 'image' | 'publish'>(savedTab as 'video' | 'image' | 'publish')
 
 // 顶部导航栏颜色状态
 const isTopGreen = ref(false);
 const zoneContainerRef = ref<HTMLElement | null>(null);
 
-// 各标签页保存的滚动位置
-let videoScrollTop = 0;
-let imageScrollTop = 0;
-let publishScrollTop = 0;
+// 各标签页保存的滚动位置 - 改为从localStorage获取初始值
+let videoScrollTop = Number(localStorage.getItem('zoneVideoScrollTop')) || 0;
+let imageScrollTop = Number(localStorage.getItem('zoneImageScrollTop')) || 0;
+let publishScrollTop = Number(localStorage.getItem('zonePublishScrollTop')) || 0;
 
 // zone-info 元素引用
 const zoneInfoRef = ref<HTMLElement | null>(null);
@@ -79,12 +82,18 @@ function saveCurrentScrollPosition() {
   switch (tab.value) {
     case 'video':
       videoScrollTop = scrollTop;
+      // 将滚动位置保存到localStorage
+      localStorage.setItem('zoneVideoScrollTop', scrollTop.toString());
       break;
     case 'image':
       imageScrollTop = scrollTop;
+      // 将滚动位置保存到localStorage
+      localStorage.setItem('zoneImageScrollTop', scrollTop.toString());
       break;
     case 'publish':
       publishScrollTop = scrollTop;
+      // 将滚动位置保存到localStorage
+      localStorage.setItem('zonePublishScrollTop', scrollTop.toString());
       break;
   }
 }
@@ -177,6 +186,9 @@ const swiperInstance = ref<SwiperType | null>(null);
 
 // 监听 tab 变化，控制 Swiper 切换并恢复滚动位置
 watch(tab, (newVal, oldVal) => {
+  // 每次tab变化时保存状态到localStorage
+  localStorage.setItem('zoneTabState', newVal);
+  
   if (swiperInstance.value) {
     let targetIndex: number;
     switch (newVal) {
@@ -233,6 +245,32 @@ const onSlideChange = (swiper: SwiperType) => {
   }
 };
 
+// 组件激活时恢复tab状态
+onActivated(() => {
+  // 如果路由参数有myself的变化，更新myself状态
+  const newMyself = route.query.myself === 'true';
+  if (myself.value !== newMyself) {
+    myself.value = newMyself;
+  }
+  
+  // 恢复之前保存的tab状态
+  const restoredTab = localStorage.getItem('zoneTabState') || 'video';
+  if (tab.value !== restoredTab) {
+    tab.value = restoredTab as 'video' | 'image' | 'publish';
+  }
+
+  // 从localStorage恢复各标签页的滚动位置
+  videoScrollTop = Number(localStorage.getItem('zoneVideoScrollTop')) || 0;
+  imageScrollTop = Number(localStorage.getItem('zoneImageScrollTop')) || 0;
+  publishScrollTop = Number(localStorage.getItem('zonePublishScrollTop')) || 0;
+  
+  // 在下一个tick恢复滚动位置
+  nextTick(() => {
+    restoreScrollPosition(tab.value);
+    updateTopBarColor();
+  });
+});
+
 onMounted(() => {
   const container = zoneContainerRef.value;
   if (container) {
@@ -251,7 +289,7 @@ onMounted(() => {
   }
 
   nextTick(() => {
-    updateTopBarColor();
+    // 初始不设置顶栏颜色，等待滚动事件触发
     restoreScrollPosition(tab.value);
   });
 });
@@ -267,57 +305,64 @@ onUnmounted(() => {
     resizeObserver = null;
   }
 });
+
+// 组件失活时也要保存状态
+onDeactivated(() => {
+  saveCurrentScrollPosition();
+});
 </script>
 <template>
-  <div id="zoneView" ref="zoneContainerRef" @scroll="handleGlobalScroll">
-    <div class="top" :class="{ 'top-green': isTopGreen }" @click="scrollToTop">
-      <span class="btn" @click.stop="goBack">
-        <font-awesome-icon icon="fa-solid fa-angle-left" />
-      </span>
-      <span class="btn" @click.stop="goHome">
-        <font-awesome-icon icon="fa-regular fa-house" />
-      </span>
-    </div>
-
-    <div class="zone-info" ref="zoneInfoRef">
-      <div class="zone-bg"></div>
-      <UserInfo :nickname="nickname" :userSignature="userSignature" :followNum="followNum" :fansNum="fansNum"
-        :isMyFollow="isMyFollow" :isMyFans="isMyFans" :myself="myself" @navigate-to="routerGoTo" />
-    </div>
-
-    <!-- 独立吸顶的 tabs 区域，修复滚动后 tabs 被移出页面的问题 -->
-    <div class="tabs-sticky">
-      <div class="tabs">
-        <v-tabs v-model="tab" color="#00796B">
-          <v-tab value="video">视频</v-tab>
-          <v-tab value="image">插画</v-tab>
-          <v-tab value="publish">发布</v-tab>
-        </v-tabs>
-        <v-divider></v-divider>
+  <div id="zoneView">
+    <div class="zone-container" ref="zoneContainerRef" @scroll="handleGlobalScroll">
+      <div class="top" :class="{ 'top-green': isTopGreen }" @click="scrollToTop">
+        <span class="btn" @click.stop="goBack">
+          <font-awesome-icon icon="fa-solid fa-angle-left" />
+        </span>
+        <span class="btn" @click.stop="goHome">
+          <font-awesome-icon icon="fa-regular fa-house" />
+        </span>
       </div>
-    </div>
 
-    <swiper class="tabs-window" :slides-per-view="1" :space-between="0" @swiper="onSwiper"
-      @slide-change="onSlideChange">
-      <swiper-slide>
-        <VideoList />
-      </swiper-slide>
-      <swiper-slide>
-        <ImageList />
-      </swiper-slide>
-      <swiper-slide>
-        <PublishList />
-      </swiper-slide>
-    </swiper>
+      <div class="zone-info" ref="zoneInfoRef">
+        <div class="zone-bg"></div>
+        <UserInfo :nickname="nickname" :userSignature="userSignature" :followNum="followNum" :fansNum="fansNum"
+          :isMyFollow="isMyFollow" :isMyFans="isMyFans" :myself="myself" @navigate-to="routerGoTo" />
+      </div>
+
+      <!-- 独立吸顶的 tabs 区域，修复滚动后 tabs 被移出页面的问题 -->
+      <div class="tabs-sticky">
+        <div class="tabs">
+          <v-tabs v-model="tab" color="#00796B">
+            <v-tab value="video">视频</v-tab>
+            <v-tab value="image">插画</v-tab>
+            <v-tab value="publish">发布</v-tab>
+          </v-tabs>
+          <v-divider></v-divider>
+        </div>
+      </div>
+
+      <swiper class="tabs-window" :slides-per-view="1" :space-between="0" @swiper="onSwiper"
+        @slide-change="onSlideChange">
+        <swiper-slide>
+          <VideoList />
+        </swiper-slide>
+        <swiper-slide>
+          <ImageList />
+        </swiper-slide>
+        <swiper-slide>
+          <PublishList />
+        </swiper-slide>
+      </swiper>
+    </div>
   </div>
 </template>
 <style lang="scss" scoped>
-#zoneView {
+.zone-container {
   overflow-y: auto;
   overflow-x: hidden;
   background-color: #fff;
   height: 100vh;
-  scroll-behavior: smooth;
+  // scroll-behavior: smooth;
   position: relative;
 }
 
