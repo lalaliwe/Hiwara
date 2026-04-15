@@ -94,14 +94,28 @@ router.beforeEach((to, from) => {
     isBack = true
   }
 
+  // 添加辅助函数判断是否应该缓存页面
+  const shouldCachePage = (routeName: string | symbol | undefined) => {
+    return routeName && typeof routeName === 'string' && !cachedPages.includes(routeName);
+  };
+
   if (from.name === undefined) {
     to.meta.transition = to.meta?.isFirstLoad ? '' : 'stack'
     historyStack.push(to.fullPath)
+    // 首次访问时也要考虑缓存目标页面
+    if (shouldCachePage(to.name)) {
+      cachedPages.push(to.name as string)
+    }
   } else if (toDepth > fromDepth) {
     to.meta.transition = to.meta?.isFirstLoad ? '' : 'stack'
     historyStack.push(to.fullPath)
-    if (from.name && !cachedPages.includes(from.name as string)) {
+    // 缓存来源页面（父级页面）
+    if (shouldCachePage(from.name)) {
       cachedPages.push(from.name as string)
+    }
+    // 同时也要缓存目标页面（当前访问的页面）
+    if (shouldCachePage(to.name)) {
+      cachedPages.push(to.name as string)
     }
   } else if (toDepth < fromDepth) {
     to.meta.transition = 'stack-reverse'
@@ -125,13 +139,17 @@ router.beforeEach((to, from) => {
   }
 
   // [修复] 特殊处理：当回到主页时，仅重置你自己的历史栈和缓存
+  // 修改此部分，使首页也能被缓存（可选）
   if (to.path === '/' && from.path !== '/') {
     historyStack.length = 0
     historyStack.push(to.fullPath)
-    cachedPages = []
-
-    // 🚨 注意：这里千万不要写 return！
-    // 让原本的 router.replace('/') 或 router.back() 自然执行下去即可
+    // 注释掉清空缓存，改为只保留首页缓存
+    // cachedPages = []
+    // 只保留首页和其他必要的页面
+    cachedPages = cachedPages.filter(pageName => {
+      const pageRoute = routes.find(route => route.name === pageName)
+      return pageRoute?.path === '/' // 只保留首页，可根据需要调整
+    })
   }
 })
 

@@ -18,24 +18,23 @@ const router = useRouter()
 
 const myself = ref<boolean>(route.query.myself == 'true')
 const nickname = ref('测试用户')
-const userSignature = ref('测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名')
+const userSignature = ref('测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名')
 const followNum = ref(100)
 const fansNum = ref(100)
 const isMyFollow = ref(false)
 const isMyFans = ref(false)
 
-// 使用localStorage保存tab状态，以便在页面离开后返回时能恢复状态
-const savedTab = localStorage.getItem('zoneTabState') || 'video'
-const tab = ref<'video' | 'image' | 'publish'>(savedTab as 'video' | 'image' | 'publish')
+// 使用内存变量保存tab状态，初始值为 'video'
+const tab = ref<'video' | 'image' | 'publish'>('video')
 
 // 顶部导航栏颜色状态
 const isTopGreen = ref(false);
 const zoneContainerRef = ref<HTMLElement | null>(null);
 
-// 各标签页保存的滚动位置 - 改为从localStorage获取初始值
-let videoScrollTop = Number(localStorage.getItem('zoneVideoScrollTop')) || 0;
-let imageScrollTop = Number(localStorage.getItem('zoneImageScrollTop')) || 0;
-let publishScrollTop = Number(localStorage.getItem('zonePublishScrollTop')) || 0;
+// 各标签页保存的滚动位置 - 改为内存变量
+let videoScrollTop = 0;
+let imageScrollTop = 0;
+let publishScrollTop = 0;
 
 // zone-info 元素引用
 const zoneInfoRef = ref<HTMLElement | null>(null);
@@ -56,23 +55,11 @@ function scrollToTop() {
 
 // 返回
 function goBack() {
-  // 清除所有状态
-  clearZoneStates();
   router.back();
 }
 // 回到主界面
 function goHome() {
-  // 清除所有状态
-  clearZoneStates();
   router.replace('/');
-}
-
-// 清除zone页面的所有本地存储状态
-function clearZoneStates() {
-  localStorage.removeItem('zoneTabState');
-  localStorage.removeItem('zoneVideoScrollTop');
-  localStorage.removeItem('zoneImageScrollTop');
-  localStorage.removeItem('zonePublishScrollTop');
 }
 
 function routerGoTo(path: string, query?: any) {
@@ -94,18 +81,12 @@ function saveCurrentScrollPosition() {
   switch (tab.value) {
     case 'video':
       videoScrollTop = scrollTop;
-      // 将滚动位置保存到localStorage
-      localStorage.setItem('zoneVideoScrollTop', scrollTop.toString());
       break;
     case 'image':
       imageScrollTop = scrollTop;
-      // 将滚动位置保存到localStorage
-      localStorage.setItem('zoneImageScrollTop', scrollTop.toString());
       break;
     case 'publish':
       publishScrollTop = scrollTop;
-      // 将滚动位置保存到localStorage
-      localStorage.setItem('zonePublishScrollTop', scrollTop.toString());
       break;
   }
 }
@@ -160,7 +141,7 @@ function updateTopBarColor() {
   if (!container) return;
 
   const zoneBg = container.querySelector('.zone-bg') as HTMLElement;
-  const topElement = document.querySelector('.top') as HTMLElement;
+  const topElement = container.querySelector('.top') as HTMLElement;
 
   if (!zoneBg || !topElement) return;
 
@@ -198,9 +179,6 @@ const swiperInstance = ref<SwiperType | null>(null);
 
 // 监听 tab 变化，控制 Swiper 切换并恢复滚动位置
 watch(tab, (newVal, oldVal) => {
-  // 每次tab变化时保存状态到localStorage
-  localStorage.setItem('zoneTabState', newVal);
-  
   if (swiperInstance.value) {
     let targetIndex: number;
     switch (newVal) {
@@ -264,18 +242,6 @@ onActivated(() => {
   if (myself.value !== newMyself) {
     myself.value = newMyself;
   }
-  
-  // 恢复之前保存的tab状态
-  const restoredTab = localStorage.getItem('zoneTabState') || 'video';
-  if (tab.value !== restoredTab) {
-    tab.value = restoredTab as 'video' | 'image' | 'publish';
-  }
-
-  // 从localStorage恢复各标签页的滚动位置
-  videoScrollTop = Number(localStorage.getItem('zoneVideoScrollTop')) || 0;
-  imageScrollTop = Number(localStorage.getItem('zoneImageScrollTop')) || 0;
-  publishScrollTop = Number(localStorage.getItem('zonePublishScrollTop')) || 0;
-  
   // 在下一个tick恢复滚动位置
   nextTick(() => {
     restoreScrollPosition(tab.value);
