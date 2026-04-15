@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted, watch, nextTick, onDeactivated, onActivated } from 'vue'
+import { ref, onMounted, onUnmounted, watch, nextTick, onActivated } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { Swiper, SwiperSlide } from 'swiper/vue';
 import type { Swiper as SwiperType } from 'swiper';
@@ -44,6 +44,9 @@ let resizeObserver: ResizeObserver | null = null;
 
 // 滚动节流标志
 let ticking = false;
+
+// 标志：是否由手动点击tab触发切换（用于避免重复恢复滚动位置）
+let isManualTabChange = false;
 
 // 返回顶部
 function scrollToTop() {
@@ -177,8 +180,8 @@ function handleResize() {
 // Swiper 实例
 const swiperInstance = ref<SwiperType | null>(null);
 
-// 监听 tab 变化，控制 Swiper 切换并恢复滚动位置
-watch(tab, (newVal, oldVal) => {
+// 监听 tab 变化，控制 Swiper 切换（滚动恢复由过渡完成事件处理）
+watch(tab, (newVal) => {
   if (swiperInstance.value) {
     let targetIndex: number;
     switch (newVal) {
@@ -195,15 +198,10 @@ watch(tab, (newVal, oldVal) => {
         targetIndex = 0;
     }
     if (swiperInstance.value.activeIndex !== targetIndex) {
+      isManualTabChange = true;
       swiperInstance.value.slideTo(targetIndex);
     }
   }
-
-  // 切换标签页后恢复对应的滚动位置
-  nextTick(() => {
-    restoreScrollPosition(newVal);
-    updateTopBarColor();
-  });
 });
 
 // Swiper 实例初始化
@@ -211,7 +209,7 @@ const onSwiper = (swiper: SwiperType) => {
   swiperInstance.value = swiper;
 };
 
-// 监听 Swiper 滑动，反控 tab 变化并保存/恢复滚动位置
+// 监听 Swiper 滑动中，反控 tab 变化并保存滚动位置
 const onSlideChange = (swiper: SwiperType) => {
   let newTab: 'video' | 'image' | 'publish';
   switch (swiper.activeIndex) {
@@ -233,6 +231,28 @@ const onSlideChange = (swiper: SwiperType) => {
     saveCurrentScrollPosition();
     tab.value = newTab;
   }
+};
+
+// 监听 Swiper 切换过渡结束（高度已稳定），恢复滚动位置
+const onSlideChangeTransitionEnd = (swiper: SwiperType) => {
+  // 确保 tab 状态一致
+  let newTab: 'video' | 'image' | 'publish';
+  switch (swiper.activeIndex) {
+    case 0: newTab = 'video'; break;
+    case 1: newTab = 'image'; break;
+    case 2: newTab = 'publish'; break;
+    default: newTab = 'video';
+  }
+  if (newTab !== tab.value) {
+    tab.value = newTab;
+  }
+
+  // 等待一帧确保高度彻底稳定
+  requestAnimationFrame(() => {
+    restoreScrollPosition(tab.value);
+    updateTopBarColor();
+    isManualTabChange = false;
+  });
 };
 
 // 组件激活时恢复tab状态
@@ -260,7 +280,6 @@ onMounted(() => {
   if (zoneInfoRef.value && window.ResizeObserver) {
     resizeObserver = new ResizeObserver(() => {
       // 内容高度变化时，重新调整滚动位置并刷新顶栏颜色
-      clampScrollPosition();
       updateTopBarColor();
     });
     resizeObserver.observe(zoneInfoRef.value);
@@ -283,14 +302,8 @@ onUnmounted(() => {
     resizeObserver = null;
   }
 });
-
-// 组件失活时也要保存状态
-onDeactivated(() => {
-  // 只有在不是通过goBack或goHome方法离开页面时才保存状态
-  // 这里我们无法区分离开原因，所以仍保存状态，实际状态清理在goBack/goHome中处理
-  saveCurrentScrollPosition();
-});
 </script>
+
 <template>
   <div id="zoneView">
     <div class="zone-container" ref="zoneContainerRef" @scroll="handleGlobalScroll">
@@ -321,8 +334,8 @@ onDeactivated(() => {
         </div>
       </div>
 
-      <swiper class="tabs-window" :slides-per-view="1" :space-between="0" @swiper="onSwiper"
-        @slide-change="onSlideChange">
+      <swiper class="tabs-window" :slides-per-view="1" :space-between="0" :auto-height="true" @swiper="onSwiper"
+        @slide-change="onSlideChange" @slide-change-transition-end="onSlideChangeTransitionEnd">
         <swiper-slide>
           <VideoList />
         </swiper-slide>
@@ -336,13 +349,14 @@ onDeactivated(() => {
     </div>
   </div>
 </template>
+
 <style lang="scss" scoped>
 .zone-container {
   overflow-y: auto;
   overflow-x: hidden;
   background-color: #fff;
   height: 100vh;
-  // scroll-behavior: smooth;
+  scroll-behavior: smooth;
   position: relative;
 }
 
