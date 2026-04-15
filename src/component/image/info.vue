@@ -1,5 +1,11 @@
 <script setup lang="ts">
 import { ref, onMounted, computed, nextTick, watch } from 'vue';
+import {
+  Like as iconLike,
+  ShareOne as iconShareOne,
+  DownloadFour as iconDownloadFour,
+  CopyLink as iconCopyLink,
+} from '@icon-park/vue-next';
 
 // 插画信息展开状态（内部状态）
 const infoExpand = ref(false);
@@ -104,10 +110,20 @@ function calculateHeights() {
   heights.value.tagsExpand = tagsExpandHeightRef.value?.offsetHeight || 0;
 }
 
+// 点赞状态
+const isLike = ref(false);
+const likeNum = ref(0);
+
 // 关注按钮点击处理
 function clickFollow() {
   const newFollowState = !props.isFollow;
   emit('follow-click', newFollowState);
+}
+
+// 点赞按钮点击处理
+function clickLike() {
+  isLike.value = !isLike.value;
+  likeNum.value += isLike.value ? 1 : -1;
 }
 </script>
 
@@ -150,6 +166,24 @@ function clickFollow() {
   <div class="synopsis" :style="{ height: infoExpand ? `${heights.synopsis}px` : 0 }">
     <div class="text">
       {{ synopsis }}
+    </div>
+  </div>
+  <div class="operation">
+    <div @click="clickLike">
+      <iconLike v-if="isLike" theme="filled" size="22" fill="#FF3D00" />
+      <iconLike v-else theme="outline" size="22" fill="#212121" />
+      <br>
+      <span v-if="isLike">已点赞</span>
+      <span v-else>点赞</span>
+    </div>
+    <div>
+      <iconShareOne theme="two-tone" size="22" :fill="['#424242', '#00796B']" /><br>分享
+    </div>
+    <div>
+      <iconDownloadFour theme="two-tone" size="22" :fill="['#424242', '#00796B']" /><br>缓存
+    </div>
+    <div>
+      <iconCopyLink theme="multi-color" size="22" :fill="['#424242', '#00796B', '#FFF', '#00796B']" /><br>下载链接
     </div>
   </div>
   <div class="tags" ref="tagsContainerRef" :style="{ height: tagsContainerHeight }">
@@ -267,6 +301,23 @@ function clickFollow() {
 
   .text {
     padding-top: 10px;
+  }
+}
+
+.operation {
+  padding: 10px 0;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  justify-items: center;
+  /* 水平居中 */
+  align-items: center;
+  /* 垂直居中 */
+
+  div {
+    text-align: center;
+    color: #616161;
+    font-size: 0.8rem;
+    width: 55px;
   }
 }
 

@@ -356,7 +356,7 @@ onUnmounted(() => {
   overflow-x: hidden;
   background-color: #fff;
   height: 100vh;
-  scroll-behavior: smooth;
+  // scroll-behavior: smooth;
   position: relative;
 }
 
