@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, nextTick, watch, onUnmounted, onActivated } from 'vue';
+import { ref, onMounted, nextTick, watch, onUnmounted, onActivated, inject, type Ref } from 'vue';
 import {
   Like as iconLike,
   ShareOne as iconShareOne,
@@ -22,6 +22,9 @@ const props = defineProps<{
   videoNum: number, // 视频数
   isFollow: boolean,  // 是否已关注
 }>()
+
+// Inject注入父组件提供的 goBack 触发器
+const backTrigger = inject<Ref<number>>('onParentGoBack', ref(0));
 
 const expand = ref(false);
 const titleRef = ref<HTMLElement | null>(null);
@@ -144,6 +147,18 @@ watch(expand, async (val) => {
     }, 300); // 与 transition 时间匹配
   }
 }, { immediate: true });
+// 监听父组件的 goBack 动作
+watch(backTrigger, (newVal, oldVal) => {
+  if (newVal !== oldVal) {
+    console.log('父组件调用了 goBack，子组件已知晓');
+    // 在这里可以添加子组件需要执行的逻辑，例如：
+    // 1. 保存当前的滚动位置到 localStorage (如果 onActivated 不够用)
+    // 2. 暂停正在播放的视频 (如果视频播放器也在这个层级或更深)
+    // 3. 发送埋点数据等
+    scrollTop = 0;
+    expand.value = false;
+  }
+});
 </script>
 <template>
   <div class="infoView" @scroll="handleSroll" ref="infoViewRef">

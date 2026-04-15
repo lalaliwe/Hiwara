@@ -1,16 +1,16 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-import { useRouter } from 'vue-router';
-const router = useRouter();
-// 返回
-function goBack() {
-  router.back();
-}
+
+const emit = defineEmits(['back']);
+
+const handleBack = () => {
+  emit('back');
+};
 </script>
 
 <template>
   <div class="top-view">
-    <div class="goback" @click="goBack">
+    <div class="goback" @click="handleBack">
       <font-awesome-icon icon="fa-solid fa-angle-left" />
     </div>
     <div class="search">

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { onActivated, ref } from 'vue';
+import { useRouter } from 'vue-router';
 import topBarView from '../component/search/topBar.vue';
 import emptyView from '../component/search/empty.vue';
 import loadingView from '../component/search/loading.vue';
@@ -10,23 +11,29 @@ defineOptions({
   name: 'Search'
 })
 
+const router = useRouter();
+const searching = ref<'empty' | 'loading' | 'result'>('result');
+
 // 应用页面设置的函数
 const applyPageSettings = () => {
   // 设置状态栏白色文字
   setStatusBarTextStyle('light')
 }
 applyPageSettings()
-// 进入页面时，重新应用页面设置
+
+// 返回
+function goBack() {
+  router.back();
+}
+
 onActivated(() => {
+  // 进入页面时，重新应用页面设置
   applyPageSettings()
 })
-
-const searching = ref<'empty' | 'loading' | 'result'>('result');
-
 </script>
 <template>
   <div id="searchView">
-    <topBarView class="topBar" />
+    <topBarView class="topBar" @back="goBack" />
     <emptyView v-if="searching === 'empty'" />
     <loadingView v-else-if="searching === 'loading'" />
     <resultView v-else-if="searching === 'result'" />

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted, onActivated, watch } from 'vue';
+import { ref, onMounted, onUnmounted, onActivated, watch, provide } from 'vue';
 import { useRouter } from 'vue-router';
 import videoPlayer from '../component/player/videoPlayer.vue';
 import infoView from '../component/player/info.vue';
@@ -50,6 +50,12 @@ const onSlideChange = (swiper: SwiperType) => {
 };
 // --- End Swiper 联动逻辑 ---
 
+// --- Provide/Inject 逻辑 ---
+// 创建一个响应式变量，用于通知子组件 goBack 被调用
+const backTrigger = ref(0);
+// 提供给子组件的方法，子组件可以通过 inject 获取这个 trigger 并 watch 它
+provide('onParentGoBack', backTrigger);
+// --- End Provide/Inject 逻辑 ---
 
 // 应用页面设置的函数
 const applyPageSettings = () => {
@@ -60,6 +66,8 @@ applyPageSettings()
 
 // 返回
 function goBack() {
+  // 触发通知
+  backTrigger.value++;
   router.back();
 }
 // 回到主界面
