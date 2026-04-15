@@ -7,8 +7,8 @@ import { Swiper, SwiperSlide } from 'swiper/vue';
 import type { Swiper as SwiperType } from 'swiper';
 import 'swiper/css';
 
-const videoListView = ref();
-const imageListView = ref();
+const videoListView = ref<HTMLElement>();
+const imageListView = ref<HTMLElement>();
 
 const tab = ref('video');
 const swiperInstance = ref<SwiperType | null>(null);
@@ -74,19 +74,17 @@ const onSlideChange = (swiper: SwiperType) => {
 };
 
 onActivated(() => {
-  if (videoListView.value && typeof videoListView.value.scrollTo === 'function') {
+  if (videoListView.value && typeof videoListView.value.scrollTo === 'function')
     videoListView.value.scrollTo({ top: videoScrollTop });
-  }
-  if (imageListView.value && typeof imageListView.value.scrollTo === 'function') {
+  if (imageListView.value && typeof imageListView.value.scrollTo === 'function')
     imageListView.value.scrollTo({ top: imageScrollTop });
-  }
 });
 
-function handleVideoScroll(event: any): void {
-  videoScrollTop = event.target.scrollTop;
+function handleVideoScroll(e: Event): void {
+  videoScrollTop = (e.target as HTMLElement).scrollTop;
 }
-function handleImageScroll(event: any): void {
-  imageScrollTop = event.target.scrollTop;
+function handleImageScroll(e: Event): void {
+  imageScrollTop = (e.target as HTMLElement).scrollTop;
 }
 </script>
 

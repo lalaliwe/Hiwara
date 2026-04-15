@@ -20,11 +20,6 @@ const applyPageSettings = () => {
 }
 applyPageSettings()
 
-// 当页面被激活时（从 keep-alive 缓存中恢复）也应用设置
-onActivated(() => {
-  applyPageSettings()
-})
-
 // 插画图片数据
 const illustrationImages = ref<string[]>([test1img]);
 // 添加更多测试图片（模拟多张插画）
@@ -98,9 +93,8 @@ const imageContainerRef = ref<HTMLElement | null>(null);
 // 返回顶部
 function scrollToTop() {
   const container = imageContainerRef.value;
-  if (container) {
+  if (container)
     container.scrollTo({ top: 0, behavior: 'smooth' });
-  }
 }
 
 // 返回
@@ -139,48 +133,62 @@ function handleScroll() {
   isTopGreen.value = illustrationViewBottomInViewport < topHeight;
 }
 
+// 当前滚动条位置
+let scrollTop = 0;
+// 保存滚动条位置
+function handleSroll(e: Event): void {
+  scrollTop = (e.target as HTMLElement).scrollTop;
+}
+onActivated(() => {
+  // 当页面被激活时（从 keep-alive 缓存中恢复）也应用设置
+  applyPageSettings()
+  // 恢复滚动条位置
+  if (imageContainerRef.value && typeof imageContainerRef.value.scrollTo === 'function')
+    imageContainerRef.value.scrollTo({ top: scrollTop });
+})
 onMounted(() => {
   // 监听滚动事件
   const container = imageContainerRef.value;
-  if (container) {
+  if (container)
     container.addEventListener('scroll', handleScroll);
-  }
 })
-
 onUnmounted(() => {
   // 清理事件监听器
   const container = imageContainerRef.value;
-  if (container) {
+  if (container)
     container.removeEventListener('scroll', handleScroll);
-  }
 })
 </script>
 <template>
-  <div id="imageView" ref="imageContainerRef">
-    <div class="top" :class="{ 'top-green': isTopGreen }" @click="scrollToTop">
-      <span class="btn" @click.stop="goBack">
-        <font-awesome-icon icon="fa-solid fa-angle-left" />
-      </span>
-      <span class="btn" @click.stop="goHome">
-        <font-awesome-icon icon="fa-regular fa-house" />
-      </span>
+  <div id="imageView">
+    <div class="image-container" ref="imageContainerRef" @scroll="handleSroll">
+      <div class="top" :class="{ 'top-green': isTopGreen }" @click="scrollToTop">
+        <span class="btn" @click.stop="goBack">
+          <font-awesome-icon icon="fa-solid fa-angle-left" />
+        </span>
+        <span class="btn" @click.stop="goHome">
+          <font-awesome-icon icon="fa-regular fa-house" />
+        </span>
+      </div>
+
+      <!-- 第一部分：图片区域（已拆分为子组件） -->
+      <IllustrationView :images="illustrationImages" />
+
+      <!-- 第二部分：插画信息区域（已拆分为子组件） -->
+      <ImageInfo :title="title" :view-count="viewCount" :created-at="createdAt" :illustration-id="illustrationId"
+        :resolution="resolution" :synopsis="synopsis" :tags="tags" :authorname="authorname" :fans-num="fansNum"
+        :image-num="imageNum" :is-follow="isFollow" @follow-click="handleFollowClick" />
+
+      <!-- 第三部分：推荐列表（已拆分为子组件） -->
+      <RecommendList :author-other-video-list="authorOtherVideoList" :recommend-video-list="recommendVideoList" />
     </div>
-
-    <!-- 第一部分：图片区域（已拆分为子组件） -->
-    <IllustrationView :images="illustrationImages" />
-
-    <!-- 第二部分：插画信息区域（已拆分为子组件） -->
-    <ImageInfo :title="title" :view-count="viewCount" :created-at="createdAt" :illustration-id="illustrationId"
-      :resolution="resolution" :synopsis="synopsis" :tags="tags" :authorname="authorname" :fans-num="fansNum"
-      :image-num="imageNum" :is-follow="isFollow" @follow-click="handleFollowClick" />
-
-    <!-- 第三部分：推荐列表（已拆分为子组件） -->
-    <RecommendList :author-other-video-list="authorOtherVideoList" :recommend-video-list="recommendVideoList" />
   </div>
 </template>
 <style lang="scss" scoped>
-#imageView {
-  overflow: auto;
+.image-container {
+  overflow-y: auto;
+  overflow-x: hidden;
+  height: 100vh;
   background-color: #fff;
   position: relative;
   padding-bottom: env(safe-area-inset-bottom, 0);

@@ -1,17 +1,15 @@
 <script setup lang="ts">
 import { ref, computed, nextTick, onMounted, onUnmounted } from 'vue';
 
-// 接收 props（只用于数据，不用于状态）
-const props = defineProps({
-  searchHistory: {
-    type: Array as () => string[],
-    required: true
-  },
-  searchRecommend: {
-    type: Array as () => string[],
-    required: true
-  }
-});
+// 内部维护搜索历史和推荐数据
+const searchHistory = ref<string[]>([]);
+const searchRecommend = ref<string[]>([]);
+
+// 生成测试数据
+for (let i = 0; i < 100; i++) {
+  searchHistory.value.push(`搜索历史${i}`);
+  searchRecommend.value.push(`搜索推荐${i}`);
+}
 
 // 折叠展开状态（完全内部管理）
 const historyExpand = ref(false);

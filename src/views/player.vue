@@ -58,16 +58,6 @@ const applyPageSettings = () => {
 }
 applyPageSettings()
 
-onMounted(() => {
-  console.log('✅ Player mounted');
-})
-onUnmounted(() => {
-  console.log('❌ Player unmounted');
-})
-onActivated(() => {
-  applyPageSettings()
-})
-
 // 返回
 function goBack() {
   router.back();
@@ -76,6 +66,16 @@ function goBack() {
 function goHome() {
   router.replace('/');
 }
+
+onActivated(() => {
+  applyPageSettings()
+})
+onMounted(() => {
+  console.log('✅ Player mounted');
+})
+onUnmounted(() => {
+  console.log('❌ Player unmounted');
+})
 </script>
 
 <template>
@@ -110,10 +110,10 @@ function goHome() {
       <!-- 替换为 Swiper -->
       <swiper class="tabs-window" :slides-per-view="1" :space-between="0" @swiper="onSwiper"
         @slide-change="onSlideChange">
-        <swiper-slide>
+        <swiper-slide ">
           <infoView :title="title" :synopsis="synopsis" :playNum="playNum" :likeNum="likeNum" :createdAt="createdAt"
-            :isLike="isLike" :tags="tags" :authorname="authorname" :fansNum="fansNum" :videoNum="videoNum"
-            :isFollow="isFollow" />
+          :isLike="isLike" :tags="tags" :authorname="authorname" :fansNum="fansNum" :videoNum="videoNum"
+          :isFollow="isFollow" />
         </swiper-slide>
         <swiper-slide>
           <commentView />
@@ -207,7 +207,6 @@ function goHome() {
     // 替代原 .v-window-item 的功能：高度100% + 内部滚动
     :deep(.swiper-slide) {
       height: 100%;
-      overflow: auto;
     }
   }
 }

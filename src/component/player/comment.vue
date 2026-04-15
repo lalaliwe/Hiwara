@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { onActivated, ref } from 'vue'
 
 interface Comment {
   id: string
@@ -34,34 +34,50 @@ const needToggle = (content: string) => {
 const toggleExpand = (id: string) => {
   expandedMap.value[id] = !expandedMap.value[id]
 }
+
+// 当前滚动条位置
+let scrollTop = 0;
+const commentViewRef = ref<HTMLElement>();
+// 保存滚动条位置
+function handleSroll(e: Event): void {
+  scrollTop = (e.target as HTMLElement).scrollTop;
+}
+onActivated(() => {
+  // 恢复滚动条位置
+  if (commentViewRef.value && typeof commentViewRef.value.scrollTo === 'function') {
+    commentViewRef.value.scrollTo({ top: scrollTop });
+  }
+})
 </script>
 
 <template>
-  <div class="commentView">
-    <div class="commentItem" v-for="item in commentList" :key="item.id">
-      <div class="avatar">
-        <img :src="item.avatar" alt="">
-      </div>
+  <div class="commentView" @scroll="handleSroll" ref="commentViewRef">
+    <div>
+      <div class="commentItem" v-for="item in commentList" :key="item.id">
+        <div class="avatar">
+          <img :src="item.avatar" alt="">
+        </div>
 
-      <div class="elements">
-        <div class="username">{{ item.username }}</div>
+        <div class="elements">
+          <div class="username">{{ item.username }}</div>
 
-        <div class="content-wrapper">
-          <div class="content" :class="{ fold: needToggle(item.content) && !expandedMap[item.id] }">
-            {{ item.content }}
-          </div>
-
-          <!-- 底部操作栏：始终显示 -->
-          <div class="action-bar">
-            <!-- 发布时间 -->
-            <div class="created-time">{{ item.createdAt }}</div>
-            <!-- 回复按钮 -->
-            <div class="reply-btn">
-              <font-awesome-icon icon="fa-regular fa-comment" /> 回复
+          <div class="content-wrapper">
+            <div class="content" :class="{ fold: needToggle(item.content) && !expandedMap[item.id] }">
+              {{ item.content }}
             </div>
-            <!-- 展开/收起按钮 (仅长文本显示) -->
-            <div class="toggle-btn" v-if="needToggle(item.content)" @click="toggleExpand(item.id)">
-              {{ expandedMap[item.id] ? '收起' : '展开' }}
+
+            <!-- 底部操作栏：始终显示 -->
+            <div class="action-bar">
+              <!-- 发布时间 -->
+              <div class="created-time">{{ item.createdAt }}</div>
+              <!-- 回复按钮 -->
+              <div class="reply-btn">
+                <font-awesome-icon icon="fa-regular fa-comment" /> 回复
+              </div>
+              <!-- 展开/收起按钮 (仅长文本显示) -->
+              <div class="toggle-btn" v-if="needToggle(item.content)" @click="toggleExpand(item.id)">
+                {{ expandedMap[item.id] ? '收起' : '展开' }}
+              </div>
             </div>
           </div>
         </div>
@@ -72,7 +88,12 @@ const toggleExpand = (id: string) => {
 
 <style lang="scss" scoped>
 .commentView {
-  padding-bottom: env(safe-area-inset-bottom, 0);
+  height: 100%;
+  overflow-y: auto;
+
+  >div {
+    padding-bottom: env(safe-area-inset-bottom, 0);
+  }
 }
 
 .commentItem {

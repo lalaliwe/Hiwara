@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import { ref, onActivated, watch } from 'vue';
 import cardButton from '../cardButton.vue';
+import { Swiper, SwiperSlide } from 'swiper/vue';
+import type { Swiper as SwiperType } from 'swiper';
+import 'swiper/css';
 
 interface ListItem {
   id: string;
@@ -14,25 +17,60 @@ interface ListItem {
   isR18: boolean;
 }
 
-const props = defineProps<{
-  videoResult: ListItem[];
-  imageResult: ListItem[];
-}>();
-
-const emit = defineEmits<{
-  (e: 'update:tab', value: string): void;
-}>();
-
 const tab = ref('video');
+
+// 内部维护搜索结果数据
+const videoResult = ref<ListItem[]>([]);
+const imageResult = ref<ListItem[]>([]);
+
+// 生成搜索结果测试数据 (从父组件移入)
+for (let i = 0; i < 100; i++) {
+  videoResult.value.push({
+    id: `video_${i}`,
+    title: `视频结果${i}`,
+    img: 'https://picsum.photos/200/300',
+    author: '作者',
+    time: '2023-01-01',
+    viewNum: '1000',
+    likeNum: '100',
+    longNum: '10:00',
+    isR18: false
+  });
+  imageResult.value.push({
+    id: `image_${i}`,
+    title: `插画结果${i}`,
+    img: 'https://picsum.photos/200/300',
+    author: '作者',
+    time: '2023-01-01',
+    viewNum: '1000',
+    likeNum: '100',
+    longNum: '10',
+    isR18: false
+  });
+}
+
 const videoListView = ref();
 const imageListView = ref();
+const swiperInstance = ref<SwiperType | null>(null);
 let videoScrollTop = 0;
 let imageScrollTop = 0;
 
-// 监听tab变化并触发emit
-watch(tab, (newTab: string) => {
-  emit('update:tab', newTab);
+watch(tab, (newVal) => {
+  if (swiperInstance.value) {
+    const targetIndex = newVal === 'video' ? 0 : 1;
+    if (swiperInstance.value.activeIndex !== targetIndex) {
+      swiperInstance.value.slideTo(targetIndex);
+    }
+  }
 });
+
+const onSwiper = (swiper: SwiperType) => {
+  swiperInstance.value = swiper;
+};
+
+const onSlideChange = (swiper: SwiperType) => {
+  tab.value = swiper.activeIndex === 0 ? 'video' : 'image';
+};
 
 onActivated(() => {
   if (videoListView.value && typeof videoListView.value.scrollTo === 'function') {
@@ -61,8 +99,9 @@ function handleImageScroll(event: any): void {
       </v-tabs>
       <v-divider></v-divider>
     </div>
-    <v-tabs-window v-model="tab" class="tabs-window">
-      <v-tabs-window-item value="video">
+    <swiper class="tabs-window" :slides-per-view="1" :space-between="0" @swiper="onSwiper"
+      @slide-change="onSlideChange">
+      <swiper-slide>
         <div class="list-view" ref="videoListView" @scroll="handleVideoScroll">
           <v-infinite-scroll color="#00796B">
             <div class="grid">
@@ -74,8 +113,9 @@ function handleImageScroll(event: any): void {
             </div>
           </v-infinite-scroll>
         </div>
-      </v-tabs-window-item>
-      <v-tabs-window-item value="image">
+      </swiper-slide>
+
+      <swiper-slide>
         <div class="list-view" ref="imageListView" @scroll="handleImageScroll">
           <v-infinite-scroll color="#00796B">
             <div class="grid">
@@ -87,8 +127,8 @@ function handleImageScroll(event: any): void {
             </div>
           </v-infinite-scroll>
         </div>
-      </v-tabs-window-item>
-    </v-tabs-window>
+      </swiper-slide>
+    </swiper>
   </div>
 </template>
 
@@ -114,16 +154,20 @@ function handleImageScroll(event: any): void {
   }
 }
 
+/* 修改: 调整 tabs-window 样式以适配 Swiper */
 .tabs-window {
   z-index: 1;
   flex: 1;
+  width: 100%;
+  height: 100%;
 
-  :deep(.v-window__container) {
+  // 深度选择器修改 Swiper 内部结构，使其高度 100% 传递下去
+  :deep(.swiper-wrapper) {
     height: 100%;
   }
 
-  .v-window-item {
-    height: 100%;
+  :deep(.swiper-slide) {
+    height: auto;
     overflow: hidden;
   }
 

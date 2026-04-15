@@ -13,23 +13,12 @@ const applyPageSettings = () => {
   setStatusBarTextStyle('light')
 }
 applyPageSettings()
-// 进入页面时，重新应用页面设置
-onActivated(() => {
-  applyPageSettings()
-})
 
 const router = useRouter()
 const route = useRoute()
 
 const tab = ref<'follow' | 'fans' | 'friend'>()
 tab.value = route.query.type as 'follow' | 'fans' | 'friend'
-
-// 定义标签页数据
-const tabs = [
-  { value: 'follow', title: '关注' },
-  { value: 'fans', title: '粉丝' },
-  { value: 'friend', title: '好友' }
-]
 
 interface ListItem {
   uid: string,
@@ -54,7 +43,7 @@ let fansList: ListItem[] = []
 let friendList: ListItem[] = []
 
 // 生成模拟数据
-for (let i = 0; i < 20; i++) {
+for (let i = 0; i < 30; i++) {
   followList.push({
     uid: `follow-${i}`,
     username: `用户${i}`,
@@ -72,25 +61,9 @@ for (let i = 0; i < 20; i++) {
     myFansing: Math.random() > 0.5,
     myFriending: Math.random() > 0.5
   })
+}
+for (let i = 0; i < 20; i++) {
   fansList.push({
-    uid: `fans-${i}`,
-    username: `用户${i}`,
-    avatar: `https://picsum.photos/id/${i}/200/200`,
-    signature: `个性签名${i}`,
-    videoNum: Math.floor(Math.random() * 100),
-    imageNum: Math.floor(Math.random() * 100),
-    followNum: Math.floor(Math.random() * 100),
-    fansNum: Math.floor(Math.random() * 100),
-    friendNum: Math.floor(Math.random() * 100),
-    following: Math.random() > 0.5,
-    fansing: Math.random() > 0.5,
-    friending: Math.random() > 0.5,
-    myFollowing: Math.random() > 0.5,
-    myFansing: Math.random() > 0.5,
-    myFriending: Math.random() > 0.5
-
-  })
-  friendList.push({
     uid: `fans-${i}`,
     username: `用户${i}`,
     avatar: `https://picsum.photos/id/${i}/200/200`,
@@ -108,15 +81,24 @@ for (let i = 0; i < 20; i++) {
     myFriending: Math.random() > 0.5
   })
 }
-
-// 根据当前选项卡获取对应的列表数据
-const getCurrentList = () => {
-  switch (tab.value) {
-    case 'follow': return followList
-    case 'fans': return fansList
-    case 'friend': return friendList
-    default: return []
-  }
+for (let i = 0; i < 10; i++) {
+  friendList.push({
+    uid: `fans-${i}`,
+    username: `用户${i}`,
+    avatar: `https://picsum.photos/id/${i}/200/200`,
+    signature: `个性签名${i}`,
+    videoNum: Math.floor(Math.random() * 100),
+    imageNum: Math.floor(Math.random() * 100),
+    followNum: Math.floor(Math.random() * 100),
+    fansNum: Math.floor(Math.random() * 100),
+    friendNum: Math.floor(Math.random() * 100),
+    following: Math.random() > 0.5,
+    fansing: Math.random() > 0.5,
+    friending: Math.random() > 0.5,
+    myFollowing: Math.random() > 0.5,
+    myFansing: Math.random() > 0.5,
+    myFriending: Math.random() > 0.5
+  })
 }
 
 // 处理关注操作
@@ -169,6 +151,38 @@ const getFollowButtonProps = (item: ListItem) => {
 const goBack = () => {
   router.back();
 }
+
+// 滚动条位置
+let followSrollTop = 0;
+let fansSrollTop = 0;
+let friendSrollTop = 0;
+
+const followListRef = ref<HTMLElement>()
+const fansListRef = ref<HTMLElement>()
+const friendListRef = ref<HTMLElement>()
+
+// 保存滚动条位置
+function handleFollowSroll(e: Event): void {
+  followSrollTop = (e.target as HTMLElement).scrollTop;
+}
+function handleFansSroll(e: Event): void {
+  fansSrollTop = (e.target as HTMLElement).scrollTop;
+}
+function handleFriendSroll(e: Event): void {
+  friendSrollTop = (e.target as HTMLElement).scrollTop;
+}
+
+onActivated(() => {
+  // 进入页面时，重新应用页面设置
+  applyPageSettings()
+  // 恢复滚动条位置
+  if (followListRef.value && typeof followListRef.value.scrollTo === 'function')
+    followListRef.value.scrollTo({ top: followSrollTop });
+  if (fansListRef.value && typeof fansListRef.value.scrollTo === 'function')
+    fansListRef.value.scrollTo({ top: fansSrollTop });
+  if (friendListRef.value && typeof friendListRef.value.scrollTo === 'function')
+    friendListRef.value.scrollTo({ top: friendSrollTop });
+})
 </script>
 
 <template>
@@ -179,47 +193,118 @@ const goBack = () => {
           <font-awesome-icon icon="fa-solid fa-angle-left" />
         </div>
         <div class="label">
-          {{tabs.find(t => t.value === tab)?.title}}
+          {{ tab === 'follow' ? '关注' : tab === 'fans' ? '粉丝' : '好友' }}
         </div>
       </div>
       <div class="tabs">
         <v-tabs v-model="tab" color="#00796B" align-tabs="center" density="compact" grow>
-          <v-tab v-for="item in tabs" :key="item.value" :value="item.value">
-            {{ item.title }}
+          <v-tab value="follow">
+            关注
+          </v-tab>
+          <v-tab value="fans">
+            粉丝
+          </v-tab>
+          <v-tab value="friend">
+            好友
           </v-tab>
         </v-tabs>
         <v-divider></v-divider>
       </div>
     </div>
     <v-tabs-window v-model="tab" class="tabs-window">
-      <v-tabs-window-item v-for="item in tabs" :key="item.value" :value="item.value">
-        <v-list lines="two" class="pa-0">
-          <v-list-item v-for="(listItem, index) in getCurrentList()" :key="index" class="list-item">
-            <!-- 左侧：头像 -->
-            <template v-slot:prepend>
-              <v-avatar size="48">
-                <v-img :src="listItem.avatar" :alt="listItem.username"></v-img>
-              </v-avatar>
-            </template>
-            <!-- 中间：昵称和签名 -->
-            <div class="list-content">
-              <div class="list-title">
-                {{ listItem.username }}
+      <v-tabs-window-item value="follow">
+        <div class="list" ref="followListRef" @scroll="handleFollowSroll">
+          <v-list lines="two" class="pa-0">
+            <v-list-item v-for="(listItem, index) in followList" :key="index" class="list-item">
+              <!-- 左侧：头像 -->
+              <template v-slot:prepend>
+                <v-avatar size="48">
+                  <v-img :src="listItem.avatar" :alt="listItem.username"></v-img>
+                </v-avatar>
+              </template>
+              <!-- 中间：昵称和签名 -->
+              <div class="list-content">
+                <div class="list-title">
+                  {{ listItem.username }}
+                </div>
+                <div class="list-subtitle">
+                  {{ listItem.signature }}
+                </div>
+                <div class="list-stats">
+                  {{ listItem.videoNum }}视频 {{ listItem.fansNum }}粉丝
+                </div>
               </div>
-              <div class="list-subtitle">
-                {{ listItem.signature }}
+              <!-- 右侧：关注/被关注/互粉/好友按钮 -->
+              <template v-slot:append>
+                <v-btn :text="getFollowButtonProps(listItem).text" :color="getFollowButtonProps(listItem).color"
+                  @click="toggleFollow(listItem)" class="btn"></v-btn>
+              </template>
+            </v-list-item>
+          </v-list>
+        </div>
+      </v-tabs-window-item>
+      <v-tabs-window-item value="fans">
+        <div class="list" ref="fansListRef" @scroll="handleFansSroll">
+          <v-list lines="two" class="pa-0">
+            <v-list-item v-for="(listItem, index) in fansList" :key="index" class="list-item">
+              <!-- 左侧：头像 -->
+              <template v-slot:prepend>
+                <v-avatar size="48">
+                  <v-img :src="listItem.avatar" :alt="listItem.username"></v-img>
+                </v-avatar>
+              </template>
+              <!-- 中间：昵称和签名 -->
+              <div class="list-content">
+                <div class="list-title">
+                  {{ listItem.username }}
+                </div>
+                <div class="list-subtitle">
+                  {{ listItem.signature }}
+                </div>
+                <div class="list-stats">
+                  {{ listItem.videoNum }}视频 {{ listItem.fansNum }}粉丝
+                </div>
               </div>
-              <div class="list-stats">
-                {{ listItem.videoNum }}视频 {{ listItem.fansNum }}粉丝
+              <!-- 右侧：关注/被关注/互粉/好友按钮 -->
+              <template v-slot:append>
+                <v-btn :text="getFollowButtonProps(listItem).text" :color="getFollowButtonProps(listItem).color"
+                  @click="toggleFollow(listItem)" class="btn"></v-btn>
+              </template>
+            </v-list-item>
+          </v-list>
+        </div>
+      </v-tabs-window-item>
+      <v-tabs-window-item value="friend">
+        <div class="list" ref="friendListRef" @scroll="handleFriendSroll">
+          <v-list lines="two" class="pa-0">
+            <v-list-item v-for="(listItem, index) in friendList" :key="index" class="list-item">
+              <!-- 左侧：头像 -->
+              <template v-slot:prepend>
+                <v-avatar size="48">
+                  <v-img :src="listItem.avatar" :alt="listItem.username"></v-img>
+                </v-avatar>
+              </template>
+              <!-- 中间：昵称和签名 -->
+              <div class="list-content">
+                <div class="list-title">
+                  {{ listItem.username }}
+                </div>
+                <div class="list-subtitle">
+                  {{ listItem.signature }}
+                </div>
+                <div class="list-stats">
+                  {{ listItem.videoNum }}视频 {{ listItem.fansNum }}粉丝
+                </div>
               </div>
-            </div>
-            <!-- 右侧：关注/被关注/互粉/好友按钮 -->
-            <template v-slot:append>
-              <v-btn v-if="tab !== 'friend'" :text="getFollowButtonProps(listItem).text"
-                :color="getFollowButtonProps(listItem).color" @click="toggleFollow(listItem)" class="btn"></v-btn>
-            </template>
-          </v-list-item>
-        </v-list>
+              <!-- 右侧：关注/被关注/互粉/好友按钮 -->
+              <template v-slot:append>
+                <!-- 好友列表通常不显示关注按钮，或者显示不同逻辑，此处保留原逻辑但注意 v-if 条件已移除，如需隐藏可加 v-if="false" 或调整逻辑 -->
+                <v-btn v-if="false" :text="getFollowButtonProps(listItem).text"
+                  :color="getFollowButtonProps(listItem).color" @click="toggleFollow(listItem)" class="btn"></v-btn>
+              </template>
+            </v-list-item>
+          </v-list>
+        </div>
       </v-tabs-window-item>
     </v-tabs-window>
   </div>
@@ -282,12 +367,24 @@ const goBack = () => {
 }
 
 .tabs-window {
-  padding: calc(60px + 40px + 1px + env(safe-area-inset-top, 0)) 0 env(safe-area-inset-bottom, 0) 0;
   flex: 1;
-  overflow-y: auto;
+  overflow: hidden;
 
-  &::-webkit-scrollbar-track {
-    margin: calc(60px + 40px + 1px + env(safe-area-inset-top, 0) + 4px) 0 calc(env(safe-area-inset-bottom, 0) + 4px) 0;
+  :deep(.v-window__container),
+  :deep(.v-window-item) {
+    height: 100%;
+  }
+
+
+
+  .list {
+    height: 100%;
+    padding: calc(60px + 40px + 1px + env(safe-area-inset-top, 0)) 0 env(safe-area-inset-bottom, 0) 0;
+    overflow: auto;
+
+    &::-webkit-scrollbar-track {
+      margin: calc(60px + 40px + 1px + env(safe-area-inset-top, 0) + 4px) 0 calc(env(safe-area-inset-bottom, 0) + 4px) 0;
+    }
   }
 
   .list-item {
