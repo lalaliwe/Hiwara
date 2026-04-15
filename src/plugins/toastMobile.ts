@@ -1,4 +1,4 @@
-import { invoke } from '@tauri-apps/api/core';
+import { invoke,isTauri } from '@tauri-apps/api/core';
 
 /**
  * Toast 显示选项
@@ -24,6 +24,10 @@ export interface ToastOptions {
  * @returns Promise<void>
  */
 export async function showNativeToast(options: ToastOptions): Promise<void> {
+  if (!isTauri()) {
+    console.warn('[Device] This function is only available in Tauri.', 'showNativeToast');
+    return;
+  }
   try {
     const payload = {
       message: options.message,

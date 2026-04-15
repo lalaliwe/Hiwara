@@ -1,5 +1,4 @@
-import { invoke } from '@tauri-apps/api/core';
-
+import { invoke,isTauri } from '@tauri-apps/api/core';
 /**
  * 应用控制响应接口
  */
@@ -29,13 +28,15 @@ export interface MoveTaskToBackResponse {
  * - 这是一个非破坏性操作，不会退出应用
  */
 export async function moveTaskToBack(): Promise<MoveTaskToBackResponse> {
+  if (!isTauri()) {
+    console.warn('[AppControl] This function is only available in Tauri.', 'moveTaskToBack');
+    return { success: false };
+  }
   try {
     return await invoke('plugin:device|move_task_to_back');
   } catch (error) {
     console.error('[AppControl] Failed to move task to back:', error);
     // 优雅降级：返回失败状态
-    return {
-      success: false,
-    };
+    return { success: false };
   }
 }

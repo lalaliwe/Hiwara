@@ -1,10 +1,14 @@
-import { invoke } from '@tauri-apps/api/core';
+import { invoke,isTauri } from '@tauri-apps/api/core';
 
 /**
  * 进入沉浸模式 (隐藏状态栏和导航栏)
  * @returns Promise<void>
  */
 export async function enterImmersive(): Promise<void> {
+  if (!isTauri()) {
+    console.warn('[Immersive] This function is only available in Tauri.', 'enterImmersive');
+    return;
+  }
   try {
     await invoke('plugin:device|enter_immersive');
     // console.log('[Immersive] Entered immersive mode');
@@ -19,6 +23,10 @@ export async function enterImmersive(): Promise<void> {
  * @returns Promise<void>
  */
 export async function exitImmersive(): Promise<void> {
+  if (!isTauri()) {
+    console.warn('[Immersive] This function is only available in Tauri.', 'exitImmersive');
+    return;
+  }
   try {
     await invoke('plugin:device|exit_immersive');
     // console.log('[Immersive] Exited immersive mode');
@@ -34,6 +42,10 @@ export async function exitImmersive(): Promise<void> {
  * @returns Promise<void>
  */
 export async function toggleImmersive(immersive: boolean): Promise<void> {
+  if (!isTauri()) {
+    console.warn('[Immersive] This function is only available in Tauri.', 'toggleImmersive');
+    return;
+  }
   if (immersive) {
     return enterImmersive();
   } else {

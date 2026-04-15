@@ -1,4 +1,4 @@
-import { invoke } from '@tauri-apps/api/core';
+import { invoke,isTauri } from '@tauri-apps/api/core';
 
 /**
  * 设备信息接口
@@ -44,19 +44,29 @@ export interface BatteryInfo {
  * @returns Promise<DeviceInfo> 设备信息对象
  */
 export async function getDeviceInfo(): Promise<DeviceInfo> {
+  if (!isTauri()) {
+    console.warn('[Device] This function is only available in Tauri.', 'getDeviceInfo()');
+    return {
+      osName: 'unknown',
+      osVersion: 'unknown',
+      deviceModel: 'unknown',
+      deviceManufacturer: 'unknown',
+      webkitType: 'unknown',
+      kernelVersion: 'unknown',
+    };
+  }
   try {
     const rawDeviceInfo = await invoke('plugin:device|get_device_info');
-    
     // 确保 rawDeviceInfo 是对象类型
-    const deviceInfo = typeof rawDeviceInfo === 'object' && rawDeviceInfo !== null 
+    const deviceInfo = typeof rawDeviceInfo === 'object' && rawDeviceInfo !== null
       ? rawDeviceInfo as Record<string, any>
       : {};
-    
+
     // 添加 WebKit 类型和内核版本的检测（基于浏览器环境）
     const userAgent = navigator.userAgent;
     let webkitType = 'unknown';
     let kernelVersion = 'unknown';
-    
+
     // 检测 WebKit 类型
     if (userAgent.includes('WebKit')) {
       if (userAgent.includes('Chrome') || userAgent.includes('CriOS')) {
@@ -71,7 +81,7 @@ export async function getDeviceInfo(): Promise<DeviceInfo> {
     } else if (userAgent.includes('Trident') || userAgent.includes('MSIE')) {
       webkitType = 'Trident';
     }
-    
+
     // 提取内核版本
     const versionMatch = userAgent.match(/(?:AppleWebKit|Gecko|Trident|Edge)\/([\d.]+)/);
     if (versionMatch) {
@@ -88,7 +98,7 @@ export async function getDeviceInfo(): Promise<DeviceInfo> {
         }
       }
     }
-    
+
     return {
       osName: deviceInfo.osName || 'unknown',
       osVersion: deviceInfo.osVersion || 'unknown',
@@ -116,6 +126,13 @@ export async function getDeviceInfo(): Promise<DeviceInfo> {
  * @returns Promise<NetworkInfo> 网络信息对象
  */
 export async function getNetworkInfo(): Promise<NetworkInfo> {
+  if (!isTauri()) {
+    console.warn('[Device] This function is only available in Tauri.', 'getNetworkInfo()');
+    return {
+      isConnected: false,
+      networkType: 'unknown',
+    };
+  }
   try {
     return await invoke('plugin:device|get_network_info');
   } catch (error) {
@@ -133,6 +150,13 @@ export async function getNetworkInfo(): Promise<NetworkInfo> {
  * @returns Promise<BatteryInfo> 电池信息对象
  */
 export async function getBatteryInfo(): Promise<BatteryInfo> {
+  if (!isTauri()) {
+    console.warn('[Device] This function is only available in Tauri.', 'getBatteryInfo()');
+    return {
+      level: 100,
+      isCharging: false,
+    };
+  }
   try {
     return await invoke('plugin:device|get_battery_info');
   } catch (error) {
@@ -150,6 +174,10 @@ export async function getBatteryInfo(): Promise<BatteryInfo> {
  * @returns Promise<boolean> 是否连接到 WiFi
  */
 export async function isWifiConnected(): Promise<boolean> {
+  if (!isTauri()) {
+    console.warn('[Device] This function is only available in Tauri.', 'isWifiConnected()');
+    return false;
+  }
   try {
     const networkInfo = await getNetworkInfo();
     return networkInfo.isConnected && networkInfo.networkType === 'wifi';
@@ -164,6 +192,10 @@ export async function isWifiConnected(): Promise<boolean> {
  * @returns Promise<boolean> 是否使用蜂窝网络
  */
 export async function isCellularNetwork(): Promise<boolean> {
+  if (!isTauri()) {
+    console.warn('[Device] This function is only available in Tauri.', 'isCellularNetwork()');
+    return false;
+  }
   try {
     const networkInfo = await getNetworkInfo();
     return networkInfo.isConnected && networkInfo.networkType === 'cellular';
@@ -178,6 +210,10 @@ export async function isCellularNetwork(): Promise<boolean> {
  * @returns Promise<boolean> 是否有网络连接
  */
 export async function isConnected(): Promise<boolean> {
+  if (!isTauri()) {
+    console.warn('[Device] This function is only available in Tauri.', 'isConnected()');
+    return false;
+  }
   try {
     const networkInfo = await getNetworkInfo();
     return networkInfo.isConnected;
@@ -192,6 +228,10 @@ export async function isConnected(): Promise<boolean> {
  * @returns Promise<number> 电池电量百分比 (0-100)
  */
 export async function getBatteryLevel(): Promise<number> {
+  if (!isTauri()) {
+    console.warn('[Device] This function is only available in Tauri.', 'getBatteryLevel()');
+    return 100; // 默认返回 100%
+  }
   try {
     const batteryInfo = await getBatteryInfo();
     return batteryInfo.level;
@@ -206,6 +246,10 @@ export async function getBatteryLevel(): Promise<number> {
  * @returns Promise<boolean> 是否在充电
  */
 export async function isCharging(): Promise<boolean> {
+  if (!isTauri()) {
+    console.warn('[Device] This function is only available in Tauri.', 'isCharging()');
+    return false; // 默认返回未充电
+  }
   try {
     const batteryInfo = await getBatteryInfo();
     return batteryInfo.isCharging;

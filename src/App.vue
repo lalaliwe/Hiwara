@@ -5,6 +5,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { onBackButtonPress } from '@tauri-apps/api/app'
 import type { PluginListener } from '@tauri-apps/api/core'
 import { showShortToast } from './core/toast'
+import { isTauri } from '@tauri-apps/api/core';
 import { moveTaskToBack } from './plugins/appControl'
 import { getCachedPages } from './router/index'
 
@@ -28,7 +29,7 @@ const transitionName = computed(() => {
   if (isFirstLoad.value && route.path === '/') {
     return ''
   }
-  
+
   const transition = route.meta?.transition
   // 当过渡名称为空字符串时，不会应用任何过渡效果
   return typeof transition === 'string' ? transition : 'fade'
@@ -71,40 +72,42 @@ onMounted(() => {
     snackbar.value = true
   })
 
-  // 只在 Android 上有效；桌面端不会触发
-  onBackButtonPress(async ({ canGoBack }) => {
-    // 检查是否为双击返回
-    const currentTime = Date.now();
+  if (isTauri()) {
+    // 只在 Android 上有效；桌面端不会触发
+    onBackButtonPress(async ({ canGoBack }) => {
+      // 检查是否为双击返回
+      const currentTime = Date.now();
 
-    // 1. 如果当前在首页
-    if (route.path === '/') {
-      // 发送自定义事件到Home组件处理
-      window.dispatchEvent(new CustomEvent('home-back-pressed'));
-      return;
-    }
+      // 1. 如果当前在首页
+      if (route.path === '/') {
+        // 发送自定义事件到Home组件处理
+        window.dispatchEvent(new CustomEvent('home-back-pressed'));
+        return;
+      }
 
-    // 2. 不在首页：希望"回退到上一页"
-    // 优先用 Tauri 提供的 canGoBack 信息
-    if (canGoBack) {
-      router.back()
-      return
-    }
+      // 2. 不在首页：希望"回退到上一页"
+      // 优先用 Tauri 提供的 canGoBack 信息
+      if (canGoBack) {
+        router.back()
+        return
+      }
 
-    // 3. 极端情况：不在首页，且 WebHistory 已经回退到底
-    // 再按返回，就直接退出应用
-    if (lastBackPressedTime && currentTime - lastBackPressedTime <= DOUBLE_BACK_PRESS_TIMEOUT) {
-      moveTaskToBack();
-      return;
-    } else {
-      // 提示用户再按一次退出
-      lastBackPressedTime = currentTime;
-      // 替换原来的console.log，使用toast提示
-      showShortToast('再按一次返回键退出应用');
-      return;
-    }
-  }).then(listener => {
-    backListener = listener;
-  })
+      // 3. 极端情况：不在首页，且 WebHistory 已经回退到底
+      // 再按返回，就直接退出应用
+      if (lastBackPressedTime && currentTime - lastBackPressedTime <= DOUBLE_BACK_PRESS_TIMEOUT) {
+        moveTaskToBack();
+        return;
+      } else {
+        // 提示用户再按一次退出
+        lastBackPressedTime = currentTime;
+        // 替换原来的console.log，使用toast提示
+        showShortToast('再按一次返回键退出应用');
+        return;
+      }
+    }).then(listener => {
+      backListener = listener;
+    })
+  }
 })
 
 // =====================
