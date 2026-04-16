@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref, watch, nextTick, onMounted, onUnmounted } from 'vue'
+import { computed, ref, watch, nextTick, onMounted, onUnmounted, defineComponent, h, type Component } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 // 官方 API：Android 返回键
 import { onBackButtonPress } from '@tauri-apps/api/app'
@@ -17,6 +17,36 @@ const cachedPages = ref<string[]>([])
 
 // 检测是否是首次加载（冷启动）
 const isFirstLoad = ref(true)
+
+// 缓存已生成的包装组件，避免重复创建
+const wrappedComponentCache = new Map<string, Component>()
+
+/**
+ * 根据原始组件和 cacheKey 生成一个带有唯一 name 的包装组件
+ */
+function wrapComponent(originalComp: Component, cacheKey: string): Component {
+  if (!originalComp) return originalComp
+
+  // 如果已缓存，直接返回
+  if (wrappedComponentCache.has(cacheKey)) {
+    return wrappedComponentCache.get(cacheKey)!
+  }
+
+  // 创建一个新的组件定义，name 设置为 cacheKey
+  const wrapped = defineComponent({
+    name: cacheKey,
+    // 继承原始组件的 props（vue-router 会通过 props 传参）
+    props: (originalComp as any).props,
+    emits: (originalComp as any).emits,
+    setup(props, ctx) {
+      // 直接渲染原始组件，并透传所有属性和插槽
+      return () => h(originalComp as any, { ...props, ...ctx.attrs }, ctx.slots)
+    }
+  })
+
+  wrappedComponentCache.set(cacheKey, wrapped)
+  return wrapped
+}
 
 // 监听路由变化，标记非首次加载
 watch(
@@ -131,10 +161,11 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <router-view v-slot="{ Component }">
+  <router-view v-slot="{ Component, route: currentRoute }">
     <transition :name="transitionName" appear>
       <keep-alive :include="cachedPages" :max="10">
-        <component :is="Component" :key="route.fullPath" v-if="Component" />
+        <component :is="wrapComponent(Component, (currentRoute.meta.cacheKey as string) || 'Anonymous')"
+          :key="currentRoute.fullPath" v-if="Component" />
       </keep-alive>
     </transition>
   </router-view>

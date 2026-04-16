@@ -14,11 +14,12 @@ interface RouteMeta {
   transition?: string
   isFirstLoad?: boolean
   componentName?: string // 显式声明组件名（可选）
+  cacheKey?: string       // 用于 keep-alive 的唯一标识
 }
 
 type PageStackItem = {
   key: string               // 路由唯一标识 (name + sorted params)
-  componentName: string     // 组件名称，供 keep-alive include 使用
+  cacheKey: string          // 用于 keep-alive include 的唯一标识
   path: string
   fullPath: string
 }
@@ -115,10 +116,18 @@ const createStackItem = (route: RouteLocationNormalized): PageStackItem => {
   const key = getPageKey(route)
   // 优先使用 meta.componentName，否则从组件定义推断
   const metaName = (route.meta as RouteMeta)?.componentName
-  const componentName = metaName || getComponentName(route)
+  const baseComponentName = metaName || getComponentName(route)
+
+  // 生成唯一缓存标识：对于动态路由，拼接 id 参数
+  let cacheKey = baseComponentName
+  const id = route.params.id
+  if (id) {
+    cacheKey = `${baseComponentName}_${id}`
+  }
+
   return {
     key,
-    componentName,
+    cacheKey,
     path: route.path,
     fullPath: route.fullPath,
   }
@@ -137,6 +146,9 @@ router.beforeEach((to, from) => {
 
   const toItem = createStackItem(to)
   const fromKey = from.name ? getPageKey(from) : null
+
+  // 将 cacheKey 存入 meta，供 App.vue 使用
+  to.meta.cacheKey = toItem.cacheKey
 
   // 初始化：无来源路由（冷启动直接进入）
   if (!fromKey) {
@@ -179,10 +191,10 @@ router.beforeEach((to, from) => {
 // ========================
 // 导出函数供外部使用
 // ========================
-/** 获取当前 keep-alive 应缓存的组件名称数组（去重） */
+/** 获取当前 keep-alive 应缓存的组件唯一标识数组（去重） */
 export function getCachedComponentNames(): string[] {
-  const names = pageStack.map(item => item.componentName)
-  return [...new Set(names)]
+  const keys = pageStack.map(item => item.cacheKey)
+  return [...new Set(keys)]
 }
 
 /** 获取当前栈中所有页面的唯一标识（调试用） */
