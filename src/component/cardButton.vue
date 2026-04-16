@@ -85,32 +85,14 @@ const formattedLikeNum = computed(() => formatNumber(props.likeNum || '0'));
 const formattedLongNum = computed(() => formatNumber(props.longNum || '0'));
 
 function clickCard() {
+  if (!props.id) {
+    console.error('缺少id');
+    return;
+  }
   if (props.type === 'video') {
-    // 使用 query 方式传参
-    // 跳转后的 URL 格式为: /player?id=xxxx
-    if (props.id) {
-      router.push({
-        path: '/player',
-        query: {
-          id: props.id
-        }
-      });
-    } else {
-      // 如果没有ID，仅跳转路径（容错处理）
-      router.push('/player');
-    }
+    router.push({ path: `/player/${props.id}` });
   } else if (props.type === 'image') {
-    if (props.id) {
-      router.push({
-        path: '/image',
-        query: {
-          id: props.id
-        }
-      });
-    } else {
-      // 如果没有ID，仅跳转路径（容错处理）
-      router.push('/image');
-    }
+    router.push({ path: `/image/${props.id}` });
   }
 }
 </script>

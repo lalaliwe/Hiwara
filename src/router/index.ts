@@ -28,13 +28,13 @@ const routes: Array<RouteRecordRaw & { meta?: RouteMeta }> = [
     meta: { transition: 'stack', depth: 0 },
   },
   {
-    path: '/player',
+    path: '/player/:id',
     name: 'Player',
     component: player,
     meta: { transition: 'stack', depth: 1 },
   },
   {
-    path: '/image',
+    path: '/image/:id',
     name: 'Image',
     component: image,
     meta: { transition: 'stack', depth: 1 },

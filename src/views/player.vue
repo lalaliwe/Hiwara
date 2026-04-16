@@ -8,6 +8,7 @@ import { setStatusBarTextStyle } from '../plugins/navbarStyle';
 import { Swiper, SwiperSlide } from 'swiper/vue';
 import type { Swiper as SwiperType } from 'swiper';
 import 'swiper/css';
+import { nextTick } from 'vue';
 
 // 设置组件名称，确保与路由name一致
 defineOptions({
@@ -16,18 +17,18 @@ defineOptions({
 
 const router = useRouter();
 
-const tab = ref('info');
-const title = '测试标题';
-const synopsis = '测试简介';
-const playNum = 100;
-const likeNum = 0;
-const createdAt = '2025-02-03 10:00';
-const isLike = ref(false);
-const tags = ['测试标签1', '测试标签2', '测试标签3', '测试标签4', '测试标签5', '测试标签6', '测试标签7', '测试标签8', '测试标签9', '测试标签10', '测试标签11', '测试标签12', '测试标签13', '测试标签14', '测试标签15', '测试标签16', '测试标签17', '测试标签18', '测试标签19', '测试标签20', '测试标签21', '测试标签22'];
-const authorname = '测试用户';
-const fansNum = 100;
-const videoNum = 10;
-const isFollow = ref(false);
+const tab = ref('info');  // 当前选中的tab
+const title = '测试标题';   // 视频标题
+const synopsis = '测试简介';  // 视频简介
+const playNum = 100;  // 播放次数
+const likeNum = 0;  // 点赞数
+const createdAt = '2025-02-03 10:00';  // 创建时间
+const isLike = ref(false);  // 是否已点赞
+const tags = ['测试标签1', '测试标签2', '测试标签3', '测试标签4', '测试标签5', '测试标签6', '测试标签7', '测试标签8', '测试标签9', '测试标签10', '测试标签11', '测试标签12', '测试标签13', '测试标签14', '测试标签15', '测试标签16', '测试标签17', '测试标签18', '测试标签19', '测试标签20', '测试标签21', '测试标签22'];  // 标签
+const authorname = '测试用户';  // 作者名称
+const fansNum = 100;  // 粉丝数
+const videoNum = 10;  // 视频数
+const isFollow = ref(false);  // 是否已关注
 
 // --- Swiper 联动逻辑 ---
 const swiperInstance = ref<SwiperType | null>(null);
@@ -50,12 +51,14 @@ const onSlideChange = (swiper: SwiperType) => {
 };
 // --- End Swiper 联动逻辑 ---
 
-// --- Provide/Inject 逻辑 ---
-// 创建一个响应式变量，用于通知子组件 goBack 被调用
-const backTrigger = ref(0);
-// 提供给子组件的方法，子组件可以通过 inject 获取这个 trigger 并 watch 它
-provide('onParentGoBack', backTrigger);
-// --- End Provide/Inject 逻辑 ---
+const goBack = () => {
+  router.back();
+};
+provide('goBack', goBack);
+const goHome = () => {
+  router.replace('/');
+};
+provide('goHome', goHome);
 
 // 应用页面设置的函数
 const applyPageSettings = () => {
@@ -64,16 +67,16 @@ const applyPageSettings = () => {
 }
 applyPageSettings()
 
-// 返回
-function goBack() {
-  // 触发通知
-  backTrigger.value++;
-  router.back();
-}
-// 回到主界面
-function goHome() {
-  router.replace('/');
-}
+// // 返回
+// function goBack() {
+//   // 触发通知
+//   backTrigger.value++;
+//   router.back();
+// }
+// // 回到主界面
+// function goHome() {
+//   router.replace('/');
+// }
 
 onActivated(() => {
   applyPageSettings()
@@ -88,14 +91,14 @@ onUnmounted(() => {
 
 <template>
   <div id="playerView">
-    <div class="topBar">
+    <!-- <div class="topBar">
       <span class="btn" @click="goBack">
         <font-awesome-icon icon="fa-solid fa-angle-left" />
       </span>
       <span class="btn" @click="goHome">
         <font-awesome-icon icon="fa-regular fa-house" />
       </span>
-    </div>
+    </div> -->
     <videoPlayer class="video-player" />
     <div class="tabs">
       <div class="tabs-elements">
@@ -138,34 +141,34 @@ onUnmounted(() => {
   background-color: #fff;
 }
 
-.topBar {
-  position: absolute;
-  top: 0;
-  width: 100%;
-  z-index: 400;
-  color: #fff;
-  height: calc(48px + env(safe-area-inset-top, 0));
+// .topBar {
+//   position: absolute;
+//   top: 0;
+//   width: 100%;
+//   z-index: 400;
+//   color: #fff;
+//   height: calc(48px + env(safe-area-inset-top, 0));
 
-  .btn {
-    display: inline-flex;
-    margin: 4px;
-    width: 40px;
-    height: 40px;
-    justify-content: center;
-    align-items: center;
-    font-size: 1.2rem;
-    cursor: pointer;
-    user-select: none;
-  }
+//   .btn {
+//     display: inline-flex;
+//     margin: 4px;
+//     width: 40px;
+//     height: 40px;
+//     justify-content: center;
+//     align-items: center;
+//     font-size: 1.2rem;
+//     cursor: pointer;
+//     user-select: none;
+//   }
 
-  &::before {
-    content: '';
-    display: block;
-    height: env(safe-area-inset-top, 0);
-    width: 100%;
-    background-color: #000;
-  }
-}
+//   &::before {
+//     content: '';
+//     display: block;
+//     height: env(safe-area-inset-top, 0);
+//     width: 100%;
+//     background-color: #000;
+//   }
+// }
 
 .video-player {
   width: 100%;

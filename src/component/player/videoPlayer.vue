@@ -1,23 +1,20 @@
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue'
-import { useRouter } from 'vue-router';
+import { ref, onMounted, onUnmounted, inject } from 'vue'
 import { lockPortrait, lockLandscape } from '../../plugins/useOrientation'
 import { enterImmersive, exitImmersive } from '../../plugins/immersive'
 import { getNetworkInfo, getBatteryInfo } from '../../plugins/deviceInfo'
 import customRange from './customRange.vue';
 
 const fullscreenState = ref(false); // 内部维护的全屏状态
-const videoPlayerRef = ref<HTMLElement | null>(null);
-const videoRef = ref<HTMLVideoElement | null>(null);
-const isPlaying = ref(false);
-const progress = ref<number>(0);
-const buffered = ref<number>(0);
-const currentTime = ref<string>('00:00');
-const totalTime = ref<string>('00:00');
+const videoPlayerRef = ref<HTMLElement | null>(null); // 播放器元素
+const videoRef = ref<HTMLVideoElement | null>(null);  // 视频元素
+const isPlaying = ref(false); // 播放状态
+const progress = ref<number>(0);  // 进度
+const buffered = ref<number>(0);  // 已缓冲
+const currentTime = ref<string>('00:00'); // 当前时间
+const totalTime = ref<string>('00:00'); // 总时长
 const isLoading = ref(false); // 缓冲加载状态
 const currentSystemTime = ref<string>(''); // 当前系统时间
-
-const router = useRouter();
 
 let timeInterval: number | undefined; // 定时器 ID
 
@@ -42,9 +39,9 @@ const updateSystemTime = () => {
 };
 
 type NetworkType = 'wifi' | 'cellular' | 'ethernet' | 'other' | 'none' | 'unknown' | 'loading'
-const networkState = ref<NetworkType>('loading');
-const batteryLevel = ref<number | 'none'>('none');
-const isCharging = ref(false);
+const networkState = ref<NetworkType>('loading'); // 网络状态
+const batteryLevel = ref<number | 'none'>('none');  // 电池电量
+const isCharging = ref(false);  // 是否正在充电
 
 // 获取网络信息
 const fetchNetworkInfo = async () => {
@@ -78,12 +75,6 @@ const fetchBatteryInfo = async () => {
     batteryLevel.value = 'none';
   }
 };
-
-// 在组件挂载时获取网络信息
-onMounted(() => {
-  fetchNetworkInfo();
-  fetchBatteryInfo();
-});
 
 // 更新视频时间
 const updateTime = () => {
@@ -183,15 +174,21 @@ const handlePopState = () => {
   }
 };
 
-// 挂载/卸载监听
+const goBack = inject<() => void>('goBack');
+const goHome = inject<() => void>('goHome');
+
+// 在组件挂载时获取网络信息
+onMounted(() => {
+  fetchNetworkInfo();
+  fetchBatteryInfo();
+});
 onMounted(async () => {
+  // 挂载/卸载监听
   document.addEventListener('fullscreenchange', handleFullscreenChange);
   window.addEventListener('popstate', handlePopState);
-
   // 初始化并定时更新系统时间
   updateSystemTime();
   const timeInterval = setInterval(updateSystemTime, 1000);
-
   // 绑定视频事件
   if (videoRef.value) {
     videoRef.value.addEventListener('play', () => {
@@ -203,7 +200,6 @@ onMounted(async () => {
     });
     videoRef.value.addEventListener('timeupdate', updateTime);
     videoRef.value.addEventListener('loadedmetadata', updateTime);
-
     // 监听缓冲事件
     videoRef.value.addEventListener('waiting', () => {
       isLoading.value = true; // 数据不足，显示加载指示器
@@ -214,21 +210,17 @@ onMounted(async () => {
     videoRef.value.addEventListener('canplaythrough', () => {
       isLoading.value = false; // 已缓冲足够，隐藏加载指示器
     });
-
     // 初始化总时长
     if (videoRef.value.duration) {
       totalTime.value = formatTime(videoRef.value.duration);
     }
   }
 });
-
 onUnmounted(() => {
   document.removeEventListener('fullscreenchange', handleFullscreenChange);
   window.removeEventListener('popstate', handlePopState);
-
   // 清除系统时间定时器
   clearInterval(timeInterval);
-
   // 清理事件监听
   if (videoRef.value) {
     videoRef.value.removeEventListener('play', () => { });
@@ -240,15 +232,6 @@ onUnmounted(() => {
     videoRef.value.removeEventListener('canplaythrough', () => { });
   }
 });
-
-// 返回
-function goBack() {
-  router.back();
-}
-// 回到主界面
-function goHome() {
-  router.replace('/');
-}
 </script>
 
 <template>
@@ -368,7 +351,7 @@ function goHome() {
     </div>
     <div v-else class="control">
       <!-- 非全屏模式 -->
-      <div class="top" v-if="false">
+      <div class="top">
         <div>
           <span class="btn" @click="goBack">
             <font-awesome-icon icon="fa-solid fa-angle-left" />
