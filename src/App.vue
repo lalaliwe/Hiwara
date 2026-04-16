@@ -14,6 +14,8 @@ const router = useRouter()
 
 // 存储需要缓存的组件名称（供 keep-alive :include 使用）
 const cachedPages = ref<string[]>([])
+// 存储首页组件名称，使其不受 max 限制
+const homeComponentName = ref<string>('Home')
 
 // 检测是否是首次加载（冷启动）
 const isFirstLoad = ref(true)
@@ -73,8 +75,13 @@ const transitionName = computed(() => {
 const updateCachedPages = async () => {
   // 等待 DOM 更新完成，保证组件实例已经创建
   await nextTick()
-  const names = getCachedComponentNames()
-  cachedPages.value = names
+  const allCachedNames = getCachedComponentNames()
+  // 分离首页和其他页面，确保首页始终被缓存
+  const nonHomePages = allCachedNames.filter(name => name !== homeComponentName.value)
+  // 对非首页页面应用 max 限制（保留最近的9个，为首页留出空间）
+  const limitedNonHomePages = nonHomePages.slice(-9)
+  // 将首页添加到列表中
+  cachedPages.value = [homeComponentName.value, ...limitedNonHomePages]
 }
 
 // 监听路由变化，立即更新缓存列表
@@ -163,7 +170,7 @@ onUnmounted(() => {
 <template>
   <router-view v-slot="{ Component, route: currentRoute }">
     <transition :name="transitionName" appear>
-      <keep-alive :include="cachedPages" :max="10">
+      <keep-alive :include="cachedPages">
         <component :is="wrapComponent(Component, (currentRoute.meta.cacheKey as string) || 'Anonymous')"
           :key="currentRoute.fullPath" v-if="Component" />
       </keep-alive>
