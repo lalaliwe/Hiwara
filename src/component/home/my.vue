@@ -60,7 +60,7 @@ function routerGoTo(path: string, query?: any) {
     <div class="card">
       <div class="label">
         <div class="left">历史记录</div>
-        <div class="right">查看全部</div>
+        <div class="right" @click="routerGoTo('/history')">查看全部</div>
       </div>
       <div class="history">
         <div class="videoListCard" v-for="i in 10">
@@ -71,20 +71,18 @@ function routerGoTo(path: string, query?: any) {
             {{ `测试标题-${i}` }}
           </div>
         </div>
-        <div class="all-btn">
-          查看全部
-        </div>
+        <div class="all-btn" @click="routerGoTo('/history')">查看全部</div>
       </div>
     </div>
     <div class="card">
       <div class="usserFunction">
-        <div class="btn">
+        <div class="btn" @click="routerGoTo('/favorites', { type: 'video' })">
           <div class="icon">
             <font-awesome-icon icon="fa-solid fa-film" />
           </div>
           <div class="text">视频收藏</div>
         </div>
-        <div class="btn">
+        <div class="btn" @click="routerGoTo('/favorites', { type: 'image' })">
           <div class="icon">
             <font-awesome-icon icon="fa-solid fa-images" />
           </div>

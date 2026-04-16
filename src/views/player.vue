@@ -96,14 +96,7 @@ onUnmounted(() => {
 
 <template>
   <div id="playerView">
-    <!-- <div class="topBar">
-      <span class="btn" @click="goBack">
-        <font-awesome-icon icon="fa-solid fa-angle-left" />
-      </span>
-      <span class="btn" @click="goHome">
-        <font-awesome-icon icon="fa-regular fa-house" />
-      </span>
-    </div> -->
+    <div class="topBar"></div>
     <videoPlayer class="video-player" />
     <div class="tabs">
       <div class="tabs-elements">
@@ -146,38 +139,14 @@ onUnmounted(() => {
   background-color: #fff;
 }
 
-// .topBar {
-//   position: absolute;
-//   top: 0;
-//   width: 100%;
-//   z-index: 400;
-//   color: #fff;
-//   height: calc(48px + env(safe-area-inset-top, 0));
-
-//   .btn {
-//     display: inline-flex;
-//     margin: 4px;
-//     width: 40px;
-//     height: 40px;
-//     justify-content: center;
-//     align-items: center;
-//     font-size: 1.2rem;
-//     cursor: pointer;
-//     user-select: none;
-//   }
-
-//   &::before {
-//     content: '';
-//     display: block;
-//     height: env(safe-area-inset-top, 0);
-//     width: 100%;
-//     background-color: #000;
-//   }
-// }
+.topBar {
+  height: env(safe-area-inset-top, 0);
+  width: 100%;
+  background-color: #000;
+}
 
 .video-player {
   width: 100%;
-  margin-top: env(safe-area-inset-top, 0);
   aspect-ratio: 16 / 9;
 }
 

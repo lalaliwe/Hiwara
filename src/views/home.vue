@@ -5,17 +5,22 @@ import homeImage from '../component/home/image.vue';
 import homeSubscribe from '../component/home/subscribe.vue';
 import homeForum from '../component/home/forum.vue';
 import homeMy from '../component/home/my.vue';
-import { ref, onMounted, onBeforeUnmount, onActivated } from 'vue';
+import { ref, onMounted, onBeforeUnmount, onActivated, provide } from 'vue';
 // import { on } from 'hammerjs';
 import { lockPortrait } from '../plugins/useOrientation'
-import { setStatusBarTextStyle} from '../plugins/navbarStyle'
+import { setStatusBarTextStyle } from '../plugins/navbarStyle'
+import { showShortToast } from '../core/toast';
+import { moveTaskToBack } from '../plugins/appControl';
+
+// 定义Tab类型
+type TabType = 'video' | 'image' | 'subscribe' | 'forum' | 'my';
 
 // 设置组件名称，确保与路由name一致
 defineOptions({
   name: 'Home'
 })
 
-const isTab = ref("subscribe");
+const isTab = ref<TabType>('subscribe');
 
 // 添加双击返回检测相关变量
 let lastBackPressedTime: number | null = null;
@@ -46,7 +51,7 @@ onBeforeUnmount(() => {
   // console.log('❌ Home unmounted');
 })
 // 处理底部按钮tab变化
-const handleTabChange = (tab: string) => {
+const handleTabChange = (tab: TabType) => {
   isTab.value = tab;
 }
 
@@ -72,11 +77,11 @@ const handleBackPressed = () => {
   }
 }
 
-// 导入showShortToast函数
-import { showShortToast } from '../core/toast';
-
-// 导入moveTaskToBack函数
-import { moveTaskToBack } from '../plugins/appControl';
+const tabSwitchToMy = () => {
+  console.log('tabSwitchToMy')
+  isTab.value = 'my'
+}
+provide('tabSwitchToMy', tabSwitchToMy)
 </script>
 
 <template>

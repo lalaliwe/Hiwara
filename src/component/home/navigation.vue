@@ -8,16 +8,19 @@ import {
   User as iconUser
 } from '@icon-park/vue-next';
 
+// 定义Tab类型
+type TabType = 'video' | 'image' | 'subscribe' | 'forum' | 'my';
+
 // 定义emit事件
 const emit = defineEmits<{
-  (e: 'update:tab', value: string): void
+  (e: 'update:tab', value: TabType): void
 }>()
 
 const props = defineProps<{
-  modelValue?: string
+  modelValue?: TabType
 }>()
 
-const value = ref(props.modelValue || "subscribe")
+const value = ref<TabType>(props.modelValue || "subscribe")
 const btnFontSize = ref(24)
 
 // 监听props.modelValue变化，确保与父组件保持同步
@@ -28,12 +31,12 @@ watch(() => props.modelValue, (newVal) => {
 })
 
 // 监听value变化并emit事件
-watch(value, (newValue: string) => {
+watch(value, (newValue) => {
   emit('update:tab', newValue)
 })
 
 // 更改value
-const changeValue = (newValue: string) => {
+const changeValue = (newValue: TabType) => {
   value.value = newValue
 }
 </script>

@@ -188,7 +188,7 @@ onMounted(async () => {
   window.addEventListener('popstate', handlePopState);
   // 初始化并定时更新系统时间
   updateSystemTime();
-  const timeInterval = setInterval(updateSystemTime, 1000);
+  // const timeInterval = setInterval(updateSystemTime, 1000);
   // 绑定视频事件
   if (videoRef.value) {
     videoRef.value.addEventListener('play', () => {

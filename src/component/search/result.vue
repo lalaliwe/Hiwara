@@ -24,7 +24,7 @@ const videoResult = ref<ListItem[]>([]);
 const imageResult = ref<ListItem[]>([]);
 
 // 生成搜索结果测试数据 (从父组件移入)
-for (let i = 0; i < 100; i++) {
+for (let i = 0; i < 10; i++) {
   videoResult.value.push({
     id: `video_${i}`,
     title: `视频结果${i}`,

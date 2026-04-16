@@ -12,7 +12,7 @@ defineOptions({
 })
 
 const router = useRouter();
-const searching = ref<'empty' | 'loading' | 'result'>('result');
+const searching = ref<'empty' | 'loading' | 'result'>('empty');
 
 // 应用页面设置的函数
 const applyPageSettings = () => {

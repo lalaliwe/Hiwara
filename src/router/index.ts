@@ -1,11 +1,13 @@
-import { createRouter, createWebHistory, type RouteRecordRaw, type RouteLocationNormalized } from 'vue-router'
-import home from '../views/home.vue'
-import player from '../views/player.vue'
-import image from '../views/image.vue'
-import search from '../views/search.vue'
-import zone from '../views/zone.vue'
-import friends from '../views/friends.vue'
-import setup from '../views/setup.vue'
+import { createRouter, createWebHistory, type RouteRecordRaw, type RouteLocationNormalized } from 'vue-router';
+import home from '../views/home.vue';
+import player from '../views/player.vue';
+import image from '../views/image.vue';
+import search from '../views/search.vue';
+import zone from '../views/zone.vue';
+import friends from '../views/friends.vue';
+import history from '../views/history.vue';
+import setup from '../views/setup.vue';
+import favorites from '../views/favorites.vue';
 
 // ========================
 // 类型定义
@@ -91,6 +93,18 @@ const routes: Array<RouteRecordRaw & { meta?: RouteMeta }> = [
     name: 'Friends',
     component: friends,
     meta: { transition: 'stack', componentName: 'Friends' },
+  },
+  {
+    path: '/history',
+    name: 'History',
+    component: history,
+    meta: { transition: 'stack', componentName: 'History' },
+  },
+  {
+    path: '/favorites',
+    name: 'Favorites',
+    component: favorites,
+    meta: { transition: 'stack', componentName: 'Favorites' },
   },
   {
     path: '/setup',

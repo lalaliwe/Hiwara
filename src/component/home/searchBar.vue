@@ -1,8 +1,12 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { inject, ref } from 'vue';
 import { useRouter } from 'vue-router';
+
 const router = useRouter();
 const isAI = ref(false)
+
+const tabSwitchToMy = inject<() => void>('tabSwitchToMy')
+
 function toggleAI() {
   isAI.value = !isAI.value
 }
@@ -13,7 +17,7 @@ function toSearch() {
 
 <template>
   <div class="top-view">
-    <div class="avatar">
+    <div class="avatar" @click="tabSwitchToMy">
       <img src="../../static/img/default-avatar.jpg" alt="Avatar" />
     </div>
     <div class="search" @click="toSearch">
