@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted, onActivated, watch, provide } from 'vue';
-import { useRouter } from 'vue-router';
+import { ref, onMounted, onUnmounted, onActivated, watch, provide, onDeactivated } from 'vue';
+import { useRouter, useRoute } from 'vue-router';
 import videoPlayer from '../component/player/videoPlayer.vue';
 import infoView from '../component/player/info.vue';
 import commentView from '../component/player/comment.vue';
@@ -8,7 +8,6 @@ import { setStatusBarTextStyle } from '../plugins/navbarStyle';
 import { Swiper, SwiperSlide } from 'swiper/vue';
 import type { Swiper as SwiperType } from 'swiper';
 import 'swiper/css';
-import { nextTick } from 'vue';
 
 // 设置组件名称，确保与路由name一致
 defineOptions({
@@ -16,8 +15,10 @@ defineOptions({
 })
 
 const router = useRouter();
+const route = useRoute();
 
 const tab = ref('info');  // 当前选中的tab
+const id = route.params.id;  // 视频id
 const title = '测试标题';   // 视频标题
 const synopsis = '测试简介';  // 视频简介
 const playNum = 100;  // 播放次数
@@ -80,12 +81,16 @@ applyPageSettings()
 
 onActivated(() => {
   applyPageSettings()
+  console.log('🔄 Player activated', id);
+})
+onDeactivated(() => {
+  console.log('⏸️ Player deactivated', id);
 })
 onMounted(() => {
-  console.log('✅ Player mounted');
+  console.log('✅ Player mounted', id);
 })
 onUnmounted(() => {
-  console.log('❌ Player unmounted');
+  console.log('❌ Player unmounted', id);
 })
 </script>
 

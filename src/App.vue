@@ -5,23 +5,27 @@ import { useRoute, useRouter } from 'vue-router'
 import { onBackButtonPress } from '@tauri-apps/api/app'
 import type { PluginListener } from '@tauri-apps/api/core'
 import { showShortToast } from './core/toast'
-import { isTauri } from '@tauri-apps/api/core';
+import { isTauri } from '@tauri-apps/api/core'
 import { moveTaskToBack } from './plugins/appControl'
-import { getCachedPages } from './router/index'
+import { getCachedComponentNames } from './router/index'
 
 const route = useRoute()
 const router = useRouter()
 
-// 存储需要缓存的页面名称
+// 存储需要缓存的组件名称（供 keep-alive :include 使用）
 const cachedPages = ref<string[]>([])
 
 // 检测是否是首次加载（冷启动）
 const isFirstLoad = ref(true)
 
 // 监听路由变化，标记非首次加载
-watch(() => route.path, () => {
-  isFirstLoad.value = false
-}, { immediate: true })
+watch(
+  () => route.path,
+  () => {
+    isFirstLoad.value = false
+  },
+  { immediate: true }
+)
 
 // 计算过渡名称
 const transitionName = computed(() => {
@@ -35,24 +39,25 @@ const transitionName = computed(() => {
   return typeof transition === 'string' ? transition : 'fade'
 })
 
-// 更新缓存页面列表
+// 更新缓存组件名称列表（同步更新，确保及时响应）
 const updateCachedPages = async () => {
+  // 等待 DOM 更新完成，保证组件实例已经创建
   await nextTick()
-  const pages = getCachedPages()
-  cachedPages.value = pages
+  const names = getCachedComponentNames()
+  cachedPages.value = names
 }
 
-// 监听路由变化
+// 监听路由变化，立即更新缓存列表
 watch(
-  () => route.path,
+  () => route.fullPath,
   () => {
-    setTimeout(updateCachedPages, 0)
+    updateCachedPages()
   },
   { immediate: true }
 )
 
 router.afterEach(() => {
-  setTimeout(updateCachedPages, 0)
+  updateCachedPages()
 })
 
 // =====================
@@ -65,24 +70,23 @@ const snackbarColor = ref('#00796B')
 
 // 监听自定义事件来显示 snackbar
 onMounted(() => {
-  window.addEventListener('show-snackbar', (event: any) => {
+  window.addEventListener('show-snackbar', ((event: CustomEvent) => {
     snackbarText.value = event.detail.message
     snackbarTimeout.value = event.detail.timeout || 2000
     snackbarColor.value = event.detail.color || '#00796B'
     snackbar.value = true
-  })
+  }) as EventListener)
 
   if (isTauri()) {
     // 只在 Android 上有效；桌面端不会触发
     onBackButtonPress(async ({ canGoBack }) => {
-      // 检查是否为双击返回
-      const currentTime = Date.now();
+      const currentTime = Date.now()
 
       // 1. 如果当前在首页
       if (route.path === '/') {
-        // 发送自定义事件到Home组件处理
-        window.dispatchEvent(new CustomEvent('home-back-pressed'));
-        return;
+        // 发送自定义事件到 Home 组件处理
+        window.dispatchEvent(new CustomEvent('home-back-pressed'))
+        return
       }
 
       // 2. 不在首页：希望"回退到上一页"
@@ -93,19 +97,20 @@ onMounted(() => {
       }
 
       // 3. 极端情况：不在首页，且 WebHistory 已经回退到底
-      // 再按返回，就直接退出应用
-      if (lastBackPressedTime && currentTime - lastBackPressedTime <= DOUBLE_BACK_PRESS_TIMEOUT) {
-        moveTaskToBack();
-        return;
+      // 再按返回，就直接退出应用（双击退出逻辑）
+      if (
+        lastBackPressedTime &&
+        currentTime - lastBackPressedTime <= DOUBLE_BACK_PRESS_TIMEOUT
+      ) {
+        moveTaskToBack()
+        return
       } else {
-        // 提示用户再按一次退出
-        lastBackPressedTime = currentTime;
-        // 替换原来的console.log，使用toast提示
-        showShortToast('再按一次返回键退出应用');
-        return;
+        lastBackPressedTime = currentTime
+        showShortToast('再按一次返回键退出应用')
+        return
       }
     }).then(listener => {
-      backListener = listener;
+      backListener = listener
     })
   }
 })
@@ -115,9 +120,9 @@ onMounted(() => {
 // =====================
 
 let backListener: PluginListener | null = null
-// 添加双击返回检测相关变量
-let lastBackPressedTime: number | null = null;
-const DOUBLE_BACK_PRESS_TIMEOUT = 2000; // 2秒内再次按下返回键则退出
+// 双击返回检测相关变量
+let lastBackPressedTime: number | null = null
+const DOUBLE_BACK_PRESS_TIMEOUT = 2000 // 2秒内再次按下返回键则退出
 
 onUnmounted(() => {
   // 取消监听，防止内存泄漏
