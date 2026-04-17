@@ -8,6 +8,7 @@ import friends from '../views/friends.vue';
 import history from '../views/history.vue';
 import setup from '../views/setup.vue';
 import favorites from '../views/favorites.vue';
+import offlineCache from '../views/offlineCache.vue';
 
 // ========================
 // 类型定义
@@ -105,6 +106,12 @@ const routes: Array<RouteRecordRaw & { meta?: RouteMeta }> = [
     name: 'Favorites',
     component: favorites,
     meta: { transition: 'stack', componentName: 'Favorites' },
+  },
+  {
+    path: '/offline-cache',
+    name: 'OfflineCache',
+    component: offlineCache,
+    meta: { transition: 'stack', componentName: 'OfflineCache' },
   },
   {
     path: '/setup',

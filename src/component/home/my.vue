@@ -94,7 +94,7 @@ function routerGoTo(path: string, query?: any) {
           </div>
           <div class="text">播放列表</div>
         </div>
-        <div class="btn">
+        <div class="btn" @click="routerGoTo('/offline-cache')">
           <div class="icon">
             <font-awesome-icon icon="fa-solid fa-download" />
           </div>

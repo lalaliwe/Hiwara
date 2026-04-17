@@ -95,10 +95,10 @@ const generateTestData = () => {
 // 按日期分组数据
 const groupByDate = (items: ListItem[]) => {
   const grouped: Record<string, ListItem[]> = {};
-  
+
   // 按日期排序
   items.sort((a, b) => new Date(b.favoriteDate).getTime() - new Date(a.favoriteDate).getTime());
-  
+
   // 按日期分组
   items.forEach(item => {
     if (!grouped[item.favoriteDate]) {
@@ -106,7 +106,7 @@ const groupByDate = (items: ListItem[]) => {
     }
     grouped[item.favoriteDate].push(item);
   });
-  
+
   return grouped;
 };
 
@@ -130,7 +130,7 @@ function handleImageScroll(event: Event): void {
 // 页面激活时恢复滚动位置
 onActivated(() => {
   applyPageSettings()
-  
+
   if (videoListView.value && typeof videoListView.value.scrollTo === 'function') {
     videoListView.value.scrollTo({ top: videoScrollTop });
   }
@@ -172,17 +172,9 @@ onActivated(() => {
               <v-list-item v-for="(item, index) in groupItems" :key="index" class="list-item">
                 <!-- 左侧：预览图 -->
                 <template v-slot:prepend>
-                  <v-img 
-                    :src="item.img" 
-                    :alt="item.title"
-                    aspect-ratio="4/3"
-                    width="106.7"
-                    height="80"
-                    cover
-                    class="rounded"
-                  ></v-img>
+                  <v-img :src="item.img" :alt="item.title" aspect-ratio="4/3" width="106.7" height="80" cover
+                    class="rounded"></v-img>
                 </template>
-                
                 <!-- 中间：标题和信息 -->
                 <div class="list-content">
                   <div class="list-title">
@@ -195,11 +187,6 @@ onActivated(() => {
                     {{ item.viewNum }}播放 • {{ item.likeNum }}点赞 • {{ item.longNum }}
                   </div>
                 </div>
-                
-                <!-- 右侧：R18标记 -->
-                <template v-slot:append v-if="item.isR18">
-                  <v-chip color="red" size="small" label>R18</v-chip>
-                </template>
               </v-list-item>
             </v-list>
           </div>
@@ -213,17 +200,10 @@ onActivated(() => {
               <v-list-item v-for="(item, index) in groupItems" :key="index" class="list-item">
                 <!-- 左侧：预览图 -->
                 <template v-slot:prepend>
-                  <v-img 
-                    :src="item.img" 
-                    :alt="item.title"
-                    aspect-ratio="4/3"
-                    width="106.7"
-                    height="80"
-                    cover
-                    class="rounded"
-                  ></v-img>
+                  <v-img :src="item.img" :alt="item.title" aspect-ratio="4/3" width="106.7" height="80" cover
+                    class="rounded"></v-img>
                 </template>
-                
+
                 <!-- 中间：标题和信息 -->
                 <div class="list-content">
                   <div class="list-title">
@@ -236,7 +216,7 @@ onActivated(() => {
                     {{ item.viewNum }}浏览 • {{ item.likeNum }}收藏 • {{ item.longNum }}张
                   </div>
                 </div>
-                
+
                 <!-- 右侧：R18标记 -->
                 <template v-slot:append v-if="item.isR18">
                   <v-chip color="red" size="small" label>R18</v-chip>
