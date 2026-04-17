@@ -8,9 +8,16 @@ import { showShortToast } from './core/toast'
 import { isTauri } from '@tauri-apps/api/core'
 import { moveTaskToBack } from './plugins/appControl'
 import { getCachedComponentNames } from './router/index'
+import loginView from './views/login.vue'
+import { useAuthStore } from './core/authStore'
 
 const route = useRoute()
 const router = useRouter()
+
+// 使用登录状态store
+const authStore = useAuthStore()
+
+const isLoggedIn = computed(() => authStore.isLoggedIn)
 
 // 存储需要缓存的组件名称（供 keep-alive :include 使用）
 const cachedPages = ref<string[]>([])
@@ -103,14 +110,14 @@ router.afterEach(() => {
 const snackbar = ref(false)
 const snackbarText = ref('')
 const snackbarTimeout = ref(2000)
-const snackbarColor = ref('#00796B')
+const snackbarColor = ref('#424242')
 
 // 监听自定义事件来显示 snackbar
 onMounted(() => {
   window.addEventListener('show-snackbar', ((event: CustomEvent) => {
     snackbarText.value = event.detail.message
     snackbarTimeout.value = event.detail.timeout || 2000
-    snackbarColor.value = event.detail.color || '#00796B'
+    snackbarColor.value = event.detail.color || '#424242'
     snackbar.value = true
   }) as EventListener)
 
@@ -168,7 +175,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <router-view v-slot="{ Component, route: currentRoute }">
+  <router-view v-slot="{ Component, route: currentRoute }" v-if="isLoggedIn">
     <transition :name="transitionName" appear>
       <keep-alive :include="cachedPages">
         <component :is="wrapComponent(Component, (currentRoute.meta.cacheKey as string) || 'Anonymous')"
@@ -176,7 +183,7 @@ onUnmounted(() => {
       </keep-alive>
     </transition>
   </router-view>
-
+  <loginView v-else />
   <!-- Vuetify Snackbar -->
   <v-snackbar v-model="snackbar" :timeout="snackbarTimeout" :color="snackbarColor" top centered class="snackbar">
     {{ snackbarText }}

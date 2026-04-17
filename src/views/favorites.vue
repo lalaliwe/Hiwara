@@ -42,11 +42,24 @@ const tab = ref<'video' | 'image'>(route.query.type === 'image' ? 'image' : 'vid
 const videoFavorites = ref<ListItem[]>([]);
 const imageFavorites = ref<ListItem[]>([]);
 
+const videoPage = ref(1);
+const imagePage = ref(1);
+const pageSize = 15;
+const videoIsLoading = ref(false);
+const imageIsLoading = ref(false);
+const videoHasFinished = ref(false);
+const imageHasFinished = ref(false);
+
 // 生成收藏测试数据，包含随机日期
-const generateTestData = () => {
-  // 清空现有数据
-  videoFavorites.value = [];
-  imageFavorites.value = [];
+const generateTestData = (type: 'video' | 'image', pageNum: number) => {
+  // 如果是第一页，清空现有数据
+  if (pageNum === 1) {
+    if (type === 'video') {
+      videoFavorites.value = [];
+    } else {
+      imageFavorites.value = [];
+    }
+  }
 
   // 生成最近几天的日期
   const dates = [];
@@ -57,39 +70,89 @@ const generateTestData = () => {
     dates.push(date.toISOString().split('T')[0]);
   }
 
-  // 生成视频收藏数据
-  for (let i = 0; i < 15; i++) {
+  // 根据类型生成数据
+  for (let i = 0; i < pageSize; i++) {
+    const itemId = (pageNum - 1) * pageSize + i;
     const randomDate = dates[Math.floor(Math.random() * dates.length)];
-    videoFavorites.value.push({
-      id: `video_${i}`,
-      title: `视频收藏${i}`,
-      img: 'https://picsum.photos/200/300',
-      author: '作者',
-      time: '2023-01-01',
-      viewNum: '1000',
-      likeNum: '100',
-      longNum: '10:00',
-      isR18: false,
-      favoriteDate: randomDate
-    });
+    
+    if (type === 'video') {
+      videoFavorites.value.push({
+        id: `video_${itemId}`,
+        title: `视频收藏${itemId}`,
+        img: 'https://picsum.photos/200/300',
+        author: '作者',
+        time: '2023-01-01',
+        viewNum: '1000',
+        likeNum: '100',
+        longNum: '10:00',
+        isR18: false,
+        favoriteDate: randomDate
+      });
+    } else {
+      imageFavorites.value.push({
+        id: `image_${itemId}`,
+        title: `插画收藏${itemId}`,
+        img: 'https://picsum.photos/200/300',
+        author: '作者',
+        time: '2023-01-01',
+        viewNum: '1000',
+        likeNum: '100',
+        longNum: '10',
+        isR18: false,
+        favoriteDate: randomDate
+      });
+    }
+  }
+};
+
+// 加载更多视频数据
+const loadMoreVideoData = async () => {
+  if (videoIsLoading.value || videoHasFinished.value) {
+    return Promise.resolve();
   }
 
-  // 生成插画收藏数据
-  for (let i = 0; i < 15; i++) {
-    const randomDate = dates[Math.floor(Math.random() * dates.length)];
-    imageFavorites.value.push({
-      id: `image_${i}`,
-      title: `插画收藏${i}`,
-      img: 'https://picsum.photos/200/300',
-      author: '作者',
-      time: '2023-01-01',
-      viewNum: '1000',
-      likeNum: '100',
-      longNum: '10',
-      isR18: false,
-      favoriteDate: randomDate
-    });
+  videoIsLoading.value = true;
+
+  // 模拟异步加载
+  await new Promise(resolve => setTimeout(resolve, 1000));
+
+  // 增加页码并生成新数据
+  videoPage.value++;
+  generateTestData('video', videoPage.value);
+
+  // 模拟加载完所有数据（这里假设最多加载5页）
+  if (videoPage.value >= 5) {
+    videoHasFinished.value = true;
   }
+
+  videoIsLoading.value = false;
+
+  return Promise.resolve();
+};
+
+// 加载更多插画数据
+const loadMoreImageData = async () => {
+  if (imageIsLoading.value || imageHasFinished.value) {
+    return Promise.resolve();
+  }
+
+  imageIsLoading.value = true;
+
+  // 模拟异步加载
+  await new Promise(resolve => setTimeout(resolve, 1000));
+
+  // 增加页码并生成新数据
+  imagePage.value++;
+  generateTestData('image', imagePage.value);
+
+  // 模拟加载完所有数据（这里假设最多加载5页）
+  if (imagePage.value >= 5) {
+    imageHasFinished.value = true;
+  }
+
+  imageIsLoading.value = false;
+
+  return Promise.resolve();
 };
 
 // 按日期分组数据
@@ -111,7 +174,8 @@ const groupByDate = (items: ListItem[]) => {
 };
 
 // 生成测试数据
-generateTestData();
+generateTestData('video', 1);
+generateTestData('image', 1);
 
 const videoListView = ref();
 const imageListView = ref();
@@ -166,64 +230,68 @@ onActivated(() => {
     <v-tabs-window v-model="tab" class="tabs-window">
       <v-tabs-window-item value="video">
         <div class="list" ref="videoListView" @scroll="handleVideoScroll">
-          <div v-for="(groupItems, date) in groupByDate(videoFavorites)" :key="date" class="date-group">
-            <div class="date-header">{{ date === new Date().toISOString().split('T')[0] ? '今天' : date }}</div>
-            <v-list lines="two" class="pa-0">
-              <v-list-item v-for="(item, index) in groupItems" :key="index" class="list-item">
-                <!-- 左侧：预览图 -->
-                <template v-slot:prepend>
-                  <v-img :src="item.img" :alt="item.title" aspect-ratio="4/3" width="106.7" height="80" cover
-                    class="rounded"></v-img>
-                </template>
-                <!-- 中间：标题和信息 -->
-                <div class="list-content">
-                  <div class="list-title">
-                    {{ item.title }}
+          <v-infinite-scroll color="#00796B" :on-load="loadMoreVideoData" :has-more="!videoHasFinished">
+            <div v-for="(groupItems, date) in groupByDate(videoFavorites)" :key="date" class="date-group">
+              <div class="date-header">{{ date === new Date().toISOString().split('T')[0] ? '今天' : date }}</div>
+              <v-list lines="two" class="pa-0">
+                <v-list-item v-for="(item, index) in groupItems" :key="index" class="list-item">
+                  <!-- 左侧：预览图 -->
+                  <template v-slot:prepend>
+                    <v-img :src="item.img" :alt="item.title" aspect-ratio="4/3" width="106.7" height="80" cover
+                      class="rounded"></v-img>
+                  </template>
+                  <!-- 中间：标题和信息 -->
+                  <div class="list-content">
+                    <div class="list-title">
+                      {{ item.title }}
+                    </div>
+                    <div class="list-subtitle">
+                      {{ item.author }} • {{ item.time }}
+                    </div>
+                    <div class="list-stats">
+                      {{ item.viewNum }}播放 • {{ item.likeNum }}点赞 • {{ item.longNum }}
+                    </div>
                   </div>
-                  <div class="list-subtitle">
-                    {{ item.author }} • {{ item.time }}
-                  </div>
-                  <div class="list-stats">
-                    {{ item.viewNum }}播放 • {{ item.likeNum }}点赞 • {{ item.longNum }}
-                  </div>
-                </div>
-              </v-list-item>
-            </v-list>
-          </div>
+                </v-list-item>
+              </v-list>
+            </div>
+          </v-infinite-scroll>
         </div>
       </v-tabs-window-item>
       <v-tabs-window-item value="image">
         <div class="list" ref="imageListView" @scroll="handleImageScroll">
-          <div v-for="(groupItems, date) in groupByDate(imageFavorites)" :key="date" class="date-group">
-            <div class="date-header">{{ date === new Date().toISOString().split('T')[0] ? '今天' : date }}</div>
-            <v-list lines="two" class="pa-0">
-              <v-list-item v-for="(item, index) in groupItems" :key="index" class="list-item">
-                <!-- 左侧：预览图 -->
-                <template v-slot:prepend>
-                  <v-img :src="item.img" :alt="item.title" aspect-ratio="4/3" width="106.7" height="80" cover
-                    class="rounded"></v-img>
-                </template>
+          <v-infinite-scroll color="#00796B" :on-load="loadMoreImageData" :has-more="!imageHasFinished">
+            <div v-for="(groupItems, date) in groupByDate(imageFavorites)" :key="date" class="date-group">
+              <div class="date-header">{{ date === new Date().toISOString().split('T')[0] ? '今天' : date }}</div>
+              <v-list lines="two" class="pa-0">
+                <v-list-item v-for="(item, index) in groupItems" :key="index" class="list-item">
+                  <!-- 左侧：预览图 -->
+                  <template v-slot:prepend>
+                    <v-img :src="item.img" :alt="item.title" aspect-ratio="4/3" width="106.7" height="80" cover
+                      class="rounded"></v-img>
+                  </template>
 
-                <!-- 中间：标题和信息 -->
-                <div class="list-content">
-                  <div class="list-title">
-                    {{ item.title }}
+                  <!-- 中间：标题和信息 -->
+                  <div class="list-content">
+                    <div class="list-title">
+                      {{ item.title }}
+                    </div>
+                    <div class="list-subtitle">
+                      {{ item.author }} • {{ item.time }}
+                    </div>
+                    <div class="list-stats">
+                      {{ item.viewNum }}浏览 • {{ item.likeNum }}收藏 • {{ item.longNum }}张
+                    </div>
                   </div>
-                  <div class="list-subtitle">
-                    {{ item.author }} • {{ item.time }}
-                  </div>
-                  <div class="list-stats">
-                    {{ item.viewNum }}浏览 • {{ item.likeNum }}收藏 • {{ item.longNum }}张
-                  </div>
-                </div>
 
-                <!-- 右侧：R18标记 -->
-                <template v-slot:append v-if="item.isR18">
-                  <v-chip color="red" size="small" label>R18</v-chip>
-                </template>
-              </v-list-item>
-            </v-list>
-          </div>
+                  <!-- 右侧：R18标记 -->
+                  <template v-slot:append v-if="item.isR18">
+                    <v-chip color="red" size="small" label>R18</v-chip>
+                  </template>
+                </v-list-item>
+              </v-list>
+            </div>
+          </v-infinite-scroll>
         </div>
       </v-tabs-window-item>
     </v-tabs-window>

@@ -38,11 +38,17 @@ interface CacheItem {
 
 // 内部维护缓存数据
 const videoCache = ref<CacheItem[]>([]);
+const page = ref(1);
+const pageSize = 15;
+const isLoading = ref(false);
+const hasFinished = ref(false);
 
 // 生成缓存测试数据，包含随机日期和进度
-const generateTestData = () => {
-  // 清空现有数据
-  videoCache.value = [];
+const generateTestData = (pageNum: number) => {
+  // 如果是第一页，清空现有数据
+  if (pageNum === 1) {
+    videoCache.value = [];
+  }
 
   // 生成最近几天的日期
   const dates = [];
@@ -54,11 +60,12 @@ const generateTestData = () => {
   }
 
   // 生成视频缓存数据
-  for (let i = 0; i < 15; i++) {
+  for (let i = 0; i < pageSize; i++) {
+    const itemId = (pageNum - 1) * pageSize + i;
     const randomDate = dates[Math.floor(Math.random() * dates.length)];
     videoCache.value.push({
-      id: `video_${i}`,
-      title: `视频缓存${i}`,
+      id: `video_${itemId}`,
+      title: `视频缓存${itemId}`,
       img: 'https://picsum.photos/200/300',
       author: '作者',
       time: '2023-01-01',
@@ -70,6 +77,31 @@ const generateTestData = () => {
       cacheDate: randomDate
     });
   }
+};
+
+// 加载更多数据
+const loadMoreData = async () => {
+  if (isLoading.value || hasFinished.value) {
+    return Promise.resolve();
+  }
+
+  isLoading.value = true;
+
+  // 模拟异步加载
+  await new Promise(resolve => setTimeout(resolve, 1000));
+
+  // 增加页码并生成新数据
+  page.value++;
+  generateTestData(page.value);
+
+  // 模拟加载完所有数据（这里假设最多加载5页）
+  if (page.value >= 5) {
+    hasFinished.value = true;
+  }
+
+  isLoading.value = false;
+
+  return Promise.resolve();
 };
 
 // 按日期分组数据
@@ -91,7 +123,7 @@ const groupByDate = (items: CacheItem[]) => {
 };
 
 // 生成测试数据
-generateTestData();
+generateTestData(1);
 
 const videoListView = ref();
 let videoScrollTop = 0;
@@ -124,42 +156,44 @@ onActivated(() => {
       </div>
     </div>
     <div class="list" ref="videoListView" @scroll="handleVideoScroll">
-      <div v-for="(groupItems, date) in groupByDate(videoCache)" :key="date" class="date-group">
-        <div class="date-header">{{ date === new Date().toISOString().split('T')[0] ? '今天' : date }}</div>
-        <v-list lines="two" class="pa-0">
-          <v-list-item v-for="(item, index) in groupItems" :key="index" class="list-item">
-            <!-- 左侧：预览图 -->
-            <template v-slot:prepend>
-              <v-img :src="item.img" :alt="item.title" aspect-ratio="4/3" width="106.7" height="80" cover
-                class="rounded"></v-img>
-            </template>
-            <!-- 中间：标题和信息 -->
-            <div class="list-content">
-              <div class="list-title">
-                {{ item.title }}
-              </div>
-              <div class="list-subtitle">
-                {{ item.author }} • {{ item.time }}
-              </div>
-              <div class="list-stats">
-                {{ item.viewNum }}播放 • {{ item.likeNum }}点赞 • {{ item.longNum }}
-              </div>
-              <!-- 缓存进度条 -->
-              <div class="cache-progress-container">
-                <v-progress-linear 
-                  :model-value="item.cacheProgress" 
-                  color="#00796B" 
-                  height="4"
-                  rounded
-                ></v-progress-linear>
-                <div class="cache-progress-text">
-                  {{ item.cacheProgress === 100 ? '缓存完成' : item.cacheProgress + '%' }}
+      <v-infinite-scroll color="#00796B" :on-load="loadMoreData" :has-more="!hasFinished">
+        <div v-for="(groupItems, date) in groupByDate(videoCache)" :key="date" class="date-group">
+          <div class="date-header">{{ date === new Date().toISOString().split('T')[0] ? '今天' : date }}</div>
+          <v-list lines="two" class="pa-0">
+            <v-list-item v-for="(item, index) in groupItems" :key="index" class="list-item">
+              <!-- 左侧：预览图 -->
+              <template v-slot:prepend>
+                <v-img :src="item.img" :alt="item.title" aspect-ratio="4/3" width="106.7" height="80" cover
+                  class="rounded"></v-img>
+              </template>
+              <!-- 中间：标题和信息 -->
+              <div class="list-content">
+                <div class="list-title">
+                  {{ item.title }}
+                </div>
+                <div class="list-subtitle">
+                  {{ item.author }} • {{ item.time }}
+                </div>
+                <div class="list-stats">
+                  {{ item.viewNum }}播放 • {{ item.likeNum }}点赞 • {{ item.longNum }}
+                </div>
+                <!-- 缓存进度条 -->
+                <div class="cache-progress-container">
+                  <v-progress-linear 
+                    :model-value="item.cacheProgress" 
+                    color="#00796B" 
+                    height="4"
+                    rounded
+                  ></v-progress-linear>
+                  <div class="cache-progress-text">
+                    {{ item.cacheProgress === 100 ? '缓存完成' : item.cacheProgress + '%' }}
+                  </div>
                 </div>
               </div>
-            </div>
-          </v-list-item>
-        </v-list>
-      </div>
+            </v-list-item>
+          </v-list>
+        </div>
+      </v-infinite-scroll>
     </div>
   </div>
 </template>
@@ -216,14 +250,12 @@ onActivated(() => {
   padding: calc(60px + env(safe-area-inset-top, 0)) 0 env(safe-area-inset-bottom, 0) 0;
   overflow: auto;
 
-  .date-group {
-    .date-header {
-      padding: 12px 16px 8px;
-      background-color: #f0f0f0;
-      font-size: 0.8rem;
-      color: #666;
-      font-weight: 500;
-    }
+  .date-header {
+    padding: 12px 16px 8px;
+    background-color: #f0f0f0;
+    font-size: 0.8rem;
+    color: #666;
+    font-weight: 500;
   }
 
   .list-item {

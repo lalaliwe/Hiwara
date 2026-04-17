@@ -1,4 +1,5 @@
 import { createApp } from "vue";
+import { createPinia } from 'pinia';
 import App from "./App.vue";
 import router from "./router";
 import "./assets/style.scss";
@@ -19,6 +20,7 @@ const vuetify = createVuetify({
 import { install } from '@icon-park/vue-next/es/all'
 import '@icon-park/vue-next/styles/index.css';
 
+
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { fas } from '@fortawesome/free-solid-svg-icons'
@@ -34,7 +36,9 @@ if (isDesktop) {
 }
 
 const app = createApp(App);
+const pinia = createPinia();
 
+app.use(pinia);
 app.use(router);
 app.use(vuetify);
 install(app);
@@ -43,7 +47,7 @@ library.add(fas, far, fab)
 app.component('font-awesome-icon', FontAwesomeIcon);
 app.config.globalProperties.$hammer = Hammer;
 
-app.mount("#app")
+app.mount("#app");
 
 router.isReady().then(() => {
   // 隐藏加载遮罩
