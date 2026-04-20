@@ -6,6 +6,7 @@ import { ref, onActivated, watch } from 'vue';
 import { Swiper, SwiperSlide } from 'swiper/vue';
 import type { Swiper as SwiperType } from 'swiper';
 import 'swiper/css';
+import { getSubscribeVideoList } from '../../core/api';
 
 const videoListView = ref<HTMLElement>();
 const imageListView = ref<HTMLElement>();
@@ -24,32 +25,9 @@ interface ListItem {
   longNum: string;
   isR18: boolean;
 }
-let videoList: ListItem[] = [];
-const imageList: ListItem[] = []; // 修正了类型
-for (let i = 0; i < 20; i++) {
-  videoList.push({
-    id: Math.random().toString(36).slice(2),
-    title: `测试标题${i + 1}`,
-    img: test1Img,
-    author: '测试作者',
-    time: '2021-09-09',
-    viewNum: '100',
-    likeNum: '100',
-    longNum: '10:00',
-    isR18: false,
-  });
-  imageList.push({
-    id: Math.random().toString(36).slice(2),
-    title: `测试标题${i + 1}`,
-    img: test1Img,
-    author: '测试作者',
-    time: '2021-09-09',
-    viewNum: '100',
-    likeNum: '100',
-    longNum: '10',
-    isR18: false,
-  });
-}
+const videoList = ref<ListItem[]>([]);
+const imageList = ref<ListItem[]>([]);
+
 let videoScrollTop = 0;
 let imageScrollTop = 0;
 
@@ -86,51 +64,72 @@ function handleVideoScroll(e: Event): void {
 function handleImageScroll(e: Event): void {
   imageScrollTop = (e.target as HTMLElement).scrollTop;
 }
+
+//获取数据
+getSubscribeVideoList().then((res) => {
+  console.log(res);
+  if (res && res.results) {
+    videoList.value = res.results.map((item: any) => {
+      return {
+        id: item.id,
+        title: item.title,
+        img: '', // 预览图暂不补全
+        author: item.user?.name || item.user?.username || 'Unknown',
+        time: item.createdAt,
+        viewNum: String(item.numViews || 0),
+        likeNum: String(item.numLikes || 0),
+        longNum: String(item.file?.duration ?? 0), // 传递原始秒数作为字符串
+        isR18: item.rating === 'ecchi' || item.rating === 'r18' // 根据 rating 判断是否 R18
+      };
+    });
+  }
+});
 </script>
 
 <template>
-  <div class="top">
-    <searchBar />
-    <div class="tabs">
-      <!-- 保留 Vuetify 的 Tab 头部作为 UI 展示 -->
-      <v-tabs v-model="tab" color="#00796B" align-tabs="center" density="compact" grow>
-        <v-tab value="video">视频</v-tab>
-        <v-tab value="image">插画</v-tab>
-      </v-tabs>
-      <v-divider></v-divider>
+  <div>
+    <div class="top">
+      <searchBar />
+      <div class="tabs">
+        <!-- 保留 Vuetify 的 Tab 头部作为 UI 展示 -->
+        <v-tabs v-model="tab" color="#00796B" align-tabs="center" density="compact" grow>
+          <v-tab value="video">视频</v-tab>
+          <v-tab value="image">插画</v-tab>
+        </v-tabs>
+        <v-divider></v-divider>
+      </div>
     </div>
+    <!-- 替换为 Swiper 组件 -->
+    <swiper class="tabs-window" :slides-per-view="1" :space-between="0" @swiper="onSwiper"
+      @slide-change="onSlideChange">
+      <swiper-slide>
+        <div class="list-view" ref="videoListView" @scroll="handleVideoScroll">
+          <v-infinite-scroll color="#00796B">
+            <div class="grid">
+              <template v-for="item in videoList" :key="item.id">
+                <cardButton type="video" :id="item.id" :title="item.title" :img="item.img" :author="item.author"
+                  :time="item.time" :viewNum="item.viewNum" :likeNum="item.likeNum" :longNum="item.longNum"
+                  :isR18="item.isR18" />
+              </template>
+            </div>
+          </v-infinite-scroll>
+        </div>
+      </swiper-slide>
+      <swiper-slide>
+        <div class="list-view" ref="imageListView" @scroll="handleImageScroll">
+          <v-infinite-scroll color="#00796B">
+            <div class="grid">
+              <template v-for="item in imageList" :key="item.id">
+                <cardButton type="image" :id="item.id" :title="item.title" :img="item.img" :author="item.author"
+                  :time="item.time" :viewNum="item.viewNum" :likeNum="item.likeNum" :longNum="item.longNum"
+                  :isR18="item.isR18" />
+              </template>
+            </div>
+          </v-infinite-scroll>
+        </div>
+      </swiper-slide>
+    </swiper>
   </div>
-
-  <!-- 替换为 Swiper 组件 -->
-  <swiper class="tabs-window" :slides-per-view="1" :space-between="0" @swiper="onSwiper" @slide-change="onSlideChange">
-    <swiper-slide>
-      <div class="list-view" ref="videoListView" @scroll="handleVideoScroll">
-        <v-infinite-scroll color="#00796B">
-          <div class="grid">
-            <template v-for="item in videoList" :key="item.id">
-              <cardButton type="video" :id="item.id" :title="item.title" :img="item.img" :author="item.author"
-                :time="item.time" :viewNum="item.viewNum" :likeNum="item.likeNum" :longNum="item.longNum"
-                :isR18="item.isR18" />
-            </template>
-          </div>
-        </v-infinite-scroll>
-      </div>
-    </swiper-slide>
-
-    <swiper-slide>
-      <div class="list-view" ref="imageListView" @scroll="handleImageScroll">
-        <v-infinite-scroll color="#00796B">
-          <div class="grid">
-            <template v-for="item in imageList" :key="item.id">
-              <cardButton type="image" :id="item.id" :title="item.title" :img="item.img" :author="item.author"
-                :time="item.time" :viewNum="item.viewNum" :likeNum="item.likeNum" :longNum="item.longNum"
-                :isR18="item.isR18" />
-            </template>
-          </div>
-        </v-infinite-scroll>
-      </div>
-    </swiper-slide>
-  </swiper>
 </template>
 
 <style lang="scss" scoped>

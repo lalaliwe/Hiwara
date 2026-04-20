@@ -2,9 +2,11 @@
 
 </script>
 <template>
-  <div class="topBar">
-    <div class="label">
-      论坛
+  <div>
+    <div class="topBar">
+      <div class="label">
+        论坛
+      </div>
     </div>
   </div>
 </template>

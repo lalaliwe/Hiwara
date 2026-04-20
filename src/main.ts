@@ -29,6 +29,13 @@ import { fab } from '@fortawesome/free-brands-svg-icons'
 
 import Hammer from 'hammerjs';
 
+// 初始化数据库
+import { initDatabase, checkUserIsLogin } from "./core/database";
+await initDatabase();
+
+// 引入store
+import { isLogin } from "./core/store";
+
 // 检测是否为桌面端（非触摸设备）
 const isDesktop = !window.matchMedia('(pointer: coarse)').matches;
 if (isDesktop) {
@@ -50,7 +57,18 @@ app.config.globalProperties.$hammer = Hammer;
 app.mount("#app");
 
 router.isReady().then(() => {
-  // 隐藏加载遮罩
+  // 检查用户登录状态
+  checkUserIsLogin().then((result) => {
+    isLogin().set(result);
+  }).catch(() => {
+    isLogin().set(false);
+  }).finally(() => {
+    hideLoading();
+  });
+});
+
+// 隐藏加载遮罩
+function hideLoading() {
   const loadingElement = document.getElementById('loading');
   if (loadingElement) {
     loadingElement.classList.add('fade');
@@ -58,7 +76,7 @@ router.isReady().then(() => {
       loadingElement.classList.add('hidden');
     }, 200);
   }
-});
+}
 
 /** 测试代码 */
 // import { getDeviceInfo } from "./plugins/deviceInfo";

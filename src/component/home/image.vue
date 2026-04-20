@@ -99,39 +99,41 @@ onActivated(() => {
 </script>
 
 <template>
-  <div class="top">
-    <searchBar />
-    <div class="tabs">
-      <div class="tabs-elements">
-        <v-tabs class="left" v-model="tab" color="#00796B" align-tabs="center" density="compact" grow>
-          <v-tab v-for="item in tabArray" :value="item.value" :key="`tabs_${item.value}`">
-            {{ item.text }}
-          </v-tab>
-        </v-tabs>
-        <div class="rigth">
-          <font-awesome-icon icon="fa-solid fa-align-right" />
-        </div>
-      </div>
-      <v-divider></v-divider>
-    </div>
-  </div>
-
-  <!-- 替换为 Swiper -->
-  <swiper class="tabs-window" :slides-per-view="1" :space-between="0" @swiper="onSwiper" @slide-change="onSlideChange">
-    <swiper-slide v-for="(item, i) in tabArray" :key="`tabs-window_${item.value}`">
-      <div class="list-view" :ref="(el) => setListRef(el, i)" @scroll="(e) => handleScroll(i, e)">
-        <v-infinite-scroll color="#00796B">
-          <div class="grid">
-            <template v-for="listItem in imageList[i]" :key="listItem.id">
-              <cardButton type="image" :id="listItem.id" :title="listItem.title" :img="listItem.img"
-                :author="listItem.author" :time="listItem.time" :viewNum="listItem.viewNum" :likeNum="listItem.likeNum"
-                :longNum="listItem.longNum" :isR18="listItem.isR18" />
-            </template>
+  <div>
+    <div class="top">
+      <searchBar />
+      <div class="tabs">
+        <div class="tabs-elements">
+          <v-tabs class="left" v-model="tab" color="#00796B" align-tabs="center" density="compact" grow>
+            <v-tab v-for="item in tabArray" :value="item.value" :key="`tabs_${item.value}`">
+              {{ item.text }}
+            </v-tab>
+          </v-tabs>
+          <div class="rigth">
+            <font-awesome-icon icon="fa-solid fa-align-right" />
           </div>
-        </v-infinite-scroll>
+        </div>
+        <v-divider></v-divider>
       </div>
-    </swiper-slide>
-  </swiper>
+    </div>
+    <!-- 替换为 Swiper -->
+    <swiper class="tabs-window" :slides-per-view="1" :space-between="0" @swiper="onSwiper"
+      @slide-change="onSlideChange">
+      <swiper-slide v-for="(item, i) in tabArray" :key="`tabs-window_${item.value}`">
+        <div class="list-view" :ref="(el) => setListRef(el, i)" @scroll="(e) => handleScroll(i, e)">
+          <v-infinite-scroll color="#00796B">
+            <div class="grid">
+              <template v-for="listItem in imageList[i]" :key="listItem.id">
+                <cardButton type="image" :id="listItem.id" :title="listItem.title" :img="listItem.img"
+                  :author="listItem.author" :time="listItem.time" :viewNum="listItem.viewNum"
+                  :likeNum="listItem.likeNum" :longNum="listItem.longNum" :isR18="listItem.isR18" />
+              </template>
+            </div>
+          </v-infinite-scroll>
+        </div>
+      </swiper-slide>
+    </swiper>
+  </div>
 </template>
 
 <style lang="scss" scoped>

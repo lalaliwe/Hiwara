@@ -9,15 +9,12 @@ import { isTauri } from '@tauri-apps/api/core'
 import { moveTaskToBack } from './plugins/appControl'
 import { getCachedComponentNames } from './router/index'
 import loginView from './views/login.vue'
-import { useAuthStore } from './core/authStore'
+import {isLogin as store_auth}  from './core/store'
 
 const route = useRoute()
 const router = useRouter()
 
-// 使用登录状态store
-const authStore = useAuthStore()
-
-const isLoggedIn = computed(() => authStore.isLoggedIn)
+const value = computed(() => store_auth().value)
 
 // 存储需要缓存的组件名称（供 keep-alive :include 使用）
 const cachedPages = ref<string[]>([])
@@ -44,12 +41,11 @@ function wrapComponent(originalComp: Component, cacheKey: string): Component {
   // 创建一个新的组件定义，name 设置为 cacheKey
   const wrapped = defineComponent({
     name: cacheKey,
-    // 继承原始组件的 props（vue-router 会通过 props 传参）
-    props: (originalComp as any).props,
-    emits: (originalComp as any).emits,
-    setup(props, ctx) {
+    // 显式设置 inheritAttrs 为 false，防止属性自动继承到根元素
+    inheritAttrs: false,
+    setup(props, { attrs, slots }) {
       // 直接渲染原始组件，并透传所有属性和插槽
-      return () => h(originalComp as any, { ...props, ...ctx.attrs }, ctx.slots)
+      return () => h(originalComp as any, { ...props, ...attrs }, slots)
     }
   })
 
@@ -171,14 +167,14 @@ const DOUBLE_BACK_PRESS_TIMEOUT = 2000 // 2秒内再次按下返回键则退出
 
 onUnmounted(() => {
   // 取消监听，防止内存泄漏
-  if(backListener) {
+  if (backListener) {
     backListener(); // 调用取消监听函数
   }
 })
 </script>
 
 <template>
-  <router-view v-slot="{ Component, route: currentRoute }" v-if="isLoggedIn">
+  <router-view v-slot="{ Component, route: currentRoute }" v-if="value">
     <transition :name="transitionName" appear>
       <keep-alive :include="cachedPages">
         <component :is="wrapComponent(Component, (currentRoute.meta.cacheKey as string) || 'Anonymous')"

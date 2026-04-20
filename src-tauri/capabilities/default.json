@@ -12,6 +12,15 @@
     "device:default",
     "process:default",
     "notification:default",
-    "sql:default"
+    "sql:default",
+    "sql:allow-execute",
+    {
+      "identifier": "http:default",
+      "allow": [
+        {
+          "url": "https://api.iwara.tv/*"
+        }
+      ]
+    }
   ]
 }

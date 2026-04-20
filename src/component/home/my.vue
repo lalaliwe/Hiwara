@@ -17,152 +17,154 @@ function routerGoTo(path: string, query?: any) {
 }
 </script>
 <template>
-  <div class="top">
-    <div class="topBtns">
-      <span class="btn">
-        <iconTheme theme="outline" size="22" fill="#ffffff" />
-      </span>
-      <span class="btn">
-        <iconMoon theme="outline" size="22" fill="#ffffff" />
-      </span>
-    </div>
-    <div class="user" @click="routerGoTo('/zone', { myself: true })">
-      <div class="avatar">
-        <v-img class="img" cover src="https://cdn.vuetifyjs.com/images/parallax/material.jpg"></v-img>
+  <div>
+    <div class="top">
+      <div class="topBtns">
+        <span class="btn">
+          <iconTheme theme="outline" size="22" fill="#ffffff" />
+        </span>
+        <span class="btn">
+          <iconMoon theme="outline" size="22" fill="#ffffff" />
+        </span>
       </div>
-      <div class="info">
-        <div class="nickname">测试用户名</div>
-        <div class="username">@abcde</div>
-      </div>
-      <div class="right">
-        <div class="btn">
-          空间
-          <font-awesome-icon icon="fa-solid fa-angle-right" />
+      <div class="user" @click="routerGoTo('/zone', { myself: true })">
+        <div class="avatar">
+          <v-img class="img" cover src="https://cdn.vuetifyjs.com/images/parallax/material.jpg"></v-img>
         </div>
-      </div>
-    </div>
-    <div class="friendsNum">
-      <div class="fill">
-        <div class="btn" @click="routerGoTo('/friends', { type: 'follow' })">
-          <div class="num">100</div>
-          <div class="label">关注</div>
+        <div class="info">
+          <div class="nickname">测试用户名</div>
+          <div class="username">@abcde</div>
+        </div>
+        <div class="right">
+          <div class="btn">
+            空间
+            <font-awesome-icon icon="fa-solid fa-angle-right" />
+          </div>
         </div>
       </div>
-      <div class="fill last">
-        <div class="btn" @click="routerGoTo('/friends', { type: 'fans' })">
-          <div class="num">100</div>
-          <div class="label">粉丝</div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="content">
-    <div class="card">
-      <div class="label">
-        <div class="left">历史记录</div>
-        <div class="right" @click="routerGoTo('/history')">查看全部</div>
-      </div>
-      <div class="history">
-        <div class="videoListCard" v-for="i in 10">
-          <div class="preview">
-            <v-img class="img" cover src="https://cdn.vuetifyjs.com/images/parallax/material.jpg"></v-img>
-          </div>
-          <div class="title">
-            {{ `测试标题-${i}` }}
+      <div class="friendsNum">
+        <div class="fill">
+          <div class="btn" @click="routerGoTo('/friends', { type: 'follow' })">
+            <div class="num">100</div>
+            <div class="label">关注</div>
           </div>
         </div>
-        <div class="all-btn" @click="routerGoTo('/history')">查看全部</div>
-      </div>
-    </div>
-    <div class="card">
-      <div class="usserFunction">
-        <div class="btn" @click="routerGoTo('/favorites', { type: 'video' })">
-          <div class="icon">
-            <font-awesome-icon icon="fa-solid fa-film" />
+        <div class="fill last">
+          <div class="btn" @click="routerGoTo('/friends', { type: 'fans' })">
+            <div class="num">100</div>
+            <div class="label">粉丝</div>
           </div>
-          <div class="text">视频收藏</div>
-        </div>
-        <div class="btn" @click="routerGoTo('/favorites', { type: 'image' })">
-          <div class="icon">
-            <font-awesome-icon icon="fa-solid fa-images" />
-          </div>
-          <div class="text">插画收藏</div>
-        </div>
-        <div class="btn">
-          <div class="icon">
-            <font-awesome-icon icon="fa-solid fa-forward-fast" />
-          </div>
-          <div class="text">播放列表</div>
-        </div>
-        <div class="btn" @click="routerGoTo('/offline-cache')">
-          <div class="icon">
-            <font-awesome-icon icon="fa-solid fa-download" />
-          </div>
-          <div class="text">离线缓存</div>
-        </div>
-        <div class="btn">
-          <div class="icon">
-            <font-awesome-icon icon="fa-solid fa-bell" />
-          </div>
-          <div class="text">通知</div>
-        </div>
-        <div class="btn" @click="routerGoTo('/friends', { type: 'friend' })">
-          <div class="icon">
-            <font-awesome-icon icon="fa-solid fa-user-group" />
-          </div>
-          <div class="text">好友</div>
-        </div>
-        <div class="btn">
-          <div class="icon">
-            <font-awesome-icon icon="fa-solid fa-envelope" />
-          </div>
-          <div class="text">私信</div>
-        </div>
-        <div class="btn" @click="routerGoTo('/setup')">
-          <div class="icon">
-            <font-awesome-icon icon="fa-solid fa-gear" />
-          </div>
-          <div class="text">设置</div>
         </div>
       </div>
     </div>
-    <div class="card">
-      <div class="label">
-        <div class="left">Iwara服务</div>
-      </div>
-      <div class="usserFunction">
-        <div class="btn">
-          <div class="icon" style="color: #ff62cd;">
-            <font-awesome-icon icon="fa-solid fa-star" />
-          </div>
-          <div class="text">高级会员</div>
+    <div class="content">
+      <div class="card">
+        <div class="label">
+          <div class="left">历史记录</div>
+          <div class="right" @click="routerGoTo('/history')">查看全部</div>
         </div>
-        <div class="btn">
-          <div class="icon" style="color: #dda82b;">
-            <font-awesome-icon icon="fa-solid fa-coins" />
+        <div class="history">
+          <div class="videoListCard" v-for="i in 10">
+            <div class="preview">
+              <v-img class="img" cover src="https://cdn.vuetifyjs.com/images/parallax/material.jpg"></v-img>
+            </div>
+            <div class="title">
+              {{ `测试标题-${i}` }}
+            </div>
           </div>
-          <div class="text">Wura</div>
-        </div>
-        <div class="btn">
-          <div class="icon">
-            <font-awesome-icon icon="fa-solid fa-circle-question" />
-          </div>
-          <div class="text">常见问题</div>
-        </div>
-        <div class="btn">
-          <div class="icon">
-            <font-awesome-icon icon="fa-solid fa-share-nodes" />
-          </div>
-          <div class="text">相关链接</div>
+          <div class="all-btn" @click="routerGoTo('/history')">查看全部</div>
         </div>
       </div>
-    </div>
-    <div class="about">
-      <span class="logo">Hiwara</span>
-      <br>
-      本应用遵循MPL-2.0开源协议，请勿用于任何商业用途。
-      <br>
-      ©2023-2026 Hiwara Team
+      <div class="card">
+        <div class="usserFunction">
+          <div class="btn" @click="routerGoTo('/favorites', { type: 'video' })">
+            <div class="icon">
+              <font-awesome-icon icon="fa-solid fa-film" />
+            </div>
+            <div class="text">视频收藏</div>
+          </div>
+          <div class="btn" @click="routerGoTo('/favorites', { type: 'image' })">
+            <div class="icon">
+              <font-awesome-icon icon="fa-solid fa-images" />
+            </div>
+            <div class="text">插画收藏</div>
+          </div>
+          <div class="btn">
+            <div class="icon">
+              <font-awesome-icon icon="fa-solid fa-forward-fast" />
+            </div>
+            <div class="text">播放列表</div>
+          </div>
+          <div class="btn" @click="routerGoTo('/offline-cache')">
+            <div class="icon">
+              <font-awesome-icon icon="fa-solid fa-download" />
+            </div>
+            <div class="text">离线缓存</div>
+          </div>
+          <div class="btn">
+            <div class="icon">
+              <font-awesome-icon icon="fa-solid fa-bell" />
+            </div>
+            <div class="text">通知</div>
+          </div>
+          <div class="btn" @click="routerGoTo('/friends', { type: 'friend' })">
+            <div class="icon">
+              <font-awesome-icon icon="fa-solid fa-user-group" />
+            </div>
+            <div class="text">好友</div>
+          </div>
+          <div class="btn">
+            <div class="icon">
+              <font-awesome-icon icon="fa-solid fa-envelope" />
+            </div>
+            <div class="text">私信</div>
+          </div>
+          <div class="btn" @click="routerGoTo('/setup')">
+            <div class="icon">
+              <font-awesome-icon icon="fa-solid fa-gear" />
+            </div>
+            <div class="text">设置</div>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="label">
+          <div class="left">Iwara服务</div>
+        </div>
+        <div class="usserFunction">
+          <div class="btn">
+            <div class="icon" style="color: #ff62cd;">
+              <font-awesome-icon icon="fa-solid fa-star" />
+            </div>
+            <div class="text">高级会员</div>
+          </div>
+          <div class="btn">
+            <div class="icon" style="color: #dda82b;">
+              <font-awesome-icon icon="fa-solid fa-coins" />
+            </div>
+            <div class="text">Wura</div>
+          </div>
+          <div class="btn">
+            <div class="icon">
+              <font-awesome-icon icon="fa-solid fa-circle-question" />
+            </div>
+            <div class="text">常见问题</div>
+          </div>
+          <div class="btn">
+            <div class="icon">
+              <font-awesome-icon icon="fa-solid fa-share-nodes" />
+            </div>
+            <div class="text">相关链接</div>
+          </div>
+        </div>
+      </div>
+      <div class="about">
+        <span class="logo">Hiwara</span>
+        <br>
+        本应用遵循MPL-2.0开源协议，请勿用于任何商业用途。
+        <br>
+        ©2023-2026 Hiwara Team
+      </div>
     </div>
   </div>
 </template>

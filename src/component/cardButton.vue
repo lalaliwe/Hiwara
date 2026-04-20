@@ -29,7 +29,7 @@ const chineseUnits = [
   { value: 10000000000000000, name: '京' }, // 京
   { value: 100000000000000000000, name: '垓' }, // 垓
   { value: 1000000000000000000000000, name: '秭' }, // 秭
-  { value: 10000000000000000000000000000, name: '穰' }, // 穰
+  { value: 10000000000000000000000000000, name: '穰' }, // 穂
   { value: 100000000000000000000000000000000, name: '沟' }, // 沟
   { value: 1000000000000000000000000000000000000, name: '涧' }, // 涧
   { value: 10000000000000000000000000000000000000000, name: '正' }, // 正
@@ -79,10 +79,44 @@ const formatNumber = (numStr: string): string => {
   return num.toString();
 };
 
+// 时间格式化函数 - 将秒数转换为 hh:mm:ss 或 mm:ss 格式
+const formatTime = (timeStr: string): string => {
+  // 尝试解析字符串为数字（秒数）
+  const totalSeconds = parseInt(timeStr);
+  
+  // 如果不能解析为有效数字，返回原字符串
+  if (isNaN(totalSeconds) || totalSeconds < 0) {
+    return timeStr || '00:00';
+  }
+  
+  // 计算时、分、秒
+  const hours = Math.floor(totalSeconds / 3600);
+  const minutes = Math.floor((totalSeconds % 3600) / 60);
+  const seconds = totalSeconds % 60;
+  
+  // 根据是否存在小时来确定格式
+  if (hours > 0) {
+    // 显示为 hh:mm:ss 格式
+    return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+  } else {
+    // 显示为 mm:ss 格式
+    return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+  }
+};
+
 // 计算属性用于格式化显示的数字
 const formattedViewNum = computed(() => formatNumber(props.viewNum || '0'));
 const formattedLikeNum = computed(() => formatNumber(props.likeNum || '0'));
-const formattedLongNum = computed(() => formatNumber(props.longNum || '0'));
+// 根据type决定是否格式化longNum：视频类型显示为时间格式，图像类型使用大数格式
+const formattedLongNum = computed(() => {
+  if (props.type === 'video') {
+    // 视频类型，格式化为时间格式
+    return formatTime(props.longNum || '0');
+  } else {
+    // 图像类型，使用数字格式化
+    return formatNumber(props.longNum || '0');
+  }
+});
 
 function clickCard() {
   if (!props.id) {
