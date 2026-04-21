@@ -3,7 +3,7 @@ import notImg from '../static/img/not-img.jpg';
 import lossImg from '../static/img/loss.png';
 import placeholder from '../static/img/placeholder.png';
 import placeholderDark from '../static/img/placeholder-dark.png';
-import { computed } from 'vue';
+import { computed, type PropType } from 'vue';
 import { useRouter } from 'vue-router';
 
 const router = useRouter();
@@ -12,7 +12,7 @@ const props = defineProps({
   type: { type: String, default: 'video' },
   id: { type: String },
   title: { type: String },
-  img: { type: String || null },
+  img: { type: String },
   author: { type: String },
   time: { type: String },
   viewNum: { type: Number },
@@ -115,7 +115,7 @@ const formatTimeDisplay = (timeStr: string | undefined): string => {
   const diffMs = now.getTime() - date.getTime();
   const diffMinutes = Math.floor(diffMs / (1000 * 60));
   const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
-  
+
   // 获取当天零点的时间戳用于比较“今天”、“昨天”等
   const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
   const dateStart = new Date(date.getFullYear(), date.getMonth(), date.getDate()).getTime();
@@ -187,9 +187,11 @@ const formattedTime = computed(() => formatTimeDisplay(props.time));
 
 // 处理图片源，如果 img 为空则显示 lossImg
 const displayImg = computed(() => {
-  return props.img ? props.img : lossImg;
+  if (props.img === 'file-loss')
+    return lossImg;
+  else
+    return props.img;
 });
-
 function clickCard() {
   if (!props.id) {
     console.error('缺少id');

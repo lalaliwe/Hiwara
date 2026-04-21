@@ -6,14 +6,15 @@ import { ref, onActivated, watch } from 'vue';
 import { Swiper, SwiperSlide } from 'swiper/vue';
 import type { Swiper as SwiperType } from 'swiper';
 import 'swiper/css';
+import { getImageList as api_getImageList } from '../../core/api';
 
-const tab = ref<'latest' | 'trending' | 'popularity' | 'mostViews' | 'mostLikes'>('latest');
+const tab = ref<'date' | 'trending' | 'popularity' | 'views' | 'likes'>('date');
 const tabArray = [
-  { value: 'latest', text: '最新' },
+  { value: 'date', text: '最新' },
   { value: 'trending', text: '流行' },
   { value: 'popularity', text: '人气' },
-  { value: 'mostViews', text: '观看量' },
-  { value: 'mostLikes', text: '点赞量' },
+  { value: 'views', text: '观看量' },
+  { value: 'likes', text: '点赞量' },
 ];
 
 interface ListItem {

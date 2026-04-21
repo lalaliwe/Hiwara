@@ -113,7 +113,7 @@ async function getSubscribeVideoList() {
         return {
           id: item.id,
           title: item.title,
-          img: item.file ? `https://i.iwara.tv/image/thumbnail/${item.file.id}/thumbnail-${item.thumbnail}.jpg` : null,
+          img: item.file ? `https://i.iwara.tv/image/thumbnail/${item.file.id}/thumbnail-${item.thumbnail}.jpg` : 'file-loss',
           author: item.user?.name || item.user?.username || 'Unknown',
           time: item.createdAt,
           viewNum: item.numViews || 0,
@@ -146,7 +146,7 @@ async function getSubscribeImageList() {
         return {
           id: item.id,
           title: item.title,
-          img: item.thumbnail ? `https://i.iwara.tv/image/thumbnail/${item.thumbnail.id}/${item.thumbnail.id}.jpg` : null,
+          img: item.thumbnail ? `https://i.iwara.tv/image/thumbnail/${item.thumbnail.id}/${item.thumbnail.id}.jpg` : 'file-loss',
           author: item.user?.name || item.user?.username || 'Unknown',
           time: item.createdAt,
           viewNum: item.numViews || 0,

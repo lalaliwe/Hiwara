@@ -152,7 +152,7 @@ export async function getSubscribeImageList(page: number): Promise<any> {
   const query = {
     rating: 'all',
     page: page,
-    limit: 24,
+    limit: 32,
     subscribed: true
   };
   try {
@@ -160,6 +160,49 @@ export async function getSubscribeImageList(page: number): Promise<any> {
     return response;
   } catch (error) {
     console.error('Get subscribe image list failed:', error);
+    throw error;
+  }
+}
+// 获取视频列表
+export async function getVideoList(page: number, sort: string, date?: string): Promise<any> {
+  const path = '/videos';
+  const headers = {
+    Authorization: `Bearer ${await getAccessToken()}`,
+  };
+  const query = {
+    rating: 'all',
+    page: page,
+    limit: 32,
+    sort: sort,
+    date: date
+  };
+  try {
+    const response = await getSendRequest(path, headers, query);
+    return response;
+  } catch (error) {
+    console.error('Get subscribe video list failed:', error);
+    throw error;
+  }
+}
+
+// 获取插画列表
+export async function getImageList(page: number, sort: string, date: string): Promise<any> {
+  const path = '/images';
+  const headers = {
+    Authorization: `Bearer ${await getAccessToken()}`,
+  };
+  const query = {
+    rating: 'all',
+    page: page,
+    limit: 32,
+    sort: sort,
+    date: date
+  };
+  try {
+    const response = await getSendRequest(path, headers, query);
+    return response;
+  } catch (error) {
+    console.error('Get subscribe video list failed:', error);
     throw error;
   }
 }

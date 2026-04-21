@@ -6,6 +6,7 @@ import { ref, onActivated, watch } from 'vue';
 import { Swiper, SwiperSlide } from 'swiper/vue';
 import type { Swiper as SwiperType } from 'swiper';
 import 'swiper/css';
+import { getVideoList as api_getVideoList } from '../../core/api';
 
 const tab = ref<'latest' | 'trending' | 'popularity' | 'mostViews' | 'mostLikes'>('latest');
 const tabArray = [
