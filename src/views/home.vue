@@ -87,11 +87,11 @@ provide('tabSwitchToMy', tabSwitchToMy)
 <template>
   <div id="homeView">
     <!-- 内容区域 -->
-    <homeVideo class="main" v-if="isTab === 'video'" />
-    <homeImage class="main" v-else-if="isTab === 'image'" />
-    <homeSubscribe class="main" v-else-if="isTab === 'subscribe'" />
-    <homeForum class="main" v-else-if="isTab === 'forum'" />
-    <homeMy class="main" v-else-if="isTab === 'my'" />
+    <homeVideo class="main" v-show="isTab === 'video'" />
+    <homeImage class="main" v-show="isTab === 'image'" />
+    <homeSubscribe class="main" v-show="isTab === 'subscribe'" />
+    <homeForum class="main" v-show="isTab === 'forum'" />
+    <homeMy class="main" v-show="isTab === 'my'" />
     <!-- 底部按钮 -->
     <homeNavigation class="bottom" :model-value="isTab" @update:tab="handleTabChange" />
   </div>

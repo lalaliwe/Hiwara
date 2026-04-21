@@ -132,7 +132,7 @@ export async function getSubscribeVideoList(page: number): Promise<any> {
   const query = {
     rating: 'all',
     page: page,
-    limit: 24,
+    limit: 32,
     subscribed: true
   };
   try {
@@ -186,7 +186,7 @@ export async function getVideoList(page: number, sort: string, date?: string): P
 }
 
 // 获取插画列表
-export async function getImageList(page: number, sort: string, date: string): Promise<any> {
+export async function getImageList(page: number, sort: string, date?: string): Promise<any> {
   const path = '/images';
   const headers = {
     Authorization: `Bearer ${await getAccessToken()}`,

@@ -81,6 +81,7 @@ function handleImageScroll(e: Event): void {
   imageScrollTop = (e.target as HTMLElement).scrollTop;
 }
 
+// 初始获取订阅列表数据
 if (tab.value === 'video' && videoList.value.length === 0) {
   getSubscribeVideoList();
 } else if (tab.value === 'image' && imageList.value.length === 0) {
@@ -103,7 +104,7 @@ async function imageListHandleScrollToEnd({ done }: any) {
     done('ok');
   }
 }
-//获取视频列表
+// 获取视频列表
 async function getSubscribeVideoList() {
   try {
     const res = await api_getSubscribeVideoList(videoListPage);
@@ -126,9 +127,9 @@ async function getSubscribeVideoList() {
       videoList.value = [...videoList.value, ...newVideos];
       videoListPage++;
       // 如果返回的数据少于预期，说明没有更多数据了
-      if (res.results.length < 20) { // 假设每页最多返回20个项目
-        videoListMore.value = true;
-      }
+      // if (res.results.length < 20) { // 假设每页最多返回20个项目
+      //   videoListMore.value = true;
+      // }
     } else {
       videoListMore.value = true;
     }
@@ -136,7 +137,7 @@ async function getSubscribeVideoList() {
     console.error('Error fetching video list:', error);
   }
 }
-//获取插画列表
+// 获取插画列表
 async function getSubscribeImageList() {
   try {
     const res = await api_getSubscribeImageList(imageListPage);
@@ -159,9 +160,9 @@ async function getSubscribeImageList() {
       imageList.value = [...imageList.value, ...newImages];
       imageListPage++;
       // 如果返回的数据少于预期，说明没有更多数据了
-      if (res.results.length < 20) { // 假设每页最多返回20个项目
-        imageListMore.value = true;
-      }
+      // if (res.results.length < 20) { // 假设每页最多返回20个项目
+      //   imageListMore.value = true;
+      // }
     } else {
       imageListMore.value = true;
     }
