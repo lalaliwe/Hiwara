@@ -2,7 +2,7 @@
 import searchBar from '../../component/home/searchBar.vue';
 import cardButton from '../../component/cardButton.vue';
 import test1Img from '../../static/img/test1.jpg';
-import { ref, onActivated, watch } from 'vue';
+import { ref, onActivated, watch, inject } from 'vue';
 import { Swiper, SwiperSlide } from 'swiper/vue';
 import type { Swiper as SwiperType } from 'swiper';
 import 'swiper/css';
@@ -34,6 +34,14 @@ const imageList = ref<ListItem[][]>(Array.from({ length: tabArray.length }, () =
 let page: number[] = new Array(tabArray.length).fill(0);
 const listMore = ref<boolean[]>(new Array(tabArray.length).fill(false))
 
+let showBeen = false;
+const homeTab = inject('isTab') as { value: 'video' | 'image' | 'subscribe' | 'forum' | 'my' };
+watch(() => homeTab.value, (val) => {
+  if (val === 'image' || !showBeen) {
+    initGetImageListData();
+    showBeen = true;
+  }
+}, { immediate: true });
 
 const listRefs = ref<HTMLElement[]>([]);
 let scrollTopArray: number[] = new Array(tabArray.length).fill(0);
@@ -93,9 +101,11 @@ onActivated(() => {
 });
 
 // 初始获取图片列表数据
-const tabIndex = tabArray.findIndex(item => item.value === tab.value);
-if (imageList.value[tabIndex].length === 0) {
-  getImageList(tabIndex);
+function initGetImageListData() {
+  const tabIndex = tabArray.findIndex(item => item.value === tab.value);
+  if (imageList.value[tabIndex].length === 0) {
+    getImageList(tabIndex);
+  }
 }
 // 下滑列表到底获取数据
 async function loadMoreData({ done }: any, index: number) {

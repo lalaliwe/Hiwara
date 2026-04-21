@@ -2,7 +2,7 @@
 import searchBar from '../../component/home/searchBar.vue';
 import cardButton from '../../component/cardButton.vue';
 import test1Img from '../../static/img/test1.jpg';
-import { ref, onActivated, watch } from 'vue';
+import { ref, onActivated, watch, inject } from 'vue';
 import { Swiper, SwiperSlide } from 'swiper/vue';
 import type { Swiper as SwiperType } from 'swiper';
 import 'swiper/css';
@@ -40,6 +40,15 @@ let imageListPage = 0;
 
 const videoListMore = ref(false);
 const imageListMore = ref(false);
+
+let showBeen = false;
+const homeTab = inject('isTab') as { value: 'video' | 'image' | 'subscribe' | 'forum' | 'my' };
+watch(() => homeTab.value, (val) => {
+  if (val === 'subscribe' && !showBeen) {
+    initGetSubscribeData();
+    showBeen = true;
+  }
+}, { immediate: true });
 
 // 1. 监听 tab 变化，控制 Swiper 切换及按需加载数据
 watch(tab, (newVal) => {
@@ -82,10 +91,12 @@ function handleImageScroll(e: Event): void {
 }
 
 // 初始获取订阅列表数据
-if (tab.value === 'video' && videoList.value.length === 0) {
-  getSubscribeVideoList();
-} else if (tab.value === 'image' && imageList.value.length === 0) {
-  getSubscribeImageList();
+function initGetSubscribeData() {
+  if (tab.value === 'video' && videoList.value.length === 0) {
+    getSubscribeVideoList();
+  } else if (tab.value === 'image' && imageList.value.length === 0) {
+    getSubscribeImageList();
+  }
 }
 // 下滑列表到底获取数据
 async function videoListHandleScrollToEnd({ done }: any) {

@@ -82,6 +82,8 @@ const tabSwitchToMy = () => {
   isTab.value = 'my'
 }
 provide('tabSwitchToMy', tabSwitchToMy)
+
+provide('isTab', isTab)
 </script>
 
 <template>
