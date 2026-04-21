@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import notImg from '../static/img/not-img.jpg';
+import lossImg from '../static/img/loss.png';
 import placeholder from '../static/img/placeholder.png';
 import placeholderDark from '../static/img/placeholder-dark.png';
 import { computed } from 'vue';
@@ -11,7 +12,7 @@ const props = defineProps({
   type: { type: String, default: 'video' },
   id: { type: String },
   title: { type: String },
-  img: { type: String },
+  img: { type: String || null },
   author: { type: String },
   time: { type: String },
   viewNum: { type: Number },
@@ -84,12 +85,12 @@ const formatTime = (seconds: number): string => {
   if (isNaN(seconds) || seconds < 0) {
     return '00:00';
   }
-  
+
   // 计算时、分、秒
   const hours = Math.floor(seconds / 3600);
   const minutes = Math.floor((seconds % 3600) / 60);
   const secs = seconds % 60;
-  
+
   // 根据是否存在小时来确定格式
   if (hours > 0) {
     // 显示为 hh:mm:ss 格式
@@ -98,6 +99,73 @@ const formatTime = (seconds: number): string => {
     // 显示为 mm:ss 格式
     return `${minutes.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
   }
+};
+
+// 时间显示格式化函数
+const formatTimeDisplay = (timeStr: string | undefined): string => {
+  if (!timeStr) return '';
+
+  const now = new Date();
+  const date = new Date(timeStr);
+
+  // 检查日期是否有效
+  if (isNaN(date.getTime())) return '';
+
+  // 计算时间差（毫秒）
+  const diffMs = now.getTime() - date.getTime();
+  const diffMinutes = Math.floor(diffMs / (1000 * 60));
+  const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+  
+  // 获取当天零点的时间戳用于比较“今天”、“昨天”等
+  const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
+  const dateStart = new Date(date.getFullYear(), date.getMonth(), date.getDate()).getTime();
+  const diffDays = Math.floor((todayStart - dateStart) / (1000 * 60 * 60 * 24));
+
+  // 十分钟及以内：X分钟前
+  if (diffMinutes < 10) {
+    // 如果是负数或极小值（比如未来时间或刚发生），显示刚刚或0分钟前
+    const mins = diffMinutes < 0 ? 0 : diffMinutes;
+    return `${mins}分钟前`;
+  }
+
+  // 十分钟以上一小时以内：XX分钟前
+  if (diffMinutes < 60) {
+    return `${diffMinutes}分钟前`;
+  }
+
+  // 今天：今天 HH:mm
+  if (diffDays === 0) {
+    const hours = date.getHours().toString().padStart(2, '0');
+    const minutes = date.getMinutes().toString().padStart(2, '0');
+    return `今天 ${hours}:${minutes}`;
+  }
+
+  // 昨天：昨天 HH:mm
+  if (diffDays === 1) {
+    const hours = date.getHours().toString().padStart(2, '0');
+    const minutes = date.getMinutes().toString().padStart(2, '0');
+    return `昨天 ${hours}:${minutes}`;
+  }
+
+  // 前天：2天前 HH:mm
+  if (diffDays === 2) {
+    const hours = date.getHours().toString().padStart(2, '0');
+    const minutes = date.getMinutes().toString().padStart(2, '0');
+    return `2天前 ${hours}:${minutes}`;
+  }
+
+  // 大前天：3天前 HH:mm
+  if (diffDays === 3) {
+    const hours = date.getHours().toString().padStart(2, '0');
+    const minutes = date.getMinutes().toString().padStart(2, '0');
+    return `3天前 ${hours}:${minutes}`;
+  }
+
+  // 再往前：YYYY-MM-DD
+  const year = date.getFullYear();
+  const month = (date.getMonth() + 1).toString().padStart(2, '0');
+  const day = date.getDate().toString().padStart(2, '0');
+  return `${year}-${month}-${day}`;
 };
 
 // 计算属性用于格式化显示的数字
@@ -112,6 +180,14 @@ const formattedLongNum = computed(() => {
     // 图像类型，使用数字格式化
     return formatNumber(props.longNum ?? 0);
   }
+});
+
+// 格式化后的时间显示
+const formattedTime = computed(() => formatTimeDisplay(props.time));
+
+// 处理图片源，如果 img 为空则显示 lossImg
+const displayImg = computed(() => {
+  return props.img ? props.img : lossImg;
 });
 
 function clickCard() {
@@ -129,7 +205,7 @@ function clickCard() {
 
 <template>
   <v-card v-ripple @click="clickCard">
-    <v-img :src="img" cover class="card-image">
+    <v-img :src="displayImg" cover class="card-image">
       <div class="info1">
         <div></div>
         <div class="isR18">
@@ -173,7 +249,7 @@ function clickCard() {
           <font-awesome-icon icon="fa-regular fa-user" />{{ author }}
         </div>
         <div class="time">
-          {{ time }}
+          {{ formattedTime }}
         </div>
       </div>
     </v-card-item>

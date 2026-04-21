@@ -8,7 +8,7 @@ const API_URL = 'https://api.iwara.tv';
 async function getSendRequest(path: string, headers?: any, query?: any) {
   try {
     // 构建查询字符串
-    let url = `${API_URL}/${path}`;
+    let url = `${API_URL}${path}`;
     if (query) {
       const queryParams = new URLSearchParams();
       Object.keys(query).forEach(key => {
@@ -51,8 +51,7 @@ async function postSendRequest(path: string, headers?: any, body?: any) {
       'Content-Type': 'application/json',
       ...(headers || {}),
     };
-    console.log(`${API_URL}/${path}`)
-    const response = await fetch(`${API_URL}/${path}`, {
+    const response = await fetch(`${API_URL}${path}`, {
       method: 'POST',
       headers: requestHeaders,
       body: body ? JSON.stringify(body) : undefined,
@@ -86,7 +85,7 @@ async function postSendRequest(path: string, headers?: any, body?: any) {
 
 // 登录
 export async function login(email: string, password: string): Promise<any> {
-  const path = 'user/login';
+  const path = '/user/login';
   const body = {
     email,
     password
@@ -105,7 +104,7 @@ async function getAccessToken(): Promise<any> {
   const accessToken = store_token().value
   if (accessToken)
     return accessToken
-  const path = 'user/token';
+  const path = '/user/token';
   const token = await getUserToken()
   const headers = {
     Authorization: `Bearer ${token}`,
@@ -125,14 +124,14 @@ async function getAccessToken(): Promise<any> {
 }
 
 // 获取用户订阅视频列表
-export async function getSubscribeVideoList(): Promise<any> {
-  const path = 'videos';
+export async function getSubscribeVideoList(page: number): Promise<any> {
+  const path = '/videos';
   const headers = {
     Authorization: `Bearer ${await getAccessToken()}`,
   };
   const query = {
     rating: 'all',
-    page: 0,
+    page: page,
     limit: 24,
     subscribed: true
   };
@@ -141,6 +140,26 @@ export async function getSubscribeVideoList(): Promise<any> {
     return response;
   } catch (error) {
     console.error('Get subscribe video list failed:', error);
+    throw error;
+  }
+}
+// 获取用户订阅插画列表
+export async function getSubscribeImageList(page: number): Promise<any> {
+  const path = '/images';
+  const headers = {
+    Authorization: `Bearer ${await getAccessToken()}`,
+  };
+  const query = {
+    rating: 'all',
+    page: page,
+    limit: 24,
+    subscribed: true
+  };
+  try {
+    const response = await getSendRequest(path, headers, query);
+    return response;
+  } catch (error) {
+    console.error('Get subscribe image list failed:', error);
     throw error;
   }
 }

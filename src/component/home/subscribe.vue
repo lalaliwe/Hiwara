@@ -6,7 +6,11 @@ import { ref, onActivated, watch } from 'vue';
 import { Swiper, SwiperSlide } from 'swiper/vue';
 import type { Swiper as SwiperType } from 'swiper';
 import 'swiper/css';
-import { getSubscribeVideoList } from '../../core/api';
+import {
+  getSubscribeVideoList as api_getSubscribeVideoList,
+  getSubscribeImageList as api_getSubscribeImageList
+} from '../../core/api';
+import loadingHuawu from '../loadingHuawu.vue';
 
 const videoListView = ref<HTMLElement>();
 const imageListView = ref<HTMLElement>();
@@ -31,13 +35,25 @@ const imageList = ref<ListItem[]>([]);
 let videoScrollTop = 0;
 let imageScrollTop = 0;
 
-// 1. 监听 tab 变化，控制 Swiper 切换
+let videoListPage = 0;
+let imageListPage = 0;
+
+const videoListMore = ref(true);
+const imageListMore = ref(true);
+
+// 1. 监听 tab 变化，控制 Swiper 切换及按需加载数据
 watch(tab, (newVal) => {
   if (swiperInstance.value) {
     const targetIndex = newVal === 'video' ? 0 : 1;
     if (swiperInstance.value.activeIndex !== targetIndex) {
       swiperInstance.value.slideTo(targetIndex);
     }
+  }
+  // 按需加载数据逻辑
+  if (newVal === 'video' && videoList.value.length === 0) {
+    getSubscribeVideoList();
+  } else if (newVal === 'image' && imageList.value.length === 0) {
+    getSubscribeImageList();
   }
 });
 
@@ -65,25 +81,95 @@ function handleImageScroll(e: Event): void {
   imageScrollTop = (e.target as HTMLElement).scrollTop;
 }
 
-//获取数据
-getSubscribeVideoList().then((res) => {
-  console.log(res);
-  if (res && res.results) {
-    videoList.value = res.results.map((item: any) => {
-      return {
-        id: item.id,
-        title: item.title,
-        img: item.file ? `https://i.iwara.tv/image/thumbnail/${item.file.id}/thumbnail-${item.thumbnail}.jpg` : '',
-        author: item.user?.name || item.user?.username || 'Unknown',
-        time: item.createdAt,
-        viewNum: String(item.numViews || 0),
-        likeNum: String(item.numLikes || 0),
-        longNum: String(item.file?.duration ?? 0),
-        isR18: item.rating === 'ecchi' || item.rating === 'r18'
-      };
-    });
+if (tab.value === 'video' && videoList.value.length === 0) {
+  getSubscribeVideoList();
+} else if (tab.value === 'image' && imageList.value.length === 0) {
+  getSubscribeImageList();
+}
+// 下滑列表到底获取数据
+async function videoListHandleScrollToEnd({ done }: any) {
+  await getSubscribeVideoList();
+  if (videoListMore.value) {
+    done('empty');
+  } else {
+    done('ok');
   }
-});
+}
+async function imageListHandleScrollToEnd({ done }: any) {
+  await getSubscribeImageList();
+  if (imageListMore.value) {
+    done('empty');
+  } else {
+    done('ok');
+  }
+}
+//获取视频列表
+async function getSubscribeVideoList() {
+  try {
+    const res = await api_getSubscribeVideoList(videoListPage);
+    console.log(res);
+    if (res && res.results && res.results.length > 0) {
+      const newVideos = res.results.map((item: any) => {
+        return {
+          id: item.id,
+          title: item.title,
+          img: item.file ? `https://i.iwara.tv/image/thumbnail/${item.file.id}/thumbnail-${item.thumbnail}.jpg` : null,
+          author: item.user?.name || item.user?.username || 'Unknown',
+          time: item.createdAt,
+          viewNum: item.numViews || 0,
+          likeNum: item.numLikes || 0,
+          longNum: item.file?.duration ?? 0,
+          isR18: item.rating === 'ecchi' || item.rating === 'r18'
+        };
+      });
+      // 追加数据
+      videoList.value = [...videoList.value, ...newVideos];
+      videoListPage++;
+      // 如果返回的数据少于预期，说明没有更多数据了
+      if (res.results.length < 20) { // 假设每页最多返回20个项目
+        videoListMore.value = true;
+      }
+    } else {
+      videoListMore.value = true;
+    }
+  } catch (error) {
+    console.error('Error fetching video list:', error);
+  }
+}
+//获取插画列表
+async function getSubscribeImageList() {
+  try {
+    const res = await api_getSubscribeImageList(imageListPage);
+    console.log(res);
+    if (res && res.results && res.results.length > 0) {
+      const newImages = res.results.map((item: any) => {
+        return {
+          id: item.id,
+          title: item.title,
+          img: item.thumbnail ? `https://i.iwara.tv/image/thumbnail/${item.thumbnail.id}/${item.thumbnail.id}.jpg` : null,
+          author: item.user?.name || item.user?.username || 'Unknown',
+          time: item.createdAt,
+          viewNum: item.numViews || 0,
+          likeNum: item.numLikes || 0,
+          longNum: item.numComments || 0,
+          isR18: item.rating === 'ecchi' || item.rating === 'r18'
+        };
+      });
+      // 追加数据
+      imageList.value = [...imageList.value, ...newImages];
+      imageListPage++;
+      // 如果返回的数据少于预期，说明没有更多数据了
+      if (res.results.length < 20) { // 假设每页最多返回20个项目
+        imageListMore.value = true;
+      }
+    } else {
+      imageListMore.value = true;
+    }
+  } catch (error) {
+    console.error('Error fetching image list:', error);
+  }
+}
+
 </script>
 
 <template>
@@ -103,8 +189,14 @@ getSubscribeVideoList().then((res) => {
     <swiper class="tabs-window" :slides-per-view="1" :space-between="0" @swiper="onSwiper"
       @slide-change="onSlideChange">
       <swiper-slide>
-        <div class="list-view" ref="videoListView" @scroll="handleVideoScroll">
-          <v-infinite-scroll color="#00796B">
+        <div v-if="videoList.length === 0" class="loading">
+          <loadingHuawu class="anime" />
+          <div class="loading-text">
+            数据加载中<span class="dots"></span>
+          </div>
+        </div>
+        <div v-else class="list-view" ref="videoListView" @scroll="handleVideoScroll">
+          <v-infinite-scroll color="#00796B" @load="videoListHandleScrollToEnd" :disabled="videoListMore">
             <div class="grid">
               <template v-for="item in videoList" :key="item.id">
                 <cardButton type="video" :id="item.id" :title="item.title" :img="item.img" :author="item.author"
@@ -112,12 +204,23 @@ getSubscribeVideoList().then((res) => {
                   :isR18="item.isR18" />
               </template>
             </div>
+            <template v-slot:empty>
+              <div class="listEnd">
+                已经到底了
+              </div>
+            </template>
           </v-infinite-scroll>
         </div>
       </swiper-slide>
       <swiper-slide>
-        <div class="list-view" ref="imageListView" @scroll="handleImageScroll">
-          <v-infinite-scroll color="#00796B">
+        <div v-if="imageList.length === 0" class="loading">
+          <loadingHuawu class="anime" />
+          <div class="loading-text">
+            数据加载中<span class="dots"></span>
+          </div>
+        </div>
+        <div v-else class="list-view" ref="imageListView" @scroll="handleImageScroll">
+          <v-infinite-scroll color="#00796B" @load="imageListHandleScrollToEnd" :disabled="imageListMore">
             <div class="grid">
               <template v-for="item in imageList" :key="item.id">
                 <cardButton type="image" :id="item.id" :title="item.title" :img="item.img" :author="item.author"
@@ -125,6 +228,11 @@ getSubscribeVideoList().then((res) => {
                   :isR18="item.isR18" />
               </template>
             </div>
+            <template v-slot:empty>
+              <div class="listEnd">
+                已经到底了
+              </div>
+            </template>
           </v-infinite-scroll>
         </div>
       </swiper-slide>
@@ -185,5 +293,62 @@ getSubscribeVideoList().then((res) => {
   grid-template-columns: repeat(2, 1fr);
   gap: 10px;
   padding: 0 10px 0 10px;
+}
+
+.loading {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  .anime {
+    width: 200px;
+  }
+
+  .loading-text {
+    font-family: 'AaXinRui85-2';
+    color: #00796B;
+
+    .dots::after {
+      content: '';
+      animation: dotsAnimation 1s infinite;
+    }
+  }
+
+  @keyframes dotsAnimation {
+    0% {
+      content: '.';
+    }
+
+    16.66% {
+      content: '..';
+    }
+
+    33.32% {
+      content: '...';
+    }
+
+    49.98% {
+      content: '....';
+    }
+
+    66.64% {
+      content: '.....';
+    }
+
+    83.3% {
+      content: '......';
+    }
+
+    100% {
+      content: '.';
+    }
+  }
+}
+
+.listEnd {
+  color: #757575;
+  padding: 4px 0;
 }
 </style>
