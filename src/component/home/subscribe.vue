@@ -20,9 +20,9 @@ interface ListItem {
   img: string;
   author: string;
   time: string;
-  viewNum: string;
-  likeNum: string;
-  longNum: string;
+  viewNum: number;
+  likeNum: number;
+  longNum: number;
   isR18: boolean;
 }
 const videoList = ref<ListItem[]>([]);
@@ -73,13 +73,13 @@ getSubscribeVideoList().then((res) => {
       return {
         id: item.id,
         title: item.title,
-        img: '', // 预览图暂不补全
+        img: item.file ? `https://i.iwara.tv/image/thumbnail/${item.file.id}/thumbnail-${item.thumbnail}.jpg` : '',
         author: item.user?.name || item.user?.username || 'Unknown',
         time: item.createdAt,
         viewNum: String(item.numViews || 0),
         likeNum: String(item.numLikes || 0),
-        longNum: String(item.file?.duration ?? 0), // 传递原始秒数作为字符串
-        isR18: item.rating === 'ecchi' || item.rating === 'r18' // 根据 rating 判断是否 R18
+        longNum: String(item.file?.duration ?? 0),
+        isR18: item.rating === 'ecchi' || item.rating === 'r18'
       };
     });
   }

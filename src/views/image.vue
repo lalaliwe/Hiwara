@@ -52,9 +52,9 @@ interface ListItem {
   img: string;
   author: string;
   time: string;
-  viewNum: string;
-  likeNum: string;
-  longNum: string;
+  viewNum: number;
+  likeNum: number;
+  longNum: number;
   isR18: boolean;
 }
 // 初始化列表数据
@@ -68,9 +68,9 @@ for (let i = 0; i < 5; i++) {
     img: '', // 图片路径由子组件内部处理
     author: '测试作者',
     time: '2021-09-09',
-    viewNum: '100',
-    likeNum: '100',
-    longNum: '10',
+    viewNum: 100,
+    likeNum: 100,
+    longNum: 10,
     isR18: false,
   });
   recommendVideoList.value.push({
@@ -79,9 +79,9 @@ for (let i = 0; i < 5; i++) {
     img: '',
     author: '测试作者',
     time: '2021-09-09',
-    viewNum: '100',
-    likeNum: '100',
-    longNum: '10',
+    viewNum: 100,
+    likeNum: 100,
+    longNum: 10,
     isR18: false,
   });
 }

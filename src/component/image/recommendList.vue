@@ -7,9 +7,9 @@ interface ListItem {
   img: string;
   author: string;
   time: string;
-  viewNum: string;
-  likeNum: string;
-  longNum: string;
+  viewNum: number;
+  likeNum: number;
+  longNum: number;
   isR18: boolean;
 }
 
