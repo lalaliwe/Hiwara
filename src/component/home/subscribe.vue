@@ -291,7 +291,7 @@ async function getSubscribeImageList() {
     overflow-y: auto;
 
     &::-webkit-scrollbar-track {
-      margin: calc(60px + 40px + 1px + env(safe-area-inset-top, 0) + 4px) 0 calc(60px + env(safe-area-inset-bottom, 0) + 4px);
+      margin: calc(60px + 40px + 1px + env(safe-area-inset-top, 0) + 4px) 0 calc(60px + env(safe-area-inset-bottom, 0) + 4px) 0;
     }
 
     .v-infinite-scroll {

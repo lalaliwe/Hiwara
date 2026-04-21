@@ -17,7 +17,7 @@ function routerGoTo(path: string, query?: any) {
 }
 </script>
 <template>
-  <div>
+  <div class="container">
     <div class="top">
       <div class="topBtns">
         <span class="btn">
@@ -169,6 +169,12 @@ function routerGoTo(path: string, query?: any) {
   </div>
 </template>
 <style lang="scss" scoped>
+.container {
+  flex: 1;
+  position: relative;
+  padding: calc(215px + env(safe-area-inset-top, 0)) 0 env(safe-area-inset-bottom, 0) 0;
+}
+
 .top {
   padding-top: env(safe-area-inset-top, 0);
   background-color: rgba(0, 121, 107, 0.9);
@@ -283,9 +289,13 @@ function routerGoTo(path: string, query?: any) {
 
 .content {
   z-index: 1;
-  flex: 1;
-  position: relative;
-  padding: calc(215px + env(safe-area-inset-top, 0)) 0 env(safe-area-inset-bottom, 0) 0;
+  overflow-y: auto;
+  height: 100%;
+  padding-bottom: calc(60px + env(safe-area-inset-bottom));
+
+  &::-webkit-scrollbar-track {
+    margin: 4px 0 calc(60px + env(safe-area-inset-bottom, 0) + 4px) 0;
+  }
 
   .card {
     margin: 10px;
@@ -380,8 +390,6 @@ function routerGoTo(path: string, query?: any) {
   }
 
   .about {
-    position: absolute;
-    bottom: calc(60px + env(safe-area-inset-bottom, 0));
     width: 100%;
     color: #757575;
     font-size: 0.7rem;
