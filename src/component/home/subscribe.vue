@@ -38,8 +38,8 @@ let imageScrollTop = 0;
 let videoListPage = 0;
 let imageListPage = 0;
 
-const videoListMore = ref(true);
-const imageListMore = ref(true);
+const videoListMore = ref(false);
+const imageListMore = ref(false);
 
 // 1. 监听 tab 变化，控制 Swiper 切换及按需加载数据
 watch(tab, (newVal) => {
