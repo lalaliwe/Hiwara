@@ -37,7 +37,7 @@ const listMore = ref<boolean[]>(new Array(tabArray.length).fill(false))
 let showBeen = false;
 const homeTab = inject('isTab') as { value: 'video' | 'image' | 'subscribe' | 'forum' | 'my' };
 watch(() => homeTab.value, (val) => {
-  if (val === 'image' || !showBeen) {
+  if (val === 'image' && !showBeen) {
     initGetImageListData();
     showBeen = true;
   }

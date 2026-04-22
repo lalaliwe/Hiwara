@@ -3,8 +3,9 @@ import notImg from '../static/img/not-img.jpg';
 import lossImg from '../static/img/loss.png';
 import placeholder from '../static/img/placeholder.png';
 import placeholderDark from '../static/img/placeholder-dark.png';
-import { computed, type PropType } from 'vue';
+import { computed, type PropType, ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
+import { getImage as api_getImage } from '../core/api';
 
 const router = useRouter();
 
@@ -185,14 +186,27 @@ const formattedLongNum = computed(() => {
 // 格式化后的时间显示
 const formattedTime = computed(() => formatTimeDisplay(props.time));
 
-// 处理图片源，如果 img 为空则显示 lossImg
-const displayImg = computed(() => {
-  if (props.img === 'file-loss')
-    return lossImg;
-  else
-    return props.img;
+// 处理图片源，初始状态如果有图片链接则显示占位图，等待 API 加载
+const displayImg = ref(props.img && props.img !== 'file-loss'
+  ? (import.meta.env.MODE === 'development' || true ? placeholder : placeholder) // 始终先显示占位图，避免闪烁
+  : (props.img === 'file-loss' ? lossImg : placeholder));
+
+onMounted(async () => {
+  if (props.img && props.img !== 'file-loss') {
+    // 使用 API 获取图片，避免直接从网页获取导致的 403 错误
+    try {
+      displayImg.value = await api_getImage(props.img);
+    } catch (error) {
+      console.error('Failed to load image via API:', error);
+      // 如果 API 失败，尝试回退到直接 URL（可选，或者保持占位图/错误图）
+      // 这里为了用户体验，如果 API 失败，可以选择不更新 displayImg 保持占位图，或者显示错误图
+      // 根据原有逻辑 fallback to direct url，但通常直接 url 会 403，所以建议显示 notImg 或保持 placeholder
+      displayImg.value = notImg;
+    }
+  }
 });
-function clickCard() {
+
+async function clickCard() {
   if (!props.id) {
     console.error('缺少id');
     return;
@@ -207,7 +221,8 @@ function clickCard() {
 
 <template>
   <v-card v-ripple @click="clickCard">
-    <v-img :src="displayImg" cover class="card-image">
+    <!-- 修改 src 绑定逻辑，确保初始显示正确，并添加 transition 实现淡入效果 -->
+    <v-img :src="displayImg" cover class="card-image" transition="fade-transition">
       <div class="info1">
         <div></div>
         <div class="isR18">

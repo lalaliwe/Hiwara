@@ -148,7 +148,7 @@ async function getVideoList(tabNum: number) {
         return {
           id: item.id,
           title: item.title,
-          img: item.file ? `https://i.iwara.tv/image/thumbnail/${item.file.id}/thumbnail-${item.thumbnail}.jpg` : 'file-loss',
+          img: item.file ? `https://i.iwara.tv/image/thumbnail/${item.file.id}/thumbnail-${String(item.thumbnail).padStart(2, '0')}.jpg` : 'file-loss',
           author: item.user?.name || item.user?.username || 'Unknown',
           time: item.createdAt,
           viewNum: item.numViews || 0,
