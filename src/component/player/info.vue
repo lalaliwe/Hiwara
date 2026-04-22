@@ -9,12 +9,24 @@ import {
 import test1Img from '../../static/img/test1.jpg';
 import cardButton from '../cardButton.vue';
 
+// 格式化时间: YYYY年MM月DD日 HH:mm
+const formatDate = (dateString: string) => {
+  if (!dateString) return '';
+  const date = new Date(dateString);
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  const hours = String(date.getHours()).padStart(2, '0');
+  const minutes = String(date.getMinutes()).padStart(2, '0');
+  return `${year}年${month}月${day}日 ${hours}:${minutes}`;
+};
+
 const props = defineProps<{
   title: string, // 标题
   synopsis: string, // 描述
   playNum: number, // 播放数
   likeNum: number, // 点赞数
-  createdAt: string,  // 创建时间
+  createdAt: string,  // 创建时间 (原始字符串)
   isLike: boolean,  // 是否已点赞
   tags: string[], // 标签
   authorname: string, // 作者昵称
@@ -154,7 +166,7 @@ watch(expand, async (val) => {
         </div>
         <div class="userinfo">
           <div class="authorname">{{ authorname }}</div>
-          <div class="userdata">{{ fansNum }}粉丝 {{ videoNum }}视频</div>
+          <!-- <div class="userdata">{{ fansNum }}粉丝 {{ videoNum }}视频</div> -->
         </div>
         <div class="follow">
           <v-btn class="btn" :color="isFollow ? '#E0E0E0' : '#00796B'" @click="clickFollow">
@@ -176,7 +188,7 @@ watch(expand, async (val) => {
       <div class="infomsg">
         <font-awesome-icon icon="fa-regular fa-circle-play" /> {{ playNum }}
         &nbsp;
-        <font-awesome-icon icon="fa-regular fa-clock" /> {{ createdAt }}
+        <font-awesome-icon icon="fa-regular fa-clock" /> {{ formatDate(createdAt) }}
       </div>
       <div class="synopsis" :style="{ height: expand ? `${heights.synopsis}px` : 0 }">
         <div class="text">
@@ -323,7 +335,8 @@ watch(expand, async (val) => {
 }
 
 .title {
-  padding: 5px 15px 5px 10px;
+  margin: 5px 0;
+  padding: 0 15px 0 10px;
   text-overflow: ellipsis;
   overflow: hidden;
   font-size: 1.1rem;

@@ -233,3 +233,32 @@ export async function getImageList(page: number, sort: string, date?: string): P
     throw error;
   }
 }
+
+// 获取视频信息
+export async function getVideoInfo(videoId: string): Promise<any> {
+  const path = `/video/${videoId}`;
+  const headers = {
+    Authorization: `Bearer ${await getAccessToken()}`,
+  };
+  try {
+    const response = await getSendRequest(path, headers);
+    return response;
+  } catch (error) {
+    console.error('Get video info failed:', error);
+    throw error;
+  }
+}
+// 获取用户信息
+export async function getUserInfo(username: string): Promise<any> {
+  const path = `/profile/${username}`;
+  const headers = {
+    Authorization: `Bearer ${await getAccessToken()}`,
+  };
+  try {
+    const response = await getSendRequest(path, headers);
+    return response;
+  } catch (error) {
+    console.error('Get user info failed:', error);
+    throw error;
+  }
+}

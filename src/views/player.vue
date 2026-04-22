@@ -8,6 +8,10 @@ import { setStatusBarTextStyle } from '../plugins/navbarStyle';
 import { Swiper, SwiperSlide } from 'swiper/vue';
 import type { Swiper as SwiperType } from 'swiper';
 import 'swiper/css';
+import {
+  getVideoInfo as api_getVideoInfo,
+  getUserInfo as api_getUserInfo
+} from '../core/api';
 
 // 设置组件名称，确保与路由name一致
 defineOptions({
@@ -18,17 +22,18 @@ const router = useRouter();
 const route = useRoute();
 
 const tab = ref('info');  // 当前选中的tab
-const id = route.params.id;  // 视频id
-const title = '测试标题';   // 视频标题
-const synopsis = '测试简介';  // 视频简介
-const playNum = 100;  // 播放次数
-const likeNum = 0;  // 点赞数
-const createdAt = '2025-02-03 10:00';  // 创建时间
+const id = ref(route.params.id);  // 视频id
+const isLoading = ref(true); // 新增：加载状态
+const title = ref<string>('');   // 视频标题
+const synopsis = ref<string>('');  // 视频简介
+const playNum = ref<number>(0);  // 播放次数
+const likeNum = ref<number>(0);  // 点赞数
+const createdAt = ref<string>('');  // 创建时间
 const isLike = ref(false);  // 是否已点赞
-const tags = ['测试标签1', '测试标签2', '测试标签3', '测试标签4', '测试标签5', '测试标签6', '测试标签7', '测试标签8', '测试标签9', '测试标签10', '测试标签11', '测试标签12', '测试标签13', '测试标签14', '测试标签15', '测试标签16', '测试标签17', '测试标签18', '测试标签19', '测试标签20', '测试标签21', '测试标签22'];  // 标签
-const authorname = '测试用户';  // 作者名称
-const fansNum = 100;  // 粉丝数
-const videoNum = 10;  // 视频数
+const tags = ref<string[]>([]);  // 标签
+const authorname = ref<string>('');  // 作者名称
+const fansNum = ref<number>(0);
+const videoNum = ref<number>(0);
 const isFollow = ref(false);  // 是否已关注
 
 // --- Swiper 联动逻辑 ---
@@ -68,6 +73,58 @@ const applyPageSettings = () => {
 }
 applyPageSettings()
 
+// 获取视频信息
+const fetchVideoInfo = async () => {
+  isLoading.value = true; // 开始加载
+  try {
+    const res = await api_getVideoInfo(id.value as string);
+    if (res) {
+      title.value = res.title || '';
+      synopsis.value = res.body || '';
+      playNum.value = res.numViews || 0;
+      likeNum.value = res.numLikes || 0;
+      isLike.value = res.liked || false;
+      // 修改: 直接传递原始时间字符串，由 info 组件格式化
+      createdAt.value = res.createdAt || '';
+
+      // 处理标签
+      if (res.tags && Array.isArray(res.tags)) {
+        tags.value = res.tags.map((tag: any) => tag.id);
+      } else {
+        tags.value = [];
+      }
+
+      // 处理作者信息
+      if (res.user) {
+        authorname.value = res.user.name || res.user.username || '';
+        isFollow.value = res.user.following || false;
+
+        // 新增：获取用户详细信息以补全粉丝数和视频数
+        // const username = res.user.username;
+        // if (username) {
+        //   try {
+        //     const userInfoRes = await api_getUserInfo(username);
+        //     if (userInfoRes && userInfoRes.user) {
+        //       // 根据 userInfo.json 结构，粉丝数和视频数可能在 user 对象或其他字段中
+        //       // 这里假设 API 返回的结构中包含 followersCount 和 videosCount 或类似字段
+        //       // 如果 API 返回结构与 test/api/userInfo.json 一致，可能需要查看具体字段
+        //       // 通常 iwara profile API 会返回更详细的信息
+        //       fansNum.value = userInfoRes.user.followersCount || 0;
+        //       videoNum.value = userInfoRes.user.videosCount || 0;
+        //     }
+        //   } catch (error) {
+        //     console.error('Failed to fetch user info:', error);
+        //   }
+        // }
+      }
+    }
+  } catch (error) {
+    console.error('Failed to fetch video info:', error);
+  } finally {
+    isLoading.value = false; // 结束加载
+  }
+};
+
 // // 返回
 // function goBack() {
 //   // 触发通知
@@ -81,17 +138,19 @@ applyPageSettings()
 
 onActivated(() => {
   applyPageSettings()
-  console.log('🔄 Player activated', id);
+  console.log('🔄 Player activated', id.value);
 })
 onDeactivated(() => {
-  console.log('⏸️ Player deactivated', id);
+  console.log('⏸️ Player deactivated', id.value);
 })
 onMounted(() => {
-  console.log('✅ Player mounted', id);
-})
+  applyPageSettings();
+  fetchVideoInfo();
+});
 onUnmounted(() => {
-  console.log('❌ Player unmounted', id);
+  console.log('❌ Player unmounted', id.value);
 })
+
 </script>
 
 <template>
@@ -119,10 +178,11 @@ onUnmounted(() => {
       <!-- 替换为 Swiper -->
       <swiper class="tabs-window" :slides-per-view="1" :space-between="0" @swiper="onSwiper"
         @slide-change="onSlideChange">
-        <swiper-slide ">
-          <infoView :title="title" :synopsis="synopsis" :playNum="playNum" :likeNum="likeNum" :createdAt="createdAt"
-          :isLike="isLike" :tags="tags" :authorname="authorname" :fansNum="fansNum" :videoNum="videoNum"
-          :isFollow="isFollow" />
+        <swiper-slide>
+          <!-- 修改：只有当非加载状态时才渲染 infoView，确保数据已准备就绪 -->
+          <infoView v-if="!isLoading" :title="title" :synopsis="synopsis" :playNum="playNum" :likeNum="likeNum"
+            :createdAt="createdAt" :isLike="isLike" :tags="tags" :authorname="authorname" :fansNum="fansNum"
+            :videoNum="videoNum" :isFollow="isFollow" />
         </swiper-slide>
         <swiper-slide>
           <commentView />

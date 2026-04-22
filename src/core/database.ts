@@ -29,9 +29,9 @@ export function initDatabase(): Promise<void> {
           password TEXT,
           token TEXT
         );`);
-        console.log('Users table created.');
+        // console.log('Users table created.');
       } else {
-        console.log('Users table already exists.');
+        // console.log('Users table already exists.');
       }
       resolve();
     } catch (error) {
