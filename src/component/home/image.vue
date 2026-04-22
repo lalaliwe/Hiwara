@@ -43,6 +43,14 @@ watch(() => homeTab.value, (val) => {
   }
 }, { immediate: true });
 
+// 注入刷新令牌
+const refreshToken = inject('refreshToken') as { value: number };
+// 监听刷新令牌变化，执行刷新
+watch(refreshToken, () => {
+  console.log('刷新图片');
+  refreshData();
+});
+
 const listRefs = ref<HTMLElement[]>([]);
 let scrollTopArray: number[] = new Array(tabArray.length).fill(0);
 
@@ -90,6 +98,19 @@ const onSlideChange = (swiper: SwiperType) => {
   }
 };
 // --- End Swiper 联动逻辑 ---
+
+// 刷新数据
+function refreshData() {
+  const tabIndex = tabArray.findIndex(item => item.value === tab.value);
+  if (tabIndex !== -1) {
+    // 清空当前 Tab 的数据
+    imageList.value[tabIndex] = [];
+    page[tabIndex] = 0;
+    listMore.value[tabIndex] = false;
+    // 重新获取数据
+    getImageList(tabIndex);
+  }
+}
 
 onActivated(() => {
   // 遍历所有 tab，恢复其保存的位置

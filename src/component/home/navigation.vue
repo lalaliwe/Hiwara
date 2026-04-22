@@ -14,6 +14,7 @@ type TabType = 'video' | 'image' | 'subscribe' | 'forum' | 'my';
 // 定义emit事件
 const emit = defineEmits<{
   (e: 'update:tab', value: TabType): void
+  (e: 'refresh', tab: TabType): void
 }>()
 
 const props = defineProps<{
@@ -39,32 +40,41 @@ watch(value, (newValue) => {
 const changeValue = (newValue: TabType) => {
   value.value = newValue
 }
+
+//刷新
+function refresh(tab: TabType) {
+  emit('refresh', tab)
+}
 </script>
 
 <template>
   <div class="tabs">
-    <div class="btn" :class="{ active: value === 'video' }" @click="changeValue('video')" v-ripple>
+    <div class="btn" :class="{ active: value === 'video' }" @click="changeValue('video')" @dblclick="refresh('video')"
+      v-ripple>
       <div>
         <iconVideo theme="outline" :size="btnFontSize" :fill="value === 'video' ? '#00796B' : '#616161'" />
         <br>
         <span>视频</span>
       </div>
     </div>
-    <div class="btn" :class="{ active: value === 'image' }" @click="changeValue('image')" v-ripple>
+    <div class="btn" :class="{ active: value === 'image' }" @click="changeValue('image')" @dblclick="refresh('image')"
+      v-ripple>
       <div>
         <iconPic theme="outline" :size="btnFontSize" :fill="value === 'image' ? '#00796B' : '#616161'" />
         <br>
         <span>插画</span>
       </div>
     </div>
-    <div class="btn" :class="{ active: value === 'subscribe' }" @click="changeValue('subscribe')" v-ripple>
+    <div class="btn" :class="{ active: value === 'subscribe' }" @click="changeValue('subscribe')"
+      @dblclick="refresh('subscribe')" v-ripple>
       <div>
         <iconRss theme="outline" :size="btnFontSize" :fill="value === 'subscribe' ? '#00796B' : '#616161'" />
         <br>
         <span>订阅</span>
       </div>
     </div>
-    <div class="btn" :class="{ active: value === 'forum' }" @click="changeValue('forum')" v-ripple>
+    <div class="btn" :class="{ active: value === 'forum' }" @click="changeValue('forum')" @dblclick="refresh('forum')"
+      v-ripple>
       <div>
         <iconComments theme="outline" :size="btnFontSize" :fill="value === 'forum' ? '#00796B' : '#616161'" />
         <br>

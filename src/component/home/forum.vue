@@ -115,13 +115,23 @@ const forumData: ForumGroup[] = [
         posts: 100,
         topics: 1000,
         latestTitle: "最新发布",
-        latestContent: "テストテキストテストテキストテストテキスト",
+        latestContent: "测试文本测试文本测试文本",
+        author: "测试作者",
+        date: "2025-01-01 12:00"
+      },
+      {
+        title: "帮助/问题",
+        description: "与网站无关的问题",
+        posts: 100,
+        topics: 1000,
+        latestTitle: "最新发布",
+        latestContent: "测试文本テストテキストテストテキスト",
         author: "テストユーザー",
         date: "2025-01-01 12:00"
       },
       {
-        title: "帮助/問題",
-        description: "ウェブサイトに関係のない問題",
+        title: "请求",
+        description: "帮助寻找或创造",
         posts: 100,
         topics: 1000,
         latestTitle: "最新发布",
@@ -130,18 +140,8 @@ const forumData: ForumGroup[] = [
         date: "2025-01-01 12:00"
       },
       {
-        title: "リクエスト",
-        description: "探すか作るのを助ける",
-        posts: 100,
-        topics: 1000,
-        latestTitle: "最新发布",
-        latestContent: "テストテキストテストテキストテストテキスト",
-        author: "テストユーザー",
-        date: "2025-01-01 12:00"
-      },
-      {
-        title: "ヘルプ",
-        description: "ウェブサイト関連の問題を解決するのを助ける",
+        title: "帮助",
+        description: "帮助解决网站相关问题",
         posts: 100,
         topics: 1000,
         latestTitle: "最新发布",

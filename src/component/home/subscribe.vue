@@ -50,6 +50,14 @@ watch(() => homeTab.value, (val) => {
   }
 }, { immediate: true });
 
+// 注入刷新令牌
+const refreshToken = inject('refreshToken') as { value: number };
+// 监听刷新令牌变化，执行刷新
+watch(refreshToken, () => {
+  console.log('刷新');
+  refreshData();
+});
+
 // 1. 监听 tab 变化，控制 Swiper 切换及按需加载数据
 watch(tab, (newVal) => {
   if (swiperInstance.value) {
@@ -61,7 +69,8 @@ watch(tab, (newVal) => {
   // 按需加载数据逻辑
   if (newVal === 'video' && videoList.value.length === 0) {
     getSubscribeVideoList();
-  } else if (newVal === 'image' && imageList.value.length === 0) {
+  }
+  if (newVal === 'image' && imageList.value.length === 0) {
     getSubscribeImageList();
   }
 });
@@ -89,12 +98,31 @@ function handleVideoScroll(e: Event): void {
 function handleImageScroll(e: Event): void {
   imageScrollTop = (e.target as HTMLElement).scrollTop;
 }
-
+// 刷新数据
+function refreshData() {
+  if (tab.value === 'video') {
+    // 清空视频列表数据
+    videoList.value = [];
+    videoListPage = 0;
+    videoListMore.value = false;
+    // 获取视频列表数据
+    getSubscribeVideoList();
+  }
+  if (tab.value === 'image') {
+    // 清空图片列表数据
+    imageList.value = [];
+    imageListPage = 0;
+    imageListMore.value = false;
+    // 获取图片列表数据
+    getSubscribeImageList();
+  }
+}
 // 初始获取订阅列表数据
 function initGetSubscribeData() {
   if (tab.value === 'video' && videoList.value.length === 0) {
     getSubscribeVideoList();
-  } else if (tab.value === 'image' && imageList.value.length === 0) {
+  }
+  if (tab.value === 'image' && imageList.value.length === 0) {
     getSubscribeImageList();
   }
 }

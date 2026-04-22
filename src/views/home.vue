@@ -21,6 +21,8 @@ defineOptions({
 })
 
 const isTab = ref<TabType>('subscribe');
+// 新增：用于通知子组件刷新的令牌
+const refreshToken = ref(0);
 
 // 添加双击返回检测相关变量
 let lastBackPressedTime: number | null = null;
@@ -84,6 +86,14 @@ const tabSwitchToMy = () => {
 provide('tabSwitchToMy', tabSwitchToMy)
 
 provide('isTab', isTab)
+
+const refresh = (data: TabType) => {
+  console.log('refresh:', data)
+  // 更新刷新令牌，通知子组件
+  refreshToken.value++
+}
+provide('refreshToken', refreshToken)
+
 </script>
 
 <template>
@@ -95,7 +105,7 @@ provide('isTab', isTab)
     <homeForum class="main" v-show="isTab === 'forum'" />
     <homeMy class="main" v-show="isTab === 'my'" />
     <!-- 底部按钮 -->
-    <homeNavigation class="bottom" :model-value="isTab" @update:tab="handleTabChange" />
+    <homeNavigation class="bottom" :model-value="isTab" @update:tab="handleTabChange" @refresh="refresh" />
   </div>
 </template>
 
