@@ -10,6 +10,11 @@ import setup from '../views/setup.vue';
 import favorites from '../views/favorites.vue';
 import offlineCache from '../views/offlineCache.vue';
 
+// setup子页面
+import setup_definition from '../views/setup/definition.vue';
+import setup_searchMode from '../views/setup/searchMode.vue';
+import setup_language from '../views/setup/language.vue';
+
 // ========================
 // 类型定义
 // ========================
@@ -118,6 +123,25 @@ const routes: Array<RouteRecordRaw & { meta?: RouteMeta }> = [
     name: 'Setup',
     component: setup,
     meta: { transition: 'stack', componentName: 'Setup' },
+  },
+  // setup子页面
+  {
+    path: '/setup/definition',
+    name: 'SetupDefinition',
+    component: setup_definition,
+    meta: { transition: 'stack', componentName: 'SetupDefinition' },
+  },
+  {
+    path: '/setup/searchMode',
+    name: 'SetupSearchMode',
+    component: setup_searchMode,
+    meta: { transition: 'stack', componentName: 'SetupSearchMode' },
+  },
+  {
+    path: '/setup/language',
+    name: 'SetupLanguage',
+    component: setup_language,
+    meta: { transition: 'stack', componentName: 'SetupLanguage' },
   },
 ]
 

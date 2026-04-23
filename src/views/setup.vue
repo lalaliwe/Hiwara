@@ -16,6 +16,10 @@ const router = useRouter()
 const goBack = () => {
   router.back();
 }
+// 路由跳转
+function routerGoTo(path: string) {
+  router.push(path);
+}
 </script>
 
 <template>
@@ -29,37 +33,59 @@ const goBack = () => {
       </div>
     </div>
     <!-- 内容区域 -->
-    <div class="item autoplay" style="border-top: solid 1px #BDBDBD;">
-      <div class="label">
-        自动播放
-      </div>
-      <div class="switch">
-        <v-switch class="btn" color="#00796B"></v-switch>
+    <div class="item" style="border-top: solid 1px #BDBDBD;">
+      <div class="label">自动播放</div>
+      <div class="icon">
+        <v-switch density="compact" color="#00796B"></v-switch>
       </div>
     </div>
-    <div class="item">
-      默认清晰度
+    <div class="item" @click="routerGoTo('/setup/definition')">
+      <div class="label">默认清晰度</div>
+      <div class="icon">
+        <font-awesome-icon icon="fa-solid fa-angle-right" />
+      </div>
+    </div>
+    <div class="item" @click="routerGoTo('/setup/searchMode')">
+      <div class="label">默认搜索模式</div>
+      <div class="icon">
+        <font-awesome-icon icon="fa-solid fa-angle-right" />
+      </div>
     </div>
     <div class="item">
-      默认搜索模式
+      <div class="label">下载目录</div>
+      <div class="icon">
+        <font-awesome-icon icon="fa-solid fa-angle-right" />
+      </div>
     </div>
     <div class="item">
-      下载目录
+      <div class="label">Aria设置</div>
+      <div class="icon">
+        <font-awesome-icon icon="fa-solid fa-angle-right" />
+      </div>
+    </div>
+    <div class="item" @click="routerGoTo('/setup/language')">
+      <div class="label">语言（Language）</div>
+      <div class="icon">
+        <font-awesome-icon icon="fa-solid fa-angle-right" />
+      </div>
     </div>
     <div class="item">
-      Aria设置
+      <div class="label">清理缓存</div>
+      <div class="icon">
+        <font-awesome-icon icon="fa-solid fa-angle-right" />
+      </div>
     </div>
     <div class="item">
-      语言（Language）
+      <div class="label">关于</div>
+      <div class="icon">
+        <font-awesome-icon icon="fa-solid fa-angle-right" />
+      </div>
     </div>
     <div class="item">
-      清理缓存
-    </div>
-    <div class="item">
-      关于
-    </div>
-    <div class="item">
-      退出登录
+      <div class="label">退出登录</div>
+      <div class="icon">
+        <font-awesome-icon icon="fa-solid fa-angle-right" />
+      </div>
     </div>
   </div>
 </template>
@@ -69,6 +95,10 @@ const goBack = () => {
   overflow-y: auto;
   padding: calc(60px + env(safe-area-inset-top, 0)) 0 env(safe-area-inset-bottom, 0) 0;
   background-color: #fafafa;
+
+  &::-webkit-scrollbar-track {
+    margin: calc(60px + env(safe-area-inset-top, 0) + 4px) 0 calc(env(safe-area-inset-bottom, 0) + 4px) 0;
+  }
 }
 
 .topBar {
@@ -114,23 +144,29 @@ const goBack = () => {
   font-size: 1rem;
   cursor: pointer;
   user-select: none;
-  height: 52px;
-  padding: 0 14px;
-  width: 100%;
   display: flex;
-  align-items: center;
-  justify-self: start;
-}
+  width: 100%;
+  overflow: hidden;
+  padding: 0 14px;
+  height: 52px;
 
-.autoplay {
   .label {
     flex: 1;
+    display: flex;
+    align-items: center;
+    justify-self: start;
+    overflow: hidden;
   }
 
-  .switch {
-    .btn {
-      transform: translateY(10px);
-    }
+  .icon {
+    color: #9E9E9E;
+    display: flex;
+    align-items: center;
+    justify-self: start;
+  }
+
+  .v-switch {
+    transform: translateY(10px);
   }
 }
 </style>

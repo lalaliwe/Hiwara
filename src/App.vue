@@ -14,7 +14,7 @@ import {isLogin as store_auth}  from './core/store'
 const route = useRoute()
 const router = useRouter()
 
-const value = computed(() => store_auth().value)
+const isLogin = computed(() => store_auth().value)
 
 // 存储需要缓存的组件名称（供 keep-alive :include 使用）
 const cachedPages = ref<string[]>([])
@@ -174,7 +174,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <router-view v-slot="{ Component, route: currentRoute }" v-if="value">
+  <router-view v-slot="{ Component, route: currentRoute }" v-if="isLogin">
     <transition :name="transitionName" appear>
       <keep-alive :include="cachedPages">
         <component :is="wrapComponent(Component, (currentRoute.meta.cacheKey as string) || 'Anonymous')"

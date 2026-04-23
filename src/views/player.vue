@@ -37,6 +37,16 @@ const fansNum = ref<number>(0);
 const videoNum = ref<number>(0);
 const isFollow = ref(false);  // 是否已关注
 
+interface VideoFileItem {
+  id: string;
+  name: string;
+  server: string;
+  type: string;
+  view: string;
+  download: string;
+}
+const videoFile = ref<VideoFileItem[]>([]);
+
 // --- Swiper 联动逻辑 ---
 const swiperInstance = ref<SwiperType | null>(null);
 
@@ -78,7 +88,7 @@ const fetchVideoInfo = async () => {
   isLoading.value = true; // 开始加载
   try {
     const res = await api_getVideoInfo(id.value as string);
-    console.log(res);
+    // console.log(res);
     if (res.ok) {
       const data = res.data;
       title.value = data.title || '';
@@ -125,7 +135,29 @@ fetchVideoInfo();
 async function fetchVideoFile(url: string, filename: string) {
   try {
     const res = await api_getVideoFileSQ(url, filename)
-    console.log(res);
+    // console.log(res);
+    // 补全逻辑：解析并存储视频文件信息
+    if (res.ok && res.data && Array.isArray(res.data)) {
+      videoFile.value = res.data.map((item: any) => {
+        // 从 view URL 中提取 server 名称 (例如: //hime.iwara.tv/... -> hime)
+        let server = 'unknown';
+        if (item.src && item.src.view) {
+          const match = item.src.view.match(/\/\/([^.]+)\./);
+          if (match && match[1]) {
+            server = match[1];
+          }
+        }
+        return {
+          id: item.id,
+          name: item.name,
+          server: server,
+          type: item.type,
+          view: `https:${item.src?.view}` || '',
+          download: `https:${item.src?.download}` || ''
+        };
+      });
+      console.log('Processed video files:', videoFile.value);
+    }
   } catch (error) {
     showShortToast('获取视频文件失败');
     console.error('获取视频文件失败：', error);

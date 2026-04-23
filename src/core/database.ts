@@ -14,12 +14,11 @@ function generateUUID(): string {
 export function initDatabase(): Promise<void> {
   return new Promise(async (resolve, reject) => {
     try {
-      // 检查表是否存在
-      const result: Array<{ name: string }> = await sqlDB.select(
+      // 独立检查并创建用户表
+      const userResult: Array<{ name: string }> = await sqlDB.select(
         `SELECT name FROM sqlite_master WHERE type='table' AND name='users'`
       );
-      if (result.length === 0) {
-        // 表不存在，创建表
+      if (userResult.length === 0) {
         await sqlDB.execute(`CREATE TABLE IF NOT EXISTS users (
           uuid TEXT PRIMARY KEY,
           uid TEXT,
@@ -29,9 +28,28 @@ export function initDatabase(): Promise<void> {
           password TEXT,
           token TEXT
         );`);
-        // console.log('Users table created.');
-      } else {
-        // console.log('Users table already exists.');
+      }
+      // 独立检查并创建设置表
+      const setupResult: Array<{ name: string }> = await sqlDB.select(
+        `SELECT name FROM sqlite_master WHERE type='table' AND name='setup'`
+      );
+
+      if (setupResult.length === 0) {
+        await sqlDB.execute(`CREATE TABLE IF NOT EXISTS setup (
+          auto_play BOOLEAN,
+          reconnect INTEGER,
+          definition TEXT,
+          search_mode INTEGER,
+          language TEXT,
+          video_save_path TEXT,
+          image_save_path TEXT,
+          aria2_rpc TEXT,
+          aria2_token TEXT,
+          aria2_download TEXT,
+          aria2_switch BOOLEAN
+        );`);
+        // 插入默认设置数据
+        await sqlDB.execute(`INSERT INTO setup (auto_play, reconnect, definition, search_mode, language, video_save_path, image_save_path, aria2_rpc, aria2_token, aria2_download, aria2_switch) VALUES (TRUE, 1, 'Source', 0, 'auto', '', '', '', '', '~/Downloads/Iwara', FALSE);`);
       }
       resolve();
     } catch (error) {
@@ -105,4 +123,65 @@ export function getUserToken(): Promise<string> {
       reject(error);
     }
   })
+}
+
+// 获取设置数据
+export async function getSetupData(): Promise<any> {
+  try {
+    const result: Array<any> = await sqlDB.select(`SELECT * FROM setup LIMIT 1`);
+    if (result.length > 0) {
+      return result[0];
+    } else {
+      // 如果没有找到设置数据，返回默认值
+      return {
+        auto_play: true,
+        reconnect: 1,
+        definition: 'Source',
+        search_mode: 0,
+        language: 'auto',
+        video_save_path: '',
+        image_save_path: '',
+        aria2_rpc: '',
+        aria2_token: '',
+        aria2_download: '~/Downloads/Iwara',
+        aria2_switch: false
+      };
+    }
+  } catch (error) {
+    console.error('Error fetching setup data:', error);
+    // 发生错误时返回默认值
+    return {
+      auto_play: true,
+      reconnect: 1,
+      definition: 'Source',
+      search_mode: 0,
+      language: 'auto',
+      video_save_path: '',
+      image_save_path: '',
+      aria2_rpc: '',
+      aria2_token: '',
+      aria2_download: '~/Downloads/Iwara',
+      aria2_switch: false
+    };
+  }
+}
+
+// 更新设置数据
+export async function updateSetupData(setupData: any): Promise<void> {
+  try {
+    // 由于setup表只应该有一条记录，我们使用UPDATE而不使用INSERT或DELETE
+    let updateFields = [];
+    let values = [];
+    
+    for (const [key, value] of Object.entries(setupData)) {
+      updateFields.push(`${key} = ?`);
+      values.push(value);
+    }
+
+    const updateQuery = `UPDATE setup SET ${updateFields.join(', ')}`;
+    await sqlDB.execute(updateQuery, values);
+  } catch (error) {
+    console.error('Error updating setup data:', error);
+    throw error;
+  }
 }
