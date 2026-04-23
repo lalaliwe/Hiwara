@@ -5,7 +5,7 @@ import placeholder from '../static/img/placeholder.png';
 import placeholderDark from '../static/img/placeholder-dark.png';
 import { computed, type PropType, ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
-import { getImage as api_getImage } from '../core/api';
+import { getImageIwara } from '../core/api';
 
 const router = useRouter();
 
@@ -195,9 +195,9 @@ onMounted(async () => {
   if (props.img && props.img !== 'file-loss') {
     // 使用 API 获取图片，避免直接从网页获取导致的 403 错误
     try {
-      displayImg.value = await api_getImage(props.img);
+      displayImg.value = await getImageIwara(props.img);
     } catch (error) {
-      console.error('Failed to load image via API:', error);
+      // console.error('Failed to load image via API:', error);
       // 如果 API 失败，尝试回退到直接 URL（可选，或者保持占位图/错误图）
       // 这里为了用户体验，如果 API 失败，可以选择不更新 displayImg 保持占位图，或者显示错误图
       // 根据原有逻辑 fallback to direct url，但通常直接 url 会 403，所以建议显示 notImg 或保持 placeholder

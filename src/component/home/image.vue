@@ -1,13 +1,14 @@
 <script setup lang="ts">
 import searchBar from '../../component/home/searchBar.vue';
 import cardButton from '../../component/cardButton.vue';
-import test1Img from '../../static/img/test1.jpg';
+// import test1Img from '../../static/img/test1.jpg';
 import { ref, onActivated, watch, inject } from 'vue';
 import { Swiper, SwiperSlide } from 'swiper/vue';
 import type { Swiper as SwiperType } from 'swiper';
 import 'swiper/css';
 import { getImageList as api_getImageList } from '../../core/api';
 import loadingHuawu from '../loadingHuawu.vue';
+import { showShortToast } from '../../core/toast';
 
 const tab = ref<'date' | 'trending' | 'popularity' | 'views' | 'likes'>('date');
 const tabArray = [
@@ -142,29 +143,35 @@ async function getImageList(tabNum: number) {
   try {
     const sort = tabArray[tabNum].value;
     const res = await api_getImageList(page[tabNum], sort);
-    console.log(res);
-    if (res && res.results && res.results.length > 0) {
-      const newImages = res.results.map((item: any) => {
-        return {
-          id: item.id,
-          title: item.title,
-          img: item.thumbnail ? `https://i.iwara.tv/image/thumbnail/${item.thumbnail.id}/${item.thumbnail.id}.jpg` : 'file-loss',
-          author: item.user?.name || item.user?.username || 'Unknown',
-          time: item.createdAt,
-          viewNum: item.numViews || 0,
-          likeNum: item.numLikes || 0,
-          longNum: item.numComments || 0,
-          isR18: item.rating === 'ecchi' || item.rating === 'r18'
-        };
-      });
-      // 追加数据
-      imageList.value[tabNum] = [...imageList.value[tabNum], ...newImages];
-      page[tabNum]++;
+    // console.log(res);
+    if (res.ok) {
+      if (res.data.results && res.data.results.length > 0) {
+        const newImages = res.data.results.map((item: any) => {
+          return {
+            id: item.id,
+            title: item.title,
+            img: item.thumbnail ? `https://i.iwara.tv/image/thumbnail/${item.thumbnail.id}/${item.thumbnail.id}.jpg` : 'file-loss',
+            author: item.user?.name || item.user?.username || 'Unknown',
+            time: item.createdAt,
+            viewNum: item.numViews || 0,
+            likeNum: item.numLikes || 0,
+            longNum: item.numComments || 0,
+            isR18: item.rating === 'ecchi' || item.rating === 'r18'
+          };
+        });
+        // 追加数据
+        imageList.value[tabNum] = [...imageList.value[tabNum], ...newImages];
+        page[tabNum]++;
+      } else {
+        listMore.value[tabNum] = true;
+      }
     } else {
-      listMore.value[tabNum] = true;
+      console.error(`状态码：${res.status}`, `错误信息：${res.statusText}`);
+      showShortToast('获取图片列表失败');
     }
   } catch (error) {
-    console.error('Error fetching image list:', error);
+    console.error(`获取插画列表失败:`, error);
+    showShortToast('获取插画列表失败');
   }
 }
 

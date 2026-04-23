@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import searchBar from '../../component/home/searchBar.vue';
 import cardButton from '../../component/cardButton.vue';
-import test1Img from '../../static/img/test1.jpg';
+// import test1Img from '../../static/img/test1.jpg';
 import { ref, onActivated, watch, inject } from 'vue';
 import { Swiper, SwiperSlide } from 'swiper/vue';
 import type { Swiper as SwiperType } from 'swiper';
@@ -11,6 +11,7 @@ import {
   getSubscribeImageList as api_getSubscribeImageList
 } from '../../core/api';
 import loadingHuawu from '../loadingHuawu.vue';
+import { showShortToast } from '../../core/toast';
 
 const videoListView = ref<HTMLElement>();
 const imageListView = ref<HTMLElement>();
@@ -147,66 +148,70 @@ async function imageListHandleScrollToEnd({ done }: any) {
 async function getSubscribeVideoList() {
   try {
     const res = await api_getSubscribeVideoList(videoListPage);
-    console.log(res);
-    if (res && res.results && res.results.length > 0) {
-      const newVideos = res.results.map((item: any) => {
-        return {
-          id: item.id,
-          title: item.title,
-          img: item.file ? `https://i.iwara.tv/image/thumbnail/${item.file.id}/thumbnail-${String(item.thumbnail).padStart(2, '0')}.jpg` : 'file-loss',
-          author: item.user?.name || item.user?.username || 'Unknown',
-          time: item.createdAt,
-          viewNum: item.numViews || 0,
-          likeNum: item.numLikes || 0,
-          longNum: item.file?.duration ?? 0,
-          isR18: item.rating === 'ecchi' || item.rating === 'r18'
-        };
-      });
-      // 追加数据
-      videoList.value = [...videoList.value, ...newVideos];
-      videoListPage++;
-      // 如果返回的数据少于预期，说明没有更多数据了
-      // if (res.results.length < 20) { // 假设每页最多返回20个项目
-      //   videoListMore.value = true;
-      // }
+    // console.log(res);
+    if (res.ok) {
+      if (res.data.results && res.data.results.length > 0) {
+        const newVideos = res.data.results.map((item: any) => {
+          return {
+            id: item.id,
+            title: item.title,
+            img: item.file ? `https://i.iwara.tv/image/thumbnail/${item.file.id}/thumbnail-${String(item.thumbnail).padStart(2, '0')}.jpg` : 'file-loss',
+            author: item.user?.name || item.user?.username || 'Unknown',
+            time: item.createdAt,
+            viewNum: item.numViews || 0,
+            likeNum: item.numLikes || 0,
+            longNum: item.file?.duration ?? 0,
+            isR18: item.rating === 'ecchi' || item.rating === 'r18'
+          };
+        });
+        // 追加数据
+        videoList.value = [...videoList.value, ...newVideos];
+        videoListPage++;
+      } else {
+        videoListMore.value = true;
+      }
     } else {
-      videoListMore.value = true;
+      console.error(`状态码：${res.status}`, `错误信息：${res.statusText}`);
+      showShortToast('获取视频列表失败');
     }
   } catch (error) {
-    console.error('Error fetching video list:', error);
+    console.error(`获取视频列表失败:`, error);
+    showShortToast('获取视频列表失败');
   }
 }
 // 获取插画列表
 async function getSubscribeImageList() {
   try {
     const res = await api_getSubscribeImageList(imageListPage);
-    console.log(res);
-    if (res && res.results && res.results.length > 0) {
-      const newImages = res.results.map((item: any) => {
-        return {
-          id: item.id,
-          title: item.title,
-          img: item.thumbnail ? `https://i.iwara.tv/image/thumbnail/${item.thumbnail.id}/${item.thumbnail.id}.jpg` : 'file-loss',
-          author: item.user?.name || item.user?.username || 'Unknown',
-          time: item.createdAt,
-          viewNum: item.numViews || 0,
-          likeNum: item.numLikes || 0,
-          longNum: item.numComments || 0,
-          isR18: item.rating === 'ecchi' || item.rating === 'r18'
-        };
-      });
-      // 追加数据
-      imageList.value = [...imageList.value, ...newImages];
-      imageListPage++;
-      // 如果返回的数据少于预期，说明没有更多数据了
-      // if (res.results.length < 20) { // 假设每页最多返回20个项目
-      //   imageListMore.value = true;
-      // }
+    // console.log(res);
+    if (res.ok) {
+      if (res.data.results && res.data.results.length > 0) {
+        const newImages = res.data.results.map((item: any) => {
+          return {
+            id: item.id,
+            title: item.title,
+            img: item.thumbnail ? `https://i.iwara.tv/image/thumbnail/${item.thumbnail.id}/${item.thumbnail.id}.jpg` : 'file-loss',
+            author: item.user?.name || item.user?.username || 'Unknown',
+            time: item.createdAt,
+            viewNum: item.numViews || 0,
+            likeNum: item.numLikes || 0,
+            longNum: item.numComments || 0,
+            isR18: item.rating === 'ecchi' || item.rating === 'r18'
+          };
+        });
+        // 追加数据
+        imageList.value = [...imageList.value, ...newImages];
+        imageListPage++;
+      } else {
+        imageListMore.value = true;
+      }
     } else {
-      imageListMore.value = true;
+      console.error(`状态码：${res.status}`, `错误信息：${res.statusText}`);
+      showShortToast('获取插画列表失败');
     }
   } catch (error) {
-    console.error('Error fetching image list:', error);
+    console.error(`获取插画列表失败:`, error);
+    showShortToast('获取插画列表失败');
   }
 }
 

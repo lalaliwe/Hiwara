@@ -305,10 +305,6 @@ watch(expand, async (val) => {
     flex-direction: column;
     justify-content: center;
     padding: 0 10px;
-
-    .btn {
-      width: 80px;
-    }
   }
 }
 

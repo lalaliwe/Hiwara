@@ -10,8 +10,9 @@ import type { Swiper as SwiperType } from 'swiper';
 import 'swiper/css';
 import {
   getVideoInfo as api_getVideoInfo,
-  getUserInfo as api_getUserInfo
+  getVideoFileSQ as api_getVideoFileSQ
 } from '../core/api';
+import { showShortToast } from '../core/toast';
 
 // 设置组件名称，确保与路由name一致
 defineOptions({
@@ -71,70 +72,65 @@ const applyPageSettings = () => {
   // 设置状态栏白色文字
   setStatusBarTextStyle('light')
 }
-applyPageSettings()
 
 // 获取视频信息
 const fetchVideoInfo = async () => {
   isLoading.value = true; // 开始加载
   try {
     const res = await api_getVideoInfo(id.value as string);
-    if (res) {
-      title.value = res.title || '';
-      synopsis.value = res.body || '';
-      playNum.value = res.numViews || 0;
-      likeNum.value = res.numLikes || 0;
-      isLike.value = res.liked || false;
+    console.log(res);
+    if (res.ok) {
+      const data = res.data;
+      title.value = data.title || '';
+      synopsis.value = data.body || '';
+      playNum.value = data.numViews || 0;
+      likeNum.value = data.numLikes || 0;
+      isLike.value = data.liked || false;
       // 修改: 直接传递原始时间字符串，由 info 组件格式化
-      createdAt.value = res.createdAt || '';
-
+      createdAt.value = data.createdAt || '';
       // 处理标签
-      if (res.tags && Array.isArray(res.tags)) {
-        tags.value = res.tags.map((tag: any) => tag.id);
+      if (data.tags && Array.isArray(data.tags)) {
+        tags.value = data.tags.map((tag: any) => tag.id);
       } else {
         tags.value = [];
       }
-
       // 处理作者信息
-      if (res.user) {
-        authorname.value = res.user.name || res.user.username || '';
-        isFollow.value = res.user.following || false;
-
-        // 新增：获取用户详细信息以补全粉丝数和视频数
-        // const username = res.user.username;
-        // if (username) {
-        //   try {
-        //     const userInfoRes = await api_getUserInfo(username);
-        //     if (userInfoRes && userInfoRes.user) {
-        //       // 根据 userInfo.json 结构，粉丝数和视频数可能在 user 对象或其他字段中
-        //       // 这里假设 API 返回的结构中包含 followersCount 和 videosCount 或类似字段
-        //       // 如果 API 返回结构与 test/api/userInfo.json 一致，可能需要查看具体字段
-        //       // 通常 iwara profile API 会返回更详细的信息
-        //       fansNum.value = userInfoRes.user.followersCount || 0;
-        //       videoNum.value = userInfoRes.user.videosCount || 0;
-        //     }
-        //   } catch (error) {
-        //     console.error('Failed to fetch user info:', error);
-        //   }
-        // }
+      if (data.user) {
+        authorname.value = data.user.name || data.user.username || '';
+        isFollow.value = data.user.following || false;
       }
+      // 获取视频文件
+      let extension = '.mp4'; // 默认扩展名
+      if (data.file?.name) {
+        const lastDotIndex = data.file.name.lastIndexOf('.');
+        if (lastDotIndex !== -1) {
+          extension = data.file.name.substring(lastDotIndex);
+        }
+      }
+      const filename = `Iwara - ${data.title} [${data.id}]${extension}`;
+      fetchVideoFile(data.fileUrl, filename);
+    } else {
+      console.error(`状态码：${res.status}`, `错误信息：${res.statusText}`);
+      showShortToast('获取视频信息失败');
     }
   } catch (error) {
-    console.error('Failed to fetch video info:', error);
+    console.error(error);
+    showShortToast('获取视频信息失败');
   } finally {
     isLoading.value = false; // 结束加载
   }
 };
-
-// // 返回
-// function goBack() {
-//   // 触发通知
-//   backTrigger.value++;
-//   router.back();
-// }
-// // 回到主界面
-// function goHome() {
-//   router.replace('/');
-// }
+fetchVideoInfo();
+// 获取视频文件
+async function fetchVideoFile(url: string, filename: string) {
+  try {
+    const res = await api_getVideoFileSQ(url, filename)
+    console.log(res);
+  } catch (error) {
+    showShortToast('获取视频文件失败');
+    console.error('获取视频文件失败：', error);
+  }
+}
 
 onActivated(() => {
   applyPageSettings()
@@ -145,14 +141,11 @@ onDeactivated(() => {
 })
 onMounted(() => {
   applyPageSettings();
-  fetchVideoInfo();
 });
 onUnmounted(() => {
   console.log('❌ Player unmounted', id.value);
 })
-
 </script>
-
 <template>
   <div id="playerView">
     <div class="topBar"></div>
@@ -191,7 +184,6 @@ onUnmounted(() => {
     </div>
   </div>
 </template>
-
 <style lang="scss" scoped>
 #playerView {
   display: flex;

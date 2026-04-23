@@ -1,6 +1,12 @@
+use flate2::read::GzDecoder;
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
+use std::io::Read;
 use tauri_plugin_http::reqwest;
+
+// 引入处理 deflate 和 brotli 所需的库
+use brotli::Decompressor as BrotliDecoder;
+use flate2::read::ZlibDecoder;
 
 #[derive(Debug, Deserialize)]
 pub struct RequestParams {
@@ -24,7 +30,7 @@ pub struct HttpResponse {
 pub struct BinaryHttpResponse {
     status: u16,
     headers: HashMap<String, String>,
-    data: Vec<u8>,  // 二进制数据
+    data: Vec<u8>, // 二进制数据
 }
 
 #[tauri::command]
@@ -90,10 +96,13 @@ pub async fn send_https_request(params: RequestParams) -> Result<HttpResponse, S
         }
     }
 
-    let data = response
-        .text()
+    let raw_bytes = response
+        .bytes()
         .await
-        .map_err(|e| format!("Failed to read response body: {}", e))?;
+        .map_err(|e| format!("Failed to read response body as bytes: {}", e))?;
+
+    // 检查内容编码并根据不同的压缩方式进行解码
+    let data = decode_response_body(raw_bytes.to_vec(), &response_headers)?; // 这里添加 .to_vec()
 
     Ok(HttpResponse {
         status,
@@ -102,8 +111,52 @@ pub async fn send_https_request(params: RequestParams) -> Result<HttpResponse, S
     })
 }
 
+// 解码响应体的辅助函数
+fn decode_response_body(
+    raw_bytes: Vec<u8>,
+    response_headers: &HashMap<String, String>,
+) -> Result<String, String> {
+    let content_encoding = response_headers
+        .get("content-encoding")
+        .map(|s| s.as_str())
+        .unwrap_or("");
+
+    if content_encoding.contains("gzip") || content_encoding.contains("x-gzip") {
+        // 解压缩gzip数据
+        let mut decoder = GzDecoder::new(&raw_bytes[..]);
+        let mut decoded_data = String::new();
+        decoder
+            .read_to_string(&mut decoded_data)
+            .map_err(|e| format!("Failed to decompress gzip data: {}", e))?;
+        Ok(decoded_data)
+    } else if content_encoding.contains("deflate") {
+        // 解压缩deflate数据
+        let mut decoder = ZlibDecoder::new(&raw_bytes[..]);
+        let mut decoded_data = String::new();
+        decoder
+            .read_to_string(&mut decoded_data)
+            .map_err(|e| format!("Failed to decompress deflate data: {}", e))?;
+        Ok(decoded_data)
+    } else if content_encoding.contains("br") {
+        // 解压缩brotli数据
+        let mut decoder = BrotliDecoder::new(&raw_bytes[..], 4096);
+        let mut decoded_data = Vec::new();
+        decoder
+            .read_to_end(&mut decoded_data)
+            .map_err(|e| format!("Failed to decompress brotli data: {}", e))?;
+        String::from_utf8(decoded_data)
+            .map_err(|e| format!("Failed to convert decompressed brotli data to UTF-8: {}", e))
+    } else {
+        // 如果没有压缩，则直接转换为字符串
+        String::from_utf8(raw_bytes.to_vec())
+            .map_err(|e| format!("Failed to convert response to UTF-8: {}", e))
+    }
+}
+
 #[tauri::command]
-pub async fn send_https_request_binary(params: RequestParams) -> Result<BinaryHttpResponse, String> {
+pub async fn send_https_request_binary(
+    params: RequestParams,
+) -> Result<BinaryHttpResponse, String> {
     let client = reqwest::Client::new();
 
     // 默认使用GET方法
@@ -179,11 +232,14 @@ pub async fn send_https_request_binary(params: RequestParams) -> Result<BinaryHt
 }
 
 #[tauri::command]
-pub async fn get_https_request(url: String) -> Result<HttpResponse, String> {
+pub async fn get_https_request(
+    url: String,
+    headers: Option<HashMap<String, String>>,
+) -> Result<HttpResponse, String> {
     send_https_request(RequestParams {
         url,
         method: "GET".to_string(),
-        headers: None,
+        headers,
         body: None,
     })
     .await

@@ -1,13 +1,14 @@
 <script setup lang="ts">
 import searchBar from '../../component/home/searchBar.vue';
 import cardButton from '../../component/cardButton.vue';
-import test1Img from '../../static/img/test1.jpg';
+// import test1Img from '../../static/img/test1.jpg';
 import { ref, onActivated, watch, inject } from 'vue';
 import { Swiper, SwiperSlide } from 'swiper/vue';
 import type { Swiper as SwiperType } from 'swiper';
 import 'swiper/css';
 import { getVideoList as api_getVideoList } from '../../core/api';
 import loadingHuawu from '../loadingHuawu.vue';
+import { showShortToast } from '../../core/toast';
 
 const tab = ref<'date' | 'trending' | 'popularity' | 'views' | 'likes'>('date');
 const tabArray = [
@@ -142,29 +143,34 @@ async function getVideoList(tabNum: number) {
   try {
     const sort = tabArray[tabNum].value;
     const res = await api_getVideoList(page[tabNum], sort);
-    console.log(res);
-    if (res && res.results && res.results.length > 0) {
-      const newVideos = res.results.map((item: any) => {
-        return {
-          id: item.id,
-          title: item.title,
-          img: item.file ? `https://i.iwara.tv/image/thumbnail/${item.file.id}/thumbnail-${String(item.thumbnail).padStart(2, '0')}.jpg` : 'file-loss',
-          author: item.user?.name || item.user?.username || 'Unknown',
-          time: item.createdAt,
-          viewNum: item.numViews || 0,
-          likeNum: item.numLikes || 0,
-          longNum: item.file?.duration ?? 0,
-          isR18: item.rating === 'ecchi' || item.rating === 'r18'
-        };
-      });
-      // 追加数据
-      videoList.value[tabNum] = [...videoList.value[tabNum], ...newVideos];
-      page[tabNum]++;
-    } else {
+    // console.log(res);
+    if (res.ok) {
+      if (res.data.results && res.data.results.length > 0) {
+        const newVideos = res.data.results.map((item: any) => {
+          return {
+            id: item.id,
+            title: item.title,
+            img: item.file ? `https://i.iwara.tv/image/thumbnail/${item.file.id}/thumbnail-${String(item.thumbnail).padStart(2, '0')}.jpg` : 'file-loss',
+            author: item.user?.name || item.user?.username || 'Unknown',
+            time: item.createdAt,
+            viewNum: item.numViews || 0,
+            likeNum: item.numLikes || 0,
+            longNum: item.file?.duration ?? 0,
+            isR18: item.rating === 'ecchi' || item.rating === 'r18'
+          };
+        });
+        // 追加数据
+        videoList.value[tabNum] = [...videoList.value[tabNum], ...newVideos];
+        page[tabNum]++;
+      }
       listMore.value[tabNum] = true;
+    } else {
+      console.error(`状态码：${res.status}`, `错误信息：${res.statusText}`);
+      showShortToast('获取视频列表失败');
     }
   } catch (error) {
-    console.error('Error fetching video list:', error);
+    console.error(`获取视频列表失败:`, error);
+    showShortToast('获取视频列表失败');
   }
 }
 

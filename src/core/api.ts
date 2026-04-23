@@ -2,14 +2,16 @@ import { fetch } from '@tauri-apps/plugin-http';
 import { getUserToken } from './database';
 import { token as store_token } from './store';
 import { invoke } from '@tauri-apps/api/core';
+import { sha1 } from './crypto';
 
 const API_URL = 'https://api.iwara.tv';
+const FILESQ_URL = 'https://filesq.iwara.tv';
 
 // 发送GET请求
-async function getSendRequest(path: string, headers?: any, query?: any) {
+async function getSendRequest(url: string, headers?: any, query?: any) {
   try {
     // 构建查询字符串
-    let url = `${API_URL}${path}`;
+    let finalUrl = url;
     if (query) {
       const queryParams = new URLSearchParams();
       Object.keys(query).forEach(key => {
@@ -19,7 +21,7 @@ async function getSendRequest(path: string, headers?: any, query?: any) {
       });
       const queryString = queryParams.toString();
       if (queryString) {
-        url += `?${queryString}`;
+        finalUrl += `?${queryString}`;
       }
     }
     // 合并默认头信息和用户传入的头信息
@@ -27,28 +29,47 @@ async function getSendRequest(path: string, headers?: any, query?: any) {
       'Content-Type': 'application/json',
       ...(headers || {}),
     };
-    const response = await fetch(url, {
+    const response = await fetch(finalUrl, {
       method: 'GET',
       headers: requestHeaders,
     });
+    console.log('response', response);
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
-    return await response.json();
+    // 尝试解析 JSON，如果失败则返回文本或空对象
+    let data: any = null;
+    const contentType = response.headers.get('content-type');
+    if (contentType && contentType.includes('application/json')) {
+      try {
+        data = await response.json();
+      } catch (e) {
+        console.warn('Failed to parse JSON response:', e);
+        data = await response.text();
+      }
+    } else {
+      data = await response.text();
+    }
+    return {
+      ok: response.ok,
+      status: response.status,
+      statusText: response.statusText,
+      data: data,
+    };
   } catch (error) {
     console.error('GET request failed:', error);
     throw error;
   }
 }
 // 发送POST请求 
-async function postSendRequest(path: string, headers?: any, body?: any) {
+async function postSendRequest(url: string, headers?: any, body?: any) {
   try {
     // 合并默认头信息和用户传入的头信息
     const requestHeaders: Record<string, string> = {
       'Content-Type': 'application/json',
       ...(headers || {}),
     };
-    const response = await fetch(`${API_URL}${path}`, {
+    const response = await fetch(url, {
       method: 'POST',
       headers: requestHeaders,
       body: body ? JSON.stringify(body) : undefined,
@@ -77,8 +98,130 @@ async function postSendRequest(path: string, headers?: any, body?: any) {
     throw error;
   }
 }
+// 发送GET请求(iwara)
+async function getSendRequestIwara(url: string, headers?: any, query?: any) {
+  try {
+    // 构建查询字符串
+    let finalUrl = url;
+    if (query) {
+      const queryParams = new URLSearchParams();
+      Object.keys(query).forEach(key => {
+        if (query[key] !== undefined && query[key] !== null) {
+          queryParams.append(key, String(query[key]));
+        }
+      });
+      const queryString = queryParams.toString();
+      if (queryString) {
+        finalUrl += `?${queryString}`;
+      }
+    }
+
+    // 合并默认头信息和用户传入的头信息
+    const requestHeaders: Record<string, string> = {
+      'Content-Type': 'application/json',
+      'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+      'Referer': 'https://www.iwara.tv/',
+      'Accept-Encoding': 'gzip, deflate, br', // 支持压缩编码
+      ...(headers || {}),
+    };
+
+    // 使用我们创建的自定义网络请求命令，模拟浏览器请求
+    const response: any = await invoke('get_https_request', {
+      url: finalUrl,
+      headers: requestHeaders
+    });
+
+    // 检查响应状态
+    if (response.status < 200 || response.status >= 300) {
+      throw new Error(`Request failed with status ${response.status}`);
+    }
+
+    // 尝试解析 JSON，如果失败则返回文本
+    let data: any = null;
+    const contentType = response.headers['Content-Type'] || response.headers['content-type'];
+
+    // 检查内容是否为JSON
+    if (contentType && contentType.includes('application/json')) {
+      try {
+        // 如果是JSON，解析它
+        data = JSON.parse(response.data);
+      } catch (e) {
+        console.warn('Failed to parse JSON response:', e);
+        console.warn('Raw response data:', response.data);
+        data = response.data;
+      }
+    } else {
+      // 不是JSON则直接使用响应数据
+      data = response.data;
+    }
+
+    return {
+      ok: response.status >= 200 && response.status < 300,
+      status: response.status,
+      data: data,
+    };
+  } catch (error) {
+    console.error('GET request failed:', error);
+    throw error;
+  }
+}
+
+// 发送POST请求(iwara) 
+async function postSendRequestIwara(url: string, headers?: any, body?: any) {
+  try {
+    // 合并默认头信息和用户传入的头信息
+    const requestHeaders: Record<string, string> = {
+      'Content-Type': 'application/json',
+      'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+      'Referer': 'https://www.iwara.tv/',
+      'Accept-Encoding': 'gzip, deflate, br', // 支持压缩编码
+      ...(headers || {}),
+    };
+
+    // 使用我们创建的自定义网络请求命令，模拟浏览器请求
+    const response: any = await invoke('post_https_request', {
+      url,
+      headers: requestHeaders,
+      body: body ? JSON.stringify(body) : undefined
+    });
+
+    // 检查响应状态
+    if (response.status < 200 || response.status >= 300) {
+      throw new Error(`Request failed with status ${response.status}`);
+    }
+
+    // 尝试解析 JSON，如果失败则返回文本
+    let data: any = null;
+    const contentType = response.headers['Content-Type'] || response.headers['content-type'];
+
+    // 检查内容是否为JSON
+    if (contentType && contentType.includes('application/json')) {
+      try {
+        // 如果是JSON，解析它
+        data = JSON.parse(response.data);
+      } catch (e) {
+        console.warn('Failed to parse JSON response:', e);
+        console.warn('Raw response data:', response.data);
+        data = response.data;
+      }
+    } else {
+      // 不是JSON则直接使用响应数据
+      data = response.data;
+    }
+
+    return {
+      ok: response.status >= 200 && response.status < 300,
+      status: response.status,
+      data: data,
+    };
+  } catch (error) {
+    console.error('POST request failed:', error);
+    throw error;
+  }
+}
+
 // 获取图片
-export async function getImage(url: string): Promise<string> {
+export async function getImageIwara(url: string): Promise<string> {
   try {
     // 构建请求头
     const headers: Record<string, string> = {
@@ -112,13 +255,13 @@ export async function getImage(url: string): Promise<string> {
 
 // 登录
 export async function login(email: string, password: string): Promise<any> {
-  const path = '/user/login';
+  const path = `${API_URL}/user/login`;
   const body = {
     email,
     password
   };
   try {
-    const response = await postSendRequest(path, undefined, body);
+    const response = await postSendRequestIwara(path, undefined, body);
     return response;
   } catch (error) {
     console.error('Login failed:', error);
@@ -131,13 +274,13 @@ async function getAccessToken(): Promise<any> {
   const accessToken = store_token().value
   if (accessToken)
     return accessToken
-  const path = '/user/token';
+  const path = `${API_URL}/user/token`;
   const token = await getUserToken()
   const headers = {
     Authorization: `Bearer ${token}`,
   };
   try {
-    const response = await postSendRequest(path, headers);
+    const response = await postSendRequestIwara(path, headers);
     if (response.ok) {
       store_token().set(response.data.accessToken);
       return response.data.accessToken;
@@ -152,7 +295,7 @@ async function getAccessToken(): Promise<any> {
 
 // 获取用户订阅视频列表
 export async function getSubscribeVideoList(page: number): Promise<any> {
-  const path = '/videos';
+  const path = `${API_URL}/videos`;
   const headers = {
     Authorization: `Bearer ${await getAccessToken()}`,
   };
@@ -163,7 +306,7 @@ export async function getSubscribeVideoList(page: number): Promise<any> {
     subscribed: true
   };
   try {
-    const response = await getSendRequest(path, headers, query);
+    const response = await getSendRequestIwara(path, headers, query);
     return response;
   } catch (error) {
     console.error('Get subscribe video list failed:', error);
@@ -172,7 +315,7 @@ export async function getSubscribeVideoList(page: number): Promise<any> {
 }
 // 获取用户订阅插画列表
 export async function getSubscribeImageList(page: number): Promise<any> {
-  const path = '/images';
+  const path = `${API_URL}/images`;
   const headers = {
     Authorization: `Bearer ${await getAccessToken()}`,
   };
@@ -183,7 +326,7 @@ export async function getSubscribeImageList(page: number): Promise<any> {
     subscribed: true
   };
   try {
-    const response = await getSendRequest(path, headers, query);
+    const response = await getSendRequestIwara(path, headers, query);
     return response;
   } catch (error) {
     console.error('Get subscribe image list failed:', error);
@@ -192,7 +335,7 @@ export async function getSubscribeImageList(page: number): Promise<any> {
 }
 // 获取视频列表
 export async function getVideoList(page: number, sort: string, date?: string): Promise<any> {
-  const path = '/videos';
+  const path = `${API_URL}/videos`;
   const headers = {
     Authorization: `Bearer ${await getAccessToken()}`,
   };
@@ -204,7 +347,7 @@ export async function getVideoList(page: number, sort: string, date?: string): P
     date: date
   };
   try {
-    const response = await getSendRequest(path, headers, query);
+    const response = await getSendRequestIwara(path, headers, query);
     return response;
   } catch (error) {
     console.error('Get subscribe video list failed:', error);
@@ -214,7 +357,7 @@ export async function getVideoList(page: number, sort: string, date?: string): P
 
 // 获取插画列表
 export async function getImageList(page: number, sort: string, date?: string): Promise<any> {
-  const path = '/images';
+  const path = `${API_URL}/images`;
   const headers = {
     Authorization: `Bearer ${await getAccessToken()}`,
   };
@@ -226,7 +369,7 @@ export async function getImageList(page: number, sort: string, date?: string): P
     date: date
   };
   try {
-    const response = await getSendRequest(path, headers, query);
+    const response = await getSendRequestIwara(path, headers, query);
     return response;
   } catch (error) {
     console.error('Get subscribe video list failed:', error);
@@ -236,15 +379,35 @@ export async function getImageList(page: number, sort: string, date?: string): P
 
 // 获取视频信息
 export async function getVideoInfo(videoId: string): Promise<any> {
-  const path = `/video/${videoId}`;
+  const path = `${API_URL}/video/${videoId}`;
   const headers = {
     Authorization: `Bearer ${await getAccessToken()}`,
   };
   try {
-    const response = await getSendRequest(path, headers);
+    const response = await getSendRequestIwara(path, headers);
     return response;
   } catch (error) {
     console.error('Get video info failed:', error);
+    throw error;
+  }
+}
+// 获取视频文件信息
+export async function getVideoFileSQ(url: string, download: string): Promise<any> {
+  // 示例url：https://filesq.iwara.tv/file/703f6909-71cd-4562-90d8-d03641ad4706?expires=1776910833478&hash=bfaa8a6c942a9553af1c976dc56b1585fc119ad522e7fc8970a1f18a50823b09
+  const urlObj = new URL(url);
+  const id = urlObj.pathname.split('/').pop();
+  const expires = urlObj.searchParams.get('expires');
+  const hash = urlObj.searchParams.get('hash');
+  const salt = 'mSvL05GfEmeEmsEYfGCnVpEjYgTJraJN'
+  const headers = {
+    'x-version': await sha1(`${id}_${expires}_${salt}`)
+  };
+  const path = download ? `${url}${url.includes('?') ? '&' : '?'}download=${encodeURIComponent(download)}` : url;
+  try {
+    const response = await getSendRequestIwara(path, headers);
+    return response;
+  } catch (error) {
+    console.error('Get video file info failed:', error);
     throw error;
   }
 }
@@ -255,7 +418,7 @@ export async function getUserInfo(username: string): Promise<any> {
     Authorization: `Bearer ${await getAccessToken()}`,
   };
   try {
-    const response = await getSendRequest(path, headers);
+    const response = await getSendRequestIwara(path, headers);
     return response;
   } catch (error) {
     console.error('Get user info failed:', error);
