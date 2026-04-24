@@ -49,7 +49,7 @@ export function initDatabase(): Promise<void> {
           aria2_switch BOOLEAN
         );`);
         // 插入默认设置数据
-        await sqlDB.execute(`INSERT INTO setup (auto_play, reconnect, definition, search_mode, language, video_save_path, image_save_path, aria2_rpc, aria2_token, aria2_download, aria2_switch) VALUES (TRUE, 1, 'Source', 0, 'auto', '', '', '', '', '~/Downloads/Iwara', FALSE);`);
+        await sqlDB.execute(`INSERT INTO setup (auto_play, reconnect, definition, search_mode, language, video_save_path, image_save_path, aria2_rpc, aria2_token, aria2_download, aria2_switch) VALUES (TRUE, 1, 'Source', 0, 'auto', '', '', '', '', '', FALSE);`);
       }
       resolve();
     } catch (error) {

@@ -51,14 +51,14 @@ function routerGoTo(path: string) {
         <font-awesome-icon icon="fa-solid fa-angle-right" />
       </div>
     </div>
-    <div class="item">
-      <div class="label">下载目录</div>
+    <div class="item" @click="routerGoTo('/setup/download')">
+      <div class="label">下载设置</div>
       <div class="icon">
         <font-awesome-icon icon="fa-solid fa-angle-right" />
       </div>
     </div>
-    <div class="item">
-      <div class="label">Aria设置</div>
+    <div class="item" @click="routerGoTo('/setup/aria2')">
+      <div class="label">Aria2设置</div>
       <div class="icon">
         <font-awesome-icon icon="fa-solid fa-angle-right" />
       </div>
@@ -69,13 +69,13 @@ function routerGoTo(path: string) {
         <font-awesome-icon icon="fa-solid fa-angle-right" />
       </div>
     </div>
-    <div class="item">
+    <!-- <div class="item">
       <div class="label">清理缓存</div>
       <div class="icon">
         <font-awesome-icon icon="fa-solid fa-angle-right" />
       </div>
-    </div>
-    <div class="item">
+    </div> -->
+    <div class="item" @click="routerGoTo('/setup/about')">
       <div class="label">关于</div>
       <div class="icon">
         <font-awesome-icon icon="fa-solid fa-angle-right" />

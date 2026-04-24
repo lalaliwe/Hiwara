@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
+import { ref } from 'vue'
 
 defineOptions({
-  name: 'SetupSearchMode'
+  name: 'SetupDownload'
 })
 
 const router = useRouter()
@@ -10,30 +11,35 @@ const router = useRouter()
 const goBack = () => {
   router.back();
 }
+
+const videoDownload = ref('~/Videos')
+const imageDownload = ref('~/Pictures');
 </script>
 
 <template>
-  <div id="setupSearchModeView">
+  <div id="setupDownloadView">
     <div class="topBar">
       <div class="goback" @click="goBack">
         <font-awesome-icon icon="fa-solid fa-angle-left" />
       </div>
       <div class="label">
-        默认搜索模式
+        下载设置
       </div>
     </div>
     <!-- 内容区域 -->
     <div class="item">
-      关键字搜索
+      <div class="label">视频下载目录</div>
+      <div class="value">{{ videoDownload }}</div>
     </div>
     <div class="item">
-      标签搜索
+      <div class="label">插画下载目录</div>
+      <div class="value">{{ imageDownload }}</div>
     </div>
   </div>
 </template>
 
 <style lang="scss" scoped>
-#setupSearchModeView {
+#setupDownloadView {
   overflow-y: auto;
   padding: calc(60px + env(safe-area-inset-top, 0)) 0 env(safe-area-inset-bottom, 0) 0;
   background-color: #fafafa;
@@ -84,13 +90,12 @@ const goBack = () => {
   border-bottom: solid 1px #BDBDBD;
   color: #212121;
   font-size: 1rem;
-  cursor: pointer;
-  user-select: none;
-  height: 52px;
-  padding: 0 14px;
   width: 100%;
-  display: flex;
-  align-items: center;
-  justify-self: start;
+  padding: 12px 14px;
+
+  .value {
+    font-size: 0.8rem;
+    color: #757575;
+  }
 }
 </style>

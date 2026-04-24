@@ -1,16 +1,10 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
-import { setStatusBarTextStyle } from '../../plugins/navbarStyle'
 import { ref } from 'vue'
 
 defineOptions({
   name: 'SetupLanguage'
 })
-
-/** 
- * 不会返回此页面，无需onActivated
- */
-setStatusBarTextStyle('light')
 
 const router = useRouter()
 // 返回上一页

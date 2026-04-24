@@ -13,7 +13,10 @@ import offlineCache from '../views/offlineCache.vue';
 // setup子页面
 import setup_definition from '../views/setup/definition.vue';
 import setup_searchMode from '../views/setup/searchMode.vue';
+import setup_download from '../views/setup/download.vue';
+import setup_aria2 from '../views/setup/aria2.vue';
 import setup_language from '../views/setup/language.vue';
+import setup_about from '../views/setup/about.vue';
 
 // ========================
 // 类型定义
@@ -138,11 +141,29 @@ const routes: Array<RouteRecordRaw & { meta?: RouteMeta }> = [
     meta: { transition: 'stack', componentName: 'SetupSearchMode' },
   },
   {
+    path: '/setup/download',
+    name: 'SetupDownload',
+    component: setup_download,
+    meta: { transition: 'stack', componentName: 'SetupDownload' },
+  },
+  {
+    path: '/setup/aria2',
+    name: 'SetupAria2',
+    component: setup_aria2,
+    meta: { transition: 'stack', componentName: 'SetupAria2' },
+  },
+  {
     path: '/setup/language',
     name: 'SetupLanguage',
     component: setup_language,
     meta: { transition: 'stack', componentName: 'SetupLanguage' },
   },
+  {
+    path: '/setup/about',
+    name: 'SetupAbout',
+    component: setup_about,
+    meta: { transition: 'stack', componentName: 'SetupAbout' },
+  }
 ]
 
 const router = createRouter({
