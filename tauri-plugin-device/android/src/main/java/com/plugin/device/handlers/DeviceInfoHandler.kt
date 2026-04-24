@@ -14,7 +14,9 @@ class DeviceInfoHandler(private val activity: Activity) {
     fun getDeviceInfo(invoke: Invoke) {
         val ret = JSObject()
         ret.put("osName", "Android")
-        ret.put("osVersion", Build.VERSION.RELEASE)
+        // 获取更详细的Android版本信息: Android 13 (API 33)
+        val osVersion = "${Build.VERSION.RELEASE} (API ${Build.VERSION.SDK_INT})"
+        ret.put("osVersion", osVersion)
         ret.put("deviceModel", Build.MODEL)
         ret.put("deviceManufacturer", Build.MANUFACTURER)
         invoke.resolve(ret)

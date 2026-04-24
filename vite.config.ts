@@ -4,6 +4,15 @@ import vue from "@vitejs/plugin-vue";
 // @ts-expect-error process is a nodejs global
 const host = process.env.TAURI_DEV_HOST;
 
+// 获取构建时间
+const buildTime = new Date().toLocaleString('zh-CN', {
+  year: 'numeric',
+  month: '2-digit',
+  day: '2-digit',
+  hour: '2-digit',
+  minute: '2-digit'
+}).replace(/\//g, '-');
+
 // https://vite.dev/config/
 export default defineConfig(async () => ({
   plugins: [vue()],
@@ -29,4 +38,7 @@ export default defineConfig(async () => ({
       ignored: ["**/src-tauri/**"],
     },
   },
+  define: {
+    __BUILD_TIME__: JSON.stringify(buildTime)
+  }
 }));

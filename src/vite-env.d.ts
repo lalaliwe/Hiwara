@@ -10,3 +10,5 @@ declare module 'vuetify/styles' {
   const styles: any;
   export default styles;
 }
+
+declare const __BUILD_TIME__: string;

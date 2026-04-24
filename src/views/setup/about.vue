@@ -1,15 +1,129 @@
 <script setup lang="ts">
+import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
+import { getDeviceInfo } from '../../plugins/deviceInfo'
 
 defineOptions({
   name: 'SetupAbout'
 })
 
 const router = useRouter()
+
+// 响应式数据
+const version = ref('0.1.0')
+const buildTime = ref('加载中...')
+const deviceType = ref('加载中...')
+const osName = ref('加载中...')
+const osVersion = ref('加载中...')
+const webViewName = ref('加载中...')
+const webViewVersion = ref('')
+
 // 返回上一页
 const goBack = () => {
   router.back();
 }
+
+// 获取操作系统图标
+const getOsIcon = () => {
+  const name = osName.value.toLowerCase()
+  
+  if (name.includes('windows')) return 'fa-brands fa-windows'
+  if (name.includes('mac') || name.includes('os x')) return 'fa-brands fa-apple'
+  if (name.includes('android')) return 'fa-brands fa-android'
+  if (name.includes('ubuntu')) return 'fa-brands fa-ubuntu'
+  if (name.includes('debian')) return 'fa-brands fa-debian'
+  if (name.includes('fedora')) return 'fa-brands fa-fedora'
+  if (name.includes('arch')) return 'fa-brands fa-arch-linux'
+  if (name.includes('opensuse') || name.includes('suse')) return 'fa-brands fa-suse'
+  if (name.includes('linux')) return 'fa-brands fa-linux'
+  
+  return 'fa-solid fa-laptop'
+}
+
+// 获取设备信息
+const loadDeviceInfo = async () => {
+  try {
+    const info = await getDeviceInfo()
+    
+    // 判断设备类型
+    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
+    deviceType.value = isMobile ? '移动端' : '桌面端'
+    
+    // OS 信息
+    osName.value = info.osName || '未知'
+    osVersion.value = info.osVersion || '未知'
+    
+    // WebView 信息 - 从 userAgent 中解析真实的 WebView 引擎和版本
+    const userAgent = navigator.userAgent
+    
+    if (info.osName === 'Android') {
+      // Android: 从 userAgent 中提取 WebView 版本
+      // Tauri Android 使用 Android System WebView, userAgent 中包含 Chrome 版本
+      const chromeMatch = userAgent.match(/Chrome\/([\d.]+)/)
+      webViewName.value = 'Android System WebView'
+      webViewVersion.value = chromeMatch ? chromeMatch[1] : ''
+    } else if (info.osName.toLowerCase().includes('windows')) {
+      // Windows: Tauri v2 使用 WebView2 (Edge Chromium)
+      const edgeMatch = userAgent.match(/Edg\/([\d.]+)/)
+      const chromeMatch = userAgent.match(/Chrome\/([\d.]+)/)
+      
+      if (edgeMatch) {
+        webViewName.value = 'Microsoft Edge WebView2'
+        webViewVersion.value = edgeMatch[1]
+      } else if (chromeMatch) {
+        webViewName.value = 'Chromium WebView'
+        webViewVersion.value = chromeMatch[1]
+      } else {
+        webViewName.value = 'Microsoft Edge WebView2'
+        webViewVersion.value = ''
+      }
+    } else if (info.osName.toLowerCase().includes('mac')) {
+      // macOS: Tauri 使用 WKWebView (WebKit)
+      const safariMatch = userAgent.match(/Version\/([\d.]+)/)
+      const webkitMatch = userAgent.match(/AppleWebKit\/([\d.]+)/)
+      
+      if (safariMatch) {
+        webViewName.value = 'WebKit (WKWebView)'
+        webViewVersion.value = safariMatch[1]
+      } else if (webkitMatch) {
+        webViewName.value = 'WebKit (WKWebView)'
+        webViewVersion.value = webkitMatch[1]
+      } else {
+        webViewName.value = 'WebKit (WKWebView)'
+        webViewVersion.value = ''
+      }
+    } else if (info.osName.toLowerCase().includes('linux')) {
+      // Linux: Tauri 使用 WebKitGTK
+      const webkitMatch = userAgent.match(/AppleWebKit\/([\d.]+)/)
+      
+      if (webkitMatch) {
+        webViewName.value = 'WebKitGTK'
+        webViewVersion.value = webkitMatch[1]
+      } else {
+        webViewName.value = 'WebKitGTK'
+        webViewVersion.value = ''
+      }
+    } else {
+      webViewName.value = '未知'
+      webViewVersion.value = ''
+    }
+  } catch (error) {
+    console.error('获取设备信息失败:', error)
+    deviceType.value = '未知'
+    osName.value = '未知'
+    osVersion.value = '未知'
+    webViewName.value = '未知'
+    webViewVersion.value = ''
+  }
+}
+
+// 组件挂载时加载信息
+onMounted(() => {
+  loadDeviceInfo()
+
+  // 设置构建时间
+  buildTime.value = __BUILD_TIME__ || '2023-10-01 12:00'
+})
 </script>
 
 <template>
@@ -33,7 +147,7 @@ const goBack = () => {
     </div>
     <div class="item">
       <div class="label">版本号</div>
-      <div class="value">v1.0.00</div>
+      <div class="value">{{ version }}</div>
     </div>
     <div class="item">
       <div class="label">版本类型</div>
@@ -41,37 +155,37 @@ const goBack = () => {
     </div>
     <div class="item">
       <div class="label">构建时间</div>
-      <div class="value">2023-10-01 12:00</div>
+      <div class="value">{{ buildTime }}</div>
     </div>
     <div class="item">
       <div class="label">设备类型</div>
       <div class="value">
-        <font-awesome-icon icon="fa-solid fa-desktop" />
+        <font-awesome-icon :icon="deviceType === '桌面端' ? 'fa-solid fa-desktop' : 'fa-solid fa-mobile-screen'" />
         &nbsp;
-        桌面端
+        {{ deviceType }}
       </div>
     </div>
     <div class="item">
       <div class="label">OS名称</div>
       <div class="value">
-        <font-awesome-icon icon="fa-brands fa-windows" />
+        <font-awesome-icon :icon="getOsIcon()" />
         &nbsp;
-        Windows 10
+        {{ osName }}
       </div>
     </div>
     <div class="item">
       <div class="label">OS版本</div>
-      <div class="value">19045.6466</div>
+      <div class="value">{{ osVersion }}</div>
     </div>
     <div class="item">
       <div class="label">WebView</div>
-      <div class="value">WebView2</div>
+      <div class="value">{{ webViewName }}</div>
+    </div>
+    <div class="item" v-if="webViewVersion">
+      <div class="label">WebView版本</div>
+      <div class="value">{{ webViewVersion }}</div>
     </div>
     <div class="item">
-      <div class="label">WebView版本</div>
-      <div class="value">10.0.19044</div>
-    </div>
-        <div class="item">
       <div class="label">检查更新</div>
       <div class="value">
         <font-awesome-icon icon="fa-solid fa-angle-right" />

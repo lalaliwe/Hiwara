@@ -21,6 +21,7 @@
           "url": "https://api.iwara.tv/*"
         }
       ]
-    }
+    },
+    "dialog:default"
   ]
 }

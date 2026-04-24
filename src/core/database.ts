@@ -1,4 +1,5 @@
 import Database from '@tauri-apps/plugin-sql';
+import { videoDir, pictureDir, join } from '@tauri-apps/api/path';
 const sqlDB = await Database.load('sqlite:database.db');
 
 // 生成UUID的辅助函数
@@ -48,8 +49,15 @@ export function initDatabase(): Promise<void> {
           aria2_download TEXT,
           aria2_switch BOOLEAN
         );`);
+        
+        // 获取系统默认路径并构建iwara目录
+        const videoPath = await videoDir();
+        const imagePath = await pictureDir();
+        const videoSavePath = await join(videoPath, 'iwara');
+        const imageSavePath = await join(imagePath, 'iwara');
+        
         // 插入默认设置数据
-        await sqlDB.execute(`INSERT INTO setup (auto_play, reconnect, definition, search_mode, language, video_save_path, image_save_path, aria2_rpc, aria2_token, aria2_download, aria2_switch) VALUES (TRUE, 1, 'Source', 0, 'auto', '', '', '', '', '', FALSE);`);
+        await sqlDB.execute(`INSERT INTO setup (auto_play, reconnect, definition, search_mode, language, video_save_path, image_save_path, aria2_rpc, aria2_token, aria2_download, aria2_switch) VALUES (TRUE, 1, 'Source', 0, 'auto', ?, ?, '', '', '', FALSE);`, [videoSavePath, imageSavePath]);
       }
       resolve();
     } catch (error) {

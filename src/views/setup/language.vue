@@ -13,6 +13,7 @@ const { language } = storeToRefs(setup)
 
 // 定义语言列表
 const languages = [
+  { label: '跟随系统', subLabel: '', value: 'auto' },
   { label: '英语', subLabel: 'English', value: 'en' },
   { label: '简体中文', subLabel: '简体中文', value: 'zh-Hans' },
   { label: '繁体中文', subLabel: '繁體中文', value: 'zh-Hant' },
@@ -147,6 +148,7 @@ const selectLanguage = async (langValue: string) => {
     display: flex;
     align-items: center;
     justify-self: start;
+    color: #9E9E9E;
   }
 
   .tips {

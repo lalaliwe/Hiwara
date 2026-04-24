@@ -30,3 +30,4 @@ tauri-plugin-sql = { version = "2", features = ["sqlite"] }
 tauri-plugin-http = "2"
 flate2 = "1.0"
 brotli = "6.0.0"
+tauri-plugin-dialog = "2"

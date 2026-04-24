@@ -2,6 +2,8 @@
 import { useRouter } from 'vue-router'
 import { setupStore } from '../../core/store'
 import { storeToRefs } from 'pinia'
+// 导入Tauri的dialog插件
+import { open } from '@tauri-apps/plugin-dialog'
 
 defineOptions({
   name: 'SetupDownload'
@@ -16,16 +18,32 @@ const goBack = () => {
   router.back();
 }
 
-// 更新视频保存路径
-const updateVideoSavePath = async (event: Event) => {
-  const target = event.target as HTMLInputElement;
-  await setup.updateSetting('videoSavePath', target.value);
+// 选择视频保存路径
+const selectVideoSavePath = async () => {
+  const selectedPath = await open({
+    directory: true,  // 只能选择目录
+    multiple: false,  // 只能选择单个目录
+    title: '选择视频保存路径'
+  });
+
+  if (selectedPath) {
+    // 将选择的路径更新到store中
+    await setup.updateSetting('videoSavePath', selectedPath as string);
+  }
 }
 
-// 更新图片保存路径
-const updateImageSavePath = async (event: Event) => {
-  const target = event.target as HTMLInputElement;
-  await setup.updateSetting('imageSavePath', target.value);
+// 选择图片保存路径
+const selectImageSavePath = async () => {
+  const selectedPath = await open({
+    directory: true,  // 只能选择目录
+    multiple: false,  // 只能选择单个目录
+    title: '选择图片保存路径'
+  });
+
+  if (selectedPath) {
+    // 将选择的路径更新到store中
+    await setup.updateSetting('imageSavePath', selectedPath as string);
+  }
 }
 </script>
 
@@ -40,31 +58,13 @@ const updateImageSavePath = async (event: Event) => {
       </div>
     </div>
     <!-- 内容区域 -->
-    <div class="item">
+    <div class="item" @click="selectVideoSavePath">
       <div class="label">视频保存路径</div>
-      <v-text-field 
-        class="input" 
-        label="请输入视频保存路径" 
-        color="#00796B" 
-        hide-details
-        density="comfortable" 
-        variant="underlined"
-        :model-value="videoSavePath"
-        @change="updateVideoSavePath"
-      ></v-text-field>
+      <div class="path-display">{{ videoSavePath || '未设置' }}</div>
     </div>
-    <div class="item">
+    <div class="item" @click="selectImageSavePath">
       <div class="label">图片保存路径</div>
-      <v-text-field 
-        class="input" 
-        label="请输入图片保存路径" 
-        color="#00796B" 
-        hide-details 
-        density="comfortable"
-        variant="underlined"
-        :model-value="imageSavePath"
-        @change="updateImageSavePath"
-      ></v-text-field>
+      <div class="path-display">{{ imageSavePath || '未设置' }}</div>
     </div>
   </div>
 </template>
@@ -77,6 +77,10 @@ const updateImageSavePath = async (event: Event) => {
 
   &::-webkit-scrollbar-track {
     margin: calc(60px + env(safe-area-inset-top, 0) + 4px) 0 calc(env(safe-area-inset-bottom, 0) + 4px) 0;
+  }
+
+  .container {
+    padding-top: 20px;
   }
 }
 
@@ -126,14 +130,17 @@ const updateImageSavePath = async (event: Event) => {
   flex-direction: column;
   width: 100%;
   overflow: hidden;
-  padding: 16px 14px;
+  padding: 14px;
+  cursor: pointer;
 
   .label {
     margin-bottom: 8px;
   }
 
-  .input {
-    width: 100%;
+  .path-display {
+    font-size: 0.8rem;
+    color: #757575;
+    word-break: break-all;
   }
 }
 </style>
