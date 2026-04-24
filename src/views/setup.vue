@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
 import { setStatusBarTextStyle } from '../plugins/navbarStyle'
+import { setupStore } from '../core/store'
+import { storeToRefs } from 'pinia'
 
 defineOptions({
   name: 'Setup'
@@ -12,6 +14,12 @@ defineOptions({
 setStatusBarTextStyle('light')
 
 const router = useRouter()
+const setup = setupStore()
+const { autoPlay, definition, searchMode, aria2Switch, language } = storeToRefs(setup)
+
+// 在组件挂载时加载设置
+setup.loadSetupFromDatabase()
+
 // 返回上一页
 const goBack = () => {
   router.back();
@@ -20,6 +28,11 @@ const goBack = () => {
 function routerGoTo(path: string) {
   router.push(path);
 }
+
+// 切换自动播放
+const toggleAutoPlay = async (value: boolean | null) => {
+  await setup.updateSetting('autoPlay', Boolean(value));
+};
 </script>
 
 <template>
@@ -35,55 +48,91 @@ function routerGoTo(path: string) {
     <!-- 内容区域 -->
     <div class="item" style="border-top: solid 1px #BDBDBD;">
       <div class="label">自动播放</div>
-      <div class="icon">
-        <v-switch density="compact" color="#00796B"></v-switch>
+      <div class="value">
+        <v-switch 
+          v-model="autoPlay" 
+          @update:model-value="toggleAutoPlay"
+          density="compact" 
+          color="#00796B"
+        ></v-switch>
       </div>
     </div>
     <div class="item" @click="routerGoTo('/setup/definition')">
       <div class="label">默认清晰度</div>
-      <div class="icon">
+      <div class="value">
+        <span>{{ 
+          definition === '360p' ? '360P' : 
+          definition === '540p' ? '540P' : 
+          '原画' 
+        }}</span>
         <font-awesome-icon icon="fa-solid fa-angle-right" />
       </div>
     </div>
     <div class="item" @click="routerGoTo('/setup/searchMode')">
       <div class="label">默认搜索模式</div>
-      <div class="icon">
+      <div class="value">
+        <span>{{ searchMode === 0 ? '关键字搜索' : '标签搜索' }}</span>
         <font-awesome-icon icon="fa-solid fa-angle-right" />
       </div>
     </div>
     <div class="item" @click="routerGoTo('/setup/download')">
       <div class="label">下载设置</div>
-      <div class="icon">
+      <div class="value">
         <font-awesome-icon icon="fa-solid fa-angle-right" />
       </div>
     </div>
     <div class="item" @click="routerGoTo('/setup/aria2')">
       <div class="label">Aria2设置</div>
-      <div class="icon">
+      <div class="value">
+        <span>{{ aria2Switch ? '已启用' : '未启用' }}</span>
         <font-awesome-icon icon="fa-solid fa-angle-right" />
       </div>
     </div>
     <div class="item" @click="routerGoTo('/setup/language')">
       <div class="label">语言（Language）</div>
-      <div class="icon">
+      <div class="value">
+        <span>{{ 
+          language === 'auto' ? '跟随系统' : 
+          language === 'zh-Hans' ? '简体中文' :
+          language === 'en' ? 'English' :
+          language === 'ja' ? '日本語' :
+          language === 'ko' ? '한국어' :
+          language === 'fr' ? 'Français' :
+          language === 'es' ? 'Español' :
+          language === 'pt' ? 'Português' :
+          language === 'de' ? 'Deutsch' :
+          language === 'it' ? 'Italiano' :
+          language === 'ru' ? 'Русский' :
+          language === 'uk' ? 'Українська' :
+          language === 'th' ? 'ภาษาไทย' :
+          language === 'vi' ? 'Tiếng Việt' :
+          language === 'km' ? 'ភាសាខ្មែរ' :
+          language === 'hi' ? 'भाषा' :
+          language === 'ar' ? 'العربية' :
+          language === 'he' ? 'עברית' :
+          language === 'bo' ? 'བོད་ཡིག' :
+          language === 'ug' ? 'ئۇيغۇر تىلى' :
+          language === 'kk' ? 'қазақ тілі' :
+          'English' 
+        }}</span>
         <font-awesome-icon icon="fa-solid fa-angle-right" />
       </div>
     </div>
     <!-- <div class="item">
       <div class="label">清理缓存</div>
-      <div class="icon">
+      <div class="value">
         <font-awesome-icon icon="fa-solid fa-angle-right" />
       </div>
     </div> -->
     <div class="item" @click="routerGoTo('/setup/about')">
       <div class="label">关于</div>
-      <div class="icon">
+      <div class="value">
         <font-awesome-icon icon="fa-solid fa-angle-right" />
       </div>
     </div>
     <div class="item">
       <div class="label">退出登录</div>
-      <div class="icon">
+      <div class="value">
         <font-awesome-icon icon="fa-solid fa-angle-right" />
       </div>
     </div>
@@ -158,7 +207,7 @@ function routerGoTo(path: string) {
     overflow: hidden;
   }
 
-  .icon {
+  .value {
     color: #9E9E9E;
     display: flex;
     align-items: center;

@@ -1,16 +1,15 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
-import { ref } from 'vue'
+import { setupStore } from '../../core/store'
+import { storeToRefs } from 'pinia'
 
 defineOptions({
   name: 'SetupLanguage'
 })
 
 const router = useRouter()
-// 返回上一页
-const goBack = () => {
-  router.back();
-}
+const setup = setupStore()
+const { language } = storeToRefs(setup)
 
 // 定义语言列表
 const languages = [
@@ -36,7 +35,17 @@ const languages = [
   { label: '维吾尔语', subLabel: 'ئۇيغۇر تىلى', value: 'ug' },
   { label: '哈萨克语', subLabel: 'қазақ тілі', value: 'kk' }
 ]
-const choose = ref('zh-Hans')
+
+// 返回上一页
+const goBack = () => {
+  router.back();
+}
+
+// 选择语言
+const selectLanguage = async (langValue: string) => {
+  await setup.updateSetting('language', langValue);
+  router.back();
+}
 </script>
 
 <template>
@@ -50,7 +59,7 @@ const choose = ref('zh-Hans')
       </div>
     </div>
     <!-- 内容区域 -->
-    <div v-for="(lang, index) in languages" :key="index" class="item">
+    <div v-for="(lang, index) in languages" :key="index" class="item" @click="selectLanguage(lang.value)">
       <div class="label">
         <div>
           {{ lang.label }}
@@ -60,7 +69,7 @@ const choose = ref('zh-Hans')
         </div>
       </div>
       <div class="icon">
-        <font-awesome-icon icon="fa-solid fa-check" v-if="lang.value === choose" />
+        <font-awesome-icon icon="fa-solid fa-check" v-if="lang.value === language" />
       </div>
     </div>
   </div>
@@ -120,10 +129,11 @@ const choose = ref('zh-Hans')
   font-size: 1rem;
   cursor: pointer;
   user-select: none;
-  height: 52px;
-  padding: 0 14px;
-  width: 100%;
   display: flex;
+  width: 100%;
+  overflow: hidden;
+  padding: 0 14px;
+  height: 52px;
 
   .label {
     flex: 1;
@@ -134,17 +144,15 @@ const choose = ref('zh-Hans')
   }
 
   .icon {
-    color: #9E9E9E;
     display: flex;
     align-items: center;
     justify-self: start;
   }
 
   .tips {
-    display: inline-flex;
-    align-items: end;
+    display: block;
     font-size: 0.8rem;
-    color: #757575;
+    color: #9E9E9E;
   }
 }
 </style>

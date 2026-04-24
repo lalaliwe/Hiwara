@@ -1,15 +1,24 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
+import { setupStore } from '../../core/store'
 
 defineOptions({
   name: 'SetupDefinition'
 })
 
 const router = useRouter()
+const setup = setupStore()
+
 // 返回上一页
 const goBack = () => {
   router.back();
-}
+};
+
+// 设置清晰度
+const setDefinition = async (def: string) => {
+  await setup.updateSetting('definition', def);
+  router.back();
+};
 </script>
 
 <template>
@@ -19,18 +28,27 @@ const goBack = () => {
         <font-awesome-icon icon="fa-solid fa-angle-left" />
       </div>
       <div class="label">
-        清晰度
+        默认清晰度
       </div>
     </div>
     <!-- 内容区域 -->
-    <div class="item">
-      360P
+    <div class="item" @click="setDefinition('360p')">
+      <div class="label">360P</div>
+      <div class="value">
+        <font-awesome-icon icon="fa-solid fa-check" v-if="setup.definition === '360p'" />
+      </div>
     </div>
-    <div class="item">
-      540P
+    <div class="item" @click="setDefinition('540p')">
+      <div class="label">540P</div>
+      <div class="value">
+        <font-awesome-icon icon="fa-solid fa-check" v-if="setup.definition === '540p'" />
+      </div>
     </div>
-    <div class="item">
-      原画
+    <div class="item" @click="setDefinition('Source')">
+      <div class="label">原画</div>
+      <div class="value">
+        <font-awesome-icon icon="fa-solid fa-check" v-if="setup.definition === 'Source'" />
+      </div>
     </div>
   </div>
 </template>
@@ -89,11 +107,25 @@ const goBack = () => {
   font-size: 1rem;
   cursor: pointer;
   user-select: none;
-  height: 52px;
-  padding: 0 14px;
-  width: 100%;
   display: flex;
-  align-items: center;
-  justify-self: start;
+  width: 100%;
+  overflow: hidden;
+  padding: 0 14px;
+  height: 52px;
+
+  .label {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-self: start;
+    overflow: hidden;
+  }
+
+  .value {
+    color: #9E9E9E;
+    display: flex;
+    align-items: center;
+    justify-self: start;
+  }
 }
 </style>

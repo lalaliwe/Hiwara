@@ -1,19 +1,32 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
-import { ref } from 'vue'
+import { setupStore } from '../../core/store'
+import { storeToRefs } from 'pinia'
 
 defineOptions({
   name: 'SetupDownload'
 })
 
 const router = useRouter()
+const setup = setupStore()
+const { videoSavePath, imageSavePath } = storeToRefs(setup)
+
 // 返回上一页
 const goBack = () => {
   router.back();
 }
 
-const videoDownload = ref('~/Videos')
-const imageDownload = ref('~/Pictures');
+// 更新视频保存路径
+const updateVideoSavePath = async (event: Event) => {
+  const target = event.target as HTMLInputElement;
+  await setup.updateSetting('videoSavePath', target.value);
+}
+
+// 更新图片保存路径
+const updateImageSavePath = async (event: Event) => {
+  const target = event.target as HTMLInputElement;
+  await setup.updateSetting('imageSavePath', target.value);
+}
 </script>
 
 <template>
@@ -28,12 +41,30 @@ const imageDownload = ref('~/Pictures');
     </div>
     <!-- 内容区域 -->
     <div class="item">
-      <div class="label">视频下载目录</div>
-      <div class="value">{{ videoDownload }}</div>
+      <div class="label">视频保存路径</div>
+      <v-text-field 
+        class="input" 
+        label="请输入视频保存路径" 
+        color="#00796B" 
+        hide-details
+        density="comfortable" 
+        variant="underlined"
+        :model-value="videoSavePath"
+        @change="updateVideoSavePath"
+      ></v-text-field>
     </div>
     <div class="item">
-      <div class="label">插画下载目录</div>
-      <div class="value">{{ imageDownload }}</div>
+      <div class="label">图片保存路径</div>
+      <v-text-field 
+        class="input" 
+        label="请输入图片保存路径" 
+        color="#00796B" 
+        hide-details 
+        density="comfortable"
+        variant="underlined"
+        :model-value="imageSavePath"
+        @change="updateImageSavePath"
+      ></v-text-field>
     </div>
   </div>
 </template>
@@ -90,12 +121,19 @@ const imageDownload = ref('~/Pictures');
   border-bottom: solid 1px #BDBDBD;
   color: #212121;
   font-size: 1rem;
+  user-select: none;
+  display: flex;
+  flex-direction: column;
   width: 100%;
-  padding: 12px 14px;
+  overflow: hidden;
+  padding: 16px 14px;
 
-  .value {
-    font-size: 0.8rem;
-    color: #757575;
+  .label {
+    margin-bottom: 8px;
+  }
+
+  .input {
+    width: 100%;
   }
 }
 </style>

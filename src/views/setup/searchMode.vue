@@ -1,13 +1,24 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
+import { setupStore } from '../../core/store'
+import { storeToRefs } from 'pinia'
 
 defineOptions({
   name: 'SetupSearchMode'
 })
 
 const router = useRouter()
+const setup = setupStore()
+const { searchMode } = storeToRefs(setup)
+
 // 返回上一页
 const goBack = () => {
+  router.back();
+}
+
+// 设置搜索模式
+const setSearchMode = async (mode: number) => {
+  await setup.updateSetting('searchMode', mode);
   router.back();
 }
 </script>
@@ -23,11 +34,17 @@ const goBack = () => {
       </div>
     </div>
     <!-- 内容区域 -->
-    <div class="item">
-      关键字搜索
+    <div class="item" @click="setSearchMode(0)">
+      <div class="label">关键字搜索</div>
+      <div class="value">
+        <font-awesome-icon icon="fa-solid fa-check" v-if="searchMode === 0" />
+      </div>
     </div>
-    <div class="item">
-      标签搜索
+    <div class="item" @click="setSearchMode(1)">
+      <div class="label">标签搜索</div>
+      <div class="value">
+        <font-awesome-icon icon="fa-solid fa-check" v-if="searchMode === 1" />
+      </div>
     </div>
   </div>
 </template>
@@ -86,11 +103,25 @@ const goBack = () => {
   font-size: 1rem;
   cursor: pointer;
   user-select: none;
-  height: 52px;
-  padding: 0 14px;
-  width: 100%;
   display: flex;
-  align-items: center;
-  justify-self: start;
+  width: 100%;
+  overflow: hidden;
+  padding: 0 14px;
+  height: 52px;
+
+  .label {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-self: start;
+    overflow: hidden;
+  }
+
+  .value {
+    color: #9E9E9E;
+    display: flex;
+    align-items: center;
+    justify-self: start;
+  }
 }
 </style>

@@ -25,9 +25,24 @@ export const token = defineStore('token', {
   }
 })
 
+// 定义设置状态的接口
+interface SetupState {
+  autoPlay: boolean;
+  reconnect: number;
+  definition: string;
+  searchMode: number;
+  language: string;
+  videoSavePath: string;
+  imageSavePath: string;
+  aria2Rpc: string;
+  aria2Token: string;
+  aria2Download: string;
+  aria2Switch: boolean;
+}
+
 // 设置相关的 store
 export const setupStore = defineStore('setup', {
-  state: () => ({
+  state: (): SetupState => ({
     autoPlay: true,
     reconnect: 1,
     definition: 'Source',
@@ -46,7 +61,7 @@ export const setupStore = defineStore('setup', {
       try {
         const dbData = await getSetupData();
         // 映射数据库字段名到 store 状态属性
-        this.autoPlay = dbData.auto_play ?? this.autoPlay;
+        this.autoPlay = Boolean(dbData.auto_play) ?? this.autoPlay;
         this.reconnect = dbData.reconnect ?? this.reconnect;
         this.definition = dbData.definition ?? this.definition;
         this.searchMode = dbData.search_mode ?? this.searchMode;
@@ -56,18 +71,18 @@ export const setupStore = defineStore('setup', {
         this.aria2Rpc = dbData.aria2_rpc ?? this.aria2Rpc;
         this.aria2Token = dbData.aria2_token ?? this.aria2Token;
         this.aria2Download = dbData.aria2_download ?? this.aria2Download;
-        this.aria2Switch = dbData.aria2_switch ?? this.aria2Switch;
+        this.aria2Switch = Boolean(dbData.aria2_switch) ?? this.aria2Switch;
       } catch (error) {
         console.error('Failed to load setup from database:', error);
       }
     },
     // 更新整个设置对象并同步到数据库
-    async updateSetup(setupData: Partial<typeof this.$state>) {
+    async updateSetup(setupData: Partial<SetupState>) {
       Object.assign(this.$state, setupData);
       await this.saveToDatabase();
     },
     // 更新单个设置项并同步到数据库
-    async updateSetting<K extends keyof typeof this.$state>(key: K, value: typeof this.$state[K]) {
+    async updateSetting<K extends keyof SetupState>(key: K, value: SetupState[K]): Promise<void> {
       this.$state[key] = value;
       await this.saveToDatabase();
     },
@@ -80,7 +95,7 @@ export const setupStore = defineStore('setup', {
     async saveToDatabase() {
       try {
         const dbFormatData = {
-          auto_play: this.autoPlay,
+          auto_play: this.autoPlay ? 1 : 0,
           reconnect: this.reconnect,
           definition: this.definition,
           search_mode: this.searchMode,
@@ -90,7 +105,7 @@ export const setupStore = defineStore('setup', {
           aria2_rpc: this.aria2Rpc,
           aria2_token: this.aria2Token,
           aria2_download: this.aria2Download,
-          aria2_switch: this.aria2Switch
+          aria2_switch: this.aria2Switch ? 1 : 0
         };
         
         await updateSetupData(dbFormatData);
