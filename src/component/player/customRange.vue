@@ -20,6 +20,7 @@ const props = withDefaults(defineProps<Props>(), {
 
 const emit = defineEmits<{
   (e: 'update:modelValue', value: number): void;
+  (e: 'change', value: number): void; // 添加 change 事件，用于检测拖动结束
 }>();
 
 // 检测是否为桌面端（非触摸设备）
@@ -35,6 +36,11 @@ onMounted(() => {
 // 唯一的 JS 逻辑：处理 Input 输入
 const handleInput = (e: Event) => {
   emit('update:modelValue', Number((e.target as HTMLInputElement).value));
+};
+
+// 处理拖动结束（change 事件在松开鼠标/手指时触发）
+const handleChange = (e: Event) => {
+  emit('change', Number((e.target as HTMLInputElement).value));
 };
 
 // 计算样式：直接返回 transform 对象，避免在模板中计算
@@ -53,7 +59,7 @@ const thumbStyle = computed(() => ({
 <template>
   <div class="video-range-container" :class="{ 'is-desktop': isDesktop }">
     <!-- 原生 Input：只负责交互逻辑 -->
-    <input type="range" class="range-input" :value="modelValue" @input="handleInput" :min="min" :max="max" :step="step"
+    <input type="range" class="range-input" :value="modelValue" @input="handleInput" @change="handleChange" :min="min" :max="max" :step="step"
       :disabled="disabled" />
 
     <!-- 自定义 UI 层：纯展示，pointer-events: none -->

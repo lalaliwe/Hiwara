@@ -27,6 +27,7 @@ const id = ref(route.params.id);  // 视频id
 const isLoading = ref(true); // 新增：加载状态
 const title = ref<string>('');   // 视频标题
 const synopsis = ref<string>('');  // 视频简介
+const poster = ref<string>(''); //视频封面
 const playNum = ref<number>(0);  // 播放次数
 const likeNum = ref<number>(0);  // 点赞数
 const createdAt = ref<string>('');  // 创建时间
@@ -109,6 +110,12 @@ const fetchVideoInfo = async () => {
         authorname.value = data.user.name || data.user.username || '';
         isFollow.value = data.user.following || false;
       }
+      // 获取视频封面
+      if (data.file && data.file.id) {
+        // 使用 API 返回的 thumbnail 索引，如果不存在则默认为 0
+        const thumbnailIndex = data.thumbnail ?? 0;
+        poster.value = `https://i.iwara.tv/image/thumbnail/${data.file.id}/thumbnail-${String(thumbnailIndex).padStart(2, '0')}.jpg`;
+      }
       // 获取视频文件
       let extension = '.mp4'; // 默认扩展名
       if (data.file?.name) {
@@ -181,7 +188,7 @@ onUnmounted(() => {
 <template>
   <div id="playerView">
     <div class="topBar"></div>
-    <videoPlayer class="video-player" />
+    <videoPlayer class="video-player" :poster="poster" />
     <div class="tabs">
       <div class="tabs-elements">
         <v-tabs class="left" v-model="tab" color="#00796B" density="comfortable">
