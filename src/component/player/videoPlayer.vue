@@ -2,8 +2,8 @@
 import { ref, onMounted, onUnmounted, inject } from 'vue'
 import { lockPortrait, lockLandscape } from '../../plugins/useOrientation'
 import { enterImmersive, exitImmersive } from '../../plugins/immersive'
-import { getNetworkInfo, getBatteryInfo } from '../../plugins/deviceInfo'
-import customRange from './customRange.vue';
+import controlFullscreen from './videoPlayer/controlFullscreen.vue';
+import control from './videoPlayer/control.vue';
 
 const fullscreenState = ref(false); // 内部维护的全屏状态
 const videoPlayerRef = ref<HTMLElement | null>(null); // 播放器元素
@@ -14,66 +14,12 @@ const buffered = ref<number>(0);  // 已缓冲
 const currentTime = ref<string>('00:00'); // 当前时间
 const totalTime = ref<string>('00:00'); // 总时长
 const isLoading = ref(false); // 缓冲加载状态
-const currentSystemTime = ref<string>(''); // 当前系统时间
-
-let timeInterval: number | undefined; // 定时器 ID
 
 // 格式化时间
 const formatTime = (seconds: number): string => {
   const mins = Math.floor(seconds / 60);
   const secs = Math.floor(seconds % 60);
   return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
-};
-
-// 格式化当前系统时间
-const formatCurrentTime = (): string => {
-  const now = new Date();
-  const hours = now.getHours().toString().padStart(2, '0');
-  const minutes = now.getMinutes().toString().padStart(2, '0');
-  return `${hours}:${minutes}`;
-};
-
-// 更新系统时间
-const updateSystemTime = () => {
-  currentSystemTime.value = formatCurrentTime();
-};
-
-type NetworkType = 'wifi' | 'cellular' | 'ethernet' | 'other' | 'none' | 'unknown' | 'loading'
-const networkState = ref<NetworkType>('loading'); // 网络状态
-const batteryLevel = ref<number | 'none'>('none');  // 电池电量
-const isCharging = ref(false);  // 是否正在充电
-
-// 获取网络信息
-const fetchNetworkInfo = async () => {
-  const timeoutMs = 5000; // 5 秒超时
-  const timeoutPromise = new Promise<never>((_, reject) => {
-    setTimeout(() => reject(new Error('获取网络信息超时')), timeoutMs);
-  });
-
-  try {
-    const msg = await Promise.race([getNetworkInfo(), timeoutPromise]);
-    networkState.value = msg.networkType;
-  } catch (error) {
-    console.error('获取网络信息失败:', error);
-    // 优雅降级：失败时设置为 unknown
-    networkState.value = 'unknown';
-  }
-};
-// 获取设备电量
-const fetchBatteryInfo = async () => {
-  const timeoutMs = 5000; // 5 秒超时
-  const timeoutPromise = new Promise<never>((_, reject) => {
-    setTimeout(() => reject(new Error('获取设备电量信息超时')), timeoutMs);
-  });
-  try {
-    const msg = await Promise.race([getBatteryInfo(), timeoutPromise]);
-    batteryLevel.value = msg.level;
-    isCharging.value = msg.isCharging;
-  } catch (error) {
-    console.error('获取设备电量信息失败:', error);
-    // 优雅降级：失败时设置为 0.5
-    batteryLevel.value = 'none';
-  }
 };
 
 // 更新视频时间
@@ -114,7 +60,6 @@ const onProgressChange = (value: number) => {
 
 // 进入全屏
 const enterFullscreen = async () => {
-  fetchNetworkInfo();
   if (!videoPlayerRef.value) return;
   try {
     // 进入沉浸式
@@ -130,7 +75,7 @@ const enterFullscreen = async () => {
   }
 };
 
-// 退出全屏
+// 退出全屏（由子组件调用或内部逻辑触发）
 const exitFullscreen = async () => {
   try {
     // 如果当前处于全屏状态，则退出
@@ -144,14 +89,11 @@ const exitFullscreen = async () => {
   }
 };
 
-// 切换全屏
-// const toggleFullscreen = async () => {
-//   if (fullscreenState.value) {
-//     await exitFullscreen();
-//   } else {
-//     await enterFullscreen();
-//   }
-// };
+// 处理子组件触发的退出全屏逻辑
+const handleExitFullscreen = async () => {
+  await exitFullscreen();
+  fullscreenState.value = false;
+};
 
 // 监听全屏状态变化 (处理 ESC 键、手势退出等情况)
 const handleFullscreenChange = () => {
@@ -177,18 +119,11 @@ const handlePopState = () => {
 const goBack = inject<() => void>('goBack');
 const goHome = inject<() => void>('goHome');
 
-// 在组件挂载时获取网络信息
-onMounted(() => {
-  fetchNetworkInfo();
-  fetchBatteryInfo();
-});
 onMounted(async () => {
   // 挂载/卸载监听
   document.addEventListener('fullscreenchange', handleFullscreenChange);
   window.addEventListener('popstate', handlePopState);
-  // 初始化并定时更新系统时间
-  updateSystemTime();
-  // const timeInterval = setInterval(updateSystemTime, 1000);
+  
   // 绑定视频事件
   if (videoRef.value) {
     videoRef.value.addEventListener('play', () => {
@@ -216,11 +151,10 @@ onMounted(async () => {
     }
   }
 });
+
 onUnmounted(() => {
   document.removeEventListener('fullscreenchange', handleFullscreenChange);
   window.removeEventListener('popstate', handlePopState);
-  // 清除系统时间定时器
-  clearInterval(timeInterval);
   // 清理事件监听
   if (videoRef.value) {
     videoRef.value.removeEventListener('play', () => { });
@@ -244,158 +178,31 @@ onUnmounted(() => {
         indeterminate></v-progress-circular>
     </div>
     <!-- 使用 fullscreenState 控制显示 -->
-    <div v-if="fullscreenState" class="control-fullscreen">
-      <!-- 全屏模式 -->
-      <div class="top">
-        <div>
-          <span class="btn" @click="exitFullscreen">
-            <font-awesome-icon icon="fa-solid fa-angle-left" />
-          </span>
-        </div>
-        <div class="title">
-          <div class="title-text">
-            测试标题
-          </div>
-        </div>
-        <div class="status">
-          <span v-if="networkState === 'wifi'">
-            <font-awesome-icon icon="fa-solid fa-wifi" />
-            WiFi
-          </span>
-          <span v-else-if="networkState === 'cellular'">
-            <font-awesome-icon icon="fa-solid fa-signal" />
-            移动数据
-          </span>
-          <span v-else-if="networkState === 'ethernet'">
-            <font-awesome-icon icon="fa-solid fa-ethernet" />
-            有线连接
-          </span>
-          <span v-else-if="networkState === 'other'">
-            <font-awesome-icon icon="fa-solid fa-network-wired" />
-            其他
-          </span>
-          <span v-else-if="networkState === 'none'">
-            <font-awesome-icon icon="fa-solid fa-wifi" />
-            <span style="position: relative;left: -1.25rem;width: 0;display: inline-block;">
-              <font-awesome-icon icon="fa-solid fa-slash" />
-            </span>
-            无网络
-          </span>
-          <span v-else-if="networkState === 'unknown'">
-            <font-awesome-icon icon="fa-solid fa-network-wired" />
-            未知网络
-          </span>
-          <span v-if="batteryLevel != 'none'">
-            <font-awesome-icon v-if="batteryLevel >= 100" icon="fa-solid fa-battery-full"
-              :style="{ color: isCharging ? '#00E676' : 'auto' }" />
-            <font-awesome-icon v-else-if="batteryLevel >= 60 && batteryLevel < 100"
-              icon="fa-solid fa-battery-three-quarters" :style="{ color: isCharging ? '#00E676' : 'auto' }" />
-            <font-awesome-icon v-else-if="batteryLevel >= 40 && batteryLevel < 60" icon="fa-solid fa-battery-half"
-              :style="{ color: isCharging ? '#00E676' : 'auto' }" />
-            <font-awesome-icon v-else-if="batteryLevel >= 20 && batteryLevel < 40" icon="fa-solid fa-battery-quarter"
-              :style="{ color: isCharging ? '#00E676' : 'auto' }" />
-            <font-awesome-icon v-else-if="batteryLevel < 20" icon="fa-solid fa-battery-empty"
-              :style="{ color: isCharging ? '#00E676' : '#FF3D00' }" />
-            <span v-if="isCharging"
-              style="position: relative;left: -1.1rem;top:-0.1rem;width: 0;display: inline-block;color:#FFFF00;font-size: 0.8rem;">
-              <font-awesome-icon icon="fa-solid fa-bolt" />
-            </span>
-          </span>
-          <span>{{ currentSystemTime }}</span>
-        </div>
-        <div>
-          <span class="btn">
-            <font-awesome-icon icon="fa-regular fa-heart" />
-          </span>
-          <span class="btn">
-            <font-awesome-icon icon="fa-regular fa-camera" />
-          </span>
-          <span class="btn">
-            <font-awesome-icon icon="fa-solid fa-download" />
-          </span>
-          <span class="btn">
-            <font-awesome-icon icon="fa-solid fa-ellipsis-vertical" />
-          </span>
-        </div>
-      </div>
-      <div class="middle"></div>
-      <div class="progress">
-        <customRange v-model="progress" :buffered="buffered" :min="0" :max="100"
-          @update:modelValue="onProgressChange" />
-      </div>
-      <div class="bottom">
-        <div>
-          <span class="btn" @click="togglePlay">
-            <font-awesome-icon v-if="isPlaying" icon="fa-solid fa-pause" />
-            <font-awesome-icon v-else icon="fa-solid fa-play" />
-          </span>
-        </div>
-        <div class="time">
-          {{ currentTime }}/{{ totalTime }}
-        </div>
-        <div class="space"></div>
-        <div class="text-btn">
-          <span>
-            <font-awesome-icon icon="fa-solid fa-server" />hiwara
-          </span>
-          <span>
-            <font-awesome-icon icon="fa-solid fa-film" />1080P
-          </span>
-        </div>
-        <div>
-          <span class="btn" @click="exitFullscreen">
-            <font-awesome-icon icon="fa-solid fa-compress" />
-          </span>
-        </div>
-      </div>
-    </div>
-    <div v-else class="control">
-      <!-- 非全屏模式 -->
-      <div class="top">
-        <div>
-          <span class="btn" @click="goBack">
-            <font-awesome-icon icon="fa-solid fa-angle-left" />
-          </span>
-          <span class="btn" @click="goHome">
-            <font-awesome-icon icon="fa-regular fa-house" />
-          </span>
-        </div>
-        <div></div>
-        <div>
-          <!-- 功能未实现 -->
-          <!-- <span class="btn">
-            <font-awesome-icon icon="fa-solid fa-picture-in-picture" />
-          </span>
-          <span class="btn">
-            <font-awesome-icon icon="fa-solid fa-tv" />
-          </span>
-          <span class="btn">
-            <font-awesome-icon icon="fa-solid fa-ellipsis-vertical" />
-          </span> -->
-        </div>
-      </div>
-      <div class="middle"></div>
-      <div class="bottom">
-        <div>
-          <span class="btn" @click="togglePlay">
-            <font-awesome-icon v-if="isPlaying" icon="fa-solid fa-pause" />
-            <font-awesome-icon v-else icon="fa-solid fa-play" />
-          </span>
-        </div>
-        <div class="progress">
-          <customRange v-model="progress" :buffered="buffered" :min="0" :max="100"
-            @update:modelValue="onProgressChange" />
-        </div>
-        <div class="time">
-          {{ currentTime }}/{{ totalTime }}
-        </div>
-        <div>
-          <span class="btn" @click="enterFullscreen">
-            <font-awesome-icon icon="fa-solid fa-expand" />
-          </span>
-        </div>
-      </div>
-    </div>
+    <controlFullscreen 
+      v-if="fullscreenState"
+      :is-playing="isPlaying"
+      :progress="progress"
+      :buffered="buffered"
+      :current-time="currentTime"
+      :total-time="totalTime"
+      :video-element="videoRef"
+      @exit="handleExitFullscreen"
+      @toggle-play="togglePlay"
+      @progress-change="onProgressChange"
+    />
+    <control
+      v-else
+      :is-playing="isPlaying"
+      :progress="progress"
+      :buffered="buffered"
+      :current-time="currentTime"
+      :total-time="totalTime"
+      @toggle-play="togglePlay"
+      @progress-change="onProgressChange"
+      @enter-fullscreen="enterFullscreen"
+      @go-back="goBack"
+      @go-home="goHome"
+    />
   </div>
 </template>
 
@@ -423,158 +230,6 @@ onUnmounted(() => {
     align-items: center;
     justify-content: center;
     pointer-events: none; // 确保点击事件可以穿透到视频
-  }
-
-  .control {
-    height: 100%;
-    width: 100%;
-    position: absolute;
-    top: 0;
-    left: 0;
-    z-index: 20;
-    display: flex;
-    flex-direction: column;
-    color: #fff;
-
-    .top {
-      display: flex;
-
-      >div:nth-child(2) {
-        flex: 1;
-      }
-    }
-
-    .middle {
-      flex: 1;
-    }
-
-    .bottom {
-      display: flex;
-
-      .progress {
-        flex: 1;
-        padding: 0 6px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      }
-
-      .time {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 0.9rem;
-        padding: 0 6px;
-      }
-    }
-
-    .btn {
-      display: inline-flex;
-      margin: 4px;
-      width: 40px;
-      height: 40px;
-      justify-content: center;
-      align-items: center;
-      font-size: 1.2rem;
-      cursor: pointer;
-      user-select: none;
-    }
-  }
-
-  .control-fullscreen {
-    height: 100%;
-    width: 100%;
-    position: absolute;
-    top: 0;
-    left: 0;
-    z-index: 20;
-    display: flex;
-    flex-direction: column;
-    color: #fff;
-
-    .top {
-      display: flex;
-      padding: 16px 16px 0 16px;
-
-      .title {
-        font-size: 1.1rem;
-        flex: 1;
-        display: flex;
-        align-items: center;
-        justify-content: start;
-        overflow: hidden;
-        min-width: 0; // 防止 flex 子项溢出
-
-
-        .title-text {
-          width: 100%;
-          overflow: hidden;
-          text-overflow: ellipsis;
-          white-space: nowrap;
-        }
-      }
-
-      .status {
-        display: grid;
-        grid-auto-flow: column;
-        gap: 6px;
-        padding: 0 4px;
-        align-items: center;
-        font-size: 1rem;
-      }
-    }
-
-    .middle {
-      flex: 1;
-    }
-
-    .progress {
-      padding: 0 16px;
-    }
-
-    .bottom {
-      display: flex;
-      padding: 0 16px 16px 16px;
-
-      .time {
-        display: flex;
-        align-items: center;
-        justify-content: start;
-        padding-left: 4px;
-        width: 140px;
-      }
-
-      .space {
-        flex: 1;
-      }
-
-      .text-btn {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-
-        span {
-          display: inline-block;
-          padding: 0 4px;
-          cursor: pointer;
-          user-select: none;
-        }
-      }
-    }
-
-
-
-    .btn {
-      display: inline-flex;
-      margin: 4px;
-      width: 40px;
-      height: 40px;
-      justify-content: center;
-      align-items: center;
-      font-size: 1.4rem;
-      cursor: pointer;
-      user-select: none;
-    }
   }
 }
 </style>
