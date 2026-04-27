@@ -2,14 +2,14 @@
 import { computed, ref, watch, nextTick, onMounted, onUnmounted, defineComponent, h, type Component } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 // 官方 API：Android 返回键
-import { listen } from '@tauri-apps/api/event'
-import type { UnlistenFn } from '@tauri-apps/api/event'
+import { onBackButtonPress } from '@tauri-apps/api/app'
+import type { PluginListener } from '@tauri-apps/api/core'
 import { showShortToast } from './core/toast'
 import { isTauri } from '@tauri-apps/api/core'
 import { moveTaskToBack } from './plugins/appControl'
 import { getCachedComponentNames } from './router/index'
 import loginView from './views/login.vue'
-import {isLogin as store_auth}  from './core/store'
+import { isLogin as store_auth } from './core/store'
 
 const route = useRoute()
 const router = useRouter()
@@ -120,7 +120,7 @@ onMounted(() => {
   if (isTauri()) {
     // 只在 Android 上有效；桌面端不会触发
     // 使用新的事件监听API替代onBackButtonPress
-    listen('tauri://backbutton', async (event) => {
+    onBackButtonPress(async ({ canGoBack }) => {
       const currentTime = Date.now()
 
       // 1. 如果当前在首页
@@ -132,7 +132,7 @@ onMounted(() => {
 
       // 2. 不在首页：希望"回退到上一页"
       // 优先用 Tauri 提供的 canGoBack 信息
-      if (window.history.state && window.history.length > 1) {
+      if (canGoBack) {
         router.back()
         return
       }
@@ -150,8 +150,8 @@ onMounted(() => {
         showShortToast('再按一次返回键退出应用')
         return
       }
-    }).then(unlisten => {
-      backListener = unlisten
+    }).then(listener => {
+      backListener = listener
     })
   }
 })
@@ -160,16 +160,14 @@ onMounted(() => {
 // Android 返回键处理（Tauri v2 官方 API）
 // =====================
 
-let backListener: UnlistenFn | null = null
+let backListener: PluginListener | null = null
 // 双击返回检测相关变量
 let lastBackPressedTime: number | null = null
 const DOUBLE_BACK_PRESS_TIMEOUT = 2000 // 2秒内再次按下返回键则退出
 
 onUnmounted(() => {
   // 取消监听，防止内存泄漏
-  if (backListener) {
-    backListener(); // 调用取消监听函数
-  }
+  backListener?.unregister()
 })
 </script>
 
