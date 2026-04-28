@@ -17,9 +17,6 @@ const router = useRouter()
 const setup = setupStore()
 const { autoPlay, definition, searchMode, aria2Switch, language } = storeToRefs(setup)
 
-// 在组件挂载时加载设置
-setup.loadSetupFromDatabase()
-
 // 返回上一页
 const goBack = () => {
   router.back();

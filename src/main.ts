@@ -30,11 +30,11 @@ import { fab } from '@fortawesome/free-brands-svg-icons'
 import Hammer from 'hammerjs';
 
 // 初始化数据库
-import { initDatabase, checkUserIsLogin } from "./core/database";
+import { initDatabase } from "./core/database";
 await initDatabase();
 
-// 引入store
-import { isLogin } from "./core/store";
+// 引入store和统一初始化函数
+import { initializeAllStores } from "./core/store";
 
 // 检测是否为桌面端（非触摸设备）
 const isDesktop = !window.matchMedia('(pointer: coarse)').matches;
@@ -54,17 +54,13 @@ library.add(fas, far, fab)
 app.component('font-awesome-icon', FontAwesomeIcon);
 app.config.globalProperties.$hammer = Hammer;
 
+// 在挂载应用之前，统一初始化所有 Store
+await initializeAllStores();
 app.mount("#app");
 
 router.isReady().then(() => {
-  // 检查用户登录状态
-  checkUserIsLogin().then((result) => {
-    isLogin().set(result);
-  }).catch(() => {
-    isLogin().set(false);
-  }).finally(() => {
-    hideLoading();
-  });
+  // 路由就绪后隐藏加载遮罩，防止白屏
+  hideLoading();
 });
 
 // 隐藏加载遮罩

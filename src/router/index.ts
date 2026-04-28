@@ -9,6 +9,7 @@ import history from '../views/history.vue';
 import setup from '../views/setup.vue';
 import favorites from '../views/favorites.vue';
 import offlineCache from '../views/offlineCache.vue';
+import login from '../views/login.vue'; // 导入登录页面
 
 // setup子页面
 import setup_definition from '../views/setup/definition.vue';
@@ -67,6 +68,12 @@ const getComponentName = (route: RouteLocationNormalized): string => {
 // 路由配置
 // ========================
 const routes: Array<RouteRecordRaw & { meta?: RouteMeta }> = [
+  {
+    path: '/login',
+    name: 'Login',
+    component: login,
+    meta: { transition: 'stack' },
+  },
   {
     path: '/',
     name: 'Home',
@@ -199,7 +206,12 @@ const createStackItem = (route: RouteLocationNormalized): PageStackItem => {
   }
 }
 
-router.beforeEach((to, from) => {
+// ========================
+// 路由守卫 - 登录验证
+// ========================
+// 移除了初始化逻辑，因为已在 main.ts 中统一初始化
+
+router.beforeEach(async (to, from) => {
   // 首次加载处理（禁用首页动画）
   if (isFirstLoad) {
     to.meta = to.meta || {}
@@ -215,6 +227,20 @@ router.beforeEach((to, from) => {
 
   // 将 cacheKey 存入 meta，供 App.vue 使用
   to.meta.cacheKey = toItem.cacheKey
+
+  // 检查登录状态 - 直接从 Store 获取（已在 main.ts 中初始化）
+  const { isLogin } = await import('../core/store');
+  const isLoggedIn = isLogin().value;
+  
+  // 如果未登录且目标不是登录页，重定向到登录页
+  if (!isLoggedIn && to.path !== '/login') {
+    return '/login';
+  }
+  
+  // 如果已登录且目标是登录页，重定向到首页
+  if (isLoggedIn && to.path === '/login') {
+    return '/';
+  }
 
   // 初始化：无来源路由（冷启动直接进入）
   if (!fromKey) {

@@ -8,13 +8,9 @@ import { showShortToast } from './core/toast'
 import { isTauri } from '@tauri-apps/api/core'
 import { moveTaskToBack } from './plugins/appControl'
 import { getCachedComponentNames } from './router/index'
-import loginView from './views/login.vue'
-import { isLogin as store_auth } from './core/store'
 
 const route = useRoute()
 const router = useRouter()
-
-const isLogin = computed(() => store_auth().value)
 
 // 存储需要缓存的组件名称（供 keep-alive :include 使用）
 const cachedPages = ref<string[]>([])
@@ -172,7 +168,8 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <router-view v-slot="{ Component, route: currentRoute }" v-if="isLogin">
+  <!-- 始终渲染 router-view，由路由守卫控制显示哪个页面 -->
+  <router-view v-slot="{ Component, route: currentRoute }">
     <transition :name="transitionName" appear>
       <keep-alive :include="cachedPages">
         <component :is="wrapComponent(Component, (currentRoute.meta.cacheKey as string) || 'Anonymous')"
@@ -180,7 +177,7 @@ onUnmounted(() => {
       </keep-alive>
     </transition>
   </router-view>
-  <loginView v-else />
+  
   <!-- Vuetify Snackbar -->
   <v-snackbar v-model="snackbar" :timeout="snackbarTimeout" :color="snackbarColor" top centered class="snackbar">
     {{ snackbarText }}

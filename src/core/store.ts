@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import { getSetupData, updateSetupData } from './database';
+import { getSetupData, updateSetupData, checkUserIsLogin } from './database';
 
 export const isLogin = defineStore('isLogin', {
   state: () => ({
@@ -12,6 +12,16 @@ export const isLogin = defineStore('isLogin', {
     // 设置登录状态的方法
     set(status: boolean) {
       this.value = status;
+    },
+    // 从数据库初始化登录状态
+    async initFromDatabase() {
+      try {
+        const isLoggedIn = await checkUserIsLogin();
+        this.set(isLoggedIn);
+      } catch (error) {
+        console.error('Failed to initialize login status:', error);
+        this.set(false);
+      }
     }
   },
 });
@@ -115,3 +125,19 @@ export const setupStore = defineStore('setup', {
     }
   },
 })
+
+/**
+ * 统一初始化所有 Store
+ * 在应用启动时调用一次，从数据库加载所有持久化状态
+ */
+export async function initializeAllStores(): Promise<void> {
+  try {
+    // 并行初始化所有 Store
+    await Promise.all([
+      isLogin().initFromDatabase(),
+      setupStore().loadSetupFromDatabase()
+    ]);
+  } catch (error) {
+    console.error('Failed to initialize stores:', error);
+  }
+}

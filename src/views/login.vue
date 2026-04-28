@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue';
+import { useRouter } from 'vue-router';
 import { showShortToast } from '../core/toast';
 import { login as api_login } from '../core/api'; // 导入整个api模块
 import {
@@ -7,6 +8,8 @@ import {
   getLastLoginAuth
 } from '../core/database'; // 导入数据库登录函数
 import { isLogin as store_auth } from '../core/store';
+
+const router = useRouter();
 
 // 定义响应式数据
 const username = ref('');
@@ -73,6 +76,8 @@ async function login() {
           await db_login(username.value, password.value, result.data.token);
           store_auth().set(true);
           showShortToast('登录成功');
+          // 跳转到首页
+          router.push('/');
         } else {
           showShortToast('登录失败：服务器响应无效');
         }
