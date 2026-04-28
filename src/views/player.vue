@@ -14,6 +14,7 @@ import {
 } from '../core/api';
 import { showShortToast } from '../core/toast';
 import { setupStore } from '../core/store';
+import huawuLoading from '../component/loadingHuawu.vue';
 
 // 设置组件名称，确保与路由name一致
 defineOptions({
@@ -300,7 +301,13 @@ onUnmounted(() => {
     <videoPlayer class="video-player" :poster="poster" :src="currentVideoSrc" :title="title" :server="currentServer"
       :video-files="videoFile" :current-definition-index="videoSelect" @refresh-server="refreshVideoFile"
       @definition-change="selectDefinition" />
-    <div class="tabs">
+    <div class="loading" v-if="isLoading">
+      <huawuLoading class="anime" />
+      <div class="loading-text">
+        数据加载中<span class="dots"></span>
+      </div>
+    </div>
+    <div class="tabs" v-if="!isLoading">
       <div class="tabs-elements">
         <v-tabs class="left" v-model="tab" color="#00796B" density="comfortable">
           <v-tab value="info">简介</v-tab>
@@ -317,7 +324,7 @@ onUnmounted(() => {
       </div>
       <v-divider></v-divider>
     </div>
-    <div class="tabs-content">
+    <div class="tabs-content" v-if="!isLoading">
       <!-- 替换为 Swiper -->
       <swiper class="tabs-window" :slides-per-view="1" :space-between="0" @swiper="onSwiper"
         @slide-change="onSlideChange">
@@ -372,6 +379,58 @@ onUnmounted(() => {
 .video-player {
   width: 100%;
   aspect-ratio: 16 / 9;
+}
+
+.loading {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  .anime {
+    width: 200px;
+  }
+
+  .loading-text {
+    font-family: 'AaXinRui85-2';
+    color: #00796B;
+
+    .dots::after {
+      content: '';
+      animation: dotsAnimation 1s infinite;
+    }
+  }
+
+  @keyframes dotsAnimation {
+    0% {
+      content: '.';
+    }
+
+    16.66% {
+      content: '..';
+    }
+
+    33.32% {
+      content: '...';
+    }
+
+    49.98% {
+      content: '....';
+    }
+
+    66.64% {
+      content: '.....';
+    }
+
+    83.3% {
+      content: '......';
+    }
+
+    100% {
+      content: '.';
+    }
+  }
 }
 
 .tabs {

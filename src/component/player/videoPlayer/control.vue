@@ -87,6 +87,14 @@ const clearHideTimer = () => {
   }
 }
 
+// 监听 hasPlayed 变化，如果从未播放变为已播放，则启动自动隐藏
+watch(() => props.hasPlayed, (newVal) => {
+  if (newVal && showControl.value) {
+    // 视频第一次播放后，如果控制栏正在显示，启动自动隐藏
+    resetHideTimer()
+  }
+})
+
 // 组件挂载时启动自动隐藏
 onMounted(() => {
   resetHideTimer()
@@ -373,8 +381,8 @@ const handleEnterFullscreen = () => {
     </div>
     <!-- 中间区域 -->
     <div class="middle" @pointerdown="handlePointerDown" @click="handleMiddleClick"></div>
-    <!-- 底部控制栏 -->
-    <div class="bottom">
+    <!-- 底部控制栏 - 只有在视频已经播放过后才显示 -->
+    <div class="bottom" v-if="hasPlayed">
       <div>
         <span class="btn" @click="handleTogglePlay">
           <font-awesome-icon v-if="isPlaying" icon="fa-solid fa-pause" />
