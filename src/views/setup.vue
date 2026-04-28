@@ -58,8 +58,8 @@ const toggleAutoPlay = async (value: boolean | null) => {
       <div class="label">默认清晰度</div>
       <div class="value">
         <span>{{ 
-          definition === '360p' ? '360P' : 
-          definition === '540p' ? '540P' : 
+          definition === '360' ? '360P' : 
+          definition === '540' ? '540P' : 
           '原画' 
         }}</span>
         <font-awesome-icon icon="fa-solid fa-angle-right" />

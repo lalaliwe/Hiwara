@@ -146,7 +146,7 @@ function clickLike() {
   </div>
   <div class="author">
     <div class="avatar">
-      <img src="../../static/img/default-avatar.jpg" alt="">
+      <img src="../../static/img/avatar-default.jpg" alt="">
     </div>
     <div class="userinfo">
       <div class="authorname">{{ authorname }}</div>

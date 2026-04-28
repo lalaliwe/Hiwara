@@ -32,16 +32,16 @@ const setDefinition = async (def: string) => {
       </div>
     </div>
     <!-- 内容区域 -->
-    <div class="item" @click="setDefinition('360p')">
+    <div class="item" @click="setDefinition('360')">
       <div class="label">360P</div>
       <div class="value">
-        <font-awesome-icon icon="fa-solid fa-check" v-if="setup.definition === '360p'" />
+        <font-awesome-icon icon="fa-solid fa-check" v-if="setup.definition === '360'" />
       </div>
     </div>
-    <div class="item" @click="setDefinition('540p')">
+    <div class="item" @click="setDefinition('540')">
       <div class="label">540P</div>
       <div class="value">
-        <font-awesome-icon icon="fa-solid fa-check" v-if="setup.definition === '540p'" />
+        <font-awesome-icon icon="fa-solid fa-check" v-if="setup.definition === '540'" />
       </div>
     </div>
     <div class="item" @click="setDefinition('Source')">

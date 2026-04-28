@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watch, onMounted, onUnmounted } from 'vue'
+import { ref, watch, onMounted, onUnmounted, computed } from 'vue'
 import Hammer from 'hammerjs'
 import { exitImmersive } from '../../../plugins/immersive'
 import { lockPortrait } from '../../../plugins/useOrientation'
@@ -15,6 +15,10 @@ const props = defineProps<{
   totalTime: string
   videoElement: HTMLVideoElement | null
   hasPlayed?: boolean // 是否已经播放过
+  title?: string // 视频标题
+  server?: string // 服务器名称
+  videoFiles?: Array<{ id: string; name: string; server: string; type: string; view: string; download: string }> // 视频文件列表
+  currentDefinitionIndex?: number // 当前选中的清晰度索引
 }>()
 
 // Emits - 向父组件事件
@@ -24,6 +28,8 @@ const emit = defineEmits<{
   (e: 'progressChange', value: number): void
   (e: 'progressChangeEnd'): void
   (e: 'gesture', event: { type: string; value?: number; isEnd?: boolean }): void
+  (e: 'refreshServer'): void // 刷新服务器列表
+  (e: 'definitionChange', index: number): void // 切换清晰度
 }>()
 
 // 本地进度状态，用于UI实时更新
@@ -37,6 +43,9 @@ watch(() => props.progress, (newVal) => {
 // 控制栏显示状态
 const showControl = ref(true)
 // console.log('[controlFullscreen.vue] 初始化 showControl:', showControl.value)
+
+// Drawer 显示状态
+const showDrawer = ref(false)
 
 // 自动隐藏定时器
 let hideTimer: number | null = null
@@ -61,6 +70,7 @@ const showControlBar = () => {
 const hideControlBar = () => {
   // console.log('[controlFullscreen.vue] hideControlBar 被调用')
   showControl.value = false
+  showDrawer.value = false // 隐藏控制栏时也隐藏 drawer
   clearHideTimer()
 }
 
@@ -403,6 +413,82 @@ const handleProgressChangeEnd = () => {
   emit('progressChangeEnd')
 }
 
+// 刷新服务器列表
+const handleRefreshServer = () => {
+  // console.log('[controlFullscreen.vue] 刷新服务器列表')
+  emit('refreshServer')
+}
+
+// 格式化清晰度文本
+const definitionTextFormat = (text: string): string => {
+  // 如果输入是数字，返回值后面加个P
+  if (!isNaN(Number(text))) {
+    return `${text}P`;
+  }
+  // 如果输入是Source，返回原画
+  if (text === 'Source') {
+    return '原画';
+  }
+  // 其他情况返回原文本
+  return text;
+}
+
+// 过滤并排序视频文件列表
+const sortedVideoFiles = computed(() => {
+  if (!props.videoFiles) return [];
+  
+  // 先过滤掉 preview
+  const filtered = props.videoFiles.filter(file => file.name.toLowerCase() !== 'preview');
+  
+  // 排序函数
+  return filtered.sort((a, b) => {
+    // Source(原画)排最后
+    if (a.name === 'Source' && b.name !== 'Source') return 1;
+    if (a.name !== 'Source' && b.name === 'Source') return -1;
+    
+    // 都是数字类型,按数值大小排序
+    const aNum = Number(a.name);
+    const bNum = Number(b.name);
+    if (!isNaN(aNum) && !isNaN(bNum)) {
+      return aNum - bNum;
+    }
+    
+    // 其他情况保持原顺序
+    return 0;
+  });
+});
+
+// 获取排序后文件在原数组中的索引
+const getOriginalIndex = (file: { id: string }) => {
+  if (!props.videoFiles) return -1;
+  return props.videoFiles.findIndex(f => f.id === file.id);
+};
+
+// 切换清晰度
+const selectDefinition = (index: number) => {
+  // 如果选择的清晰度与当前相同,则不执行切换
+  if (index === props.currentDefinitionIndex) {
+    showDrawer.value = false;
+    return;
+  }
+  
+  // 触发事件通知父组件
+  emit('definitionChange', index);
+  showDrawer.value = false;
+}
+
+// 切换 drawer 显示状态
+const toggleDrawer = () => {
+  showDrawer.value = !showDrawer.value
+  // 如果打开了 drawer，清除自动隐藏定时器，防止控制栏自动隐藏
+  if (showDrawer.value) {
+    clearHideTimer()
+  } else {
+    // 如果关闭了 drawer，重新启动自动隐藏定时器
+    resetHideTimer()
+  }
+}
+
 onMounted(() => {
   // console.log('[controlFullscreen.vue] 组件已挂载')
   fetchNetworkInfo()
@@ -439,7 +525,7 @@ onUnmounted(() => {
       </div>
       <div class="title">
         <div class="title-text">
-          测试标题
+          {{ title || '未知标题' }}
         </div>
       </div>
       <div class="status">
@@ -526,17 +612,42 @@ onUnmounted(() => {
       </div>
       <div class="space"></div>
       <div class="text-btn">
-        <span>
-          <font-awesome-icon icon="fa-solid fa-server" />hiwara
+        <span @click="handleRefreshServer">
+          <font-awesome-icon icon="fa-solid fa-server" />{{ server || 'hiwara' }}
         </span>
-        <span>
-          <font-awesome-icon icon="fa-solid fa-film" />1080P
+        <span @click="toggleDrawer">
+          <font-awesome-icon icon="fa-solid fa-film" />{{ definitionTextFormat(videoFiles?.[currentDefinitionIndex || 0]?.name || '1080P') }}
         </span>
       </div>
       <div>
         <span class="btn" @click="handleExitFullscreen">
           <font-awesome-icon icon="fa-solid fa-compress" />
         </span>
+      </div>
+    </div>
+
+    <!-- 右侧Drawer -->
+    <div class="drawer" :class="{ 'drawer-open': showDrawer }">
+      <div class="drawer-header">
+        <span class="drawer-title">选择清晰度</span>
+        <span class="btn" @click="toggleDrawer">
+          <font-awesome-icon icon="fa-solid fa-xmark" />
+        </span>
+      </div>
+      <v-divider></v-divider>
+      <div class="drawer-content">
+        <div 
+          v-for="(file, index) in sortedVideoFiles" 
+          :key="file.id"
+          class="definition-item"
+          :class="{ active: getOriginalIndex(file) === currentDefinitionIndex }"
+          @click="selectDefinition(getOriginalIndex(file))"
+        >
+          <font-awesome-icon icon="fa-solid fa-film" />
+          <span class="definition-text">{{ definitionTextFormat(file.name) }}</span>
+          <font-awesome-icon v-if="getOriginalIndex(file) === currentDefinitionIndex" 
+            icon="fa-solid fa-check" class="check-icon" />
+        </div>
       </div>
     </div>
   </div>
@@ -640,7 +751,70 @@ onUnmounted(() => {
     cursor: pointer;
     user-select: none;
   }
+
+  .drawer {
+    background-color: rgba(0, 0, 0, 0.4);
+    position: absolute;
+    top: 0px;
+    right: -280px;
+    height: 100%;
+    width: 280px;
+    transition: right 0.3s ease-in-out;
+    z-index: 30;
+    display: flex;
+    flex-direction: column;
+    backdrop-filter: blur(10px);
+
+    &.drawer-open {
+      right: 0;
+    }
+
+    .drawer-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px;
+
+      .drawer-title {
+        font-size: 1.1rem;
+        font-weight: bold;
+      }
+    }
+
+    .drawer-content {
+      flex: 1;
+      overflow-y: auto;
+      padding: 8px 0;
+
+      .definition-item {
+        display: flex;
+        align-items: center;
+        padding: 12px 16px;
+        cursor: pointer;
+        user-select: none;
+        gap: 12px;
+        transition: background-color 0.2s;
+
+        &:hover {
+          background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        &.active {
+          background-color: rgba(0, 121, 107, 0.3);
+        }
+
+        .definition-text {
+          flex: 1;
+        }
+
+        .check-icon {
+          color: #00796B;
+        }
+      }
+    }
+  }
 }
+
 
 .touch {
   height: 100%;

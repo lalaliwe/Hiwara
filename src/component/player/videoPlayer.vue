@@ -13,9 +13,21 @@ const setup = setupStore();
 // 定义 props
 const props = defineProps<{
   poster?: string
+  src?: string
+  title?: string
+  server?: string // 服务器名称
+  videoFiles?: Array<{ id: string; name: string; server: string; type: string; view: string; download: string }> // 视频文件列表
+  currentDefinitionIndex?: number // 当前选中的清晰度索引
+}>()
+
+// 定义 emits
+const emit = defineEmits<{
+  (e: 'refreshServer'): void // 刷新服务器列表
+  (e: 'definition-change', index: number): void // 切换清晰度
 }>()
 
 const localPosterUrl = ref<string>(''); // 本地存储的poster URL
+const videoSrc = ref<string>(''); // 视频源地址
 
 // 监听 poster prop 变化
 watch(() => props.poster, async (newPoster) => {
@@ -32,6 +44,13 @@ watch(() => props.poster, async (newPoster) => {
       console.error('Failed to load poster:', error);
       localPosterUrl.value = '';
     }
+  }
+}, { immediate: true });
+
+// 监听 src prop 变化
+watch(() => props.src, (newSrc) => {
+  if (newSrc) {
+    videoSrc.value = newSrc;
   }
 }, { immediate: true });
 
@@ -169,6 +188,18 @@ const handleExitFullscreen = async () => {
   fullscreenState.value = false;
 };
 
+// 处理服务器刷新
+const handleRefreshServer = () => {
+  // console.log('[videoPlayer.vue] 触发服务器刷新')
+  emit('refreshServer')
+}
+
+// 处理清晰度切换
+const handleDefinitionChange = (index: number) => {
+  // console.log('[videoPlayer.vue] 触发清晰度切换:', index)
+  emit('definition-change', index)
+}
+
 // 监听全屏状态变化 (处理 ESC 键、手势退出等情况)
 const handleFullscreenChange = () => {
   const isNowFullscreen = !!document.fullscreenElement;
@@ -200,6 +231,17 @@ onMounted(async () => {
 
   // 绑定视频事件
   if (videoRef.value) {
+    // 初始加载阶段的事件
+    videoRef.value.addEventListener('loadstart', () => {
+      isLoading.value = true; // 开始加载视频
+    });
+    videoRef.value.addEventListener('suspend', () => {
+      isLoading.value = true; // 加载被暂停（通常是用户主动暂停）
+    });
+    videoRef.value.addEventListener('stalled', () => {
+      isLoading.value = true; // 浏览器尝试获取数据但未能获取到
+    });
+    
     videoRef.value.addEventListener('play', () => {
       isPlaying.value = true;
       isLoading.value = false; // 开始播放时隐藏加载指示器
@@ -209,7 +251,15 @@ onMounted(async () => {
       isPlaying.value = false;
     });
     videoRef.value.addEventListener('timeupdate', updateTime);
-    videoRef.value.addEventListener('loadedmetadata', updateTime);
+    videoRef.value.addEventListener('loadedmetadata', () => {
+      updateTime();
+      isLoading.value = false; // 元数据加载完成，隐藏加载指示器
+      console.log('视频元数据加载完成');
+    });
+    videoRef.value.addEventListener('loadeddata', () => {
+      isLoading.value = false; // 数据加载完成，隐藏加载指示器
+      console.log('视频数据加载完成');
+    });
     // 监听缓冲事件
     videoRef.value.addEventListener('waiting', () => {
       isLoading.value = true; // 数据不足，显示加载指示器
@@ -232,10 +282,14 @@ onUnmounted(() => {
   window.removeEventListener('popstate', handlePopState);
   // 清理事件监听
   if (videoRef.value) {
+    videoRef.value.removeEventListener('loadstart', () => { });
+    videoRef.value.removeEventListener('suspend', () => { });
+    videoRef.value.removeEventListener('stalled', () => { });
     videoRef.value.removeEventListener('play', () => { });
     videoRef.value.removeEventListener('pause', () => { });
     videoRef.value.removeEventListener('timeupdate', updateTime);
-    videoRef.value.removeEventListener('loadedmetadata', updateTime);
+    videoRef.value.removeEventListener('loadedmetadata', () => { });
+    videoRef.value.removeEventListener('loadeddata', () => { });
     videoRef.value.removeEventListener('waiting', () => { });
     videoRef.value.removeEventListener('playing', () => { });
     videoRef.value.removeEventListener('canplaythrough', () => { });
@@ -304,7 +358,7 @@ const handleGestureEvent = (event: { type: string; value?: number; isEnd?: boole
 
 <template>
   <div class="video-player" ref="videoPlayerRef">
-    <video ref="videoRef" src="https://ro.qisato.top:2096/public/VID_20220416_033049_395.mp4" :autoplay="setup.autoPlay"
+    <video ref="videoRef" :src="videoSrc" :autoplay="setup.autoPlay"
       :poster="setup.autoPlay ? '../../static/img/transparent.png' : (localPosterUrl || '../../static/img/transparent.png')" @click="togglePlay"></video>
     <!-- 视频黑屏遮罩（仅在未播放时显示） -->
     <div v-if="false" class="black-overlay"></div>
@@ -320,8 +374,11 @@ const handleGestureEvent = (event: { type: string; value?: number; isEnd?: boole
     <!-- 使用 fullscreenState 控制显示 -->
     <controlFullscreen v-if="fullscreenState" :is-playing="isPlaying" :progress="progress" :buffered="buffered"
       :current-time="currentTime" :total-time="totalTime" :video-element="videoRef" :has-played="hasPlayed"
+      :title="props.title" :server="props.server" :video-files="props.videoFiles" 
+      :current-definition-index="props.currentDefinitionIndex"
       @exit="handleExitFullscreen" @toggle-play="togglePlay" @progress-change="onProgressChange"
-      @progress-change-end="onProgressChangeEnd" @gesture="handleGestureEvent" />
+      @progress-change-end="onProgressChangeEnd" @gesture="handleGestureEvent" @refresh-server="handleRefreshServer" 
+      @definition-change="handleDefinitionChange" />
     <control v-else :is-playing="isPlaying" :progress="progress" :buffered="buffered" :current-time="currentTime"
       :total-time="totalTime" :has-played="hasPlayed" @toggle-play="togglePlay" @progress-change="onProgressChange"
       @progress-change-end="onProgressChangeEnd" @enter-fullscreen="enterFullscreen" @go-back="goBack" @go-home="goHome"

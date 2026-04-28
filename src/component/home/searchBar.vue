@@ -18,7 +18,7 @@ function toSearch() {
 <template>
   <div class="top-view">
     <div class="avatar" @click="tabSwitchToMy">
-      <img src="../../static/img/default-avatar.jpg" alt="Avatar" />
+      <img src="../../static/img/avatar-default.jpg" alt="Avatar" />
     </div>
     <div class="search" @click="toSearch">
       <div class="input">

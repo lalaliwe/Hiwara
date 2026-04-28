@@ -7,7 +7,11 @@ import {
   CopyLink as iconCopyLink,
 } from '@icon-park/vue-next';
 import test1Img from '../../static/img/test1.jpg';
+import defaultAvatarImg from '../../static/img/avatar-default.jpg';
+import avatarPlaceholderImg from '../../static/img/avatar-placeholder.png';
+import avatarErrorImg from '../../static/img/avatar-error.png';
 import cardButton from '../cardButton.vue';
+import { getImageIwara } from '../../core/api';
 
 // 格式化时间: YYYY年MM月DD日 HH:mm
 const formatDate = (dateString: string) => {
@@ -30,6 +34,7 @@ const props = defineProps<{
   isLike: boolean,  // 是否已点赞
   tags: string[], // 标签
   authorname: string, // 作者昵称
+  avatar: string, // 作者头像    
   fansNum: number, // 粉丝数
   videoNum: number, // 视频数
   isFollow: boolean,  // 是否已关注
@@ -156,13 +161,44 @@ watch(expand, async (val) => {
     }, 300); // 与 transition 时间匹配
   }
 }, { immediate: true });
+
+// 头像 URL（响应式）
+const avatarUrl = ref<string>('');
+
+// 加载头像
+async function loadAvatar() {
+  if (!props.avatar || props.avatar.trim() === '') {
+    // avatar 为空，使用默认头像
+    avatarUrl.value = defaultAvatarImg;
+  } else {
+    try {
+      // avatar 不为空，通过 API 获取
+      avatarUrl.value = await getImageIwara(props.avatar);
+    } catch (error) {
+      console.error('Failed to load avatar:', error);
+      // 加载失败时使用默认头像
+      avatarUrl.value = avatarErrorImg;
+    }
+  }
+}
+
+// 监听 avatar prop 变化，立即执行
+watch(() => props.avatar, () => {
+  loadAvatar();
+}, { immediate: true });
+
 </script>
 <template>
   <div class="infoView" @scroll="handleSroll" ref="infoViewRef">
     <div>
       <div class="author">
         <div class="avatar">
-          <img src="../../static/img/default-avatar.jpg" alt="">
+          <!-- <img :src="avatarUrl" alt=""> -->
+          <v-img :src="avatarUrl" cover>
+            <template v-slot:placeholder>
+              <v-img height="100%" :src="avatarPlaceholderImg" cover></v-img>
+            </template>
+          </v-img>
         </div>
         <div class="userinfo">
           <div class="authorname">{{ authorname }}</div>
@@ -276,7 +312,7 @@ watch(expand, async (val) => {
     align-items: center;
     justify-content: center;
 
-    img {
+    .v-img {
       width: 40px;
       height: 40px;
       border-radius: 50%;

@@ -113,42 +113,54 @@ onMounted(() => {
     snackbar.value = true
   }) as EventListener)
 
+  // 只在 Tauri 环境中尝试注册返回键监听器
   if (isTauri()) {
-    // 只在 Android 上有效；桌面端不会触发
-    // 使用新的事件监听API替代onBackButtonPress
-    onBackButtonPress(async ({ canGoBack }) => {
-      const currentTime = Date.now()
+    // 使用 setTimeout 延迟注册，确保 Tauri 插件已完全初始化
+    // 这可以解决开发环境下的竞态条件问题
+    setTimeout(async () => {
+      try {
+        // 只在 Android 上有效；桌面端不会触发
+        // 使用新的事件监听API替代onBackButtonPress
+        const listener = await onBackButtonPress(async ({ canGoBack }) => {
+          const currentTime = Date.now()
 
-      // 1. 如果当前在首页
-      if (route.path === '/') {
-        // 发送自定义事件到 Home 组件处理
-        window.dispatchEvent(new CustomEvent('home-back-pressed'))
-        return
-      }
+          // 1. 如果当前在首页
+          if (route.path === '/') {
+            // 发送自定义事件到 Home 组件处理
+            window.dispatchEvent(new CustomEvent('home-back-pressed'))
+            return
+          }
 
-      // 2. 不在首页：希望"回退到上一页"
-      // 优先用 Tauri 提供的 canGoBack 信息
-      if (canGoBack) {
-        router.back()
-        return
-      }
+          // 2. 不在首页：希望"回退到上一页"
+          // 优先用 Tauri 提供的 canGoBack 信息
+          if (canGoBack) {
+            router.back()
+            return
+          }
 
-      // 3. 极端情况：不在首页，且 WebHistory 已经回退到底
-      // 再按返回，就直接退出应用（双击退出逻辑）
-      if (
-        lastBackPressedTime &&
-        currentTime - lastBackPressedTime <= DOUBLE_BACK_PRESS_TIMEOUT
-      ) {
-        moveTaskToBack()
-        return
-      } else {
-        lastBackPressedTime = currentTime
-        showShortToast('再按一次返回键退出应用')
-        return
+          // 3. 极端情况：不在首页，且 WebHistory 已经回退到底
+          // 再按返回，就直接退出应用（双击退出逻辑）
+          if (
+            lastBackPressedTime &&
+            currentTime - lastBackPressedTime <= DOUBLE_BACK_PRESS_TIMEOUT
+          ) {
+            moveTaskToBack()
+            return
+          } else {
+            lastBackPressedTime = currentTime
+            showShortToast('再按一次返回键退出应用')
+            return
+          }
+        })
+
+        // 保存监听器引用以便后续清理
+        backListener = listener
+      } catch (error) {
+        // 在非 Android 平台或插件未就绪时，静默失败
+        // 这不会影响应用的正常运行
+        console.warn('[App] Failed to register back button listener:', error)
       }
-    }).then(listener => {
-      backListener = listener
-    })
+    }, 100) // 延迟 100ms 确保 Tauri 桥接已就绪
   }
 })
 
@@ -177,7 +189,7 @@ onUnmounted(() => {
       </keep-alive>
     </transition>
   </router-view>
-  
+
   <!-- Vuetify Snackbar -->
   <v-snackbar v-model="snackbar" :timeout="snackbarTimeout" :color="snackbarColor" top centered class="snackbar">
     {{ snackbarText }}
