@@ -16,7 +16,10 @@ const buildTime = new Date().toLocaleString('zh-CN', {
 // https://vite.dev/config/
 export default defineConfig(async () => ({
   plugins: [vue()],
-
+  build: {
+    // 将构建目标设置为最新标准，允许使用顶层 await 等现代语法
+    target: 'esnext',
+  },
   // Vite options tailored for Tauri development and only applied in `tauri dev` or `tauri build`
   //
   // 1. prevent Vite from obscuring rust errors
@@ -28,10 +31,10 @@ export default defineConfig(async () => ({
     host: host || false,
     hmr: host
       ? {
-          protocol: "ws",
-          host,
-          port: 1421,
-        }
+        protocol: "ws",
+        host,
+        port: 1421,
+      }
       : undefined,
     watch: {
       // 3. tell Vite to ignore watching `src-tauri`

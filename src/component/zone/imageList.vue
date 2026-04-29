@@ -13,9 +13,9 @@ interface ListItem {
   img: string;
   author: string;
   time: string;
-  viewNum: string;
-  likeNum: string;
-  longNum: string;
+  viewNum: number;
+  likeNum: number;
+  longNum: number;
   isR18: boolean;
 }
 
@@ -27,9 +27,9 @@ for (let i = 0; i < 20; i++) {
     img: test1Img,
     author: '测试作者',
     time: '2021-09-09',
-    viewNum: '100',
-    likeNum: '100',
-    longNum: '10',
+    viewNum: 100,
+    likeNum: 100,
+    longNum: 10,
     isR18: false,
   });
 }
