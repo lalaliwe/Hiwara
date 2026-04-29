@@ -43,6 +43,10 @@ let imageListPage = 0;
 const videoListMore = ref(false);
 const imageListMore = ref(false);
 
+// 加载更多失败标记
+const videoLoadMoreFailed = ref(false);
+const imageLoadMoreFailed = ref(false);
+
 // 聚合状态：'failed' | 'empty' | 'loading' | 'success'
 type ListState = 'failed' | 'empty' | 'loading' | 'success';
 const videoState = ref<ListState>('loading');
@@ -121,6 +125,7 @@ function refreshData() {
     videoList.value = [];
     videoListPage = 0;
     videoListMore.value = false;
+    videoLoadMoreFailed.value = false;
     videoState.value = 'loading';
     // 获取视频列表数据
     getSubscribeVideoList();
@@ -130,11 +135,26 @@ function refreshData() {
     imageList.value = [];
     imageListPage = 0;
     imageListMore.value = false;
+    imageLoadMoreFailed.value = false;
     imageState.value = 'loading';
     // 获取图片列表数据
     getSubscribeImageList();
   }
 }
+
+// 重试加载更多
+function retryVideoLoadMore() {
+  videoLoadMoreFailed.value = false;
+  videoListMore.value = false;
+  getSubscribeVideoList();
+}
+
+function retryImageLoadMore() {
+  imageLoadMoreFailed.value = false;
+  imageListMore.value = false;
+  getSubscribeImageList();
+}
+
 // 初始获取订阅列表数据
 function initGetSubscribeData() {
   if (tab.value === 'video' && videoList.value.length === 0 && videoState.value !== 'failed' && videoState.value !== 'empty') {
@@ -182,6 +202,7 @@ async function getSubscribeVideoList() {
       if (res.data.results && res.data.results.length > 0) {
         videoState.value = 'success';
         videoListMore.value = false;
+        videoLoadMoreFailed.value = false;
         const newVideos = res.data.results.map((item: any) => {
           return {
             id: item.id,
@@ -212,6 +233,7 @@ async function getSubscribeVideoList() {
         videoState.value = 'failed';
       } else {
         videoListMore.value = true;
+        videoLoadMoreFailed.value = true;
       }
     }
   } catch (error) {
@@ -222,6 +244,7 @@ async function getSubscribeVideoList() {
       videoState.value = 'failed';
     } else {
       videoListMore.value = true;
+      videoLoadMoreFailed.value = true;
     }
   }
 }
@@ -234,6 +257,7 @@ async function getSubscribeImageList() {
       if (res.data.results && res.data.results.length > 0) {
         imageState.value = 'success';
         imageListMore.value = false;
+        imageLoadMoreFailed.value = false;
         const newImages = res.data.results.map((item: any) => {
           return {
             id: item.id,
@@ -264,6 +288,7 @@ async function getSubscribeImageList() {
         imageState.value = 'failed';
       } else {
         imageListMore.value = true;
+        imageLoadMoreFailed.value = true;
       }
     }
   } catch (error) {
@@ -274,6 +299,7 @@ async function getSubscribeImageList() {
       imageState.value = 'failed';
     } else {
       imageListMore.value = true;
+      imageLoadMoreFailed.value = true;
     }
   }
 }
@@ -313,8 +339,13 @@ async function getSubscribeImageList() {
                   :isR18="item.isR18" />
               </template>
             </div>
+            
             <template v-slot:empty>
-              <div class="listEnd">
+              <div v-if="videoLoadMoreFailed" class="load-more-failed">
+                <span>加载失败，</span>
+                <span class="retry-btn" @click="retryVideoLoadMore">点击重试</span>
+              </div>
+              <div v-else class="listEnd">
                 已经到底了
               </div>
             </template>
@@ -340,8 +371,13 @@ async function getSubscribeImageList() {
                   :isR18="item.isR18" />
               </template>
             </div>
+            
             <template v-slot:empty>
-              <div class="listEnd">
+              <div v-if="imageLoadMoreFailed" class="load-more-failed">
+                <span>加载失败，</span>
+                <span class="retry-btn" @click="retryImageLoadMore">点击重试</span>
+              </div>
+              <div v-else class="listEnd">
                 已经到底了
               </div>
             </template>
@@ -417,5 +453,22 @@ async function getSubscribeImageList() {
 .listEnd {
   color: #757575;
   padding: 4px 0;
+}
+
+.load-more-failed {
+  text-align: center;
+  padding: 10px 0;
+  color: #757575;
+  font-size: 0.9rem;
+  
+  .retry-btn {
+    color: #00796B;
+    cursor: pointer;
+    
+    &:hover {
+      opacity: 0.8;
+      text-decoration: underline;
+    }
+  }
 }
 </style>

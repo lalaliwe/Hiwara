@@ -36,6 +36,9 @@ const imageList = ref<ListItem[][]>(Array.from({ length: tabArray.length }, () =
 let page: number[] = new Array(tabArray.length).fill(0);
 const listMore = ref<boolean[]>(new Array(tabArray.length).fill(false))
 
+// 加载更多失败标记
+const loadMoreFailed = ref<boolean[]>(new Array(tabArray.length).fill(false))
+
 // 每个tab的加载状态：'failed' | 'empty' | 'loading' | 'success'
 type ListState = 'failed' | 'empty' | 'loading' | 'success';
 const state = ref<ListState[]>(new Array(tabArray.length).fill('loading'));
@@ -122,6 +125,7 @@ function refreshData() {
     imageList.value[tabIndex] = [];
     page[tabIndex] = 0;
     listMore.value[tabIndex] = false;
+    loadMoreFailed.value[tabIndex] = false;
     state.value[tabIndex] = 'loading';
     // 重新获取数据
     getImageList(tabIndex);
@@ -136,6 +140,13 @@ onActivated(() => {
     }
   });
 });
+
+// 重试加载更多
+function retryLoadMore(index: number) {
+  loadMoreFailed.value[index] = false;
+  listMore.value[index] = false;
+  getImageList(index);
+}
 
 // 初始获取图片列表数据
 function initGetImageListData() {
@@ -169,6 +180,7 @@ async function getImageList(tabNum: number) {
       if (res.data.results && res.data.results.length > 0) {
         state.value[tabNum] = 'success';
         listMore.value[tabNum] = false;
+        loadMoreFailed.value[tabNum] = false;
         const newImages = res.data.results.map((item: any) => {
           return {
             id: item.id,
@@ -199,6 +211,7 @@ async function getImageList(tabNum: number) {
         state.value[tabNum] = 'failed';
       } else {
         listMore.value[tabNum] = true;
+        loadMoreFailed.value[tabNum] = true;
       }
     }
   } catch (error) {
@@ -209,6 +222,7 @@ async function getImageList(tabNum: number) {
       state.value[tabNum] = 'failed';
     } else {
       listMore.value[tabNum] = true;
+      loadMoreFailed.value[tabNum] = true;
     }
   }
 }
@@ -238,10 +252,10 @@ async function getImageList(tabNum: number) {
       @slide-change="onSlideChange">
       <swiper-slide v-for="(item, i) in tabArray" :key="`tabs-window_${item.value}`">
         <div v-if="state[i] === 'failed'" class="loading" @click="handleErrorClick(i)">
-          <errorHuawu>加载失败，点击重试</errorHuawu>
+          <errorHuawu>插画列表加载失败了喵~</errorHuawu>
         </div>
         <div v-else-if="state[i] === 'empty'" class="loading" @click="handleErrorClick(i)">
-          <errorHuawu>暂无内容，点击刷新</errorHuawu>
+          <errorHuawu>暂无插画内容</errorHuawu>
         </div>
         <div v-else-if="state[i] === 'loading'" class="loading">
           <loadingHuawu>数据加载中</loadingHuawu>
@@ -256,7 +270,11 @@ async function getImageList(tabNum: number) {
               </template>
             </div>
             <template v-slot:empty>
-              <div class="listEnd">
+              <div v-if="loadMoreFailed[i]" class="load-more-failed">
+                <span>加载失败，</span>
+                <span class="retry-btn" @click="retryLoadMore(i)">点击重试</span>
+              </div>
+              <div v-else class="listEnd">
                 已经到底了
               </div>
             </template>
@@ -350,5 +368,22 @@ async function getImageList(tabNum: number) {
 .listEnd {
   color: #757575;
   padding: 4px 0;
+}
+
+.load-more-failed {
+  text-align: center;
+  padding: 10px 0;
+  color: #757575;
+  font-size: 0.9rem;
+  
+  .retry-btn {
+    color: #00796B;
+    cursor: pointer;
+    
+    &:hover {
+      opacity: 0.8;
+      text-decoration: underline;
+    }
+  }
 }
 </style>

@@ -2,6 +2,7 @@
 import { onActivated, ref, watch } from 'vue'
 import { getVideoComments, getImageIwara } from '../../core/api'
 import errorHuawu from '../errorHuawu.vue'
+import loadingHuawu from '../loadingHuawu.vue'
 import { showShortToast } from '../../core/toast'
 import defaultAvatarImg from '../../static/img/avatar-default.jpg'
 import avatarPlaceholderImg from '../../static/img/avatar-placeholder.png'
@@ -43,6 +44,11 @@ const commentMore = ref(false)
 let scrollTop = 0
 // 新增：加载状态，防止重复请求
 const loading = ref(false)
+// 聚合状态：'failed' | 'empty' | 'loading' | 'success'
+type CommentState = 'failed' | 'empty' | 'loading' | 'success'
+const commentState = ref<CommentState>('loading')
+// 加载更多失败标记
+const loadMoreFailed = ref(false)
 
 // 头像 URL 缓存 (userId -> avatarUrl)
 const avatarUrlMap = ref<Record<string, string>>({})
@@ -96,6 +102,9 @@ async function getCommentList() {
     const res = await getVideoComments(props.vid, commentPage)
     if (res.ok) {
       if (res.data.results && res.data.results.length > 0) {
+        commentState.value = 'success'
+        commentMore.value = false
+        loadMoreFailed.value = false
         const newComments = res.data.results.map((item: any) => {
           return {
             id: item.id,
@@ -117,14 +126,31 @@ async function getCommentList() {
         commentPage++
       } else {
         commentMore.value = true
+        if (commentList.value.length === 0) {
+          commentState.value = 'empty'
+        }
       }
     } else {
       console.error(`状态码：${res.status}`, `错误信息：${res.statusText}`)
       showShortToast('获取评论失败')
+      // 如果是加载更多时失败，阻止继续加载
+      if (commentList.value.length === 0) {
+        commentState.value = 'failed'
+      } else {
+        commentMore.value = true
+        loadMoreFailed.value = true
+      }
     }
   } catch (error) {
     console.error(`获取评论失败:`, error)
-    showShortToast('获取评论失败')
+    showShortToast('获取更多评论失败，点击重试')
+    // 如果是加载更多时失败，阻止继续加载
+    if (commentList.value.length === 0) {
+      commentState.value = 'failed'
+    } else {
+      commentMore.value = true
+      loadMoreFailed.value = true
+    }
   } finally {
     // 确保无论成功失败都释放锁
     loading.value = false
@@ -147,6 +173,13 @@ async function handleScrollToEnd({ done }: any) {
   }
 }
 
+// 重试加载更多
+function retryLoadMore() {
+  loadMoreFailed.value = false
+  commentMore.value = false
+  getCommentList()
+}
+
 // 初始化加载评论
 function initGetComments() {
   if (props.vid && commentList.value.length === 0) {
@@ -162,6 +195,8 @@ watch(() => props.vid, (newVal) => {
     commentMore.value = false
     commentList.value = []
     avatarUrlMap.value = {}
+    loadMoreFailed.value = false
+    commentState.value = 'loading'
     getCommentList()
   }
 }, { immediate: true })
@@ -218,8 +253,14 @@ onActivated(() => {
 
 <template>
   <div class="commentView" @scroll="handleScroll" ref="commentViewRef">
-    <div v-if="commentList.length === 0 && commentMore" class="empty-state">
+    <div v-if="commentState === 'failed'" class="empty-state">
+      <errorHuawu>评论加载失败了喵~</errorHuawu>
+    </div>
+    <div v-else-if="commentState === 'empty'" class="empty-state">
       <errorHuawu>当前还没有评论</errorHuawu>
+    </div>
+    <div v-else-if="commentState === 'loading'" class="empty-state">
+      <loadingHuawu>评论加载中</loadingHuawu>
     </div>
     <v-infinite-scroll v-else color="#00796B" @load="handleScrollToEnd" :disabled="commentMore">
       <div class="commentItem" v-for="item in commentList" :key="item.id">
@@ -255,9 +296,14 @@ onActivated(() => {
           </div>
         </div>
       </div>
+      
       <template v-slot:empty>
-        <div class="listEnd">
-          已经到底了
+        <div v-if="loadMoreFailed" class="load-more-failed">
+          <span>加载失败，</span>
+          <span class="retry-btn" @click="retryLoadMore">点击重试</span>
+        </div>
+        <div v-else class="listEnd">
+          已经到底了喵~
         </div>
       </template>
     </v-infinite-scroll>
@@ -277,6 +323,23 @@ onActivated(() => {
 .listEnd {
   color: #757575;
   padding: 4px 0;
+}
+
+.load-more-failed {
+  text-align: center;
+  padding: 10px 0;
+  color: #757575;
+  font-size: 0.9rem;
+  
+  .retry-btn {
+    color: #00796B;
+    cursor: pointer;
+    
+    &:hover {
+      opacity: 0.8;
+      text-decoration: underline;
+    }
+  }
 }
 
 .empty-state {
