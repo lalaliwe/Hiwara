@@ -200,10 +200,7 @@ async function getImageList(tabNum: number) {
       @slide-change="onSlideChange">
       <swiper-slide v-for="(item, i) in tabArray" :key="`tabs-window_${item.value}`">
         <div v-if="imageList[i].length === 0" class="loading">
-          <loadingHuawu class="anime" />
-          <div class="loading-text">
-            数据加载中<span class="dots"></span>
-          </div>
+          <loadingHuawu>数据加载中</loadingHuawu>
         </div>
         <div v-else class="list-view" :ref="(el) => setListRef(el, i)" @scroll="(e) => handleScroll(i, e)">
           <v-infinite-scroll color="#00796B" @load="(state) => loadMoreData(state, i)" :disabled="listMore[i]">
@@ -305,50 +302,6 @@ async function getImageList(tabNum: number) {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-
-  .anime {
-    width: 200px;
-  }
-
-  .loading-text {
-    font-family: 'AaXinRui85-2';
-    color: #00796B;
-
-    .dots::after {
-      content: '';
-      animation: dotsAnimation 1s infinite;
-    }
-  }
-
-  @keyframes dotsAnimation {
-    0% {
-      content: '.';
-    }
-
-    16.66% {
-      content: '..';
-    }
-
-    33.32% {
-      content: '...';
-    }
-
-    49.98% {
-      content: '....';
-    }
-
-    66.64% {
-      content: '.....';
-    }
-
-    83.3% {
-      content: '......';
-    }
-
-    100% {
-      content: '.';
-    }
-  }
 }
 
 .listEnd {

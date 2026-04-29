@@ -411,6 +411,58 @@ export async function getVideoFileSQ(url: string, download: string): Promise<any
     throw error;
   }
 }
+// 获取视频推荐：该用户的其他视频
+export async function getVideoRecommendByUser(vid: string, uid: string): Promise<any> {
+  const path = `${API_URL}/videos`;
+  const headers = {
+    Authorization: `Bearer ${await getAccessToken()}`,
+  };
+  const query = {
+    rating: 'all',
+    user: uid,
+    exclude: vid,
+    limit: 6
+  };
+  try {
+    const response = await getSendRequestIwara(path, headers, query);
+    return response;
+  } catch (error) {
+    console.error('Get video info failed:', error);
+    throw error;
+  }
+}
+// 获取视频推荐：更多视频
+export async function getVideoRecommendByOther(vid: string): Promise<any> {
+  const path = `${API_URL}/video/${vid}/related`;
+  const headers = {
+    Authorization: `Bearer ${await getAccessToken()}`,
+  };
+  try {
+    const response = await getSendRequestIwara(path, headers);
+    return response;
+  } catch (error) {
+    console.error('Get video info failed:', error);
+    throw error;
+  }
+}
+// 获取视频评论
+export async function getVideoComments(vid: string, page: number): Promise<any> {
+  const path = `${API_URL}/video/${vid}/comments`;
+  const headers = {
+    Authorization: `Bearer ${await getAccessToken()}`,
+  };
+  const query = {
+    page: page,
+    limit: 32
+  };
+  try {
+    const response = await getSendRequestIwara(path, headers, query);
+    return response;
+  } catch (error) {
+    console.error('Get video info failed:', error);
+    throw error;
+  }
+}
 // 获取用户信息
 export async function getUserInfo(username: string): Promise<any> {
   const path = `/profile/${username}`;

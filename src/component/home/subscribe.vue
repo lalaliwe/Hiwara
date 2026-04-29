@@ -235,10 +235,7 @@ async function getSubscribeImageList() {
       @slide-change="onSlideChange">
       <swiper-slide>
         <div v-if="videoList.length === 0" class="loading">
-          <loadingHuawu class="anime" />
-          <div class="loading-text">
-            数据加载中<span class="dots"></span>
-          </div>
+          <loadingHuawu>数据加载中</loadingHuawu>
         </div>
         <div v-else class="list-view" ref="videoListView" @scroll="handleVideoScroll">
           <v-infinite-scroll color="#00796B" @load="videoListHandleScrollToEnd" :disabled="videoListMore">
@@ -259,10 +256,7 @@ async function getSubscribeImageList() {
       </swiper-slide>
       <swiper-slide>
         <div v-if="imageList.length === 0" class="loading">
-          <loadingHuawu class="anime" />
-          <div class="loading-text">
-            数据加载中<span class="dots"></span>
-          </div>
+          <loadingHuawu>数据加载中</loadingHuawu>
         </div>
         <div v-else class="list-view" ref="imageListView" @scroll="handleImageScroll">
           <v-infinite-scroll color="#00796B" @load="imageListHandleScrollToEnd" :disabled="imageListMore">
@@ -346,50 +340,6 @@ async function getSubscribeImageList() {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-
-  .anime {
-    width: 200px;
-  }
-
-  .loading-text {
-    font-family: 'AaXinRui85-2';
-    color: #00796B;
-
-    .dots::after {
-      content: '';
-      animation: dotsAnimation 1s infinite;
-    }
-  }
-
-  @keyframes dotsAnimation {
-    0% {
-      content: '.';
-    }
-
-    16.66% {
-      content: '..';
-    }
-
-    33.32% {
-      content: '...';
-    }
-
-    49.98% {
-      content: '....';
-    }
-
-    66.64% {
-      content: '.....';
-    }
-
-    83.3% {
-      content: '......';
-    }
-
-    100% {
-      content: '.';
-    }
-  }
 }
 
 .listEnd {

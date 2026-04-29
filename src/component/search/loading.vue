@@ -1,11 +1,6 @@
 <template>
   <div class="search-loading">
-    <div class="animation-container">
-      <loadingHuawu />
-      <div class="loading-text">
-        数据加载中<span class="dots"></span>
-      </div>
-    </div>
+    <loadingHuawu>数据加载中</loadingHuawu>
   </div>
 </template>
 
@@ -28,50 +23,5 @@ import loadingHuawu from '../loadingHuawu.vue';
   align-items: center;
   height: 100%;
   user-select: none;
-
-  .animation-container {
-    width: 200px;
-    text-align: center;
-    color: #00796B;
-  }
-
-  .loading-text {
-    font-family: 'AaXinRui85-2';
-  }
-
-  .dots::after {
-    content: '';
-    animation: dotsAnimation 1s infinite;
-  }
-}
-
-@keyframes dotsAnimation {
-  0% {
-    content: '.';
-  }
-
-  16.66% {
-    content: '..';
-  }
-
-  33.32% {
-    content: '...';
-  }
-
-  49.98% {
-    content: '....';
-  }
-
-  66.64% {
-    content: '.....';
-  }
-
-  83.3% {
-    content: '......';
-  }
-
-  100% {
-    content: '.';
-  }
 }
 </style>

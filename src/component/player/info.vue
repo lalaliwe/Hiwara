@@ -11,7 +11,7 @@ import defaultAvatarImg from '../../static/img/avatar-default.jpg';
 import avatarPlaceholderImg from '../../static/img/avatar-placeholder.png';
 import avatarErrorImg from '../../static/img/avatar-error.png';
 import cardButton from '../cardButton.vue';
-import { getImageIwara } from '../../core/api';
+import { getImageIwara, getVideoRecommendByUser, getVideoRecommendByOther } from '../../core/api';
 
 // 格式化时间: YYYY年MM月DD日 HH:mm
 const formatDate = (dateString: string) => {
@@ -38,6 +38,8 @@ const props = defineProps<{
   fansNum: number, // 粉丝数
   videoNum: number, // 视频数
   isFollow: boolean,  // 是否已关注
+  vid: string, // 视频ID
+  uid: string, // 用户ID
 }>()
 
 const expand = ref(false);  // 是否展开
@@ -72,31 +74,67 @@ const recommendVideoList = ref<ListItem[]>([]); // 推荐视频
 let scrollTop = 0;
 const infoViewRef = ref<HTMLElement>();
 
-// 测试数据生成
-for (let i = 0; i < 5; i++) {
-  authorOtherVideoList.value.push({
-    id: Math.random().toString(36).slice(2),
-    title: '作者测试标题',
-    img: test1Img,
-    author: '测试作者',
-    time: '2021-09-09',
-    viewNum: 100,
-    likeNum: 100,
-    longNum: 10,
-    isR18: false,
-  });
-  recommendVideoList.value.push({
-    id: Math.random().toString(36).slice(2),
-    title: '推荐测试标题',
-    img: test1Img,
-    author: '测试作者',
-    time: '2021-09-09',
-    viewNum: 100,
-    likeNum: 100,
-    longNum: 10,
-    isR18: false,
-  });
+// 加载状态
+const isLoadingAuthorVideos = ref(false);
+const isLoadingRecommendVideos = ref(false);
+
+// 加载作者其他视频
+async function loadAuthorOtherVideos() {
+  if (!props.vid || !props.uid) return;
+  
+  isLoadingAuthorVideos.value = true;
+  try {
+    const response = await getVideoRecommendByUser(props.vid, props.uid);
+    if (response.ok && response.data.results) {
+      authorOtherVideoList.value = await Promise.all(response.data.results.map(async (item: any) => ({
+        id: item.id,
+        title: item.title,
+        img: item.file ? `https://i.iwara.tv/image/thumbnail/${item.file.id}/thumbnail-${String(item.thumbnail ?? 0).padStart(2, '0')}.jpg` : test1Img,
+        author: item.user?.name || item.user?.username || '',
+        time: item.createdAt,  // 传递原始时间字符串，让cardButton自己格式化
+        viewNum: item.numViews || 0,
+        likeNum: item.numLikes || 0,
+        longNum: item.file?.duration || 0,
+        isR18: item.rating === 'ecchi' || item.rating === 'r18',
+      })));
+    }
+  } catch (error) {
+    console.error('Failed to load author other videos:', error);
+  } finally {
+    isLoadingAuthorVideos.value = false;
+  }
 }
+
+// 加载推荐视频
+async function loadRecommendVideos() {
+  if (!props.vid) return;
+  
+  isLoadingRecommendVideos.value = true;
+  try {
+    const response = await getVideoRecommendByOther(props.vid);
+    if (response.ok && response.data.results) {
+      recommendVideoList.value = await Promise.all(response.data.results.map(async (item: any) => ({
+        id: item.id,
+        title: item.title,
+        img: item.file ? `https://i.iwara.tv/image/thumbnail/${item.file.id}/thumbnail-${String(item.thumbnail ?? 0).padStart(2, '0')}.jpg` : test1Img,
+        author: item.user?.name || item.user?.username || '',
+        time: item.createdAt,  // 传递原始时间字符串，让cardButton自己格式化
+        viewNum: item.numViews || 0,
+        likeNum: item.numLikes || 0,
+        longNum: item.file?.duration || 0,
+        isR18: item.rating === 'ecchi' || item.rating === 'r18',
+      })));
+    }
+  } catch (error) {
+    console.error('Failed to load recommend videos:', error);
+  } finally {
+    isLoadingRecommendVideos.value = false;
+  }
+}
+
+// 在setup阶段立即加载数据（在onMounted之前）
+loadAuthorOtherVideos();
+loadRecommendVideos();
 
 // 处理窗口大小改变
 function handleResize() {
@@ -269,21 +307,21 @@ watch(() => props.avatar, () => {
         </div>
       </div>
       <div class="recommend">
-        <div class="label">
+        <div class="label" v-if="!isLoadingAuthorVideos && authorOtherVideoList.length > 0">
           该作者其他视频
         </div>
-        <div class="lists">
-          <div v-for="(item, index) in authorOtherVideoList">
+        <div class="lists" v-if="!isLoadingAuthorVideos && authorOtherVideoList.length > 0">
+          <div v-for="(item, index) in authorOtherVideoList" :key="item.id">
             <cardButton type="video" :id="item.id" :title="item.title" :img="item.img" :author="item.author"
               :time="item.time" :viewNum="item.viewNum" :likeNum="item.likeNum" :longNum="item.longNum"
               :isR18="item.isR18" />
           </div>
         </div>
-        <div class="label">
+        <div class="label" v-if="!isLoadingRecommendVideos && recommendVideoList.length > 0">
           更多推荐
         </div>
-        <div class="lists">
-          <div v-for="(item, index) in authorOtherVideoList">
+        <div class="lists" v-if="!isLoadingRecommendVideos && recommendVideoList.length > 0">
+          <div v-for="(item, index) in recommendVideoList" :key="item.id">
             <cardButton type="video" :id="item.id" :title="item.title" :img="item.img" :author="item.author"
               :time="item.time" :viewNum="item.viewNum" :likeNum="item.likeNum" :longNum="item.longNum"
               :isR18="item.isR18" />
