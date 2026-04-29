@@ -15,6 +15,7 @@ import {
 import { showShortToast } from '../core/toast';
 import { setupStore } from '../core/store';
 import huawuLoading from '../component/loadingHuawu.vue';
+import errorHuawu from '../component/errorHuawu.vue';
 
 // 设置组件名称，确保与路由name一致
 defineOptions({
@@ -26,7 +27,6 @@ const route = useRoute();
 
 const tab = ref('info');  // 当前选中的tab
 const id = ref(route.params.id);  // 视频id
-const isLoading = ref(true); // 新增：加载状态
 const title = ref<string>('');   // 视频标题
 const synopsis = ref<string>('');  // 视频简介
 const poster = ref<string>(''); //视频封面
@@ -53,6 +53,10 @@ interface VideoFileItem {
 const videoFile = ref<VideoFileItem[]>([]);
 const videoSelect = ref<number>(0);
 const showDefinitionDialog = ref(false); // 控制清晰度选择对话框显示
+
+// 聚合状态：'failed' | 'loading' | 'success'
+type VideoInfoState = 'failed' | 'loading' | 'success';
+const videoInfoState = ref<VideoInfoState>('loading');
 
 // 当前选中的视频文件信息
 const currentServer = computed(() => {
@@ -103,7 +107,7 @@ const applyPageSettings = () => {
 
 // 获取视频信息
 const fetchVideoInfo = async () => {
-  isLoading.value = true; // 开始加载
+  videoInfoState.value = 'loading'; // 开始加载
   try {
     const res = await api_getVideoInfo(id.value as string);
     // console.log(res);
@@ -144,16 +148,19 @@ const fetchVideoInfo = async () => {
         }
       }
       const filename = `Iwara - ${data.title} [${data.id}]${extension}`;
-      fetchVideoFile(data.fileUrl, filename);
+      await fetchVideoFile(data.fileUrl, filename);
+
+      // 数据获取成功
+      videoInfoState.value = 'success';
     } else {
       console.error(`状态码：${res.status}`, `错误信息：${res.statusText}`);
       showShortToast('获取视频信息失败');
+      videoInfoState.value = 'failed';
     }
   } catch (error) {
     console.error(error);
     showShortToast('获取视频信息失败');
-  } finally {
-    isLoading.value = false; // 结束加载
+    videoInfoState.value = 'failed';
   }
 };
 fetchVideoInfo();
@@ -202,6 +209,11 @@ async function fetchVideoFile(url: string, filename: string) {
     console.error('获取视频文件失败：', error);
   }
 }
+// 重试加载视频信息
+const retryFetchVideoInfo = () => {
+  fetchVideoInfo();
+};
+
 function definitionTextFormat(text: string): string {
   // 如果输入是数字，返回值后面加个P
   if (!isNaN(Number(text))) {
@@ -303,13 +315,13 @@ onUnmounted(() => {
     <videoPlayer class="video-player" :poster="poster" :src="currentVideoSrc" :title="title" :server="currentServer"
       :video-files="videoFile" :current-definition-index="videoSelect" @refresh-server="refreshVideoFile"
       @definition-change="selectDefinition" />
-    <div class="loading" v-if="isLoading">
+    <div class="loading" v-if="videoInfoState === 'loading'">
       <huawuLoading class="anime" />
       <div class="loading-text">
         数据加载中<span class="dots"></span>
       </div>
     </div>
-    <div class="tabs" v-if="!isLoading">
+    <div class="tabs" v-if="videoInfoState === 'success'">
       <div class="tabs-elements">
         <v-tabs class="left" v-model="tab" color="#00796B" density="comfortable">
           <v-tab value="info">简介</v-tab>
@@ -326,15 +338,16 @@ onUnmounted(() => {
       </div>
       <v-divider></v-divider>
     </div>
-    <div class="tabs-content" v-if="!isLoading">
+    <div class="tabs-content" v-if="videoInfoState === 'success'">
       <!-- 替换为 Swiper -->
       <swiper class="tabs-window" :slides-per-view="1" :space-between="0" @swiper="onSwiper"
         @slide-change="onSlideChange">
         <swiper-slide>
           <!-- 修改：只有当非加载状态时才渲染 infoView，确保数据已准备就绪 -->
-          <infoView v-if="!isLoading" :title="title" :synopsis="synopsis" :playNum="playNum" :likeNum="likeNum"
-            :createdAt="createdAt" :isLike="isLike" :tags="tags" :authorname="authorname" :avatar="avatar"
-            :fansNum="fansNum" :videoNum="videoNum" :isFollow="isFollow" :vid="id as string" :uid="uid" />
+          <infoView v-if="videoInfoState === 'success'" :title="title" :synopsis="synopsis" :playNum="playNum"
+            :likeNum="likeNum" :createdAt="createdAt" :isLike="isLike" :tags="tags" :authorname="authorname"
+            :avatar="avatar" :fansNum="fansNum" :videoNum="videoNum" :isFollow="isFollow" :vid="id as string"
+            :uid="uid" />
         </swiper-slide>
         <swiper-slide>
           <commentView :vid="id as string" />
