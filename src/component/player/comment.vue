@@ -56,14 +56,14 @@ const avatarUrlMap = ref<Record<string, string>>({})
 // 加载单个用户头像
 async function loadUserAvatar(user: CommentUser): Promise<string> {
   const userId = user.id
-  
+
   // 如果已经缓存，直接返回
   if (avatarUrlMap.value[userId]) {
     return avatarUrlMap.value[userId]
   }
-  
+
   let avatarUrl: string
-  
+
   try {
     // 没有头像信息，使用默认头像
     if (!user.avatar) {
@@ -78,7 +78,7 @@ async function loadUserAvatar(user: CommentUser): Promise<string> {
     console.error('Failed to load avatar:', error)
     avatarUrl = avatarErrorImg
   }
-  
+
   avatarUrlMap.value[userId] = avatarUrl
   return avatarUrl
 }
@@ -95,9 +95,9 @@ async function getCommentList() {
   if (!props.vid) return
   // 如果正在加载或已经没有更多数据，则不再请求
   if (loading.value || commentMore.value) return
-  
+
   loading.value = true
-  
+
   try {
     const res = await getVideoComments(props.vid, commentPage)
     if (res.ok) {
@@ -164,7 +164,7 @@ async function handleScrollToEnd({ done }: any) {
     done('ok') // 或者根据具体UI库要求处理
     return
   }
-  
+
   await getCommentList()
   if (commentMore.value) {
     done('empty')
@@ -265,7 +265,8 @@ onActivated(() => {
     <v-infinite-scroll v-else color="#00796B" @load="handleScrollToEnd" :disabled="commentMore">
       <div class="commentItem" v-for="item in commentList" :key="item.id">
         <div class="avatar">
-          <v-img :src="avatarUrlMap[item.user.id] || avatarPlaceholderImg" cover height="40px" width="40px" style="border-radius: 50%;">
+          <v-img :src="avatarUrlMap[item.user.id] || avatarPlaceholderImg" cover height="40px" width="40px"
+            style="border-radius: 50%;">
             <template v-slot:placeholder>
               <v-img height="100%" width="100%" :src="avatarPlaceholderImg" cover style="border-radius: 50%;"></v-img>
             </template>
@@ -283,10 +284,13 @@ onActivated(() => {
             <!-- 底部操作栏：始终显示 -->
             <div class="action-bar">
               <!-- 发布时间 -->
-              <div class="created-time">{{ formatDate(item.createdAt) }}</div>
-              <!-- 回复按钮 -->
-              <div class="reply-btn">
-                <font-awesome-icon icon="fa-regular fa-comment" /> 回复
+              <div class="created-time">{{ formatDate(item.createdAt) }}&nbsp;&nbsp;</div>
+              <!-- 回复数 + 回复按钮 -->
+              <div class="reply-section">
+                <div v-if="item.numReplies > 0">{{ item.numReplies }}条回复&nbsp;&nbsp;</div>
+                <div class="reply-btn">
+                  回复
+                </div>
               </div>
               <!-- 展开/收起按钮 (仅长文本显示) -->
               <div class="toggle-btn" v-if="needToggle(item.body)" @click="toggleExpand(item.id)">
@@ -296,7 +300,7 @@ onActivated(() => {
           </div>
         </div>
       </div>
-      
+
       <template v-slot:empty>
         <div v-if="loadMoreFailed" class="load-more-failed">
           <span>加载失败，</span>
@@ -330,11 +334,11 @@ onActivated(() => {
   padding: 10px 0;
   color: #757575;
   font-size: 0.9rem;
-  
+
   .retry-btn {
     color: #00796B;
     cursor: pointer;
-    
+
     &:hover {
       opacity: 0.8;
       text-decoration: underline;
@@ -412,10 +416,15 @@ onActivated(() => {
         color: #616161;
       }
 
-      .reply-btn {
+      .reply-section {
+        display: flex;
+        align-items: center;
         color: #616161;
-        cursor: pointer;
-        padding: 0 4px;
+
+        .reply-btn {
+          cursor: pointer;
+          color: #00796B;
+        }
       }
 
       .toggle-btn {
