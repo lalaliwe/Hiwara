@@ -8,6 +8,7 @@ import type { Swiper as SwiperType } from 'swiper';
 import 'swiper/css';
 import { getVideoList as api_getVideoList } from '../../core/api';
 import loadingHuawu from '../loadingHuawu.vue';
+import errorHuawu from '../errorHuawu.vue';
 import { showShortToast } from '../../core/toast';
 
 const tab = ref<'date' | 'trending' | 'popularity' | 'views' | 'likes'>('date');
@@ -34,6 +35,10 @@ interface ListItem {
 const videoList = ref<ListItem[][]>(Array.from({ length: tabArray.length }, () => []));
 let page: number[] = new Array(tabArray.length).fill(0);
 const listMore = ref<boolean[]>(new Array(tabArray.length).fill(false))
+
+// 每个tab的加载状态：'failed' | 'empty' | 'loading' | 'success'
+type ListState = 'failed' | 'empty' | 'loading' | 'success';
+const state = ref<ListState[]>(new Array(tabArray.length).fill('loading'));
 
 let showBeen = false;
 const homeTab = inject('isTab') as { value: 'video' | 'image' | 'subscribe' | 'forum' | 'my' };
@@ -84,9 +89,9 @@ watch(tab, (newVal) => {
       swiperInstance.value.slideTo(targetIndex);
     }
   }
-  // 按需加载数据逻辑
+  // 按需加载数据逻辑 - 只有在没有数据且状态不是失败或空时才跳过
   const tabIndex = tabArray.findIndex(item => item.value === newVal);
-  if (tabIndex !== -1 && videoList.value[tabIndex].length === 0) {
+  if (tabIndex !== -1 && videoList.value[tabIndex].length === 0 && state.value[tabIndex] !== 'failed' && state.value[tabIndex] !== 'empty') {
     getVideoList(tabIndex);
   }
 });
@@ -98,6 +103,15 @@ const onSlideChange = (swiper: SwiperType) => {
     tab.value = targetItem.value as any;
   }
 };
+
+// 点击错误图片刷新数据
+function handleErrorClick(index: number) {
+  const tabIndex = tabArray.findIndex(item => item.value === tab.value);
+  if (tabIndex === index) {
+    refreshData();
+  }
+}
+
 // --- End Swiper 联动逻辑 ---
 
 // 刷新数据
@@ -108,6 +122,7 @@ function refreshData() {
     videoList.value[tabIndex] = [];
     page[tabIndex] = 0;
     listMore.value[tabIndex] = false;
+    state.value[tabIndex] = 'loading';
     // 重新获取数据
     getVideoList(tabIndex);
   }
@@ -125,16 +140,22 @@ onActivated(() => {
 // 初始获取视频列表数据
 function initGetVideoListData() {
   const tabIndex = tabArray.findIndex(item => item.value === tab.value);
-  if (videoList.value[tabIndex].length === 0) {
+  if (videoList.value[tabIndex].length === 0 && state.value[tabIndex] !== 'failed' && state.value[tabIndex] !== 'empty') {
+    state.value[tabIndex] = 'loading';
     getVideoList(tabIndex);
   }
 }
 // 下滑列表到底获取数据
 async function loadMoreData({ done }: any, index: number) {
-  await getVideoList(index);
-  if (listMore.value[index]) {
-    done('empty');
-  } else {
+  try {
+    await getVideoList(index);
+    if (listMore.value[index]) {
+      done('empty');
+    } else {
+      done('ok');
+    }
+  } catch (error) {
+    // 加载更多失败时，显示错误提示但保留已有数据
     done('ok');
   }
 }
@@ -146,6 +167,8 @@ async function getVideoList(tabNum: number) {
     // console.log(res);
     if (res.ok) {
       if (res.data.results && res.data.results.length > 0) {
+        state.value[tabNum] = 'success';
+        listMore.value[tabNum] = false;
         const newVideos = res.data.results.map((item: any) => {
           return {
             id: item.id,
@@ -162,15 +185,31 @@ async function getVideoList(tabNum: number) {
         // 追加数据
         videoList.value[tabNum] = [...videoList.value[tabNum], ...newVideos];
         page[tabNum]++;
+      } else {
+        listMore.value[tabNum] = true;
+        if (videoList.value[tabNum].length === 0) {
+          state.value[tabNum] = 'empty';
+        }
       }
-      listMore.value[tabNum] = true;
     } else {
       console.error(`状态码：${res.status}`, `错误信息：${res.statusText}`);
       showShortToast('获取视频列表失败');
+      // 如果是加载更多时失败，阻止继续加载
+      if (videoList.value[tabNum].length === 0) {
+        state.value[tabNum] = 'failed';
+      } else {
+        listMore.value[tabNum] = true;
+      }
     }
   } catch (error) {
     console.error(`获取视频列表失败:`, error);
     showShortToast('获取视频列表失败');
+    // 如果是加载更多时失败，阻止继续加载
+    if (videoList.value[tabNum].length === 0) {
+      state.value[tabNum] = 'failed';
+    } else {
+      listMore.value[tabNum] = true;
+    }
   }
 }
 
@@ -198,7 +237,13 @@ async function getVideoList(tabNum: number) {
     <swiper class="tabs-window" :slides-per-view="1" :space-between="0" @swiper="onSwiper"
       @slide-change="onSlideChange">
       <swiper-slide v-for="(item, i) in tabArray" :key="`tabs-window_${item.value}`">
-        <div v-if="videoList[i].length === 0" class="loading">
+        <div v-if="state[i] === 'failed'" class="loading" @click="handleErrorClick(i)">
+          <errorHuawu>加载失败，点击重试</errorHuawu>
+        </div>
+        <div v-else-if="state[i] === 'empty'" class="loading" @click="handleErrorClick(i)">
+          <errorHuawu>暂无内容，点击刷新</errorHuawu>
+        </div>
+        <div v-else-if="state[i] === 'loading'" class="loading">
           <loadingHuawu>数据加载中</loadingHuawu>
         </div>
         <div v-else class="list-view" :ref="(el) => setListRef(el, i)" @scroll="(e) => handleScroll(i, e)">

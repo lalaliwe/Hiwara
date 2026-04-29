@@ -11,6 +11,7 @@ import {
   getSubscribeImageList as api_getSubscribeImageList
 } from '../../core/api';
 import loadingHuawu from '../loadingHuawu.vue';
+import errorHuawu from '../errorHuawu.vue';
 import { showShortToast } from '../../core/toast';
 
 const videoListView = ref<HTMLElement>();
@@ -42,6 +43,11 @@ let imageListPage = 0;
 const videoListMore = ref(false);
 const imageListMore = ref(false);
 
+// 聚合状态：'failed' | 'empty' | 'loading' | 'success'
+type ListState = 'failed' | 'empty' | 'loading' | 'success';
+const videoState = ref<ListState>('loading');
+const imageState = ref<ListState>('loading');
+
 let showBeen = false;
 const homeTab = inject('isTab') as { value: 'video' | 'image' | 'subscribe' | 'forum' | 'my' };
 watch(() => homeTab.value, (val) => {
@@ -67,11 +73,11 @@ watch(tab, (newVal) => {
       swiperInstance.value.slideTo(targetIndex);
     }
   }
-  // 按需加载数据逻辑
-  if (newVal === 'video' && videoList.value.length === 0) {
+  // 按需加载数据逻辑 - 只有在没有数据且状态不是失败或空时才跳过
+  if (newVal === 'video' && videoList.value.length === 0 && videoState.value !== 'failed' && videoState.value !== 'empty') {
     getSubscribeVideoList();
   }
-  if (newVal === 'image' && imageList.value.length === 0) {
+  if (newVal === 'image' && imageList.value.length === 0 && imageState.value !== 'failed' && imageState.value !== 'empty') {
     getSubscribeImageList();
   }
 });
@@ -85,6 +91,15 @@ const onSwiper = (swiper: SwiperType) => {
 const onSlideChange = (swiper: SwiperType) => {
   tab.value = swiper.activeIndex === 0 ? 'video' : 'image';
 };
+
+// 点击错误图片刷新数据
+function handleVideoErrorClick() {
+  refreshData();
+}
+
+function handleImageErrorClick() {
+  refreshData();
+}
 
 onActivated(() => {
   if (videoListView.value && typeof videoListView.value.scrollTo === 'function')
@@ -106,6 +121,7 @@ function refreshData() {
     videoList.value = [];
     videoListPage = 0;
     videoListMore.value = false;
+    videoState.value = 'loading';
     // 获取视频列表数据
     getSubscribeVideoList();
   }
@@ -114,33 +130,46 @@ function refreshData() {
     imageList.value = [];
     imageListPage = 0;
     imageListMore.value = false;
+    imageState.value = 'loading';
     // 获取图片列表数据
     getSubscribeImageList();
   }
 }
 // 初始获取订阅列表数据
 function initGetSubscribeData() {
-  if (tab.value === 'video' && videoList.value.length === 0) {
+  if (tab.value === 'video' && videoList.value.length === 0 && videoState.value !== 'failed' && videoState.value !== 'empty') {
+    videoState.value = 'loading';
     getSubscribeVideoList();
   }
-  if (tab.value === 'image' && imageList.value.length === 0) {
+  if (tab.value === 'image' && imageList.value.length === 0 && imageState.value !== 'failed' && imageState.value !== 'empty') {
+    imageState.value = 'loading';
     getSubscribeImageList();
   }
 }
 // 下滑列表到底获取数据
 async function videoListHandleScrollToEnd({ done }: any) {
-  await getSubscribeVideoList();
-  if (videoListMore.value) {
-    done('empty');
-  } else {
+  try {
+    await getSubscribeVideoList();
+    if (videoListMore.value) {
+      done('empty');
+    } else {
+      done('ok');
+    }
+  } catch (error) {
+    // 加载更多失败时，显示错误提示但保留已有数据
     done('ok');
   }
 }
 async function imageListHandleScrollToEnd({ done }: any) {
-  await getSubscribeImageList();
-  if (imageListMore.value) {
-    done('empty');
-  } else {
+  try {
+    await getSubscribeImageList();
+    if (imageListMore.value) {
+      done('empty');
+    } else {
+      done('ok');
+    }
+  } catch (error) {
+    // 加载更多失败时，显示错误提示但保留已有数据
     done('ok');
   }
 }
@@ -151,6 +180,8 @@ async function getSubscribeVideoList() {
     // console.log(res);
     if (res.ok) {
       if (res.data.results && res.data.results.length > 0) {
+        videoState.value = 'success';
+        videoListMore.value = false;
         const newVideos = res.data.results.map((item: any) => {
           return {
             id: item.id,
@@ -169,14 +200,29 @@ async function getSubscribeVideoList() {
         videoListPage++;
       } else {
         videoListMore.value = true;
+        if (videoList.value.length === 0) {
+          videoState.value = 'empty';
+        }
       }
     } else {
       console.error(`状态码：${res.status}`, `错误信息：${res.statusText}`);
       showShortToast('获取视频列表失败');
+      // 如果是加载更多时失败，阻止继续加载
+      if (videoList.value.length === 0) {
+        videoState.value = 'failed';
+      } else {
+        videoListMore.value = true;
+      }
     }
   } catch (error) {
     console.error(`获取视频列表失败:`, error);
     showShortToast('获取视频列表失败');
+    // 如果是加载更多时失败，阻止继续加载
+    if (videoList.value.length === 0) {
+      videoState.value = 'failed';
+    } else {
+      videoListMore.value = true;
+    }
   }
 }
 // 获取插画列表
@@ -186,6 +232,8 @@ async function getSubscribeImageList() {
     // console.log(res);
     if (res.ok) {
       if (res.data.results && res.data.results.length > 0) {
+        imageState.value = 'success';
+        imageListMore.value = false;
         const newImages = res.data.results.map((item: any) => {
           return {
             id: item.id,
@@ -204,19 +252,32 @@ async function getSubscribeImageList() {
         imageListPage++;
       } else {
         imageListMore.value = true;
+        if (imageList.value.length === 0) {
+          imageState.value = 'empty';
+        }
       }
     } else {
       console.error(`状态码：${res.status}`, `错误信息：${res.statusText}`);
       showShortToast('获取插画列表失败');
+      // 如果是加载更多时失败，阻止继续加载
+      if (imageList.value.length === 0) {
+        imageState.value = 'failed';
+      } else {
+        imageListMore.value = true;
+      }
     }
   } catch (error) {
     console.error(`获取插画列表失败:`, error);
     showShortToast('获取插画列表失败');
+    // 如果是加载更多时失败，阻止继续加载
+    if (imageList.value.length === 0) {
+      imageState.value = 'failed';
+    } else {
+      imageListMore.value = true;
+    }
   }
 }
-
 </script>
-
 <template>
   <div>
     <div class="top">
@@ -234,7 +295,13 @@ async function getSubscribeImageList() {
     <swiper class="tabs-window" :slides-per-view="1" :space-between="0" @swiper="onSwiper"
       @slide-change="onSlideChange">
       <swiper-slide>
-        <div v-if="videoList.length === 0" class="loading">
+        <div v-if="videoState === 'failed'" class="loading" @click="handleVideoErrorClick">
+          <errorHuawu>视频列表加载失败了喵~</errorHuawu>
+        </div>
+        <div v-else-if="videoState === 'empty'" class="loading" @click="handleVideoErrorClick">
+          <errorHuawu>暂无视频内容</errorHuawu>
+        </div>
+        <div v-else-if="videoState === 'loading'" class="loading">
           <loadingHuawu>数据加载中</loadingHuawu>
         </div>
         <div v-else class="list-view" ref="videoListView" @scroll="handleVideoScroll">
@@ -255,7 +322,13 @@ async function getSubscribeImageList() {
         </div>
       </swiper-slide>
       <swiper-slide>
-        <div v-if="imageList.length === 0" class="loading">
+        <div v-if="imageState === 'failed'" class="loading" @click="handleImageErrorClick">
+          <errorHuawu>插画列表加载失败了喵~</errorHuawu>
+        </div>
+        <div v-else-if="imageState === 'empty'" class="loading" @click="handleImageErrorClick">
+          <errorHuawu>暂无插画内容</errorHuawu>
+        </div>
+        <div v-else-if="imageState === 'loading'" class="loading">
           <loadingHuawu>数据加载中</loadingHuawu>
         </div>
         <div v-else class="list-view" ref="imageListView" @scroll="handleImageScroll">
@@ -278,7 +351,6 @@ async function getSubscribeImageList() {
     </swiper>
   </div>
 </template>
-
 <style lang="scss" scoped>
 .top {
   position: absolute;

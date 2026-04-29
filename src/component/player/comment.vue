@@ -41,6 +41,8 @@ const props = defineProps<{
 let commentPage = 0
 const commentMore = ref(false)
 let scrollTop = 0
+// 新增：加载状态，防止重复请求
+const loading = ref(false)
 
 // 头像 URL 缓存 (userId -> avatarUrl)
 const avatarUrlMap = ref<Record<string, string>>({})
@@ -85,6 +87,10 @@ async function loadAvatarsForComments(comments: Comment[]) {
 // 获取评论列表
 async function getCommentList() {
   if (!props.vid) return
+  // 如果正在加载或已经没有更多数据，则不再请求
+  if (loading.value || commentMore.value) return
+  
+  loading.value = true
   
   try {
     const res = await getVideoComments(props.vid, commentPage)
@@ -105,6 +111,7 @@ async function getCommentList() {
         })
         // 追加数据
         commentList.value = [...commentList.value, ...newComments]
+        console.log('newImages', commentList.value)
         // 批量加载新评论的头像
         await loadAvatarsForComments(newComments)
         commentPage++
@@ -118,11 +125,20 @@ async function getCommentList() {
   } catch (error) {
     console.error(`获取评论失败:`, error)
     showShortToast('获取评论失败')
+  } finally {
+    // 确保无论成功失败都释放锁
+    loading.value = false
   }
 }
 
 // 滚动到底部加载数据
 async function handleScrollToEnd({ done }: any) {
+  // 如果正在加载，直接返回，避免重复触发
+  if (loading.value) {
+    done('ok') // 或者根据具体UI库要求处理
+    return
+  }
+  
   await getCommentList()
   if (commentMore.value) {
     done('empty')
