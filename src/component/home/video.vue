@@ -93,10 +93,7 @@ watch(tab, (newVal) => {
     }
   }
   // 按需加载数据逻辑 - 只有在没有数据且状态不是失败或空时才跳过
-  const tabIndex = tabArray.findIndex(item => item.value === newVal);
-  if (tabIndex !== -1 && videoList.value[tabIndex].length === 0 && state.value[tabIndex] !== 'failed' && state.value[tabIndex] !== 'empty') {
-    getVideoList(tabIndex);
-  }
+  initGetVideoListData();
 });
 
 // 2. 监听 Swiper 滑动，反控 tab 变化
@@ -106,17 +103,31 @@ const onSlideChange = (swiper: SwiperType) => {
     tab.value = targetItem.value as any;
   }
 };
-
-// 点击错误图片刷新数据
-function handleErrorClick(index: number) {
-  const tabIndex = tabArray.findIndex(item => item.value === tab.value);
-  if (tabIndex === index) {
-    refreshData();
-  }
-}
-
 // --- End Swiper 联动逻辑 ---
 
+onActivated(() => {
+  // 遍历所有 tab，恢复其保存的位置
+  listRefs.value.forEach((el, index) => {
+    if (el && typeof el.scrollTo === 'function') {
+      el.scrollTo({ top: scrollTopArray[index] });
+    }
+  });
+});
+
+// 初始获取视频列表数据
+function initGetVideoListData() {
+  const tabIndex = tabArray.findIndex(item => item.value === tab.value);
+  if (state.value[tabIndex] === 'loading') {
+    getVideoList(tabIndex).then((res) => {
+      if (res.length > 0)
+        state.value[tabIndex] = 'success';
+      else
+        state.value[tabIndex] = 'empty';
+    }).catch(() => {
+      state.value[tabIndex] = 'failed';
+    });
+  }
+}
 // 刷新数据
 function refreshData() {
   const tabIndex = tabArray.findIndex(item => item.value === tab.value);
@@ -128,59 +139,44 @@ function refreshData() {
     loadMoreFailed.value[tabIndex] = false;
     state.value[tabIndex] = 'loading';
     // 重新获取数据
-    getVideoList(tabIndex);
+    getVideoList(tabIndex).then((res) => {
+      if (res.length > 0)
+        state.value[tabIndex] = 'success';
+      else
+        state.value[tabIndex] = 'empty';
+    }).catch(() => {
+      state.value[tabIndex] = 'failed';
+    });
   }
 }
-
-onActivated(() => {
-  // 遍历所有 tab，恢复其保存的位置
-  listRefs.value.forEach((el, index) => {
-    if (el && typeof el.scrollTo === 'function') {
-      el.scrollTo({ top: scrollTopArray[index] });
-    }
-  });
-});
-
-// 重试加载更多
-function retryLoadMore(index: number) {
-  loadMoreFailed.value[index] = false;
-  listMore.value[index] = false;
-  getVideoList(index);
-}
-
-// 初始获取视频列表数据
-function initGetVideoListData() {
+// 点击错误图片刷新数据
+function handleErrorClick(index: number) {
   const tabIndex = tabArray.findIndex(item => item.value === tab.value);
-  if (videoList.value[tabIndex].length === 0 && state.value[tabIndex] !== 'failed' && state.value[tabIndex] !== 'empty') {
-    state.value[tabIndex] = 'loading';
-    getVideoList(tabIndex);
+  if (tabIndex === index) {
+    refreshData();
   }
 }
-// 下滑列表到底获取数据
+// 下滑列表到底追加数据
 async function loadMoreData({ done }: any, index: number) {
-  try {
-    await getVideoList(index);
-    if (listMore.value[index]) {
+  getVideoList(index).then((res) => {
+    if (res.length > 0) done('ok');
+    else {
+      listMore.value[index] = true;
       done('empty');
-    } else {
-      done('ok');
     }
-  } catch (error) {
-    // 加载更多失败时，显示错误提示但保留已有数据
-    done('ok');
-  }
+  }).catch(() => {
+    loadMoreFailed.value[index] = true;
+    done('error');
+  });
 }
 // 获取视频列表
-async function getVideoList(tabNum: number) {
+async function getVideoList(tabNum: number): Promise<any> {
   try {
     const sort = tabArray[tabNum].value;
     const res = await api_getVideoList(page[tabNum], sort);
     // console.log(res);
     if (res.ok) {
       if (res.data.results && res.data.results.length > 0) {
-        state.value[tabNum] = 'success';
-        listMore.value[tabNum] = false;
-        loadMoreFailed.value[tabNum] = false;
         const newVideos = res.data.results.map((item: any) => {
           return {
             id: item.id,
@@ -197,33 +193,18 @@ async function getVideoList(tabNum: number) {
         // 追加数据
         videoList.value[tabNum] = [...videoList.value[tabNum], ...newVideos];
         page[tabNum]++;
+        // 返回数据
+        return newVideos
       } else {
-        listMore.value[tabNum] = true;
-        if (videoList.value[tabNum].length === 0) {
-          state.value[tabNum] = 'empty';
-        }
-      }
-    } else {
-      console.error(`状态码：${res.status}`, `错误信息：${res.statusText}`);
-      showShortToast('获取视频列表失败');
-      // 如果是加载更多时失败，阻止继续加载
-      if (videoList.value[tabNum].length === 0) {
-        state.value[tabNum] = 'failed';
-      } else {
-        listMore.value[tabNum] = true;
-        loadMoreFailed.value[tabNum] = true;
+        // 返回空数组
+        return []
       }
     }
+    throw new Error(`状态码：${res.status}, 错误信息：${res.statusText}`);
   } catch (error) {
     console.error(`获取视频列表失败:`, error);
     showShortToast('获取视频列表失败');
-    // 如果是加载更多时失败，阻止继续加载
-    if (videoList.value[tabNum].length === 0) {
-      state.value[tabNum] = 'failed';
-    } else {
-      listMore.value[tabNum] = true;
-      loadMoreFailed.value[tabNum] = true;
-    }
+    throw error;
   }
 }
 
@@ -269,12 +250,14 @@ async function getVideoList(tabNum: number) {
                   :likeNum="listItem.likeNum" :longNum="listItem.longNum" :isR18="listItem.isR18" />
               </template>
             </div>
-            <template v-slot:empty>
-              <div v-if="loadMoreFailed[i]" class="load-more-failed">
+            <template v-slot:error="{ props }">
+              <div class="load-more-failed">
                 <span>加载失败，</span>
-                <span class="retry-btn" @click="retryLoadMore(i)">点击重试</span>
+                <span class="retry-btn" v-bind=props>点击重试</span>
               </div>
-              <div v-else class="listEnd">
+            </template>
+            <template v-slot:empty>
+              <div class="listEnd">
                 已经到底了
               </div>
             </template>
@@ -376,11 +359,11 @@ async function getVideoList(tabNum: number) {
   padding: 10px 0;
   color: #757575;
   font-size: 0.9rem;
-  
+
   .retry-btn {
     color: #00796B;
     cursor: pointer;
-    
+
     &:hover {
       opacity: 0.8;
       text-decoration: underline;
