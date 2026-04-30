@@ -81,7 +81,7 @@ const isLoadingRecommendVideos = ref(false);
 // 加载作者其他视频
 async function loadAuthorOtherVideos() {
   if (!props.vid || !props.uid) return;
-  
+
   isLoadingAuthorVideos.value = true;
   try {
     const response = await getVideoRecommendByUser(props.vid, props.uid);
@@ -108,7 +108,7 @@ async function loadAuthorOtherVideos() {
 // 加载推荐视频
 async function loadRecommendVideos() {
   if (!props.vid) return;
-  
+
   isLoadingRecommendVideos.value = true;
   try {
     const response = await getVideoRecommendByOther(props.vid);
@@ -311,21 +311,17 @@ watch(() => props.avatar, () => {
           该作者其他视频
         </div>
         <div class="lists" v-if="!isLoadingAuthorVideos && authorOtherVideoList.length > 0">
-          <div v-for="(item, index) in authorOtherVideoList" :key="item.id">
-            <cardButton type="video" :id="item.id" :title="item.title" :img="item.img" :author="item.author"
-              :time="item.time" :viewNum="item.viewNum" :likeNum="item.likeNum" :longNum="item.longNum"
-              :isR18="item.isR18" />
-          </div>
+          <cardButton v-for="(item, index) in authorOtherVideoList" :key="item.id" type="video" :id="item.id"
+            :title="item.title" :img="item.img" :author="item.author" :time="item.time" :viewNum="item.viewNum"
+            :likeNum="item.likeNum" :longNum="item.longNum" :isR18="item.isR18" class="card-button" />
         </div>
         <div class="label" v-if="!isLoadingRecommendVideos && recommendVideoList.length > 0">
           更多推荐
         </div>
         <div class="lists" v-if="!isLoadingRecommendVideos && recommendVideoList.length > 0">
-          <div v-for="(item, index) in recommendVideoList" :key="item.id">
-            <cardButton type="video" :id="item.id" :title="item.title" :img="item.img" :author="item.author"
-              :time="item.time" :viewNum="item.viewNum" :likeNum="item.likeNum" :longNum="item.longNum"
-              :isR18="item.isR18" />
-          </div>
+          <cardButton v-for="(item, index) in recommendVideoList" :key="item.id" type="video" :id="item.id"
+            :title="item.title" :img="item.img" :author="item.author" :time="item.time" :viewNum="item.viewNum"
+            :likeNum="item.likeNum" :longNum="item.longNum" :isR18="item.isR18" class="card-button" />
         </div>
       </div>
     </div>
@@ -478,6 +474,8 @@ watch(() => props.avatar, () => {
 }
 
 .recommend {
+  overflow: hidden;
+
   .label {
     font-size: 0.8rem;
     padding: 0 10px;

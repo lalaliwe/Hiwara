@@ -241,7 +241,7 @@ onMounted(async () => {
     videoRef.value.addEventListener('stalled', () => {
       isLoading.value = true; // 浏览器尝试获取数据但未能获取到
     });
-    
+
     videoRef.value.addEventListener('play', () => {
       isPlaying.value = true;
       isLoading.value = false; // 开始播放时隐藏加载指示器
@@ -353,13 +353,13 @@ const handleGestureEvent = (event: { type: string; value?: number; isEnd?: boole
       break
   }
 }
-
 </script>
 
 <template>
   <div class="video-player" ref="videoPlayerRef">
     <video ref="videoRef" :src="videoSrc" :autoplay="setup.autoPlay"
-      :poster="setup.autoPlay ? '../../static/img/transparent.png' : (localPosterUrl || '../../static/img/transparent.png')" @click="togglePlay"></video>
+      :poster="setup.autoPlay ? '../../static/img/transparent.png' : (localPosterUrl || '../../static/img/transparent.png')"
+      @click="togglePlay"></video>
     <!-- 视频黑屏遮罩（仅在未播放时显示） -->
     <div v-if="false" class="black-overlay"></div>
     <!-- 仅在缓冲时显示加载指示器，且没有手势消息时显示 -->
@@ -374,11 +374,10 @@ const handleGestureEvent = (event: { type: string; value?: number; isEnd?: boole
     <!-- 使用 fullscreenState 控制显示 -->
     <controlFullscreen v-if="fullscreenState" :is-playing="isPlaying" :progress="progress" :buffered="buffered"
       :current-time="currentTime" :total-time="totalTime" :video-element="videoRef" :has-played="hasPlayed"
-      :title="props.title" :server="props.server" :video-files="props.videoFiles" 
-      :current-definition-index="props.currentDefinitionIndex"
-      @exit="handleExitFullscreen" @toggle-play="togglePlay" @progress-change="onProgressChange"
-      @progress-change-end="onProgressChangeEnd" @gesture="handleGestureEvent" @refresh-server="handleRefreshServer" 
-      @definition-change="handleDefinitionChange" />
+      :title="props.title" :server="props.server" :video-files="props.videoFiles"
+      :current-definition-index="props.currentDefinitionIndex" @exit="handleExitFullscreen" @toggle-play="togglePlay"
+      @progress-change="onProgressChange" @progress-change-end="onProgressChangeEnd" @gesture="handleGestureEvent"
+      @refresh-server="handleRefreshServer" @definition-change="handleDefinitionChange" />
     <control v-else :is-playing="isPlaying" :progress="progress" :buffered="buffered" :current-time="currentTime"
       :total-time="totalTime" :has-played="hasPlayed" @toggle-play="togglePlay" @progress-change="onProgressChange"
       @progress-change-end="onProgressChangeEnd" @enter-fullscreen="enterFullscreen" @go-back="goBack" @go-home="goHome"

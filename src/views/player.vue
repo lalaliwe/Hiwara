@@ -14,7 +14,7 @@ import {
 } from '../core/api';
 import { showShortToast } from '../core/toast';
 import { setupStore } from '../core/store';
-import huawuLoading from '../component/loadingHuawu.vue';
+import loadingHuawu from '../component/loadingHuawu.vue';
 import errorHuawu from '../component/errorHuawu.vue';
 
 // 设置组件名称，确保与路由name一致
@@ -316,45 +316,46 @@ onUnmounted(() => {
       :video-files="videoFile" :current-definition-index="videoSelect" @refresh-server="refreshVideoFile"
       @definition-change="selectDefinition" />
     <div class="loading" v-if="videoInfoState === 'loading'">
-      <huawuLoading class="anime" />
-      <div class="loading-text">
-        数据加载中<span class="dots"></span>
-      </div>
+      <loadingHuawu>数据加载中</loadingHuawu>
     </div>
-    <div class="tabs" v-if="videoInfoState === 'success'">
-      <div class="tabs-elements">
-        <v-tabs class="left" v-model="tab" color="#00796B" density="comfortable">
-          <v-tab value="info">简介</v-tab>
-          <v-tab value="comment">评论</v-tab>
-        </v-tabs>
-        <div class="right" v-if="videoFile.length > 0">
-          <span v-ripple @click="refreshVideoFile">
-            <font-awesome-icon icon="fa-solid fa-server" />{{ currentServer }}
-          </span>
-          <span v-ripple @click="showDefinitionDialog = true">
-            <font-awesome-icon icon="fa-solid fa-film" />{{ definitionTextFormat(currentDefinition) }}
-          </span>
+    <div class="loading" v-if="videoInfoState === 'failed'">
+      <errorHuawu>数据加载失败了喵~</errorHuawu>
+    </div>
+    <div class="video-info" v-if="videoInfoState === 'success'">
+      <div class="tabs">
+        <div class="tabs-elements">
+          <v-tabs class="left" v-model="tab" color="#00796B" density="comfortable">
+            <v-tab value="info">简介</v-tab>
+            <v-tab value="comment">评论</v-tab>
+          </v-tabs>
+          <div class="right" v-if="videoFile.length > 0">
+            <span v-ripple @click="refreshVideoFile">
+              <font-awesome-icon icon="fa-solid fa-server" />{{ currentServer }}
+            </span>
+            <span v-ripple @click="showDefinitionDialog = true">
+              <font-awesome-icon icon="fa-solid fa-film" />{{ definitionTextFormat(currentDefinition) }}
+            </span>
+          </div>
         </div>
+        <v-divider></v-divider>
       </div>
-      <v-divider></v-divider>
+      <div class="tabs-content">
+        <!-- 替换为 Swiper -->
+        <swiper class="tabs-window" :slides-per-view="1" :space-between="0" @swiper="onSwiper"
+          @slide-change="onSlideChange">
+          <swiper-slide>
+            <!-- 修改：只有当非加载状态时才渲染 infoView，确保数据已准备就绪 -->
+            <infoView v-if="videoInfoState === 'success'" :title="title" :synopsis="synopsis" :playNum="playNum"
+              :likeNum="likeNum" :createdAt="createdAt" :isLike="isLike" :tags="tags" :authorname="authorname"
+              :avatar="avatar" :fansNum="fansNum" :videoNum="videoNum" :isFollow="isFollow" :vid="id as string"
+              :uid="uid" />
+          </swiper-slide>
+          <swiper-slide>
+            <commentView :vid="id as string" />
+          </swiper-slide>
+        </swiper>
+      </div>
     </div>
-    <div class="tabs-content" v-if="videoInfoState === 'success'">
-      <!-- 替换为 Swiper -->
-      <swiper class="tabs-window" :slides-per-view="1" :space-between="0" @swiper="onSwiper"
-        @slide-change="onSlideChange">
-        <swiper-slide>
-          <!-- 修改：只有当非加载状态时才渲染 infoView，确保数据已准备就绪 -->
-          <infoView v-if="videoInfoState === 'success'" :title="title" :synopsis="synopsis" :playNum="playNum"
-            :likeNum="likeNum" :createdAt="createdAt" :isLike="isLike" :tags="tags" :authorname="authorname"
-            :avatar="avatar" :fansNum="fansNum" :videoNum="videoNum" :isFollow="isFollow" :vid="id as string"
-            :uid="uid" />
-        </swiper-slide>
-        <swiper-slide>
-          <commentView :vid="id as string" />
-        </swiper-slide>
-      </swiper>
-    </div>
-
     <!-- 清晰度选择对话框 -->
     <v-dialog v-model="showDefinitionDialog" max-width="400">
       <v-card>
@@ -402,50 +403,13 @@ onUnmounted(() => {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+}
 
-  .anime {
-    width: 200px;
-  }
-
-  .loading-text {
-    font-family: 'AaXinRui85-2';
-    color: #00796B;
-
-    .dots::after {
-      content: '';
-      animation: dotsAnimation 1s infinite;
-    }
-  }
-
-  @keyframes dotsAnimation {
-    0% {
-      content: '.';
-    }
-
-    16.66% {
-      content: '..';
-    }
-
-    33.32% {
-      content: '...';
-    }
-
-    49.98% {
-      content: '....';
-    }
-
-    66.64% {
-      content: '.....';
-    }
-
-    83.3% {
-      content: '......';
-    }
-
-    100% {
-      content: '.';
-    }
-  }
+.video-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 }
 
 .tabs {

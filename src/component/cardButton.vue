@@ -220,7 +220,7 @@ async function clickCard() {
 </script>
 
 <template>
-  <v-card v-ripple @click="clickCard">
+  <div class="card-button" v-ripple @click="clickCard">
     <!-- 修改 src 绑定逻辑，确保初始显示正确，并添加 transition 实现淡入效果 -->
     <v-img :src="displayImg" cover class="card-image" transition="fade-transition">
       <div class="info1">
@@ -255,12 +255,10 @@ async function clickCard() {
         <v-img height="100%" :src="notImg" cover></v-img>
       </template>
     </v-img>
-    <v-card-item class="title">
-      <v-card-title>
-        {{ title }}
-      </v-card-title>
-    </v-card-item>
-    <v-card-item class="info2">
+    <div class="title">
+      <div>{{ title }}</div>
+    </div>
+    <div class="info2">
       <div class="content">
         <div class="author">
           <font-awesome-icon icon="fa-regular fa-user" />{{ author }}
@@ -269,13 +267,27 @@ async function clickCard() {
           {{ formattedTime }}
         </div>
       </div>
-    </v-card-item>
-  </v-card>
+    </div>
+  </div>
 </template>
 
 <style lang="scss" scoped>
+.card-button {
+  height: 180px;
+  width: 100%;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  background-color: #fff;
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+  cursor: pointer;
+  user-select: none;
+}
+
 .card-image {
-  aspect-ratio: 16 / 10;
+  // aspect-ratio: 16 / 10;
+  flex: 1;
   cursor: pointer;
   user-select: none;
 }
@@ -345,20 +357,32 @@ async function clickCard() {
 }
 
 .title {
-  padding: 0.4rem 0.625rem;
+  font-size: 1rem;
+  height: 2rem;
+  overflow: hidden;
 
-  .v-card-title {
-    font-size: 1rem;
+  padding: 0 10px;
+  display: flex;
+  align-items: center;
+  justify-self: start;
+
+  div {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
   }
 }
 
 .info2 {
-  padding: 0rem 0.625rem 0.4rem 0.625rem;
+  padding: 0 10px;
   font-size: 0.8rem;
-  cursor: pointer;
-  user-select: none;
+  height: 2rem;
+  display: flex;
+  align-items: center;
+  justify-self: start;
 
   .content {
+    width: 100%;
     display: grid;
     grid-template-columns: repeat(2, 50%);
 

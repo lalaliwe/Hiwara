@@ -13,9 +13,10 @@ import {
 import loadingHuawu from '../loadingHuawu.vue';
 import errorHuawu from '../errorHuawu.vue';
 import { showShortToast } from '../../core/toast';
+import type { VInfiniteScroll } from 'vuetify/components'
 
-const videoListView = ref<HTMLElement>();
-const imageListView = ref<HTMLElement>();
+const videoListView = ref<InstanceType<typeof VInfiniteScroll>>();
+const imageListView = ref<InstanceType<typeof VInfiniteScroll>>();
 
 const tab = ref('video');
 const swiperInstance = ref<SwiperType | null>(null);
@@ -92,17 +93,19 @@ const onSlideChange = (swiper: SwiperType) => {
 };
 
 onActivated(() => {
-  if (videoListView.value && typeof videoListView.value.scrollTo === 'function')
-    videoListView.value.scrollTo({ top: videoScrollTop });
-  if (imageListView.value && typeof imageListView.value.scrollTo === 'function')
-    imageListView.value.scrollTo({ top: imageScrollTop });
+  if (videoListView.value)
+    videoListView.value.$el.scrollTop = videoScrollTop;
+  if (imageListView.value)
+    imageListView.value.$el.scrollTop = imageScrollTop;
 });
 
 function handleVideoScroll(e: Event): void {
   videoScrollTop = (e.target as HTMLElement).scrollTop;
+  // console.log(videoScrollTop);
 }
 function handleImageScroll(e: Event): void {
   imageScrollTop = (e.target as HTMLElement).scrollTop;
+  // console.log(imageScrollTop);
 }
 // 初始获取订阅列表数据
 function initGetSubscribeData() {
@@ -298,28 +301,27 @@ async function getSubscribeImageList(): Promise<any> {
         <div v-else-if="videoState === 'loading'" class="loading">
           <loadingHuawu>数据加载中</loadingHuawu>
         </div>
-        <div v-else class="list-view" ref="videoListView" @scroll="handleVideoScroll">
-          <v-infinite-scroll color="#00796B" @load="videoListHandleScrollToEnd" :disabled="videoListMore">
-            <div class="grid">
-              <template v-for="item in videoList" :key="item.id">
-                <cardButton type="video" :id="item.id" :title="item.title" :img="item.img" :author="item.author"
-                  :time="item.time" :viewNum="item.viewNum" :likeNum="item.likeNum" :longNum="item.longNum"
-                  :isR18="item.isR18" />
-              </template>
+        <v-infinite-scroll v-else color="#00796B" @load="videoListHandleScrollToEnd" :disabled="videoListMore"
+          class="list-view" ref="videoListView" @scroll="handleVideoScroll">
+          <div class="grid">
+            <template v-for="item in videoList" :key="item.id">
+              <cardButton type="video" :id="item.id" :title="item.title" :img="item.img" :author="item.author"
+                :time="item.time" :viewNum="item.viewNum" :likeNum="item.likeNum" :longNum="item.longNum"
+                :isR18="item.isR18" />
+            </template>
+          </div>
+          <template v-slot:error="{ props }">
+            <div class="load-more-failed">
+              <span>加载失败，</span>
+              <span class="retry-btn" v-bind=props>点击重试</span>
             </div>
-            <template v-slot:error="{ props }">
-              <div class="load-more-failed">
-                <span>加载失败，</span>
-                <span class="retry-btn" v-bind=props>点击重试</span>
-              </div>
-            </template>
-            <template v-slot:empty>
-              <div class="listEnd">
-                已经到底了
-              </div>
-            </template>
-          </v-infinite-scroll>
-        </div>
+          </template>
+          <template v-slot:empty>
+            <div class="listEnd">
+              已经到底了
+            </div>
+          </template>
+        </v-infinite-scroll>
       </swiper-slide>
       <swiper-slide>
         <div v-if="imageState === 'failed'" class="loading" @click="handleImageErrorClick">
@@ -331,28 +333,27 @@ async function getSubscribeImageList(): Promise<any> {
         <div v-else-if="imageState === 'loading'" class="loading">
           <loadingHuawu>数据加载中</loadingHuawu>
         </div>
-        <div v-else class="list-view" ref="imageListView" @scroll="handleImageScroll">
-          <v-infinite-scroll color="#00796B" @load="imageListHandleScrollToEnd" :disabled="imageListMore">
-            <div class="grid">
-              <template v-for="item in imageList" :key="item.id">
-                <cardButton type="image" :id="item.id" :title="item.title" :img="item.img" :author="item.author"
-                  :time="item.time" :viewNum="item.viewNum" :likeNum="item.likeNum" :longNum="item.longNum"
-                  :isR18="item.isR18" />
-              </template>
+        <v-infinite-scroll v-else color="#00796B" @load="imageListHandleScrollToEnd" :disabled="imageListMore"
+          class="list-view" ref="imageListView" @scroll="handleImageScroll">
+          <div class="grid">
+            <template v-for="item in imageList" :key="item.id">
+              <cardButton type="image" :id="item.id" :title="item.title" :img="item.img" :author="item.author"
+                :time="item.time" :viewNum="item.viewNum" :likeNum="item.likeNum" :longNum="item.longNum"
+                :isR18="item.isR18" />
+            </template>
+          </div>
+          <template v-slot:error="{ props }">
+            <div class="load-more-failed">
+              <span>加载失败，</span>
+              <span class="retry-btn" v-bind=props>点击重试</span>
             </div>
-            <template v-slot:error="{ props }">
-              <div class="load-more-failed">
-                <span>加载失败，</span>
-                <span class="retry-btn" v-bind=props>点击重试</span>
-              </div>
-            </template>
-            <template v-slot:empty>
-              <div class="listEnd">
-                已经到底了
-              </div>
-            </template>
-          </v-infinite-scroll>
-        </div>
+          </template>
+          <template v-slot:empty>
+            <div class="listEnd">
+              已经到底了
+            </div>
+          </template>
+        </v-infinite-scroll>
       </swiper-slide>
     </swiper>
   </div>
@@ -392,24 +393,28 @@ async function getSubscribeImageList(): Promise<any> {
   }
 
   .list-view {
-    height: 100vh; // 使用视口高度，因为 swiper-slide 的 auto 高度需要子级有明确高度
-    overflow-y: auto;
+    $top: calc(env(safe-area-inset-top, 0) + 60px + 40px);
+    $bottom: calc(env(safe-area-inset-bottom, 0) + 60px);
+    height: calc(100vh - $top - 10px - $bottom);
+    padding-top: calc($top + 10px);
+    padding-bottom: $bottom;
 
     &::-webkit-scrollbar-track {
-      margin: calc(60px + 40px + 1px + env(safe-area-inset-top, 0) + 4px) 0 calc(60px + env(safe-area-inset-bottom, 0) + 4px) 0;
+      margin: calc($top + 4px) 0 calc($bottom + 4px) 0;
     }
 
-    .v-infinite-scroll {
-      padding: calc(60px + 40px + 1px + 10px + env(safe-area-inset-top, 0)) 0 calc(60px + env(safe-area-inset-bottom, 0)) 0;
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      padding: 0 10px 0 10px;
+
+      >* {
+        content-visibility: auto;
+        contain-intrinsic-size: 0 180px;
+      }
     }
   }
-}
-
-.grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 10px;
-  padding: 0 10px 0 10px;
 }
 
 .loading {

@@ -10,6 +10,7 @@ import { getVideoList as api_getVideoList } from '../../core/api';
 import loadingHuawu from '../loadingHuawu.vue';
 import errorHuawu from '../errorHuawu.vue';
 import { showShortToast } from '../../core/toast';
+import type { VInfiniteScroll } from 'vuetify/components'
 
 const tab = ref<'date' | 'trending' | 'popularity' | 'views' | 'likes'>('date');
 const tabArray = [
@@ -60,12 +61,12 @@ watch(refreshToken, () => {
   refreshData();
 });
 
-const listRefs = ref<HTMLElement[]>([]);
+const listRefs = ref<InstanceType<typeof VInfiniteScroll>[]>([]);;
 let scrollTopArray: number[] = new Array(tabArray.length).fill(0);
 
 const setListRef = (el: any, index: number) => {
   if (el) {
-    listRefs.value[index] = el as HTMLElement;
+    listRefs.value[index] = el as InstanceType<typeof VInfiniteScroll>;
   }
 };
 
@@ -108,9 +109,8 @@ const onSlideChange = (swiper: SwiperType) => {
 onActivated(() => {
   // 遍历所有 tab，恢复其保存的位置
   listRefs.value.forEach((el, index) => {
-    if (el && typeof el.scrollTo === 'function') {
-      el.scrollTo({ top: scrollTopArray[index] });
-    }
+    if (el)
+      el.$el.scrollTop = scrollTopArray[index];
   });
 });
 
@@ -241,28 +241,27 @@ async function getVideoList(tabNum: number): Promise<any> {
         <div v-else-if="state[i] === 'loading'" class="loading">
           <loadingHuawu>数据加载中</loadingHuawu>
         </div>
-        <div v-else class="list-view" :ref="(el) => setListRef(el, i)" @scroll="(e) => handleScroll(i, e)">
-          <v-infinite-scroll color="#00796B" @load="(state) => loadMoreData(state, i)" :disabled="listMore[i]">
-            <div class="grid">
-              <template v-for="(listItem, index) in videoList[i]" :key="listItem.id">
-                <cardButton type="video" :id="listItem.id" :title="listItem.title" :img="listItem.img"
-                  :author="listItem.author" :time="listItem.time" :viewNum="listItem.viewNum"
-                  :likeNum="listItem.likeNum" :longNum="listItem.longNum" :isR18="listItem.isR18" />
-              </template>
+        <v-infinite-scroll v-else color="#00796B" @load="(state) => loadMoreData(state, i)" :disabled="listMore[i]"
+          class="list-view" :ref="(el) => setListRef(el, i)" @scroll="(e: Event) => handleScroll(i, e)">
+          <div class="grid">
+            <template v-for="(listItem, index) in videoList[i]" :key="listItem.id">
+              <cardButton type="video" :id="listItem.id" :title="listItem.title" :img="listItem.img"
+                :author="listItem.author" :time="listItem.time" :viewNum="listItem.viewNum" :likeNum="listItem.likeNum"
+                :longNum="listItem.longNum" :isR18="listItem.isR18" />
+            </template>
+          </div>
+          <template v-slot:error="{ props }">
+            <div class="load-more-failed">
+              <span>加载失败，</span>
+              <span class="retry-btn" v-bind=props>点击重试</span>
             </div>
-            <template v-slot:error="{ props }">
-              <div class="load-more-failed">
-                <span>加载失败，</span>
-                <span class="retry-btn" v-bind=props>点击重试</span>
-              </div>
-            </template>
-            <template v-slot:empty>
-              <div class="listEnd">
-                已经到底了
-              </div>
-            </template>
-          </v-infinite-scroll>
-        </div>
+          </template>
+          <template v-slot:empty>
+            <div class="listEnd">
+              已经到底了
+            </div>
+          </template>
+        </v-infinite-scroll>
       </swiper-slide>
     </swiper>
   </div>
@@ -320,25 +319,28 @@ async function getVideoList(tabNum: number): Promise<any> {
   }
 
   .list-view {
-    height: 100vh;
-    /* 解决 Swiper 内部高度计算问题 */
-    overflow-y: auto;
+    $top: calc(env(safe-area-inset-top, 0) + 60px + 40px);
+    $bottom: calc(env(safe-area-inset-bottom, 0) + 60px);
+    height: calc(100vh - $top - 10px - $bottom);
+    padding-top: calc($top + 10px);
+    padding-bottom: $bottom;
 
     &::-webkit-scrollbar-track {
-      margin: calc(60px + 40px + 1px + env(safe-area-inset-top, 0) + 4px) 0 calc(60px + env(safe-area-inset-bottom, 0) + 4px) 0;
+      margin: calc($top + 4px) 0 calc($bottom + 4px) 0;
     }
 
-    .v-infinite-scroll {
-      padding: calc(60px + 40px + 1px + 10px + env(safe-area-inset-top, 0)) 0 calc(60px + env(safe-area-inset-bottom, 0)) 0;
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      padding: 0 10px 0 10px;
+
+      >* {
+        content-visibility: auto;
+        contain-intrinsic-size: 0 180px;
+      }
     }
   }
-}
-
-.grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 10px;
-  padding: 0 10px 0 10px;
 }
 
 .loading {
