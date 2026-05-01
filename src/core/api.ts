@@ -463,6 +463,55 @@ export async function getVideoComments(vid: string, page: number): Promise<any> 
     throw error;
   }
 }
+// 获取插画信息
+export async function getImageInfo(imageId: string): Promise<any> {
+  const path = `${API_URL}/image/${imageId}`;
+  const headers = {
+    Authorization: `Bearer ${await getAccessToken()}`,
+  };
+  try {
+    console.log(path)
+    const response = await getSendRequestIwara(path, headers);
+    return response;
+  } catch (error) {
+    console.error('Get image info failed:', error);
+    throw error;
+  }
+}
+// 获取插画推荐：该用户的其他插画
+export async function getImageRecommendByUser(iid: string, uid: string): Promise<any> {
+  const path = `${API_URL}/images`;
+  const headers = {
+    Authorization: `Bearer ${await getAccessToken()}`,
+  };
+  const query = {
+    rating: 'all',
+    user: uid,
+    exclude: iid,
+    limit: 6
+  };
+  try {
+    const response = await getSendRequestIwara(path, headers, query);
+    return response;
+  } catch (error) {
+    console.error('Get image info failed:', error);
+    throw error;
+  }
+}
+// 获取插画推荐：更多插画
+export async function getImageRecommendByOther(iid: string): Promise<any> {
+  const path = `${API_URL}/image/${iid}/related`;
+  const headers = {
+    Authorization: `Bearer ${await getAccessToken()}`,
+  };
+  try {
+    const response = await getSendRequestIwara(path, headers);
+    return response;
+  } catch (error) {
+    console.error('Get image info failed:', error);
+    throw error;
+  }
+}
 // 获取用户信息
 export async function getUserInfo(username: string): Promise<any> {
   const path = `/profile/${username}`;

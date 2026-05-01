@@ -205,32 +205,31 @@ async function getSubscribeVideoList(): Promise<any> {
   try {
     const res = await api_getSubscribeVideoList(videoListPage);
     // console.log(res);
-    if (res.ok) {
-      if (res.data.results && res.data.results.length > 0) {
-        const newVideos = res.data.results.map((item: any) => {
-          return {
-            id: item.id,
-            title: item.title,
-            img: item.file ? `https://i.iwara.tv/image/thumbnail/${item.file.id}/thumbnail-${String(item.thumbnail).padStart(2, '0')}.jpg` : 'file-loss',
-            author: item.user?.name || item.user?.username || 'Unknown',
-            time: item.createdAt,
-            viewNum: item.numViews || 0,
-            likeNum: item.numLikes || 0,
-            longNum: item.file?.duration ?? 0,
-            isR18: item.rating === 'ecchi' || item.rating === 'r18'
-          };
-        });
-        // 追加数据
-        videoList.value = [...videoList.value, ...newVideos];
-        videoListPage++;
-        // 返回数据
-        return newVideos;
-      } else {
-        // 返回空数组
-        return [];
-      }
+    if (!res.ok)
+      throw new Error(`状态码：${res.status}, 错误信息：${res.statusText}`);
+    if (res.data.results && res.data.results.length > 0) {
+      const newVideos = res.data.results.map((item: any) => {
+        return {
+          id: item.id,
+          title: item.title,
+          img: item.file ? `https://i.iwara.tv/image/thumbnail/${item.file.id}/thumbnail-${String(item.thumbnail).padStart(2, '0')}.jpg` : 'file-loss',
+          author: item.user?.name || item.user?.username || 'Unknown',
+          time: item.createdAt,
+          viewNum: item.numViews || 0,
+          likeNum: item.numLikes || 0,
+          longNum: item.file?.duration ?? 0,
+          isR18: item.rating === 'ecchi' || item.rating === 'r18'
+        };
+      });
+      // 追加数据
+      videoList.value = [...videoList.value, ...newVideos];
+      videoListPage++;
+      // 返回数据
+      return newVideos;
+    } else {
+      // 返回空数组
+      return [];
     }
-    throw new Error(`状态码：${res.status}, 错误信息：${res.statusText}`);
   } catch (error) {
     console.error(`获取视频列表失败:`, error);
     showShortToast('获取视频列表失败');
@@ -242,32 +241,31 @@ async function getSubscribeImageList(): Promise<any> {
   try {
     const res = await api_getSubscribeImageList(imageListPage);
     // console.log(res);
-    if (res.ok) {
-      if (res.data.results && res.data.results.length > 0) {
-        const newImages = res.data.results.map((item: any) => {
-          return {
-            id: item.id,
-            title: item.title,
-            img: item.thumbnail ? `https://i.iwara.tv/image/thumbnail/${item.thumbnail.id}/${item.thumbnail.id}.jpg` : 'file-loss',
-            author: item.user?.name || item.user?.username || 'Unknown',
-            time: item.createdAt,
-            viewNum: item.numViews || 0,
-            likeNum: item.numLikes || 0,
-            longNum: item.numComments || 0,
-            isR18: item.rating === 'ecchi' || item.rating === 'r18'
-          };
-        });
-        // 追加数据
-        imageList.value = [...imageList.value, ...newImages];
-        imageListPage++;
-        // 返回数据
-        return newImages;
-      } else {
-        // 返回空数组
-        return [];
-      }
+    if (!res.ok)
+      throw new Error(`状态码：${res.status}, 错误信息：${res.statusText}`);
+    if (res.data.results && res.data.results.length > 0) {
+      const newImages = res.data.results.map((item: any) => {
+        return {
+          id: item.id,
+          title: item.title,
+          img: item.thumbnail ? `https://i.iwara.tv/image/thumbnail/${item.thumbnail.id}/${item.thumbnail.id}.jpg` : 'file-loss',
+          author: item.user?.name || item.user?.username || 'Unknown',
+          time: item.createdAt,
+          viewNum: item.numViews || 0,
+          likeNum: item.numLikes || 0,
+          longNum: item.numImages || 0,
+          isR18: item.rating === 'ecchi' || item.rating === 'r18'
+        };
+      });
+      // 追加数据
+      imageList.value = [...imageList.value, ...newImages];
+      imageListPage++;
+      // 返回数据
+      return newImages;
+    } else {
+      // 返回空数组
+      return [];
     }
-    throw new Error(`状态码：${res.status}, 错误信息：${res.statusText}`);
   } catch (error) {
     console.error(`获取插画列表失败:`, error);
     showShortToast('获取插画列表失败');

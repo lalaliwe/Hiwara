@@ -1,5 +1,9 @@
 <script setup lang="ts">
 import cardButton from '../cardButton.vue';
+import {
+  getImageRecommendByUser as api_getImageRecommendByUser,
+  getImageRecommendByOther as api_getImageRecommendByOther
+} from '../../core/api';
 
 interface ListItem {
   id: string;
@@ -24,24 +28,20 @@ const props = defineProps<recommendListProps>();
 <template>
   <div class="recommend">
     <div class="label">
-      该作者其他视频
+      该作者其他插画
     </div>
     <div class="lists">
-      <div v-for="(item, index) in authorOtherVideoList" :key="item.id">
-        <cardButton type="image" :id="item.id" :title="item.title" :img="item.img" :author="item.author"
-          :time="item.time" :viewNum="item.viewNum" :likeNum="item.likeNum" :longNum="item.longNum"
-          :isR18="item.isR18" />
-      </div>
+      <cardButton v-for="(item, index) in authorOtherVideoList" :key="item.id" type="image" :id="item.id"
+        :title="item.title" :img="item.img" :author="item.author" :time="item.time" :viewNum="item.viewNum"
+        :likeNum="item.likeNum" :longNum="item.longNum" :isR18="item.isR18" />
     </div>
     <div class="label">
       更多推荐
     </div>
     <div class="lists">
-      <div v-for="(item, index) in recommendVideoList" :key="item.id">
-        <cardButton type="image" :id="item.id" :title="item.title" :img="item.img" :author="item.author"
-          :time="item.time" :viewNum="item.viewNum" :likeNum="item.likeNum" :longNum="item.longNum"
-          :isR18="item.isR18" />
-      </div>
+      <cardButton v-for="(item, index) in recommendVideoList" :key="item.id" type="image" :id="item.id"
+        :title="item.title" :img="item.img" :author="item.author" :time="item.time" :viewNum="item.viewNum"
+        :likeNum="item.likeNum" :longNum="item.longNum" :isR18="item.isR18" />
     </div>
   </div>
 </template>

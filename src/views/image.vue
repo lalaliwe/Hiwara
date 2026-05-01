@@ -2,16 +2,23 @@
 import { ref, onMounted, onUnmounted, onActivated } from 'vue';
 import test1img from '../static/img/test1.jpg';
 import { setStatusBarTextStyle } from '../plugins/navbarStyle'
-import { useRouter } from 'vue-router';
+import { useRouter, useRoute } from 'vue-router';
 import ImageInfo from '../component/image/info.vue';
 import RecommendList from '../component/image/recommendList.vue';
-import IllustrationView from '../component/image/illustrationView.vue';
+import imgPreview from '../component/image/imgPreview.vue';
+import {
+  getImageInfo as api_getImageInfo,
+} from '../core/api';
+import { showShortToast } from '../core/toast';
+import loadingHuawu from '../component/loadingHuawu.vue';
+import errorHuawu from '../component/errorHuawu.vue';
 
 defineOptions({
   name: 'Image'
 })
 
 const router = useRouter();
+const route = useRoute();
 
 // 应用页面设置的函数
 const applyPageSettings = () => {
@@ -21,29 +28,25 @@ const applyPageSettings = () => {
 applyPageSettings()
 
 // 插画图片数据
-const illustrationImages = ref<string[]>([test1img]);
-// 添加更多测试图片（模拟多张插画）
-// for (let i = 0; i < 3; i++) {
-//   illustrationImages.value.push(test1img);
-// }
+const illustrationImages = ref<string[]>([]);
+
+// 页面状态
+const isState = ref<'failed' | 'loading' | 'success'>('loading');
 
 // 插画信息数据（全部独立变量）
-const title = ref('测试标题');
-const viewCount = ref(100);
-const createdAt = ref('2020-01-01 18:37');
-const illustrationId = ref('1234567890');
-const resolution = ref('1200x800');
-const synopsis = ref('测试简介');
-const tags = ref<string[]>([]);
-for (let i = 0; i < 100; i++) {
-  tags.value.push(`标签${i}`);
-}
+const id = ref<string>(route.params.id as string);  // 插画ID
+const title = ref<string>('');  // 插画标题
+const viewCount = ref<number>(0); // 插画浏览数
+const createdAt = ref<string>('');  // 插画创建时间
+const resolution = ref<string>(''); // 插画分辨率
+const synopsis = ref<string>(''); // 插画简介
+const tags = ref<string[]>([]); // 插画标签数组
 
 // 作者信息
-const authorname = ref('测试作者');
-const fansNum = ref(100);
-const imageNum = ref(10);
-const isFollow = ref(false);
+const authorname = ref<string>(''); // 作者名称
+const fansNum = ref<number>(0); // 粉丝数
+const imageNum = ref<number>(0);  // 插画数量
+const isFollow = ref<boolean>(false); // 是否已关注作者
 
 // 推荐列表
 interface ListItem {
@@ -112,25 +115,28 @@ function handleFollowClick(newFollowState: boolean) {
 }
 
 // 处理滚动事件
-function handleScroll() {
+function handleScroll(e: Event) {
   const container = imageContainerRef.value;
   const topElement = document.querySelector('.top') as HTMLElement;
 
   if (!container || !topElement) return;
 
-  // 获取 illustrationView 的位置
-  const illustrationView = container.querySelector('.illustrationView') as HTMLElement;
-  if (!illustrationView) return;
+  // 获取 imgPreview 的位置
+  const imgPreview = container.querySelector('.imgPreview') as HTMLElement;
+  if (!imgPreview) return;
 
-  // 计算 illustrationView 底部相对于容器视口的位置
-  const illustrationViewBottomInViewport = illustrationView.offsetTop + illustrationView.offsetHeight - container.scrollTop;
+  // 计算 imgPreview 底部相对于容器视口的位置
+  const imgPreviewBottomInViewport = imgPreview.offsetTop + imgPreview.offsetHeight - container.scrollTop;
 
   // top 元素的高度（包括 padding 和 safe-area-inset）
   const topHeight = topElement.offsetHeight;
 
-  // 当 illustrationView 的底部在视口中的位置 < top 元素的高度时
-  // 说明 illustrationView 已经滚到了 top 元素下方，top 的投影会落在空白区域
-  isTopGreen.value = illustrationViewBottomInViewport < topHeight;
+  // 当 imgPreview 的底部在视口中的位置 < top 元素的高度时
+  // 说明 imgPreview 已经滚到了 top 元素下方，top 的投影会落在空白区域
+  isTopGreen.value = imgPreviewBottomInViewport < topHeight;
+
+  // 同时保存滚动条位置
+  scrollTop = (e.target as HTMLElement).scrollTop;
 }
 
 // 当前滚动条位置
@@ -158,26 +164,69 @@ onUnmounted(() => {
   if (container)
     container.removeEventListener('scroll', handleScroll);
 })
+// 获取插画信息
+getImageInfo();
+async function getImageInfo(): Promise<void> {
+  try {
+    const res = await api_getImageInfo(id.value as string);
+    console.log(res);
+    if (!res.ok)
+      throw new Error(`状态码：${res.status}, 错误信息：${res.statusText}`);
+    const imageInfo = res.data;
+    // 插画信息
+    title.value = imageInfo.title;
+    viewCount.value = imageInfo.numViews;
+    createdAt.value = imageInfo.createdAt;
+    synopsis.value = imageInfo.body ? imageInfo.body : '-';
+    interface Tag {
+      id: string;
+      type: string;
+      sensitive: boolean;
+    }
+    tags.value = imageInfo.tags.map((tag: Tag) => tag.id);
+    // 用户信息
+    authorname.value = imageInfo.user.name;
+    isFollow.value = imageInfo.user.followedBy;
+    // 插画文件数组
+    illustrationImages.value = imageInfo.files.map((file: any) => {
+      const src = `https://i.iwara.tv/image/large/${file.id}/${file.name}`;
+      return src;
+    });
+    // 更新页面状态
+    isState.value = 'success';
+  } catch (error) {
+    console.error(`获取插画信息失败`, error);
+    showShortToast('获取插画信息失败');
+    isState.value = 'failed';
+    throw error;
+  }
+}
 </script>
 <template>
   <div id="imageView">
-    <div class="image-container" ref="imageContainerRef" @scroll="handleSroll">
-      <div class="top" :class="{ 'top-green': isTopGreen }" @click="scrollToTop">
-        <span class="btn" @click.stop="goBack">
-          <font-awesome-icon icon="fa-solid fa-angle-left" />
-        </span>
-        <span class="btn" @click.stop="goHome">
-          <font-awesome-icon icon="fa-regular fa-house" />
-        </span>
-      </div>
+    <div class="top" :class="{ 'top-green': isTopGreen }" @click="scrollToTop">
+      <span class="btn" @click.stop="goBack">
+        <font-awesome-icon icon="fa-solid fa-angle-left" />
+      </span>
+      <span class="btn" @click.stop="goHome">
+        <font-awesome-icon icon="fa-regular fa-house" />
+      </span>
+    </div>
+    <div v-if="isState === 'loading'" class="state-container">
+      <loadingHuawu>正在加载数据</loadingHuawu>
+    </div>
+    <div v-else-if="isState === 'failed'" class="state-container">
+      <errorHuawu>数据加载失败了喵~</errorHuawu>
+    </div>
+    <div v-else-if="isState === 'success'" class="image-container" ref="imageContainerRef" @scroll="handleScroll">
 
       <!-- 第一部分：图片区域（已拆分为子组件） -->
-      <IllustrationView :images="illustrationImages" />
+      <imgPreview :images="illustrationImages" />
 
       <!-- 第二部分：插画信息区域（已拆分为子组件） -->
-      <ImageInfo :title="title" :view-count="viewCount" :created-at="createdAt" :illustration-id="illustrationId"
-        :resolution="resolution" :synopsis="synopsis" :tags="tags" :authorname="authorname" :fans-num="fansNum"
-        :image-num="imageNum" :is-follow="isFollow" @follow-click="handleFollowClick" />
+      <ImageInfo v-if="isState === 'success'" :title="title" :view-count="viewCount" :created-at="createdAt"
+        :illustration-id="id" :resolution="resolution" :synopsis="synopsis" :tags="tags" :authorname="authorname"
+        :fans-num="fansNum" :image-num="imageNum" :is-follow="isFollow" @follow-click="handleFollowClick" />
 
       <!-- 第三部分：推荐列表（已拆分为子组件） -->
       <RecommendList :author-other-video-list="authorOtherVideoList" :recommend-video-list="recommendVideoList" />
@@ -185,13 +234,10 @@ onUnmounted(() => {
   </div>
 </template>
 <style lang="scss" scoped>
-.image-container {
-  overflow-y: auto;
-  overflow-x: hidden;
-  height: 100vh;
-  background-color: #fff;
-  position: relative;
-  padding-bottom: env(safe-area-inset-bottom, 0);
+#imageView {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 .top {
@@ -223,5 +269,21 @@ onUnmounted(() => {
 .top-green {
   background-color: rgba(0, 121, 107, 0.9);
   backdrop-filter: blur(10px);
+}
+
+.state-container {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.image-container {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  background-color: #fff;
+  position: relative;
+  padding-bottom: env(safe-area-inset-bottom, 0);
 }
 </style>

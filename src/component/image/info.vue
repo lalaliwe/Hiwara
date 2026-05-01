@@ -239,6 +239,7 @@ function clickLike() {
   overflow: hidden;
   font-size: 1.1rem;
   transition: height 0.3s ease-in-out;
+  cursor: pointer;
 }
 
 .infomsg {
@@ -357,7 +358,7 @@ function clickLike() {
   .tagsExpandHeight {
     overflow: hidden;
     margin: 10px;
-    
+
     .tag {
       margin: 2px 2px 2px 0;
     }
