@@ -4,37 +4,41 @@ import { getImageIwara } from '../../core/api';
 import placeholderImg from '../../static/img/placeholder.png'
 import notImg from '../../static/img/not-img.jpg'
 
-interface imgPreviewProps {
-  images: string[]; // 插画图片URL数组
+interface ImageFile {
+  id: string;
+  name: string;
+}
+interface ImgPreviewProps {
+  pid: string;
+  images: ImageFile[]; // 插画图片URL数组
 }
 
-const props = defineProps<imgPreviewProps>();
+const props = defineProps<ImgPreviewProps>();
+const emit = defineEmits(['resolution', 'fullScreen']);
 
 // 图片展开状态
 const imageExpand = ref(false);
-
 // 处理后的图片URL数组
 const processedImages = ref<string[]>([]);
-
 // 加载状态
 const loading = ref(false);
+// 第一张图片ref
+const firstImg = ref<HTMLImageElement>();
 
 // 判断是否为服务器URL（需要特殊处理）
 const isServerUrl = (url: string): boolean => {
   return url.startsWith('http://') || url.startsWith('https://');
 };
 
-// 处理单个图片URL
-const processImageUrl = async (url: string): Promise<string> => {
-  if (isServerUrl(url)) {
-    try {
-      return await getImageIwara(url);
-    } catch (error) {
-      console.error('Failed to load image:', url, error);
-      return notImg;
-    }
+// 处理单个图片文件对象
+const processImageFile = async (file: ImageFile): Promise<string> => {
+  try {
+    const url = `https://i.iwara.tv/image/large/${file.id}/${file.name}`;
+    return await getImageIwara(url);
+  } catch (error) {
+    console.error('Failed to load image:', file, error);
+    return notImg;
   }
-  return url;
 };
 
 // 处理所有图片
@@ -46,11 +50,11 @@ const loadImages = async () => {
 
   loading.value = true;
   try {
-    const results = await Promise.all(props.images.map(processImageUrl));
+    const results = await Promise.all(props.images.map(processImageFile));
     processedImages.value = results;
   } catch (error) {
     console.error('Failed to load images:', error);
-    processedImages.value = props.images;
+    processedImages.value = [];
   } finally {
     loading.value = false;
   }
@@ -65,12 +69,35 @@ watch(() => props.images, () => {
 onMounted(() => {
   // 初始加载已在watch中处理
 });
+
+const onImageLoaded = () => {
+  const realImgElement = firstImg.value;
+  if (realImgElement) {
+    const width = realImgElement.naturalWidth;
+    const height = realImgElement.naturalHeight;
+    console.log(`Image loaded: ${width}x${height}`);
+    emit('resolution', { width, height });
+  }
+};
+
+// 全屏大图
+function fullScreen() {
+  if (processedImages.value.length <= 1)
+    emit('fullScreen');
+  else {
+    if (imageExpand.value)
+      emit('fullScreen');
+    else
+      imageExpand.value = true;
+  }
+}
 </script>
 
 <template>
   <div class="imgPreview">
     <!-- 主图 -->
-    <v-img v-if="processedImages.length > 0" cover :src="processedImages[0]">
+    <v-img v-if="processedImages.length > 0" cover :src="processedImages[0]" @load="onImageLoaded" ref="firstImg"
+      @click="fullScreen">
       <template v-slot:placeholder>
         <v-img cover :src="placeholderImg"></v-img>
       </template>

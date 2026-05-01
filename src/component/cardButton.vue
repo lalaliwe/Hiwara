@@ -243,7 +243,7 @@ async function clickCard() {
           </span>
         </div>
         <div class="longNum">
-          <span>
+          <span v-if="!(type === 'image' && longNum as number <= 1)">
             {{ formattedLongNum }}
           </span>
         </div>

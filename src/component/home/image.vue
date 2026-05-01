@@ -179,32 +179,31 @@ async function getImageList(tabNum: number): Promise<any> {
     const sort = tabArray[tabNum].value;
     const res = await api_getImageList(page[tabNum], sort);
     // console.log(res);
-    if (res.ok) {
-      if (res.data.results && res.data.results.length > 0) {
-        const newImages = res.data.results.map((item: any) => {
-          return {
-            id: item.id,
-            title: item.title,
-            img: item.thumbnail ? `https://i.iwara.tv/image/thumbnail/${item.thumbnail.id}/${item.thumbnail.id}.jpg` : 'file-loss',
-            author: item.user?.name || item.user?.username || 'Unknown',
-            time: item.createdAt,
-            viewNum: item.numViews || 0,
-            likeNum: item.numLikes || 0,
-            longNum: item.numComments || 0,
-            isR18: item.rating === 'ecchi' || item.rating === 'r18'
-          };
-        });
-        // 追加数据
-        imageList.value[tabNum] = [...imageList.value[tabNum], ...newImages];
-        page[tabNum]++;
-        // 返回数据
-        return newImages
-      } else {
-        // 返回空数组
-        return []
-      }
+    if (!res.ok)
+      throw new Error(`状态码：${res.status}, 错误信息：${res.statusText}`);
+    if (res.data.results && res.data.results.length > 0) {
+      const newImages = res.data.results.map((item: any) => {
+        return {
+          id: item.id,
+          title: item.title,
+          img: item.thumbnail ? `https://i.iwara.tv/image/thumbnail/${item.thumbnail.id}/${item.thumbnail.id}.jpg` : 'file-loss',
+          author: item.user?.name || item.user?.username || 'Unknown',
+          time: item.createdAt,
+          viewNum: item.numViews || 0,
+          likeNum: item.numLikes || 0,
+          longNum: item.numImages || 0,
+          isR18: item.rating === 'ecchi' || item.rating === 'r18'
+        };
+      });
+      // 追加数据
+      imageList.value[tabNum] = [...imageList.value[tabNum], ...newImages];
+      page[tabNum]++;
+      // 返回数据
+      return newImages
+    } else {
+      // 返回空数组
+      return []
     }
-    throw new Error(`状态码：${res.status}, 错误信息：${res.statusText}`);
   } catch (error) {
     console.error(`获取插画列表失败:`, error);
     showShortToast('获取插画列表失败');

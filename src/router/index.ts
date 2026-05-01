@@ -134,7 +134,7 @@ const routes: Array<RouteRecordRaw & { meta?: RouteMeta }> = [
     component: setup,
     meta: { transition: 'stack', componentName: 'Setup' },
   },
-  // setup子页面
+  // ------setup子页面------
   {
     path: '/setup/definition',
     name: 'SetupDefinition',
@@ -171,6 +171,7 @@ const routes: Array<RouteRecordRaw & { meta?: RouteMeta }> = [
     component: setup_about,
     meta: { transition: 'stack', componentName: 'SetupAbout' },
   }
+  // ------end------
 ]
 
 const router = createRouter({
@@ -231,12 +232,12 @@ router.beforeEach(async (to, from) => {
   // 检查登录状态 - 直接从 Store 获取（已在 main.ts 中初始化）
   const { isLogin } = await import('../core/store');
   const isLoggedIn = isLogin().value;
-  
+
   // 如果未登录且目标不是登录页，重定向到登录页
   if (!isLoggedIn && to.path !== '/login') {
     return '/login';
   }
-  
+
   // 如果已登录且目标是登录页，重定向到首页
   if (isLoggedIn && to.path === '/login') {
     return '/';

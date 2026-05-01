@@ -12,6 +12,8 @@ import {
 import { showShortToast } from '../core/toast';
 import loadingHuawu from '../component/loadingHuawu.vue';
 import errorHuawu from '../component/errorHuawu.vue';
+import fullScreen from '../component/image/fullScreen.vue';
+import comment from '../component/image/comment.vue';
 
 defineOptions({
   name: 'Image'
@@ -28,13 +30,18 @@ const applyPageSettings = () => {
 applyPageSettings()
 
 // 插画图片数据
-const illustrationImages = ref<string[]>([]);
+interface ImageFile {
+  id: string;
+  name: string;
+}
+const illustrationImages = ref<ImageFile[]>([]);
 
 // 页面状态
 const isState = ref<'failed' | 'loading' | 'success'>('loading');
+const fullScreenVisible = ref(false);
 
 // 插画信息数据（全部独立变量）
-const id = ref<string>(route.params.id as string);  // 插画ID
+const pid = ref<string>(route.params.id as string);  // 插画ID
 const title = ref<string>('');  // 插画标题
 const viewCount = ref<number>(0); // 插画浏览数
 const createdAt = ref<string>('');  // 插画创建时间
@@ -44,50 +51,10 @@ const tags = ref<string[]>([]); // 插画标签数组
 
 // 作者信息
 const authorname = ref<string>(''); // 作者名称
+const uid = ref<string>(''); // 作者ID
 const fansNum = ref<number>(0); // 粉丝数
 const imageNum = ref<number>(0);  // 插画数量
 const isFollow = ref<boolean>(false); // 是否已关注作者
-
-// 推荐列表
-interface ListItem {
-  id: string;
-  title: string;
-  img: string;
-  author: string;
-  time: string;
-  viewNum: number;
-  likeNum: number;
-  longNum: number;
-  isR18: boolean;
-}
-// 初始化列表数据
-const authorOtherVideoList = ref<ListItem[]>([]);
-const recommendVideoList = ref<ListItem[]>([]);
-// 测试数据生成
-for (let i = 0; i < 5; i++) {
-  authorOtherVideoList.value.push({
-    id: Math.random().toString(36).slice(2),
-    title: '作者测试标题',
-    img: '', // 图片路径由子组件内部处理
-    author: '测试作者',
-    time: '2021-09-09',
-    viewNum: 100,
-    likeNum: 100,
-    longNum: 10,
-    isR18: false,
-  });
-  recommendVideoList.value.push({
-    id: Math.random().toString(36).slice(2),
-    title: '推荐测试标题',
-    img: '',
-    author: '测试作者',
-    time: '2021-09-09',
-    viewNum: 100,
-    likeNum: 100,
-    longNum: 10,
-    isR18: false,
-  });
-}
 
 // 顶部导航栏颜色状态
 const isTopGreen = ref(false);
@@ -168,7 +135,7 @@ onUnmounted(() => {
 getImageInfo();
 async function getImageInfo(): Promise<void> {
   try {
-    const res = await api_getImageInfo(id.value as string);
+    const res = await api_getImageInfo(pid.value as string);
     console.log(res);
     if (!res.ok)
       throw new Error(`状态码：${res.status}, 错误信息：${res.statusText}`);
@@ -186,20 +153,26 @@ async function getImageInfo(): Promise<void> {
     tags.value = imageInfo.tags.map((tag: Tag) => tag.id);
     // 用户信息
     authorname.value = imageInfo.user.name;
+    uid.value = imageInfo.user.id;
     isFollow.value = imageInfo.user.followedBy;
     // 插画文件数组
     illustrationImages.value = imageInfo.files.map((file: any) => {
-      const src = `https://i.iwara.tv/image/large/${file.id}/${file.name}`;
-      return src;
+      const id = file.id;
+      const name = file.name;
+      return { id, name };
     });
     // 更新页面状态
     isState.value = 'success';
   } catch (error) {
-    console.error(`获取插画信息失败`, error);
+    console.error(`获取插画信息失败：`, error);
     showShortToast('获取插画信息失败');
     isState.value = 'failed';
     throw error;
   }
+}
+// 监听图片分辨率事件
+function handleResolution(res: { width: number; height: number }) {
+  resolution.value = `${res.width}x${res.height}`;
 }
 </script>
 <template>
@@ -221,16 +194,17 @@ async function getImageInfo(): Promise<void> {
     <div v-else-if="isState === 'success'" class="image-container" ref="imageContainerRef" @scroll="handleScroll">
 
       <!-- 第一部分：图片区域（已拆分为子组件） -->
-      <imgPreview :images="illustrationImages" />
+      <imgPreview :pid="pid" :images="illustrationImages" @resolution="handleResolution" @fullScreen="fullScreenVisible = true" />
 
       <!-- 第二部分：插画信息区域（已拆分为子组件） -->
-      <ImageInfo v-if="isState === 'success'" :title="title" :view-count="viewCount" :created-at="createdAt"
-        :illustration-id="id" :resolution="resolution" :synopsis="synopsis" :tags="tags" :authorname="authorname"
-        :fans-num="fansNum" :image-num="imageNum" :is-follow="isFollow" @follow-click="handleFollowClick" />
+      <ImageInfo v-if="isState === 'success'" :title="title" :view-count="viewCount" :created-at="createdAt" :pid="pid"
+        :resolution="resolution" :synopsis="synopsis" :tags="tags" :authorname="authorname" :fans-num="fansNum"
+        :image-num="imageNum" :is-follow="isFollow" @follow-click="handleFollowClick" />
 
       <!-- 第三部分：推荐列表（已拆分为子组件） -->
-      <RecommendList :author-other-video-list="authorOtherVideoList" :recommend-video-list="recommendVideoList" />
+      <RecommendList :pid="pid" :uid="uid" />
     </div>
+    <fullScreen class="full-screen" :style="{ right: fullScreenVisible ? '0px' : '-100vw' }" />
   </div>
 </template>
 <style lang="scss" scoped>
@@ -238,6 +212,7 @@ async function getImageInfo(): Promise<void> {
   height: 100%;
   display: flex;
   flex-direction: column;
+  background-color: #fafafa;
 }
 
 .top {
@@ -285,5 +260,13 @@ async function getImageInfo(): Promise<void> {
   background-color: #fff;
   position: relative;
   padding-bottom: env(safe-area-inset-bottom, 0);
+}
+
+.full-screen {
+  position: absolute;
+  top: 0;
+  right: -100vw;
+  z-index: 600;
+  transition: right 0.3s ease-in-out;
 }
 </style>

@@ -31,7 +31,7 @@ interface ImageInfoProps {
   title: string;
   viewCount: number;
   createdAt: string;
-  illustrationId: string;
+  pid: string;
   resolution: string;
   synopsis: string;
   tags: string[];
@@ -125,6 +125,17 @@ function clickLike() {
   isLike.value = !isLike.value;
   likeNum.value += isLike.value ? 1 : -1;
 }
+// 格式化时间: YYYY年MM月DD日 HH:mm
+const formatDate = (dateString: string) => {
+  if (!dateString) return '';
+  const date = new Date(dateString);
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  const hours = String(date.getHours()).padStart(2, '0');
+  const minutes = String(date.getMinutes()).padStart(2, '0');
+  return `${year}年${month}月${day}日 ${hours}:${minutes}`;
+};
 </script>
 
 <template>
@@ -138,11 +149,11 @@ function clickLike() {
   <div class="infomsg">
     <font-awesome-icon icon="fa-regular fa-eye" /> {{ viewCount }}
     &nbsp;
-    <font-awesome-icon icon="fa-regular fa-clock" /> {{ createdAt }}
+    <font-awesome-icon icon="fa-regular fa-clock" /> {{ formatDate(createdAt) }}
     <br>
-    插画 ID {{ illustrationId }}
+    <span>插画ID {{ pid }}</span>
     &nbsp;
-    分辨率 {{ resolution }}
+    <span v-if="resolution !== ''">分辨率 {{ resolution }}</span>
   </div>
   <div class="author">
     <div class="avatar">
@@ -150,7 +161,7 @@ function clickLike() {
     </div>
     <div class="userinfo">
       <div class="authorname">{{ authorname }}</div>
-      <div class="userdata">{{ fansNum }}粉丝 {{ imageNum }}插画</div>
+      <div class="userdata" v-if="false">{{ fansNum }}粉丝 {{ imageNum }}插画</div>
     </div>
     <div class="follow">
       <v-btn class="btn" :color="isFollow ? '#E0E0E0' : '#00796B'" @click="clickFollow">

@@ -222,6 +222,7 @@ async function postSendRequestIwara(url: string, headers?: any, body?: any) {
 
 // 获取图片(iwara) 
 export async function getImageIwara(url: string): Promise<string> {
+  // console.log('getImageIwara', url);
   try {
     // 构建请求头
     const headers: Record<string, string> = {
