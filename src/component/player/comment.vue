@@ -40,15 +40,15 @@ const props = defineProps<{
 }>()
 
 let commentPage = 0
-const commentMore = ref(false)
+const commentMore = ref(false) // 评论加载到底
 let scrollTop = 0
-// 新增：加载状态，防止重复请求
-const loading = ref(false)
+
+// 加载更多失败标记
+const loadMoreFailed = ref(false) // 评论加载失败
+
 // 聚合状态：'failed' | 'empty' | 'loading' | 'success'
 type CommentState = 'failed' | 'empty' | 'loading' | 'success'
 const commentState = ref<CommentState>('loading')
-// 加载更多失败标记
-const loadMoreFailed = ref(false)
 
 // 头像 URL 缓存 (userId -> avatarUrl)
 const avatarUrlMap = ref<Record<string, string>>({})
@@ -90,21 +90,69 @@ async function loadAvatarsForComments(comments: Comment[]) {
   }
 }
 
+// 初始获取评论列表数据
+function initGetComments() {
+  if (commentState.value === 'loading') {
+    getCommentList().then((res) => {
+      if (res.length > 0)
+        commentState.value = 'success';
+      else
+        commentState.value = 'empty';
+    }).catch(() => {
+      commentState.value = 'failed';
+    });
+  }
+}
+
+// 刷新数据
+function refreshData() {
+  // 清空评论列表数据
+  commentList.value = [];
+  commentPage = 0;
+  commentMore.value = false;
+  loadMoreFailed.value = false;
+  commentState.value = 'loading';
+  
+  // 获取评论列表数据
+  getCommentList().then((res) => {
+    if (res.length > 0)
+      commentState.value = 'success';
+    else
+      commentState.value = 'empty';
+  }).catch(() => {
+    commentState.value = 'failed';
+  });
+}
+
+// 点击错误图片刷新数据
+function handleErrorClick() {
+  refreshData();
+}
+
+// 下滑列表到底追加数据
+async function handleScrollToEnd({ done }: any) {
+  getCommentList().then((res) => {
+    if (res.length > 0) done('ok');
+    else {
+      commentMore.value = true;
+      done('empty');
+    }
+  }).catch(() => {
+    loadMoreFailed.value = true;
+    done('error');
+  });
+}
+
 // 获取评论列表
-async function getCommentList() {
-  if (!props.vid) return
-  // 如果正在加载或已经没有更多数据，则不再请求
-  if (loading.value || commentMore.value) return
-
-  loading.value = true
-
+async function getCommentList(): Promise<any> {
+  if (!props.vid) {
+    throw new Error('视频ID不存在');
+  }
+  
   try {
-    const res = await getVideoComments(props.vid, commentPage)
+    const res = await getVideoComments(props.vid, commentPage);
     if (res.ok) {
       if (res.data.results && res.data.results.length > 0) {
-        commentState.value = 'success'
-        commentMore.value = false
-        loadMoreFailed.value = false
         const newComments = res.data.results.map((item: any) => {
           return {
             id: item.id,
@@ -116,88 +164,40 @@ async function getCommentList() {
             updatedAt: item.updatedAt,
             user: item.user,
             videoId: item.videoId
-          }
-        })
+          };
+        });
         // 追加数据
-        commentList.value = [...commentList.value, ...newComments]
-        console.log('newImages', commentList.value)
+        commentList.value = [...commentList.value, ...newComments];
         // 批量加载新评论的头像
-        await loadAvatarsForComments(newComments)
-        commentPage++
+        await loadAvatarsForComments(newComments);
+        commentPage++;
+        // 返回数据
+        return newComments;
       } else {
-        commentMore.value = true
-        if (commentList.value.length === 0) {
-          commentState.value = 'empty'
-        }
-      }
-    } else {
-      console.error(`状态码：${res.status}`, `错误信息：${res.statusText}`)
-      showShortToast('获取评论失败')
-      // 如果是加载更多时失败，阻止继续加载
-      if (commentList.value.length === 0) {
-        commentState.value = 'failed'
-      } else {
-        commentMore.value = true
-        loadMoreFailed.value = true
+        // 返回空数组
+        return [];
       }
     }
+    throw new Error(`状态码：${res.status}, 错误信息：${res.statusText}`);
   } catch (error) {
-    console.error(`获取评论失败:`, error)
-    showShortToast('获取更多评论失败，点击重试')
-    // 如果是加载更多时失败，阻止继续加载
-    if (commentList.value.length === 0) {
-      commentState.value = 'failed'
-    } else {
-      commentMore.value = true
-      loadMoreFailed.value = true
-    }
-  } finally {
-    // 确保无论成功失败都释放锁
-    loading.value = false
-  }
-}
-
-// 滚动到底部加载数据
-async function handleScrollToEnd({ done }: any) {
-  // 如果正在加载，直接返回，避免重复触发
-  if (loading.value) {
-    done('ok') // 或者根据具体UI库要求处理
-    return
-  }
-
-  await getCommentList()
-  if (commentMore.value) {
-    done('empty')
-  } else {
-    done('ok')
-  }
-}
-
-// 重试加载更多
-function retryLoadMore() {
-  loadMoreFailed.value = false
-  commentMore.value = false
-  getCommentList()
-}
-
-// 初始化加载评论
-function initGetComments() {
-  if (props.vid && commentList.value.length === 0) {
-    getCommentList()
+    console.error(`获取评论列表失败:`, error);
+    showShortToast('获取评论列表失败');
+    throw error;
   }
 }
 
 // 监听视频ID变化
 watch(() => props.vid, (newVal) => {
-  if (newVal && commentList.value.length === 0) {
+  if (newVal) {
     // 重置分页状态
-    commentPage = 0
-    commentMore.value = false
-    commentList.value = []
-    avatarUrlMap.value = {}
-    loadMoreFailed.value = false
-    commentState.value = 'loading'
-    getCommentList()
+    commentPage = 0;
+    commentMore.value = false;
+    commentList.value = [];
+    avatarUrlMap.value = {};
+    loadMoreFailed.value = false;
+    commentState.value = 'loading';
+    // 重新初始化加载
+    initGetComments();
   }
 }, { immediate: true })
 
@@ -253,10 +253,10 @@ onActivated(() => {
 
 <template>
   <div class="commentView" @scroll="handleScroll" ref="commentViewRef">
-    <div v-if="commentState === 'failed'" class="empty-state">
+    <div v-if="commentState === 'failed'" class="empty-state" @click="handleErrorClick">
       <errorHuawu>评论加载失败了喵~</errorHuawu>
     </div>
-    <div v-else-if="commentState === 'empty'" class="empty-state">
+    <div v-else-if="commentState === 'empty'" class="empty-state" @click="handleErrorClick">
       <errorHuawu>当前还没有评论</errorHuawu>
     </div>
     <div v-else-if="commentState === 'loading'" class="empty-state">
@@ -272,15 +272,12 @@ onActivated(() => {
             </template>
           </v-img>
         </div>
-
         <div class="elements">
           <div class="username">{{ item.user.name || item.user.username }}</div>
-
           <div class="content-wrapper">
             <div class="content" :class="{ fold: needToggle(item.body) && !expandedMap[item.id] }">
               {{ item.body }}
             </div>
-
             <!-- 底部操作栏：始终显示 -->
             <div class="action-bar">
               <!-- 发布时间 -->
@@ -300,13 +297,14 @@ onActivated(() => {
           </div>
         </div>
       </div>
-
-      <template v-slot:empty>
-        <div v-if="loadMoreFailed" class="load-more-failed">
+      <template v-slot:error="{ props }">
+        <div class="load-more-failed">
           <span>加载失败，</span>
-          <span class="retry-btn" @click="retryLoadMore">点击重试</span>
+          <span class="retry-btn" v-bind=props>点击重试</span>
         </div>
-        <div v-else class="listEnd">
+      </template>
+      <template v-slot:empty>
+        <div class="listEnd">
           已经到底了喵~
         </div>
       </template>

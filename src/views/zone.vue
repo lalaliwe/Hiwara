@@ -3,7 +3,7 @@ import { ref, onMounted, onUnmounted, watch, nextTick, onActivated } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { Swiper, SwiperSlide } from 'swiper/vue';
 import type { Swiper as SwiperType } from 'swiper';
-import 'swiper/css';
+import 'swiper/swiper-bundle.css';
 import UserInfo from '../component/zone/userInfo.vue'
 import VideoList from '../component/zone/videoList.vue'
 import ImageList from '../component/zone/imageList.vue'

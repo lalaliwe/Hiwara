@@ -63,7 +63,8 @@ const buffered = ref<number>(0);  // 已缓冲
 const currentTime = ref<string>('00:00'); // 当前时间
 const totalTime = ref<string>('00:00'); // 总时长
 const isLoading = ref(false); // 缓冲加载状态
-const hasPlayed = ref(false); // 是否已经播放过（用于控制自动隐藏）
+const isState = ref<'failed' | 'empty' | 'loading' | 'success'>('empty'); // 视频加载状态
+const metadataLoaded = ref(false); // 是否已经播放过（用于控制自动隐藏）
 
 // 手势操作消息显示
 const gestureMessage = ref<string>('')
@@ -127,7 +128,6 @@ const updateTime = () => {
 // 切换播放/暂停
 const togglePlay = () => {
   if (!videoRef.value) return;
-
   if (isPlaying.value) {
     videoRef.value.pause();
   } else {
@@ -231,42 +231,44 @@ onMounted(async () => {
 
   // 绑定视频事件
   if (videoRef.value) {
-    // 初始加载阶段的事件
+    // 视频资源开始加载
     videoRef.value.addEventListener('loadstart', () => {
       isLoading.value = true; // 开始加载视频
     });
-    videoRef.value.addEventListener('suspend', () => {
-      isLoading.value = true; // 加载被暂停（通常是用户主动暂停）
-    });
-    videoRef.value.addEventListener('stalled', () => {
-      isLoading.value = true; // 浏览器尝试获取数据但未能获取到
-    });
-
+    // 缓存数据足够播放，暂停加载数据
+    videoRef.value.addEventListener('suspend', () => { });
+    // 网络波动，意外断开
+    videoRef.value.addEventListener('stalled', () => { });
+    // 视频播放
     videoRef.value.addEventListener('play', () => {
       isPlaying.value = true;
-      isLoading.value = false; // 开始播放时隐藏加载指示器
-      hasPlayed.value = true; // 标记已经播放过
     });
+    // 视频暂停
     videoRef.value.addEventListener('pause', () => {
       isPlaying.value = false;
     });
+    // 播放进度更新
     videoRef.value.addEventListener('timeupdate', updateTime);
+    // 元数据加载完成
     videoRef.value.addEventListener('loadedmetadata', () => {
       updateTime();
-      isLoading.value = false; // 元数据加载完成，隐藏加载指示器
+      metadataLoaded.value = true;
       console.log('视频元数据加载完成');
     });
+    // 首帧加载完成
     videoRef.value.addEventListener('loadeddata', () => {
-      isLoading.value = false; // 数据加载完成，隐藏加载指示器
       console.log('视频数据加载完成');
     });
     // 监听缓冲事件
+    // 数据不足，进入缓冲状态
     videoRef.value.addEventListener('waiting', () => {
       isLoading.value = true; // 数据不足，显示加载指示器
     });
+    // 从缓冲恢复，继续播放
     videoRef.value.addEventListener('playing', () => {
       isLoading.value = false; // 从缓冲恢复，隐藏加载指示器
     });
+    // 缓冲完成
     videoRef.value.addEventListener('canplaythrough', () => {
       isLoading.value = false; // 已缓冲足够，隐藏加载指示器
     });
@@ -373,13 +375,13 @@ const handleGestureEvent = (event: { type: string; value?: number; isEnd?: boole
     </div>
     <!-- 使用 fullscreenState 控制显示 -->
     <controlFullscreen v-if="fullscreenState" :is-playing="isPlaying" :progress="progress" :buffered="buffered"
-      :current-time="currentTime" :total-time="totalTime" :video-element="videoRef" :has-played="hasPlayed"
+      :current-time="currentTime" :total-time="totalTime" :video-element="videoRef" :metadataLoaded="metadataLoaded"
       :title="props.title" :server="props.server" :video-files="props.videoFiles"
       :current-definition-index="props.currentDefinitionIndex" @exit="handleExitFullscreen" @toggle-play="togglePlay"
       @progress-change="onProgressChange" @progress-change-end="onProgressChangeEnd" @gesture="handleGestureEvent"
       @refresh-server="handleRefreshServer" @definition-change="handleDefinitionChange" />
     <control v-else :is-playing="isPlaying" :progress="progress" :buffered="buffered" :current-time="currentTime"
-      :total-time="totalTime" :has-played="hasPlayed" @toggle-play="togglePlay" @progress-change="onProgressChange"
+      :total-time="totalTime" :metadataLoaded="metadataLoaded" @toggle-play="togglePlay" @progress-change="onProgressChange"
       @progress-change-end="onProgressChangeEnd" @enter-fullscreen="enterFullscreen" @go-back="goBack" @go-home="goHome"
       @gesture="handleGestureEvent" />
   </div>

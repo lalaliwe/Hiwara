@@ -10,7 +10,7 @@ const props = defineProps<{
   buffered: number
   currentTime: string
   totalTime: string
-  hasPlayed?: boolean // 是否已经播放过
+  metadataLoaded?: boolean // 是否已经播放过
 }>()
 
 // Emits - 向父组件事件
@@ -67,7 +67,7 @@ const resetHideTimer = () => {
   clearHideTimer()
 
   // 如果视频还没有开始播放过，不设置自动隐藏
-  if (!props.hasPlayed) {
+  if (!props.metadataLoaded) {
     // console.log('[control.vue] 视频未播放，不自动隐藏')
     return
   }
@@ -87,8 +87,8 @@ const clearHideTimer = () => {
   }
 }
 
-// 监听 hasPlayed 变化，如果从未播放变为已播放，则启动自动隐藏
-watch(() => props.hasPlayed, (newVal) => {
+// 监听 metadataLoaded 变化，如果从未播放变为已播放，则启动自动隐藏
+watch(() => props.metadataLoaded, (newVal) => {
   if (newVal && showControl.value) {
     // 视频第一次播放后，如果控制栏正在显示，启动自动隐藏
     resetHideTimer()
@@ -278,9 +278,13 @@ const handlePointerDown = (event: PointerEvent) => {
 
 // 处理中间区域点击
 const handleMiddleClick = () => {
-  clickCount++
+  // 视频元数据未加载完成时不处理点击
+  if (!props.metadataLoaded)
+    return
 
+  clickCount++
   if (clickCount === 1) {
+    // 单击
     clickTimer = window.setTimeout(() => {
       if (pointerType.value === 'mouse') {
         // 鼠标单击：暂停/播放
@@ -382,7 +386,7 @@ const handleEnterFullscreen = () => {
     <!-- 中间区域 -->
     <div class="middle" @pointerdown="handlePointerDown" @click="handleMiddleClick"></div>
     <!-- 底部控制栏 - 只有在视频已经播放过后才显示 -->
-    <div class="bottom" v-if="hasPlayed">
+    <div class="bottom" v-if="metadataLoaded">
       <div>
         <span class="btn" @click="handleTogglePlay">
           <font-awesome-icon v-if="isPlaying" icon="fa-solid fa-pause" />
@@ -418,6 +422,7 @@ const handleEnterFullscreen = () => {
   display: flex;
   flex-direction: column;
   color: #fff;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.4), transparent 20%, transparent 80%, rgba(0, 0, 0, 0.4));
 
   .top {
     display: flex;

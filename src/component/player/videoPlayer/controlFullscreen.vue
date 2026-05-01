@@ -14,7 +14,7 @@ const props = defineProps<{
   currentTime: string
   totalTime: string
   videoElement: HTMLVideoElement | null
-  hasPlayed?: boolean // 是否已经播放过
+  metadataLoaded?: boolean // 是否已经播放过
   title?: string // 视频标题
   server?: string // 服务器名称
   videoFiles?: Array<{ id: string; name: string; server: string; type: string; view: string; download: string }> // 视频文件列表
@@ -80,7 +80,7 @@ const resetHideTimer = () => {
   clearHideTimer()
 
   // 如果视频还没有开始播放过，不设置自动隐藏
-  if (!props.hasPlayed) {
+  if (!props.metadataLoaded) {
     // console.log('[controlFullscreen.vue] 视频未播放，不自动隐藏')
     return
   }
@@ -436,23 +436,23 @@ const definitionTextFormat = (text: string): string => {
 // 过滤并排序视频文件列表
 const sortedVideoFiles = computed(() => {
   if (!props.videoFiles) return [];
-  
+
   // 先过滤掉 preview
   const filtered = props.videoFiles.filter(file => file.name.toLowerCase() !== 'preview');
-  
+
   // 排序函数
   return filtered.sort((a, b) => {
     // Source(原画)排最后
     if (a.name === 'Source' && b.name !== 'Source') return 1;
     if (a.name !== 'Source' && b.name === 'Source') return -1;
-    
+
     // 都是数字类型,按数值大小排序
     const aNum = Number(a.name);
     const bNum = Number(b.name);
     if (!isNaN(aNum) && !isNaN(bNum)) {
       return aNum - bNum;
     }
-    
+
     // 其他情况保持原顺序
     return 0;
   });
@@ -471,7 +471,7 @@ const selectDefinition = (index: number) => {
     showDrawer.value = false;
     return;
   }
-  
+
   // 触发事件通知父组件
   emit('definitionChange', index);
   showDrawer.value = false;
@@ -616,7 +616,8 @@ onUnmounted(() => {
           <font-awesome-icon icon="fa-solid fa-server" />{{ server || 'hiwara' }}
         </span>
         <span @click="toggleDrawer">
-          <font-awesome-icon icon="fa-solid fa-film" />{{ definitionTextFormat(videoFiles?.[currentDefinitionIndex || 0]?.name || '1080P') }}
+          <font-awesome-icon icon="fa-solid fa-film" />{{ definitionTextFormat(videoFiles?.[currentDefinitionIndex ||
+            0]?.name || '1080P') }}
         </span>
       </div>
       <div>
@@ -636,17 +637,13 @@ onUnmounted(() => {
       </div>
       <v-divider></v-divider>
       <div class="drawer-content">
-        <div 
-          v-for="(file, index) in sortedVideoFiles" 
-          :key="file.id"
-          class="definition-item"
+        <div v-for="(file, index) in sortedVideoFiles" :key="file.id" class="definition-item"
           :class="{ active: getOriginalIndex(file) === currentDefinitionIndex }"
-          @click="selectDefinition(getOriginalIndex(file))"
-        >
+          @click="selectDefinition(getOriginalIndex(file))">
           <font-awesome-icon icon="fa-solid fa-film" />
           <span class="definition-text">{{ definitionTextFormat(file.name) }}</span>
-          <font-awesome-icon v-if="getOriginalIndex(file) === currentDefinitionIndex" 
-            icon="fa-solid fa-check" class="check-icon" />
+          <font-awesome-icon v-if="getOriginalIndex(file) === currentDefinitionIndex" icon="fa-solid fa-check"
+            class="check-icon" />
         </div>
       </div>
     </div>
@@ -666,6 +663,7 @@ onUnmounted(() => {
   display: flex;
   flex-direction: column;
   color: #fff;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.4), transparent 20%, transparent 80%, rgba(0, 0, 0, 0.4));
 
   .top {
     display: flex;

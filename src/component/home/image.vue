@@ -5,7 +5,7 @@ import cardButton from '../../component/cardButton.vue';
 import { ref, onActivated, watch, inject } from 'vue';
 import { Swiper, SwiperSlide } from 'swiper/vue';
 import type { Swiper as SwiperType } from 'swiper';
-import 'swiper/css';
+import 'swiper/swiper-bundle.css';
 import { getImageList as api_getImageList } from '../../core/api';
 import loadingHuawu from '../loadingHuawu.vue';
 import errorHuawu from '../errorHuawu.vue';

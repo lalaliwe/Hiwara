@@ -158,7 +158,7 @@ onMounted(() => {
       } catch (error) {
         // 在非 Android 平台或插件未就绪时，静默失败
         // 这不会影响应用的正常运行
-        console.warn('[App] Failed to register back button listener:', error)
+        console.warn('[App] 注册返回按钮监听器失败：', error)
       }
     }, 100) // 延迟 100ms 确保 Tauri 桥接已就绪
   }

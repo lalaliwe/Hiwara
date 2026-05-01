@@ -3,7 +3,7 @@ import { ref, onActivated, watch } from 'vue';
 import cardButton from '../cardButton.vue';
 import { Swiper, SwiperSlide } from 'swiper/vue';
 import type { Swiper as SwiperType } from 'swiper';
-import 'swiper/css';
+import 'swiper/swiper-bundle.css';
 
 interface ListItem {
   id: string;

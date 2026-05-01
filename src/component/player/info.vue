@@ -407,12 +407,14 @@ watch(() => props.avatar, () => {
   overflow: hidden;
   font-size: 1.1rem;
   transition: height 0.3s ease-in-out;
+  cursor: pointer;
 }
 
 .infomsg {
   padding: 0 10px;
   font-size: 0.8rem;
   color: #616161;
+  cursor: pointer;
 }
 
 .synopsis {

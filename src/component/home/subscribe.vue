@@ -5,7 +5,7 @@ import cardButton from '../../component/cardButton.vue';
 import { ref, onActivated, watch, inject } from 'vue';
 import { Swiper, SwiperSlide } from 'swiper/vue';
 import type { Swiper as SwiperType } from 'swiper';
-import 'swiper/css';
+import 'swiper/swiper-bundle.css';
 import {
   getSubscribeVideoList as api_getSubscribeVideoList,
   getSubscribeImageList as api_getSubscribeImageList
@@ -350,7 +350,7 @@ async function getSubscribeImageList(): Promise<any> {
           </template>
           <template v-slot:empty>
             <div class="listEnd">
-              已经到底了
+              已经到底了喵~
             </div>
           </template>
         </v-infinite-scroll>

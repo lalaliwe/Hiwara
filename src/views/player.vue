@@ -7,7 +7,7 @@ import commentView from '../component/player/comment.vue';
 import { setStatusBarTextStyle } from '../plugins/navbarStyle';
 import { Swiper, SwiperSlide } from 'swiper/vue';
 import type { Swiper as SwiperType } from 'swiper';
-import 'swiper/css';
+import 'swiper/swiper-bundle.css';
 import {
   getVideoInfo as api_getVideoInfo,
   getVideoFileSQ as api_getVideoFileSQ
