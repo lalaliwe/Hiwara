@@ -5,6 +5,7 @@ import {
   ShareOne as iconShareOne,
   DownloadFour as iconDownloadFour,
   CopyLink as iconCopyLink,
+  Comments as iconComments
 } from '@icon-park/vue-next';
 
 // 插画信息展开状态（内部状态）
@@ -191,6 +192,9 @@ const formatDate = (dateString: string) => {
       <iconShareOne theme="two-tone" size="22" :fill="['#424242', '#00796B']" /><br>分享
     </div>
     <div>
+      <iconComments theme="multi-color" size="22" :fill="['#484848', '#00796B', '#FFFFFF', '#00796B']" /><br>评论
+    </div>
+    <div>
       <iconDownloadFour theme="two-tone" size="22" :fill="['#424242', '#00796B']" /><br>缓存
     </div>
     <div>
@@ -319,7 +323,7 @@ const formatDate = (dateString: string) => {
 .operation {
   padding: 10px 0;
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(5, 1fr);
   justify-items: center;
   /* 水平居中 */
   align-items: center;
@@ -330,6 +334,8 @@ const formatDate = (dateString: string) => {
     color: #616161;
     font-size: 0.8rem;
     width: 55px;
+    cursor: pointer;
+    user-select: none;
   }
 }
 

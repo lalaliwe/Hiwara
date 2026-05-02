@@ -1,12 +1,14 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, watch } from 'vue';
 import { getImageIwara } from '../../core/api';
-import placeholderImg from '../../static/img/placeholder.png'
 import notImg from '../../static/img/not-img.jpg'
+import iwaraSVG from '../../assets/svg/iwara.svg'
 
 interface ImageFile {
   id: string;
   name: string;
+  width: number;
+  height: number;
 }
 interface ImgPreviewProps {
   pid: string;
@@ -37,7 +39,7 @@ const processImageFile = async (file: ImageFile): Promise<string> => {
     return await getImageIwara(url);
   } catch (error) {
     console.error('Failed to load image:', file, error);
-    return notImg;
+    return '';
   }
 };
 
@@ -81,12 +83,12 @@ const onImageLoaded = () => {
 };
 
 // 全屏大图
-function fullScreen() {
+function fullScreen(num: number = 0) {
   if (processedImages.value.length <= 1)
-    emit('fullScreen');
+    emit('fullScreen', num);
   else {
     if (imageExpand.value)
-      emit('fullScreen');
+      emit('fullScreen', num);
     else
       imageExpand.value = true;
   }
@@ -96,18 +98,30 @@ function fullScreen() {
 <template>
   <div class="imgPreview">
     <!-- 主图 -->
-    <v-img v-if="processedImages.length > 0" cover :src="processedImages[0]" @load="onImageLoaded" ref="firstImg"
-      @click="fullScreen">
+    <v-img cover :src="processedImages[0]" @load="onImageLoaded" ref="firstImg" @click="fullScreen(0)"
+      :style="{ aspectRatio: `${props.images[0].width}/${props.images[0].height}` }">
       <template v-slot:placeholder>
-        <v-img cover :src="placeholderImg"></v-img>
+        <div class="placeholder">
+          <img :src="iwaraSVG" class="img" />
+        </div>
+      </template>
+      <template v-slot:error>
+        <v-img cover :src="notImg" />
       </template>
     </v-img>
-    <!-- 占位图（如果没有主图） -->
-    <v-img v-else cover :src="placeholderImg"></v-img>
-
     <!-- 额外的图片（展开时显示） -->
     <div v-if="imageExpand && processedImages.length > 1">
-      <v-img v-for="(img, index) in processedImages.slice(1)" :key="index" cover :src="img"></v-img>
+      <v-img v-for="(img, index) in processedImages.slice(1)" :key="index" cover :src="img"
+        @click="fullScreen(index + 1)">
+        <template v-slot:placeholder>
+          <div class="placeholder">
+            <img :src="iwaraSVG" class="img" />
+          </div>
+        </template>
+        <template v-slot:error>
+          <v-img cover :src="notImg" />
+        </template>
+      </v-img>
     </div>
     <!-- 展开/收起按钮（只有多张图片时才显示） -->
     <span v-if="processedImages.length > 1" class="expand-btn" @click="imageExpand = !imageExpand">
@@ -132,6 +146,20 @@ function fullScreen() {
     font-size: 0.9rem;
     user-select: none;
     cursor: pointer;
+  }
+}
+
+.placeholder {
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+  background-color: #d0d0d0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .img {
+    width: 120px;
   }
 }
 </style>

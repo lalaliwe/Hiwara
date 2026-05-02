@@ -1,8 +1,7 @@
 <script setup lang="ts">
 import notImg from '../static/img/not-img.jpg';
 import lossImg from '../static/img/loss.png';
-import placeholder from '../static/img/placeholder.png';
-import placeholderDark from '../static/img/placeholder-dark.png';
+import iwaraSVG from '../assets/svg/iwara.svg'
 import { computed, type PropType, ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { getImageIwara } from '../core/api';
@@ -186,10 +185,10 @@ const formattedLongNum = computed(() => {
 // 格式化后的时间显示
 const formattedTime = computed(() => formatTimeDisplay(props.time));
 
-// 处理图片源，初始状态如果有图片链接则显示占位图，等待 API 加载
+// 处理图片源，初始状态如果有图片链接则显示空字符串，等待 API 加载
 const displayImg = ref(props.img && props.img !== 'file-loss'
-  ? (import.meta.env.MODE === 'development' || true ? placeholder : placeholder) // 始终先显示占位图，避免闪烁
-  : (props.img === 'file-loss' ? lossImg : placeholder));
+  ? '' // 初始为空，等待 API 加载完成
+  : (props.img === 'file-loss' ? lossImg : notImg));
 
 onMounted(async () => {
   if (props.img && props.img !== 'file-loss') {
@@ -249,10 +248,12 @@ async function clickCard() {
         </div>
       </div>
       <template v-slot:placeholder>
-        <v-img height="100%" :src="placeholder" cover></v-img>
+        <div class="placeholder">
+          <img :src="iwaraSVG" class="img" />
+        </div>
       </template>
       <template v-slot:error>
-        <v-img height="100%" :src="notImg" cover></v-img>
+        <img height="100%" :src="notImg" cover />
       </template>
     </v-img>
     <div class="title">
@@ -290,6 +291,20 @@ async function clickCard() {
   flex: 1;
   cursor: pointer;
   user-select: none;
+}
+
+.placeholder {
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+  background-color: #d0d0d0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .img {
+    width: 60px;
+  }
 }
 
 .info1 {

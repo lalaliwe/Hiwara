@@ -33,6 +33,8 @@ applyPageSettings()
 interface ImageFile {
   id: string;
   name: string;
+  width: number;
+  height: number;
 }
 const illustrationImages = ref<ImageFile[]>([]);
 
@@ -59,6 +61,8 @@ const isFollow = ref<boolean>(false); // 是否已关注作者
 // 顶部导航栏颜色状态
 const isTopGreen = ref(false);
 const imageContainerRef = ref<HTMLElement | null>(null);
+
+const fullScreenRef = ref();
 
 // 返回顶部
 function scrollToTop() {
@@ -159,7 +163,9 @@ async function getImageInfo(): Promise<void> {
     illustrationImages.value = imageInfo.files.map((file: any) => {
       const id = file.id;
       const name = file.name;
-      return { id, name };
+      const width = file.width;
+      const height = file.height;
+      return { id, name, width, height };
     });
     // 更新页面状态
     isState.value = 'success';
@@ -174,14 +180,25 @@ async function getImageInfo(): Promise<void> {
 function handleResolution(res: { width: number; height: number }) {
   resolution.value = `${res.width}x${res.height}`;
 }
+// 全屏大图
+const fullScreenTrigger = async (num: number) => {
+  fullScreenVisible.value = true;
+  // 等待下一帧确保组件已渲染
+  await new Promise(resolve => requestAnimationFrame(resolve));
+  fullScreenRef.value.changeSwiper(num);
+  // 调用全屏组件的进入全屏方法
+  if (fullScreenRef.value.enterFullscreen) {
+    fullScreenRef.value.enterFullscreen();
+  }
+}
 </script>
 <template>
   <div id="imageView">
     <div class="top" :class="{ 'top-green': isTopGreen }" @click="scrollToTop">
-      <span class="btn" @click.stop="goBack">
+      <span class="btn" @click="goBack">
         <font-awesome-icon icon="fa-solid fa-angle-left" />
       </span>
-      <span class="btn" @click.stop="goHome">
+      <span class="btn" @click="goHome">
         <font-awesome-icon icon="fa-regular fa-house" />
       </span>
     </div>
@@ -194,7 +211,8 @@ function handleResolution(res: { width: number; height: number }) {
     <div v-else-if="isState === 'success'" class="image-container" ref="imageContainerRef" @scroll="handleScroll">
 
       <!-- 第一部分：图片区域（已拆分为子组件） -->
-      <imgPreview :pid="pid" :images="illustrationImages" @resolution="handleResolution" @fullScreen="fullScreenVisible = true" />
+      <imgPreview :pid="pid" :images="illustrationImages" @resolution="handleResolution"
+        @fullScreen="fullScreenTrigger" />
 
       <!-- 第二部分：插画信息区域（已拆分为子组件） -->
       <ImageInfo v-if="isState === 'success'" :title="title" :view-count="viewCount" :created-at="createdAt" :pid="pid"
@@ -204,7 +222,8 @@ function handleResolution(res: { width: number; height: number }) {
       <!-- 第三部分：推荐列表（已拆分为子组件） -->
       <RecommendList :pid="pid" :uid="uid" />
     </div>
-    <fullScreen class="full-screen" :style="{ right: fullScreenVisible ? '0px' : '-100vw' }" />
+    <fullScreen class="full-screen" :style="{ right: fullScreenVisible ? '0px' : '-100vw' }" ref="fullScreenRef"
+      @close="fullScreenVisible = false" :images="illustrationImages" />
   </div>
 </template>
 <style lang="scss" scoped>
@@ -226,7 +245,6 @@ function handleResolution(res: { width: number; height: number }) {
   // background-color: #00796B;
   width: 100%;
   transition: background-color 0.3s ease-in-out;
-  cursor: pointer;
 
   .btn {
     display: inline-flex;
