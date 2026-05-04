@@ -76,7 +76,7 @@ const selectImageSavePath = async () => {
   background-color: #fafafa;
 
   &::-webkit-scrollbar-track {
-    margin: calc(60px + env(safe-area-inset-top, 0) + 4px) 0 calc(env(safe-area-inset-bottom, 0) + 4px) 0;
+    margin: calc(60px + env(safe-area-inset-top, 0)) 0 env(safe-area-inset-bottom, 0) 0;
   }
 
   .container {

@@ -382,10 +382,6 @@ onUnmounted(() => {
   height: 100vh;
   width: 100vw;
   overflow-y: auto;
-
-  &::-webkit-scrollbar-track {
-    margin: calc(60px + env(safe-area-inset-top, 0) + 4px) 0 calc(env(safe-area-inset-bottom, 0) + 4px) 0;
-  }
 }
 
 .topBar {
@@ -431,6 +427,7 @@ onUnmounted(() => {
   >div {
     padding-bottom: env(safe-area-inset-bottom, 0);
   }
+
 }
 
 .listEnd {
@@ -467,6 +464,10 @@ onUnmounted(() => {
   height: 100%;
   overflow-x: hidden;
   padding: calc(env(safe-area-inset-top, 0) + 60px) 0 env(safe-area-inset-bottom, 0) 0;
+
+  &::-webkit-scrollbar-track {
+    margin: calc(60px + env(safe-area-inset-top, 0)) 0 env(safe-area-inset-bottom, 0) 0;
+  }
 }
 
 .commentItem {
