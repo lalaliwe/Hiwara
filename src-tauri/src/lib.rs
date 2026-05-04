@@ -6,7 +6,8 @@ fn greet(name: &str) -> String {
 
 mod network;
 use network::{
-    get_https_request, post_https_request, send_https_request, send_https_request_binary,
+    delete_https_request, get_https_request, post_https_request, send_https_request,
+    send_https_request_binary,
 };
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
@@ -25,6 +26,7 @@ pub fn run() {
             send_https_request,
             get_https_request,
             post_https_request,
+            delete_https_request,
             send_https_request_binary
         ])
         .run(tauri::generate_context!())

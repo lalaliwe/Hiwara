@@ -11,7 +11,16 @@ import defaultAvatarImg from '../../static/img/avatar-default.jpg';
 import avatarPlaceholderImg from '../../static/img/avatar-placeholder.png';
 import avatarErrorImg from '../../static/img/avatar-error.png';
 import cardButton from '../cardButton.vue';
-import { getImageIwara, getVideoRecommendByUser, getVideoRecommendByOther } from '../../core/api';
+import {
+  getImageIwara,
+  getVideoRecommendByUser,
+  getVideoRecommendByOther,
+  likeVideo,
+  unlikeVideo,
+  followUser,
+  unfollowUser,
+} from '../../core/api';
+import { showShortToast } from '../../core/toast';
 
 // 格式化时间: YYYY年MM月DD日 HH:mm
 const formatDate = (dateString: string) => {
@@ -40,7 +49,61 @@ const props = defineProps<{
   isFollow: boolean,  // 是否已关注
   vid: string, // 视频ID
   uid: string, // 用户ID
+  download: string, // 下载链接
+  slug: string, // 视频slug
 }>()
+
+const emit = defineEmits<{
+  (e: 'like', isLiked: boolean): void;
+  (e: 'follow', isFollowed: boolean): void;
+}>();
+
+// 复制下载链接到剪贴板
+async function copyDownloadLink() {
+  if (!props.download) {
+    showShortToast('获取下载链接失败');
+    return;
+  }
+  try {
+    await navigator.clipboard.writeText(props.download);
+    showShortToast('下载链接已复制到剪贴板');
+  } catch (err) {
+    console.error('复制失败:', err);
+    showShortToast('获取下载链接失败');
+  }
+}
+
+// 使用 Web Share API 分享下载链接
+async function shareDownloadLink() {
+  if (!props.download) {
+    showShortToast('获取下载链接失败');
+    return;
+  }
+  // 检查浏览器是否支持 Web Share API
+  if (!navigator.share) {
+    showShortToast('当前设备不支持分享功能');
+    return;
+  }
+  try {
+    let shareUrl: string;
+    if (props.slug === '')
+      shareUrl = `https://iwara.tv/video/${props.vid}`;
+    else
+      shareUrl = `https://iwara.tv/video/${props.vid}/${props.slug}`;
+    await navigator.share({
+      title: props.title || 'Iwara 视频分享',
+      text: `分享视频: ${props.title}`,
+      url: shareUrl,
+    });
+    showShortToast('分享成功');
+  } catch (err) {
+    // 用户取消分享不显示错误提示
+    if ((err as Error).name !== 'AbortError') {
+      console.error('分享失败:', err);
+      showShortToast('分享失败，请重试');
+    }
+  }
+}
 
 const expand = ref(false);  // 是否展开
 const titleRef = ref<HTMLElement | null>(null); // 标题元素
@@ -77,6 +140,8 @@ const infoViewRef = ref<HTMLElement>();
 // 加载状态
 const isLoadingAuthorVideos = ref(false);
 const isLoadingRecommendVideos = ref(false);
+const isFollowing = ref(false); // 关注操作进行中状态
+const isLiking = ref(false); // 点赞操作进行中状态
 
 // 加载作者其他视频
 async function loadAuthorOtherVideos() {
@@ -145,13 +210,6 @@ function calculateHeights() {
   heights.value.titleCollapse = titleCollapseHeightRef.value?.offsetHeight || 0;
   heights.value.titleExpand = titleExpandHeightRef.value?.offsetHeight || 0;
   heights.value.synopsis = synopsisHeightRef.value?.offsetHeight || 0;
-}
-
-// 关注
-function clickFollow() {
-}
-// 点赞
-function clickLike() {
 }
 // 保存滚动条位置
 function handleSroll(e: Event): void {
@@ -225,6 +283,93 @@ watch(() => props.avatar, () => {
   loadAvatar();
 }, { immediate: true });
 
+// 关注
+function clickFollow() {
+  // 如果正在执行关注操作，直接返回
+  if (isFollowing.value) return;
+  console.log(props.uid);
+  isFollowing.value = true;
+  if (props.isFollow) {
+    emit('follow', false);
+    unfollowUser(props.uid).then((res) => {
+      if (res.ok && res.status === 204) {
+        console.log('取消关注成功');
+        showShortToast('已取消关注');
+      } else {
+        console.log('取消关注失败');
+        showShortToast('取消关注失败');
+        emit('follow', true);
+      }
+    }).catch((error) => {
+      console.error('取消关注请求失败:', error);
+      showShortToast('取消关注失败');
+      emit('follow', true);
+    }).finally(() => {
+      isFollowing.value = false;
+    })
+  } else {
+    emit('follow', true);
+    followUser(props.uid).then((res) => {
+      if (res.ok && res.status === 201) {
+        console.log('关注成功');
+        showShortToast('已关注');
+      } else {
+        console.log('关注失败');
+        showShortToast('关注失败');
+        emit('follow', false);
+      }
+    }).catch((error) => {
+      console.error('关注请求失败:', error);
+      showShortToast('关注失败');
+      emit('follow', false);
+    }).finally(() => {
+      isFollowing.value = false;
+    })
+  }
+}
+// 点赞
+function clickLike() {
+  // 如果正在执行点赞操作，直接返回
+  if (isLiking.value) return;
+  isLiking.value = true;
+  if (props.isLike) {
+    emit('like', false);
+    unlikeVideo(props.vid).then((res) => {
+      if (res.ok && res.status === 204) {
+        console.log('取消点赞成功');
+        showShortToast('已取消点赞');
+      } else {
+        console.log('取消点赞失败');
+        showShortToast('取消点赞失败');
+        emit('like', true);
+      }
+    }).catch((error) => {
+      console.error('取消点赞请求失败:', error);
+      showShortToast('取消点赞失败');
+      emit('like', true);
+    }).finally(() => {
+      isLiking.value = false;
+    })
+  } else {
+    emit('like', true);
+    likeVideo(props.vid).then((res) => {
+      if (res.ok && res.status === 201) {
+        console.log('点赞成功');
+        showShortToast('已点赞');
+      } else {
+        console.log('点赞失败');
+        showShortToast('点赞失败');
+        emit('like', false);
+      }
+    }).catch((error) => {
+      console.error('点赞请求失败:', error);
+      showShortToast('点赞失败');
+      emit('like', false);
+    }).finally(() => {
+      isLiking.value = false;
+    });
+  }
+}
 </script>
 <template>
   <div class="infoView" @scroll="handleSroll" ref="infoViewRef">
@@ -243,7 +388,7 @@ watch(() => props.avatar, () => {
           <!-- <div class="userdata">{{ fansNum }}粉丝 {{ videoNum }}视频</div> -->
         </div>
         <div class="follow">
-          <v-btn class="btn" :color="isFollow ? '#E0E0E0' : '#00796B'" @click="clickFollow">
+          <v-btn class="btn" :color="isFollow ? '#E0E0E0' : '#00796B'" @click="clickFollow" variant="flat">
             <span v-if="isFollow">
               <font-awesome-icon icon="fa-solid fa-bars" /> 已关注
             </span>
@@ -296,13 +441,13 @@ watch(() => props.avatar, () => {
           <span v-if="isLike">已点赞</span>
           <span v-else>点赞</span>
         </div>
-        <div>
+        <div @click="shareDownloadLink">
           <iconShareOne theme="two-tone" size="22" :fill="['#424242', '#00796B']" /><br>分享
         </div>
         <div>
           <iconDownloadFour theme="two-tone" size="22" :fill="['#424242', '#00796B']" /><br>缓存
         </div>
-        <div>
+        <div @click="copyDownloadLink">
           <iconCopyLink theme="multi-color" size="22" :fill="['#424242', '#00796B', '#FFF', '#00796B']" /><br>下载链接
         </div>
       </div>
@@ -472,6 +617,8 @@ watch(() => props.avatar, () => {
     color: #616161;
     font-size: 0.8rem;
     width: 55px;
+    cursor: pointer;
+    user-select: none;
   }
 }
 

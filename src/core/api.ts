@@ -98,6 +98,20 @@ async function postSendRequest(url: string, headers?: any, body?: any) {
     throw error;
   }
 }
+// 发送DELETE请求
+async function deleteRequest(url: string, customHeaders?: any): Promise<any> {
+  const headers = {
+    Authorization: `Bearer ${await getAccessToken()}`,
+    ...(customHeaders || {}),
+  };
+  try {
+    const response = await deleteSendRequestIwara(url, headers);
+    return response;
+  } catch (error) {
+    console.error('DELETE request failed:', error);
+    throw error;
+  }
+}
 // 发送GET请求(iwara)
 async function getSendRequestIwara(url: string, headers?: any, query?: any) {
   try {
@@ -216,6 +230,59 @@ async function postSendRequestIwara(url: string, headers?: any, body?: any) {
     };
   } catch (error) {
     console.error('POST request failed:', error);
+    throw error;
+  }
+}
+
+// 发送DELETE请求(iwara) 
+async function deleteSendRequestIwara(url: string, headers?: any) {
+  try {
+    // 合并默认头信息和用户传入的头信息
+    const requestHeaders: Record<string, string> = {
+      'Content-Type': 'application/json',
+      'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+      'Referer': 'https://www.iwara.tv/',
+      'Accept-Encoding': 'gzip, deflate, br', // 支持压缩编码
+      ...(headers || {}),
+    };
+
+    // 使用我们创建的自定义网络请求命令，模拟浏览器请求
+    const response: any = await invoke('delete_https_request', {
+      url,
+      headers: requestHeaders
+    });
+
+    // 检查响应状态
+    if (response.status < 200 || response.status >= 300) {
+      throw new Error(`Request failed with status ${response.status}`);
+    }
+
+    // 尝试解析 JSON，如果失败则返回文本
+    let data: any = null;
+    const contentType = response.headers['Content-Type'] || response.headers['content-type'];
+
+    // 检查内容是否为JSON
+    if (contentType && contentType.includes('application/json')) {
+      try {
+        // 如果是JSON，解析它
+        data = JSON.parse(response.data);
+      } catch (e) {
+        console.warn('Failed to parse JSON response:', e);
+        console.warn('Raw response data:', response.data);
+        data = response.data;
+      }
+    } else {
+      // 不是JSON则直接使用响应数据
+      data = response.data;
+    }
+
+    return {
+      ok: response.status >= 200 && response.status < 300,
+      status: response.status,
+      data: data,
+    };
+  } catch (error) {
+    console.error('DELETE request failed:', error);
     throw error;
   }
 }
@@ -377,7 +444,6 @@ export async function getImageList(page: number, sort: string, date?: string): P
     throw error;
   }
 }
-
 // 获取视频信息
 export async function getVideoInfo(videoId: string): Promise<any> {
   const path = `${API_URL}/video/${videoId}`;
@@ -409,6 +475,34 @@ export async function getVideoFileSQ(url: string, download: string): Promise<any
     return response;
   } catch (error) {
     console.error('Get video file info failed:', error);
+    throw error;
+  }
+}
+// 点赞视频
+export async function likeVideo(videoId: string): Promise<any> {
+  const path = `${API_URL}/video/${videoId}/like`;
+  const headers = {
+    Authorization: `Bearer ${await getAccessToken()}`,
+  };
+  try {
+    const response = await postSendRequestIwara(path, headers);
+    return response;
+  } catch (error) {
+    console.error('Like video failed:', error);
+    throw error;
+  }
+}
+// 取消点赞视频
+export async function unlikeVideo(videoId: string): Promise<any> {
+  const path = `${API_URL}/video/${videoId}/like`;
+  const headers = {
+    Authorization: `Bearer ${await getAccessToken()}`,
+  };
+  try {
+    const response = await deleteSendRequestIwara(path, headers);
+    return response;
+  } catch (error) {
+    console.error('Unlike video failed:', error);
     throw error;
   }
 }
@@ -479,6 +573,34 @@ export async function getImageInfo(imageId: string): Promise<any> {
     throw error;
   }
 }
+// 点赞插画
+export async function likeImage(imageId: string): Promise<any> {
+  const path = `${API_URL}/image/${imageId}/like`;
+  const headers = {
+    Authorization: `Bearer ${await getAccessToken()}`,
+  };
+  try {
+    const response = await postSendRequestIwara(path, headers);
+    return response;
+  } catch (error) {
+    console.error('Like image failed:', error);
+    throw error;
+  }
+}
+// 取消点赞插画
+export async function unlikeImage(imageId: string): Promise<any> {
+  const path = `${API_URL}/image/${imageId}/like`;
+  const headers = {
+    Authorization: `Bearer ${await getAccessToken()}`,
+  };
+  try {
+    const response = await deleteSendRequestIwara(path, headers);
+    return response;
+  } catch (error) {
+    console.error('Unlike image failed:', error);
+    throw error;
+  }
+}
 // 获取插画推荐：该用户的其他插画
 export async function getImageRecommendByUser(pid: string, uid: string): Promise<any> {
   const path = `${API_URL}/images`;
@@ -533,7 +655,7 @@ export async function getImageComments(pid: string, page: number): Promise<any> 
 }
 // 获取用户信息
 export async function getUserInfo(username: string): Promise<any> {
-  const path = `/profile/${username}`;
+  const path = `${API_URL}/profile/${username}`;
   const headers = {
     Authorization: `Bearer ${await getAccessToken()}`,
   };
@@ -542,6 +664,34 @@ export async function getUserInfo(username: string): Promise<any> {
     return response;
   } catch (error) {
     console.error('Get user info failed:', error);
+    throw error;
+  }
+}
+// 关注用户
+export async function followUser(uid: string): Promise<any> {
+  const path = `${API_URL}/user/${uid}/followers`;
+  const headers = {
+    Authorization: `Bearer ${await getAccessToken()}`,
+  };
+  try {
+    const response = await postSendRequestIwara(path, headers);
+    return response;
+  } catch (error) {
+    console.error('Follow user failed:', error);
+    throw error;
+  }
+}
+// 取消关注用户
+export async function unfollowUser(uid: string): Promise<any> {
+  const path = `${API_URL}/user/${uid}/followers`;
+  const headers = {
+    Authorization: `Bearer ${await getAccessToken()}`,
+  };
+  try {
+    const response = await deleteSendRequestIwara(path, headers);
+    return response;
+  } catch (error) {
+    console.error('Unfollow user failed:', error);
     throw error;
   }
 }

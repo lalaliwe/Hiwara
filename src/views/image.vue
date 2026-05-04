@@ -45,6 +45,7 @@ const commentVisible = ref(false);
 
 // 插画信息数据（全部独立变量）
 const pid = ref<string>(route.params.id as string);  // 插画ID
+const slug = ref<string>('');  // 插画slug
 const title = ref<string>('');  // 插画标题
 const viewCount = ref<number>(0); // 插画浏览数
 const createdAt = ref<string>('');  // 插画创建时间
@@ -58,6 +59,7 @@ const uid = ref<string>(''); // 作者ID
 const fansNum = ref<number>(0); // 粉丝数
 const imageNum = ref<number>(0);  // 插画数量
 const isFollow = ref<boolean>(false); // 是否已关注作者
+const isLike = ref<boolean>(false); // 是否已点赞
 
 // 顶部导航栏颜色状态
 const isTopGreen = ref(false);
@@ -79,10 +81,6 @@ function goBack() {
 // 回到主界面
 function goHome() {
   router.replace('/');
-}
-
-// 关注
-function handleFollow() {
 }
 
 // 处理滚动事件
@@ -146,6 +144,7 @@ async function getImageInfo(): Promise<void> {
     const imageInfo = res.data;
     // 插画信息
     title.value = imageInfo.title;
+    slug.value = imageInfo.slug || '';
     viewCount.value = imageInfo.numViews;
     createdAt.value = imageInfo.createdAt;
     synopsis.value = imageInfo.body ? imageInfo.body : '-';
@@ -159,6 +158,7 @@ async function getImageInfo(): Promise<void> {
     authorname.value = imageInfo.user.name;
     uid.value = imageInfo.user.id;
     isFollow.value = imageInfo.user.followedBy;
+    isLike.value = imageInfo.liked || false;
     // 插画文件数组
     illustrationImages.value = imageInfo.files.map((file: any) => {
       const id = file.id;
@@ -196,6 +196,16 @@ const handleCommentTrigger = () => {
   console.log('打开评论');
   commentVisible.value = true;
 }
+
+// 处理点赞事件
+const handleLike = (isLiked: boolean) => {
+  isLike.value = isLiked;
+}
+
+// 处理关注事件
+const handleFollow = (isFollowed: boolean) => {
+  isFollow.value = isFollowed;
+}
 </script>
 <template>
   <div id="imageView">
@@ -221,8 +231,9 @@ const handleCommentTrigger = () => {
 
       <!-- 第二部分：插画信息区域（已拆分为子组件） -->
       <ImageInfo v-if="isState === 'success'" :title="title" :view-count="viewCount" :created-at="createdAt" :pid="pid"
-        :resolution="resolution" :synopsis="synopsis" :tags="tags" :authorname="authorname" :fans-num="fansNum"
-        :image-num="imageNum" :is-follow="isFollow" @commentTrigger="handleCommentTrigger" />
+        :slug="slug" :resolution="resolution" :synopsis="synopsis" :tags="tags" :authorname="authorname" :uid="uid"
+        :fans-num="fansNum" :image-num="imageNum" :is-follow="isFollow" :is-like="isLike" 
+        @commentTrigger="handleCommentTrigger" @like="handleLike" @follow="handleFollow" />
       <!-- 第三部分：推荐列表（已拆分为子组件） -->
       <RecommendList :pid="pid" :uid="uid" />
     </div>

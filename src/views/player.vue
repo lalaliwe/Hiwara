@@ -41,6 +41,7 @@ const uid = ref<string>('');  // 作者ID
 const fansNum = ref<number>(0);   // 作者粉丝数（无API）
 const videoNum = ref<number>(0);  // 作者视频数（无API）
 const isFollow = ref(false);  // 是否已关注
+const slug = ref<string>('');
 
 interface VideoFileItem {
   id: string;
@@ -67,6 +68,9 @@ const currentDefinition = computed(() => {
 });
 const currentVideoSrc = computed(() => {
   return videoFile.value[videoSelect.value]?.view || '';
+});
+const currentDownloadUrl = computed(() => {
+  return videoFile.value[videoSelect.value]?.download || '';
 });
 
 // --- Swiper 联动逻辑 ---
@@ -118,6 +122,7 @@ const fetchVideoInfo = async () => {
       playNum.value = data.numViews || 0;
       likeNum.value = data.numLikes || 0;
       isLike.value = data.liked || false;
+      slug.value = data.slug || '';
       // 修改: 直接传递原始时间字符串，由 info 组件格式化
       createdAt.value = data.createdAt || '';
       // 处理标签
@@ -308,6 +313,13 @@ onMounted(() => {
 onUnmounted(() => {
   console.log('❌ Player unmounted', id.value);
 })
+
+const likeTrigger = (val: boolean) => {
+  isLike.value = val;
+}
+const followTrigger = (val: boolean) => {
+  isFollow.value = val;
+}
 </script>
 <template>
   <div id="playerView">
@@ -348,7 +360,7 @@ onUnmounted(() => {
             <infoView v-if="videoInfoState === 'success'" :title="title" :synopsis="synopsis" :playNum="playNum"
               :likeNum="likeNum" :createdAt="createdAt" :isLike="isLike" :tags="tags" :authorname="authorname"
               :avatar="avatar" :fansNum="fansNum" :videoNum="videoNum" :isFollow="isFollow" :vid="id as string"
-              :uid="uid" />
+              :uid="uid" :download="currentDownloadUrl" :slug="slug" @like="likeTrigger" @follow="followTrigger" />
           </swiper-slide>
           <swiper-slide>
             <commentView :vid="id as string" />

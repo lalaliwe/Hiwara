@@ -259,3 +259,17 @@ pub async fn post_https_request(
     })
     .await
 }
+
+#[tauri::command]
+pub async fn delete_https_request(
+    url: String,
+    headers: Option<HashMap<String, String>>,
+) -> Result<HttpResponse, String> {
+    send_https_request(RequestParams {
+        url,
+        method: "DELETE".to_string(),
+        headers,
+        body: None,
+    })
+    .await
+}

@@ -7,6 +7,13 @@ import {
   CopyLink as iconCopyLink,
   Comments as iconComments
 } from '@icon-park/vue-next';
+import {
+  likeImage,
+  unlikeImage,
+  followUser,
+  unfollowUser,
+} from '../../core/api';
+import { showShortToast } from '../../core/toast';
 
 // 插画信息展开状态（内部状态）
 const infoExpand = ref(false);
@@ -33,19 +40,26 @@ interface ImageInfoProps {
   viewCount: number;
   createdAt: string;
   pid: string;
+  slug: string;
   resolution: string;
   synopsis: string;
   tags: string[];
   authorname: string;
+  uid: string;
   fansNum: number;
   imageNum: number;
   isFollow: boolean;
+  isLike: boolean;
 }
 
 const props = defineProps<ImageInfoProps>();
 
 // 定义 emits
-const emit = defineEmits(['commentTrigger']);
+const emit = defineEmits<{
+  (e: 'commentTrigger'): void;
+  (e: 'like', isLiked: boolean): void;
+  (e: 'follow', isFollowed: boolean): void;
+}>();
 
 // 标签容器高度（computed 缓存）
 const tagsContainerHeight = computed(() => {
@@ -111,10 +125,152 @@ function calculateHeights() {
 
 // 点赞状态
 const isLike = ref(false);
+// 操作状态
+const isFollowing = ref(false); // 关注操作进行中状态
+const isLiking = ref(false); // 点赞操作进行中状态
+
+// 复制下载链接到剪贴板
+async function copyDownloadLink() {
+  if (!props.pid) {
+    showShortToast('获取下载链接失败');
+    return;
+  }
+  try {
+    let shareUrl: string;
+    if (props.slug === '')
+      shareUrl = `https://iwara.tv/image/${props.pid}`;
+    else
+      shareUrl = `https://iwara.tv/image/${props.pid}/${props.slug}`;
+    await navigator.clipboard.writeText(shareUrl);
+    showShortToast('链接已复制到剪贴板');
+  } catch (err) {
+    console.error('复制失败:', err);
+    showShortToast('复制链接失败');
+  }
+}
+
+// 使用 Web Share API 分享插画
+async function shareImage() {
+  if (!props.pid) {
+    showShortToast('获取分享链接失败');
+    return;
+  }
+  // 检查浏览器是否支持 Web Share API
+  if (!navigator.share) {
+    showShortToast('当前设备不支持分享功能');
+    return;
+  }
+  try {
+    let shareUrl: string;
+    if (props.slug === '')
+      shareUrl = `https://iwara.tv/image/${props.pid}`;
+    else
+      shareUrl = `https://iwara.tv/image/${props.pid}/${props.slug}`;
+    await navigator.share({
+      title: props.title || 'Iwara 插画分享',
+      text: `分享插画: ${props.title}`,
+      url: shareUrl,
+    });
+    showShortToast('分享成功');
+  } catch (err) {
+    // 用户取消分享不显示错误提示
+    if ((err as Error).name !== 'AbortError') {
+      console.error('分享失败:', err);
+      showShortToast('分享失败，请重试');
+    }
+  }
+}
+
 // 关注按钮点击处理
-function clickFollow() { }
+function clickFollow() {
+  // 如果正在执行关注操作，直接返回
+  if (isFollowing.value) return;
+  
+  isFollowing.value = true;
+  if (props.isFollow) {
+    emit('follow', false);
+    unfollowUser(props.uid).then((res) => {
+      if (res.ok && res.status === 204) {
+        console.log('取消关注成功');
+        showShortToast('已取消关注');
+      } else {
+        console.log('取消关注失败');
+        showShortToast('取消关注失败');
+        emit('follow', true);
+      }
+    }).catch((error) => {
+      console.error('取消关注请求失败:', error);
+      showShortToast('取消关注失败');
+      emit('follow', true);
+    }).finally(() => {
+      isFollowing.value = false;
+    })
+  } else {
+    emit('follow', true);
+    followUser(props.uid).then((res) => {
+      if (res.ok && res.status === 201) {
+        console.log('关注成功');
+        showShortToast('已关注');
+      } else {
+        console.log('关注失败');
+        showShortToast('关注失败');
+        emit('follow', false);
+      }
+    }).catch((error) => {
+      console.error('关注请求失败:', error);
+      showShortToast('关注失败');
+      emit('follow', false);
+    }).finally(() => {
+      isFollowing.value = false;
+    })
+  }
+}
+
 // 点赞按钮点击处理
-function clickLike() { }
+function clickLike() {
+  // 如果正在执行点赞操作，直接返回
+  if (isLiking.value) return;
+  
+  isLiking.value = true;
+  if (props.isLike) {
+    emit('like', false);
+    unlikeImage(props.pid).then((res) => {
+      if (res.ok && res.status === 204) {
+        console.log('取消点赞成功');
+        showShortToast('已取消点赞');
+      } else {
+        console.log('取消点赞失败');
+        showShortToast('取消点赞失败');
+        emit('like', true);
+      }
+    }).catch((error) => {
+      console.error('取消点赞请求失败:', error);
+      showShortToast('取消点赞失败');
+      emit('like', true);
+    }).finally(() => {
+      isLiking.value = false;
+    })
+  } else {
+    emit('like', true);
+    likeImage(props.pid).then((res) => {
+      if (res.ok && res.status === 201) {
+        console.log('点赞成功');
+        showShortToast('已点赞');
+      } else {
+        console.log('点赞失败');
+        showShortToast('点赞失败');
+        emit('like', false);
+      }
+    }).catch((error) => {
+      console.error('点赞请求失败:', error);
+      showShortToast('点赞失败');
+      emit('like', false);
+    }).finally(() => {
+      isLiking.value = false;
+    });
+  }
+}
+
 // 格式化时间: YYYY年MM月DD日 HH:mm
 const formatDate = (dateString: string) => {
   if (!dateString) return '';
@@ -154,7 +310,7 @@ const formatDate = (dateString: string) => {
       <div class="userdata" v-if="false">{{ fansNum }}粉丝 {{ imageNum }}插画</div>
     </div>
     <div class="follow">
-      <v-btn class="btn" :color="isFollow ? '#E0E0E0' : '#00796B'" @click="clickFollow">
+      <v-btn class="btn" :color="isFollow ? '#E0E0E0' : '#00796B'" @click="clickFollow" variant="flat" :loading="isFollowing">
         <span v-if="isFollow">
           <font-awesome-icon icon="fa-solid fa-bars" /> 已关注
         </span>
@@ -177,17 +333,14 @@ const formatDate = (dateString: string) => {
       <span v-if="isLike">已点赞</span>
       <span v-else>点赞</span>
     </div>
-    <div>
+    <div @click="shareImage">
       <iconShareOne theme="two-tone" size="22" :fill="['#424242', '#00796B']" /><br>分享
     </div>
     <div @click="emit('commentTrigger')">
       <iconComments theme="multi-color" size="22" :fill="['#484848', '#00796B', '#FFFFFF', '#00796B']" /><br>评论
     </div>
-    <div>
-      <iconDownloadFour theme="two-tone" size="22" :fill="['#424242', '#00796B']" /><br>缓存
-    </div>
-    <div>
-      <iconCopyLink theme="multi-color" size="22" :fill="['#424242', '#00796B', '#FFF', '#00796B']" /><br>下载链接
+    <div @click="copyDownloadLink">
+      <iconCopyLink theme="multi-color" size="22" :fill="['#424242', '#00796B', '#FFF', '#00796B']" /><br>链接
     </div>
   </div>
   <div class="tags" ref="tagsContainerRef" :style="{ height: tagsContainerHeight }">
@@ -312,7 +465,7 @@ const formatDate = (dateString: string) => {
 .operation {
   padding: 10px 0;
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   justify-items: center;
   /* 水平居中 */
   align-items: center;
