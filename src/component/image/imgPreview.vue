@@ -77,7 +77,7 @@ const onImageLoaded = () => {
   if (realImgElement) {
     const width = realImgElement.naturalWidth;
     const height = realImgElement.naturalHeight;
-    console.log(`Image loaded: ${width}x${height}`);
+    // console.log(`Image loaded: ${width}x${height}`);
     emit('resolution', { width, height });
   }
 };

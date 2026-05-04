@@ -32,7 +32,7 @@ interface Comment {
 }
 
 const commentList = ref<Comment[]>([])
-const commentViewRef = ref<HTMLElement>()
+const commentListRef = ref<HTMLElement>()
 
 // 接收视频ID prop
 const props = defineProps<{
@@ -112,7 +112,7 @@ function refreshData() {
   commentMore.value = false;
   loadMoreFailed.value = false;
   commentState.value = 'loading';
-  
+
   // 获取评论列表数据
   getCommentList().then((res) => {
     if (res.length > 0)
@@ -148,7 +148,7 @@ async function getCommentList(): Promise<any> {
   if (!props.vid) {
     throw new Error('视频ID不存在');
   }
-  
+
   try {
     const res = await getVideoComments(props.vid, commentPage);
     if (res.ok) {
@@ -245,14 +245,14 @@ function handleScroll(e: Event): void {
 
 onActivated(() => {
   // 恢复滚动条位置
-  if (commentViewRef.value && typeof commentViewRef.value.scrollTo === 'function') {
-    commentViewRef.value.scrollTo({ top: scrollTop })
+  if (commentListRef.value && typeof commentListRef.value.scrollTo === 'function') {
+    commentListRef.value.scrollTo({ top: scrollTop })
   }
 })
 </script>
 
 <template>
-  <div class="commentView" @scroll="handleScroll" ref="commentViewRef">
+  <div class="commentView">
     <div v-if="commentState === 'failed'" class="empty-state" @click="handleErrorClick">
       <errorHuawu>评论加载失败了喵~</errorHuawu>
     </div>
@@ -262,7 +262,8 @@ onActivated(() => {
     <div v-else-if="commentState === 'loading'" class="empty-state">
       <loadingHuawu>评论加载中</loadingHuawu>
     </div>
-    <v-infinite-scroll v-else color="#00796B" @load="handleScrollToEnd" :disabled="commentMore">
+    <v-infinite-scroll class="commentList" v-else color="#00796B" @load="handleScrollToEnd" :disabled="commentMore" @scroll="handleScroll"
+      ref="commentListRef">
       <div class="commentItem" v-for="item in commentList" :key="item.id">
         <div class="avatar">
           <v-img :src="avatarUrlMap[item.user.id] || avatarPlaceholderImg" cover height="40px" width="40px"
@@ -315,7 +316,6 @@ onActivated(() => {
 <style lang="scss" scoped>
 .commentView {
   height: 100%;
-  overflow-y: auto;
 
   >div {
     padding-bottom: env(safe-area-inset-bottom, 0);
@@ -350,6 +350,10 @@ onActivated(() => {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+}
+
+.commentList{
+  height: 100%;
 }
 
 .commentItem {

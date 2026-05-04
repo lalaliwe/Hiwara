@@ -78,7 +78,6 @@ watch(tab, (newVal) => {
       swiperInstance.value.slideTo(targetIndex);
     }
   }
-  // 按需加载数据逻辑 - 只有在没有数据且状态不是失败或空时才跳过
   initGetSubscribeData();
 });
 

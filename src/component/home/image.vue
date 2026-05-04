@@ -93,11 +93,7 @@ watch(tab, (newVal) => {
       swiperInstance.value.slideTo(targetIndex);
     }
   }
-  // 按需加载数据逻辑 - 只有在没有数据且状态不是失败或空时才跳过
-  const tabIndex = tabArray.findIndex(item => item.value === newVal);
-  if (tabIndex !== -1 && imageList.value[tabIndex].length === 0 && state.value[tabIndex] !== 'failed' && state.value[tabIndex] !== 'empty') {
-    getImageList(tabIndex);
-  }
+  initGetImageListData();
 });
 
 // 2. 监听 Swiper 滑动，反控 tab 变化
@@ -210,9 +206,7 @@ async function getImageList(tabNum: number): Promise<any> {
     throw error;
   }
 }
-
 </script>
-
 <template>
   <div>
     <div class="top">

@@ -41,6 +41,7 @@ const illustrationImages = ref<ImageFile[]>([]);
 // 页面状态
 const isState = ref<'failed' | 'loading' | 'success'>('loading');
 const fullScreenVisible = ref(false);
+const commentVisible = ref(false);
 
 // 插画信息数据（全部独立变量）
 const pid = ref<string>(route.params.id as string);  // 插画ID
@@ -80,9 +81,8 @@ function goHome() {
   router.replace('/');
 }
 
-// 处理关注状态变化
-function handleFollowClick(newFollowState: boolean) {
-  isFollow.value = newFollowState;
+// 关注
+function handleFollow() {
 }
 
 // 处理滚动事件
@@ -191,6 +191,11 @@ const fullScreenTrigger = async (num: number) => {
     fullScreenRef.value.enterFullscreen();
   }
 }
+// 打开评论
+const handleCommentTrigger = () => {
+  console.log('打开评论');
+  commentVisible.value = true;
+}
 </script>
 <template>
   <div id="imageView">
@@ -217,13 +222,13 @@ const fullScreenTrigger = async (num: number) => {
       <!-- 第二部分：插画信息区域（已拆分为子组件） -->
       <ImageInfo v-if="isState === 'success'" :title="title" :view-count="viewCount" :created-at="createdAt" :pid="pid"
         :resolution="resolution" :synopsis="synopsis" :tags="tags" :authorname="authorname" :fans-num="fansNum"
-        :image-num="imageNum" :is-follow="isFollow" @follow-click="handleFollowClick" />
-
+        :image-num="imageNum" :is-follow="isFollow" @commentTrigger="handleCommentTrigger" />
       <!-- 第三部分：推荐列表（已拆分为子组件） -->
       <RecommendList :pid="pid" :uid="uid" />
     </div>
-    <fullScreen class="full-screen" :style="{ right: fullScreenVisible ? '0px' : '-100vw' }" ref="fullScreenRef"
+    <fullScreen class="drawer" :style="{ right: fullScreenVisible ? '0px' : '-100vw' }" ref="fullScreenRef"
       @close="fullScreenVisible = false" :images="illustrationImages" />
+    <comment class="drawer" :pid="pid" :style="{ right: commentVisible ? '0px' : '-100vw' }" @close="commentVisible = false" />
   </div>
 </template>
 <style lang="scss" scoped>
@@ -280,7 +285,7 @@ const fullScreenTrigger = async (num: number) => {
   padding-bottom: env(safe-area-inset-bottom, 0);
 }
 
-.full-screen {
+.drawer {
   position: absolute;
   top: 0;
   right: -100vw;

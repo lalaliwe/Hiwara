@@ -207,7 +207,6 @@ async function getVideoList(tabNum: number): Promise<any> {
     throw error;
   }
 }
-
 </script>
 <template>
   <div>

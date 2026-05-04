@@ -6,8 +6,6 @@ import type { Swiper as SwiperType } from 'swiper';
 import { getImageIwara } from '../../core/api';
 import placeholderImg from '../../static/img/placeholder.png'
 import notImg from '../../static/img/not-img.jpg'
-import { enterImmersive, exitImmersive } from '../../plugins/immersive';
-import { lockLandscape, lockPortrait } from '../../plugins/useOrientation';
 
 // 导入 Swiper 样式
 import 'swiper/swiper-bundle.css';
@@ -158,10 +156,6 @@ const changeSwiper = (num: number) => {
 // 进入全屏
 const enterFullscreen = async () => {
   try {
-    // 进入沉浸式模式
-    enterImmersive();
-    // 锁定屏幕为横向
-    lockLandscape();
     // 推入历史记录，用于捕获返回键
     history.pushState({ fullscreen: true }, '');
     isFullscreen.value = true;
@@ -175,10 +169,6 @@ const exitFullscreen = async () => {
   try {
     // 如果处于全屏状态，则退出
     if (isFullscreen.value) {
-      // 退出沉浸式模式
-      exitImmersive();
-      // 锁定屏幕为竖向
-      lockPortrait();
       isFullscreen.value = false;
     }
   } catch (err) {

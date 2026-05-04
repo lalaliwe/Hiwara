@@ -480,7 +480,7 @@ export async function getImageInfo(imageId: string): Promise<any> {
   }
 }
 // 获取插画推荐：该用户的其他插画
-export async function getImageRecommendByUser(iid: string, uid: string): Promise<any> {
+export async function getImageRecommendByUser(pid: string, uid: string): Promise<any> {
   const path = `${API_URL}/images`;
   const headers = {
     Authorization: `Bearer ${await getAccessToken()}`,
@@ -488,7 +488,7 @@ export async function getImageRecommendByUser(iid: string, uid: string): Promise
   const query = {
     rating: 'all',
     user: uid,
-    exclude: iid,
+    exclude: pid,
     limit: 6
   };
   try {
@@ -500,8 +500,8 @@ export async function getImageRecommendByUser(iid: string, uid: string): Promise
   }
 }
 // 获取插画推荐：更多插画
-export async function getImageRecommendByOther(iid: string): Promise<any> {
-  const path = `${API_URL}/image/${iid}/related`;
+export async function getImageRecommendByOther(pid: string): Promise<any> {
+  const path = `${API_URL}/image/${pid}/related`;
   const headers = {
     Authorization: `Bearer ${await getAccessToken()}`,
   };
@@ -510,6 +510,24 @@ export async function getImageRecommendByOther(iid: string): Promise<any> {
     return response;
   } catch (error) {
     console.error('Get image info failed:', error);
+    throw error;
+  }
+}
+// 获取插画评论
+export async function getImageComments(pid: string, page: number): Promise<any> {
+  const path = `${API_URL}/image/${pid}/comments`;
+  const headers = {
+    Authorization: `Bearer ${await getAccessToken()}`,
+  };
+  const query = {
+    page: page,
+    limit: 32
+  };
+  try {
+    const response = await getSendRequestIwara(path, headers, query);
+    return response;
+  } catch (error) {
+    console.error('Get image comments failed:', error);
     throw error;
   }
 }

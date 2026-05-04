@@ -45,9 +45,7 @@ interface ImageInfoProps {
 const props = defineProps<ImageInfoProps>();
 
 // 定义 emits
-const emit = defineEmits<{
-  (e: 'follow-click', isFollow: boolean): void;
-}>();
+const emit = defineEmits(['commentTrigger']);
 
 // 标签容器高度（computed 缓存）
 const tagsContainerHeight = computed(() => {
@@ -113,19 +111,10 @@ function calculateHeights() {
 
 // 点赞状态
 const isLike = ref(false);
-const likeNum = ref(0);
-
 // 关注按钮点击处理
-function clickFollow() {
-  const newFollowState = !props.isFollow;
-  emit('follow-click', newFollowState);
-}
-
+function clickFollow() { }
 // 点赞按钮点击处理
-function clickLike() {
-  isLike.value = !isLike.value;
-  likeNum.value += isLike.value ? 1 : -1;
-}
+function clickLike() { }
 // 格式化时间: YYYY年MM月DD日 HH:mm
 const formatDate = (dateString: string) => {
   if (!dateString) return '';
@@ -191,7 +180,7 @@ const formatDate = (dateString: string) => {
     <div>
       <iconShareOne theme="two-tone" size="22" :fill="['#424242', '#00796B']" /><br>分享
     </div>
-    <div>
+    <div @click="emit('commentTrigger')">
       <iconComments theme="multi-color" size="22" :fill="['#484848', '#00796B', '#FFFFFF', '#00796B']" /><br>评论
     </div>
     <div>
