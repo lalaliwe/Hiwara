@@ -2,12 +2,15 @@
 import { ref, computed, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { showShortToast } from '../core/toast';
-import { login as api_login } from '../core/api'; // 导入整个api模块
+import {
+  login as api_login,
+  getMyselfInfo
+} from '../core/api';
 import {
   login as db_login,
   getLastLoginAuth
 } from '../core/database'; // 导入数据库登录函数
-import { isLogin as store_auth } from '../core/store';
+import { isLogin } from '../core/store';
 
 const router = useRouter();
 
@@ -21,6 +24,11 @@ const loading = ref(false); // 新增：控制加载状态
 // 验证规则
 const usernameRule = computed(() => [(v: string) => !!v || '用户名不得为空']);
 const passwordRule = computed(() => [(v: string) => !!v || '密码不得为空']);
+
+// 如果已经登录，直接跳转首页
+if (isLogin().value) {
+  router.push('/');
+}
 
 async function initLastLogin() {
   try {
@@ -71,10 +79,11 @@ async function login() {
       // 检查HTTP状态码
       if (result.status === 200) {
         // 登录成功
+        const token = result.data.token;
         if (result.data && result.data.token) {
-          // 在数据库中记录登录用户，uuid自动生成，其余项暂时留空
+          // 在数据库中记录登录用户
           await db_login(username.value, password.value, result.data.token);
-          store_auth().set(true);
+          isLogin().set(true);
           showShortToast('登录成功');
           // 跳转到首页
           router.push('/');

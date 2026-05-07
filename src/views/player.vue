@@ -36,6 +36,7 @@ const createdAt = ref<string>('');  // 创建时间
 const isLike = ref(false);  // 是否已点赞
 const tags = ref<string[]>([]);  // 标签
 const authorname = ref<string>('');  // 作者名称
+const username = ref<string>(''); // 用户名
 const avatar = ref<string>('');   // 作者头像
 const uid = ref<string>('');  // 作者ID
 const fansNum = ref<number>(0);   // 作者粉丝数（无API）
@@ -133,7 +134,8 @@ const fetchVideoInfo = async () => {
       }
       // 处理作者信息
       if (data.user) {
-        authorname.value = data.user.name || data.user.username || '';
+        authorname.value = data.user.name || '';
+        username.value = data.user.username || '';
         uid.value = data.user.id || '';
         avatar.value = data.user.avatar ? `https://i.iwara.tv/image/avatar/${data.user.avatar.id}/${data.user.avatar.name}` : '';
         isFollow.value = data.user.following || false;
@@ -359,8 +361,9 @@ const followTrigger = (val: boolean) => {
             <!-- 修改：只有当非加载状态时才渲染 infoView，确保数据已准备就绪 -->
             <infoView v-if="videoInfoState === 'success'" :title="title" :synopsis="synopsis" :playNum="playNum"
               :likeNum="likeNum" :createdAt="createdAt" :isLike="isLike" :tags="tags" :authorname="authorname"
-              :avatar="avatar" :fansNum="fansNum" :videoNum="videoNum" :isFollow="isFollow" :vid="id as string"
-              :uid="uid" :download="currentDownloadUrl" :slug="slug" @like="likeTrigger" @follow="followTrigger" />
+              :username="username" :avatar="avatar" :fansNum="fansNum" :videoNum="videoNum" :isFollow="isFollow"
+              :vid="id as string" :uid="uid" :download="currentDownloadUrl" :slug="slug" @like="likeTrigger"
+              @follow="followTrigger" />
           </swiper-slide>
           <swiper-slide>
             <commentView :vid="id as string" />

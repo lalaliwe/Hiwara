@@ -7,17 +7,17 @@ interface Props {
   userSignature: string;
   followNum: number;
   fansNum: number;
-  myself: boolean;
+  isMyself: boolean;
   isMyFollow: boolean;
   isMyFans: boolean;
 }
 
 withDefaults(defineProps<Props>(), {
-  nickname: '默认用户名',
-  userSignature: '默认个性签名',
+  nickname: '',
+  userSignature: '',
   followNum: 0,
   fansNum: 0,
-  myself: false,
+  isMyself: false,
   isMyFollow: false,
   isMyFans: false
 });
@@ -117,7 +117,7 @@ function handleFollow(follow: boolean) {
         </div>
       </div>
       <div>
-        <span v-if="myself">
+        <span v-if="isMyself">
           <v-btn variant="outlined" color="#00796B" style="width: 100%;">编辑资料</v-btn>
         </span>
         <span v-else>
@@ -149,14 +149,11 @@ function handleFollow(follow: boolean) {
       </div>
     </div>
     <div class="username" @click="expand = !expand">
-      <div class="name fold" ref="usernameRef">{{
-        nickname
-        }}</div>
+      <div class="name fold" ref="usernameRef">{{ nickname }}</div>
       <div class="detail">详情</div>
     </div>
     <div class="userSignature fold" ref="userSignatureRef">
-      {{
-        userSignature }}</div>
+      {{ userSignature }}</div>
     <div class="calculateHeight">
       <div class="usernameHeigth fold" ref="usernameFoldHeightRef">{{ nickname }}</div>
       <div class="usernameHeigth" ref="usernameExpandHeightRef">{{ nickname }}</div>

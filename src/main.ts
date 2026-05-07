@@ -78,5 +78,5 @@ function hideLoading() {
 // import { getDeviceInfo } from "./plugins/deviceInfo";
 // const deviceInfo = await getDeviceInfo();
 // console.log(deviceInfo);
-import { invoke } from '@tauri-apps/api/core'
-console.log(await invoke('test'))
+// import { invoke } from '@tauri-apps/api/core'
+// console.log(await invoke('test'))

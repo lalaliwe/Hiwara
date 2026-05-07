@@ -21,6 +21,9 @@ import {
   unfollowUser,
 } from '../../core/api';
 import { showShortToast } from '../../core/toast';
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
 
 // 格式化时间: YYYY年MM月DD日 HH:mm
 const formatDate = (dateString: string) => {
@@ -43,6 +46,7 @@ const props = defineProps<{
   isLike: boolean,  // 是否已点赞
   tags: string[], // 标签
   authorname: string, // 作者昵称
+  username: string, // 用户名
   avatar: string, // 作者头像    
   fansNum: number, // 粉丝数
   videoNum: number, // 视频数
@@ -370,11 +374,16 @@ function clickLike() {
     });
   }
 }
+function toZone() {
+  router.push({
+    path: `/zone/${props.username}`,
+  });
+}
 </script>
 <template>
   <div class="infoView" @scroll="handleSroll" ref="infoViewRef">
     <div>
-      <div class="author">
+      <div class="author" @click="toZone">
         <div class="avatar">
           <!-- <img :src="avatarUrl" alt=""> -->
           <v-img :src="avatarUrl" cover>

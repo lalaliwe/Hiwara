@@ -22,9 +22,6 @@ export function initDatabase(): Promise<void> {
       if (userResult.length === 0) {
         await sqlDB.execute(`CREATE TABLE IF NOT EXISTS users (
           uuid TEXT PRIMARY KEY,
-          uid TEXT,
-          name TEXT,
-          username TEXT,
           email TEXT,
           password TEXT,
           token TEXT
@@ -49,13 +46,13 @@ export function initDatabase(): Promise<void> {
           aria2_download TEXT,
           aria2_switch BOOLEAN
         );`);
-        
+
         // 获取系统默认路径并构建iwara目录
         const videoPath = await videoDir();
         const imagePath = await pictureDir();
         const videoSavePath = await join(videoPath, 'iwara');
         const imageSavePath = await join(imagePath, 'iwara');
-        
+
         // 插入默认设置数据
         await sqlDB.execute(`INSERT INTO setup (auto_play, reconnect, definition, search_mode, language, video_save_path, image_save_path, aria2_rpc, aria2_token, aria2_download, aria2_switch) VALUES (TRUE, 1, 'Source', 0, 'auto', ?, ?, '', '', '', FALSE);`, [videoSavePath, imageSavePath]);
       }
@@ -81,15 +78,18 @@ export function checkUserIsLogin(): Promise<boolean> {
 }
 
 // 登录：插入用户到数据库，确保表中最多只有一行数据
-export function login(email: string = '', password: string = '', token: string = ''): Promise<void> {
+export function login(
+  email: string,
+  password: string,
+  token: string,
+): Promise<void> {
   return new Promise(async (resolve, reject) => {
     try {
       // 删除现有所有用户数据，确保表中只有一行
       await sqlDB.execute(`DELETE FROM users`);
-
       const uuid = generateUUID();
-      await sqlDB.execute(`INSERT INTO users (uuid, uid, name, username, email, password, token) VALUES (?, ?, ?, ?, ?, ?, ?)`,
-        [uuid, null, null, null, email, password, token]
+      await sqlDB.execute(`INSERT INTO users (uuid, email, password, token) VALUES (?, ?, ?, ?)`,
+        [uuid, email, password, token]
       );
       console.log('User logged in and saved with uuid:', uuid);
       resolve();
@@ -180,7 +180,7 @@ export async function updateSetupData(setupData: any): Promise<void> {
     // 由于setup表只应该有一条记录，我们使用UPDATE而不使用INSERT或DELETE
     let updateFields = [];
     let values = [];
-    
+
     for (const [key, value] of Object.entries(setupData)) {
       updateFields.push(`${key} = ?`);
       values.push(value);

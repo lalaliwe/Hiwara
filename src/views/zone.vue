@@ -8,6 +8,11 @@ import UserInfo from '../component/zone/userInfo.vue'
 import VideoList from '../component/zone/videoList.vue'
 import ImageList from '../component/zone/imageList.vue'
 import PublishList from '../component/zone/publishList.vue'
+import {
+  getUserInfo,
+} from '../core/api'
+import { showShortToast } from '../core/toast';
+import { muid } from '../core/store';
 
 defineOptions({
   name: 'Zone'
@@ -16,13 +21,17 @@ defineOptions({
 const route = useRoute()
 const router = useRouter()
 
-const myself = ref<boolean>(route.query.myself == 'true')
-const nickname = ref('测试用户')
-const userSignature = ref('测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名测试个性签名')
-const followNum = ref(100)
-const fansNum = ref(100)
+const isMyself = ref<boolean>(false)
+const username = ref(route.params.username)
+const nickname = ref('')
+const userSignature = ref('')
+const followNum = ref(0)
+const fansNum = ref(0)
 const isMyFollow = ref(false)
 const isMyFans = ref(false)
+
+// 页面加载状态
+const state = ref<'loading' | 'success' | 'error'>('loading')
 
 // 使用内存变量保存tab状态，初始值为 'video'
 const tab = ref<'video' | 'image' | 'publish'>('video')
@@ -259,8 +268,8 @@ const onSlideChangeTransitionEnd = (swiper: SwiperType) => {
 onActivated(() => {
   // 如果路由参数有myself的变化，更新myself状态
   const newMyself = route.query.myself === 'true';
-  if (myself.value !== newMyself) {
-    myself.value = newMyself;
+  if (isMyself.value !== newMyself) {
+    isMyself.value = newMyself;
   }
   // 在下一个tick恢复滚动位置
   nextTick(() => {
@@ -302,11 +311,31 @@ onUnmounted(() => {
     resizeObserver = null;
   }
 });
+
+// 获取数据
+getData()
+async function getData() {
+  try {
+    const res = await getUserInfo(username.value as string)
+    if (!res.ok)
+      throw new Error(res.message);
+    console.log(res);
+    if (res.data.user.id === muid().value)
+      isMyself.value = true;
+    nickname.value = res.data.user.name;
+    userSignature.value = res.data.body ? res.data.body : '这个人很懒，什么都没留下~';
+    state.value = 'success';
+  } catch (error) {
+    console.error(error);
+    showShortToast('获取用户信息失败');
+    state.value = 'error';
+  }
+}
 </script>
 
 <template>
   <div id="zoneView">
-    <div class="zone-container" ref="zoneContainerRef" @scroll="handleGlobalScroll">
+    <div class="zone-container" ref="zoneContainerRef" @scroll="handleGlobalScroll" v-if="state === 'success'">
       <div class="top" :class="{ 'top-green': isTopGreen }" @click="scrollToTop">
         <span class="btn" @click.stop="goBack">
           <font-awesome-icon icon="fa-solid fa-angle-left" />
@@ -319,7 +348,7 @@ onUnmounted(() => {
       <div class="zone-info" ref="zoneInfoRef">
         <div class="zone-bg"></div>
         <UserInfo :nickname="nickname" :userSignature="userSignature" :followNum="followNum" :fansNum="fansNum"
-          :isMyFollow="isMyFollow" :isMyFans="isMyFans" :myself="myself" @navigate-to="routerGoTo" />
+          :isMyFollow="isMyFollow" :isMyFans="isMyFans" :isMyself="isMyself" @navigate-to="routerGoTo" />
       </div>
 
       <!-- 独立吸顶的 tabs 区域，修复滚动后 tabs 被移出页面的问题 -->
@@ -396,6 +425,7 @@ onUnmounted(() => {
   position: relative;
   width: 100%;
   background-color: #fff;
+  margin-bottom: 8px;
 
   .zone-bg {
     width: 100%;

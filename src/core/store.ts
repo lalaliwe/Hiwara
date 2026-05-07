@@ -35,6 +35,24 @@ export const token = defineStore('token', {
   }
 })
 
+export const muid = defineStore('muid', {
+  state: () => ({ value: null as string | null }),
+  actions: {
+    set(muid: string) {
+      this.value = muid;
+    }
+  }
+})
+
+export const muname = defineStore('muname', {
+  state: () => ({ value: null as string | null }),
+  actions: {
+    set(muname: string) {
+      this.value = muname;
+    }
+  }
+})
+
 // 定义设置状态的接口
 interface SetupState {
   autoPlay: boolean;
@@ -117,7 +135,7 @@ export const setupStore = defineStore('setup', {
           aria2_download: this.aria2Download,
           aria2_switch: this.aria2Switch ? 1 : 0
         };
-        
+
         await updateSetupData(dbFormatData);
       } catch (error) {
         console.error('Failed to save setup to database:', error);

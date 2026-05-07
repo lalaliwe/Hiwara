@@ -4,7 +4,24 @@ import {
   Theme as iconTheme
 } from '@icon-park/vue-next';
 import { useRouter } from 'vue-router'
+import { ref } from 'vue';
+import {
+  getImageIwara,
+  getMyselfInfo,
+  getUserFollowers,
+  getUserFans
+} from '../../core/api'
+import { showShortToast } from '../../core/toast';
+import { muid, muname } from '../../core/store'
+
 const router = useRouter()
+
+const nickname = ref<string>('');
+const username = ref<string>('');
+const avatar = ref<string>('');
+const followNum = ref<number>(0);
+const fansNum = ref<number>(0);
+
 function routerGoTo(path: string, query?: any) {
   if (query) {
     router.push({
@@ -13,6 +30,45 @@ function routerGoTo(path: string, query?: any) {
     });
   } else {
     router.push(path);
+  }
+}
+// 获取用户个人信息
+getUserInfo();
+async function getUserInfo() {
+  try {
+    const userInfoRes = await getMyselfInfo();
+    if (!userInfoRes.ok)
+      throw new Error(userInfoRes.message);
+    nickname.value = userInfoRes.data.user.name;
+    username.value = userInfoRes.data.user.username;
+    avatar.value = userInfoRes.data.user.avatar;
+    muid().set(userInfoRes.data.user.id);
+    muname().set(userInfoRes.data.user.username);
+    const uid = userInfoRes.data.user.id;
+    const [followRes, fansRes] = await Promise.allSettled([
+      getUserFollowers(uid),
+      getUserFans(uid)
+    ]);
+    // 处理关注数结果
+    if (followRes.status === 'fulfilled' && followRes.value.ok) {
+      followNum.value = followRes.value.data.count;
+    } else {
+      console.error('获取关注数失败:', followRes.status === 'rejected' ? followRes.reason : followRes.value.message);
+    }
+    // 处理粉丝数结果
+    if (fansRes.status === 'fulfilled' && fansRes.value.ok) {
+      fansNum.value = fansRes.value.data.count;
+    } else {
+      console.error('获取粉丝数失败:', fansRes.status === 'rejected' ? fansRes.reason : fansRes.value.message);
+    }
+    if ((followRes.status === 'rejected' || fansRes.status === 'rejected') &&
+      !(followRes.status === 'fulfilled' && followRes.value.ok) &&
+      !(fansRes.status === 'fulfilled' && fansRes.value.ok)) {
+      showShortToast('获取用户信息失败');
+    }
+  } catch (err) {
+    console.error(err);
+    showShortToast('获取用户信息失败');
   }
 }
 </script>
@@ -27,13 +83,13 @@ function routerGoTo(path: string, query?: any) {
           <iconMoon theme="outline" size="22" fill="#ffffff" />
         </span>
       </div>
-      <div class="user" @click="routerGoTo('/zone', { myself: true })">
+      <div class="user" @click="routerGoTo(`/zone/${username}`)">
         <div class="avatar">
           <v-img class="img" cover src="https://cdn.vuetifyjs.com/images/parallax/material.jpg"></v-img>
         </div>
         <div class="info">
-          <div class="nickname">测试用户名</div>
-          <div class="username">@abcde</div>
+          <div class="nickname">{{ nickname }}</div>
+          <div class="username">@{{ username }}</div>
         </div>
         <div class="right">
           <div class="btn">
@@ -45,13 +101,13 @@ function routerGoTo(path: string, query?: any) {
       <div class="friendsNum">
         <div class="fill">
           <div class="btn" @click="routerGoTo('/friends', { type: 'follow' })">
-            <div class="num">100</div>
+            <div class="num">{{ followNum }}</div>
             <div class="label">关注</div>
           </div>
         </div>
         <div class="fill last">
           <div class="btn" @click="routerGoTo('/friends', { type: 'fans' })">
-            <div class="num">100</div>
+            <div class="num">{{ fansNum }}</div>
             <div class="label">粉丝</div>
           </div>
         </div>
@@ -267,6 +323,8 @@ function routerGoTo(path: string, query?: any) {
       justify-content: center;
 
       .btn {
+        cursor: pointer;
+        user-select: none;
         display: inline-block;
         padding: 4px 16px;
 

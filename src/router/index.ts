@@ -99,7 +99,7 @@ const routes: Array<RouteRecordRaw & { meta?: RouteMeta }> = [
     meta: { transition: 'stack', componentName: 'Search' },
   },
   {
-    path: '/zone',
+    path: '/zone/:username',
     name: 'Zone',
     component: zone,
     meta: { transition: 'stack', componentName: 'Zone' },
