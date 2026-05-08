@@ -45,30 +45,33 @@ async function getUserInfo() {
     muid().set(userInfoRes.data.user.id);
     muname().set(userInfoRes.data.user.username);
     const uid = userInfoRes.data.user.id;
-    const [followRes, fansRes] = await Promise.allSettled([
-      getUserFollowers(uid),
-      getUserFans(uid)
-    ]);
-    // 处理关注数结果
-    if (followRes.status === 'fulfilled' && followRes.value.ok) {
-      followNum.value = followRes.value.data.count;
-    } else {
-      console.error('获取关注数失败:', followRes.status === 'rejected' ? followRes.reason : followRes.value.message);
-    }
-    // 处理粉丝数结果
-    if (fansRes.status === 'fulfilled' && fansRes.value.ok) {
-      fansNum.value = fansRes.value.data.count;
-    } else {
-      console.error('获取粉丝数失败:', fansRes.status === 'rejected' ? fansRes.reason : fansRes.value.message);
-    }
-    if ((followRes.status === 'rejected' || fansRes.status === 'rejected') &&
-      !(followRes.status === 'fulfilled' && followRes.value.ok) &&
-      !(fansRes.status === 'fulfilled' && fansRes.value.ok)) {
-      showShortToast('获取用户信息失败');
-    }
+    await Promise.allSettled([
+      getFollowersNum(uid),
+      getFansNum(uid)
+    ])
   } catch (err) {
     console.error(err);
     showShortToast('获取用户信息失败');
+  }
+  async function getFollowersNum(uid: string) {
+    try {
+      const res = await getUserFollowers(uid);
+      if (!res.ok)
+        throw new Error(res.message);
+      followNum.value = res.data.count;
+    } catch (err) {
+      console.error(err);
+    }
+  }
+  async function getFansNum(uid: string) {
+    try {
+      const res = await getUserFans(uid);
+      if (!res.ok)
+        throw new Error(res.message);
+      fansNum.value = res.data.count;
+    } catch (err) {
+      console.error(err);
+    }
   }
 }
 </script>

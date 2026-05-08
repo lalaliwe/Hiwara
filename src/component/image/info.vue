@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted, computed, nextTick, watch } from 'vue';
+import { useRouter } from 'vue-router';
 import {
   Like as iconLike,
   ShareOne as iconShareOne,
@@ -14,6 +15,8 @@ import {
   unfollowUser,
 } from '../../core/api';
 import { showShortToast } from '../../core/toast';
+
+const router = useRouter();
 
 // 插画信息展开状态（内部状态）
 const infoExpand = ref(false);
@@ -45,10 +48,12 @@ interface ImageInfoProps {
   synopsis: string;
   tags: string[];
   authorname: string;
+  username: string;
   uid: string;
   fansNum: number;
   imageNum: number;
   isFollow: boolean;
+  isMyFans?: boolean;  // 是否是粉丝（互粉状态）
   isLike: boolean;
 }
 
@@ -271,6 +276,12 @@ function clickLike() {
   }
 }
 
+function toZone() {
+  router.push({
+    path: `/zone/${props.username}`,
+  });
+}
+
 // 格式化时间: YYYY年MM月DD日 HH:mm
 const formatDate = (dateString: string) => {
   if (!dateString) return '';
@@ -301,7 +312,7 @@ const formatDate = (dateString: string) => {
     &nbsp;
     <span v-if="resolution !== ''">分辨率 {{ resolution }}</span>
   </div>
-  <div class="author">
+  <div class="author" @click="toZone">
     <div class="avatar">
       <img src="../../static/img/avatar-default.jpg" alt="">
     </div>
@@ -310,14 +321,30 @@ const formatDate = (dateString: string) => {
       <div class="userdata" v-if="false">{{ fansNum }}粉丝 {{ imageNum }}插画</div>
     </div>
     <div class="follow">
-      <v-btn class="btn" :color="isFollow ? '#E0E0E0' : '#00796B'" @click="clickFollow" variant="flat" :loading="isFollowing">
-        <span v-if="isFollow">
-          <font-awesome-icon icon="fa-solid fa-bars" /> 已关注
-        </span>
-        <span v-else>
-          <font-awesome-icon icon="fa-solid fa-plus" /> 关注
-        </span>
-      </v-btn>
+      <span v-if="!isFollow && !isMyFans">
+        <v-btn variant="flat" color="#00796B" @click="clickFollow" :loading="isFollowing">
+          <font-awesome-icon icon="fa-solid fa-plus" />
+          关注
+        </v-btn>
+      </span>
+      <span v-else-if="isFollow && !isMyFans">
+        <v-btn variant="outlined" color="#00796B" @click="clickFollow" :loading="isFollowing">
+          <font-awesome-icon icon="fa-solid fa-bars" />
+          已关注
+        </v-btn>
+      </span>
+      <span v-else-if="isFollow && isMyFans">
+        <v-btn variant="outlined" color="#00796B" @click="clickFollow" :loading="isFollowing">
+          <font-awesome-icon icon="fa-solid fa-bars" />
+          已互粉
+        </v-btn>
+      </span>
+      <span v-else-if="!isFollow && isMyFans">
+        <v-btn variant="flat" color="#00796B" @click="clickFollow" :loading="isFollowing">
+          <font-awesome-icon icon="fa-solid fa-plus" />
+          回关
+        </v-btn>
+      </span>
     </div>
   </div>
   <div class="synopsis" :style="{ height: infoExpand ? `${heights.synopsis}px` : 0 }">

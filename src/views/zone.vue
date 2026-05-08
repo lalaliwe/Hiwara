@@ -4,15 +4,21 @@ import { useRoute, useRouter } from 'vue-router'
 import { Swiper, SwiperSlide } from 'swiper/vue';
 import type { Swiper as SwiperType } from 'swiper';
 import 'swiper/swiper-bundle.css';
-import UserInfo from '../component/zone/userInfo.vue'
-import VideoList from '../component/zone/videoList.vue'
-import ImageList from '../component/zone/imageList.vue'
-import PublishList from '../component/zone/publishList.vue'
+import UserInfo from '../component/zone/info.vue'
+import VideoList from '../component/zone/video.vue'
+import ImageList from '../component/zone/image.vue'
+import PublishList from '../component/zone/publish.vue'
 import {
   getUserInfo,
+  getUserFollowers,
+  getUserFans,
+  getImageIwara
 } from '../core/api'
 import { showShortToast } from '../core/toast';
 import { muid } from '../core/store';
+import kivotos from '../static/img/kivotos.png'
+import loadingHuawu from '../component/loadingHuawu.vue';
+import errorHuawu from '../component/errorHuawu.vue';
 
 defineOptions({
   name: 'Zone'
@@ -23,12 +29,18 @@ const router = useRouter()
 
 const isMyself = ref<boolean>(false)
 const username = ref(route.params.username)
-const nickname = ref('')
-const userSignature = ref('')
-const followNum = ref(0)
-const fansNum = ref(0)
-const isMyFollow = ref(false)
-const isMyFans = ref(false)
+const uid = ref<string>('')
+const nickname = ref<string>('')
+const userSignature = ref<string>('')
+const avatar = ref<string>('')
+const header = ref<string>('')
+const followNum = ref<number>(0)
+const fansNum = ref<number>(0)
+const isMyFollow = ref<boolean>(false)
+const isMyFans = ref<boolean>(false)
+
+// zone-bg 背景样式
+const zoneBgStyle = ref<string>('');
 
 // 页面加载状态
 const state = ref<'loading' | 'success' | 'error'>('loading')
@@ -153,7 +165,7 @@ function updateTopBarColor() {
   if (!container) return;
 
   const zoneBg = container.querySelector('.zone-bg') as HTMLElement;
-  const topElement = container.querySelector('.top') as HTMLElement;
+  const topElement = document.querySelector('.top') as HTMLElement;
 
   if (!zoneBg || !topElement) return;
 
@@ -323,32 +335,88 @@ async function getData() {
     if (res.data.user.id === muid().value)
       isMyself.value = true;
     nickname.value = res.data.user.name;
+    uid.value = res.data.user.id;
     userSignature.value = res.data.body ? res.data.body : '这个人很懒，什么都没留下~';
-    state.value = 'success';
+    avatar.value = res.data.user.avatar ? `https://i.iwara.tv/image/avatar/${res.data.user.avatar.id}/${res.data.user.avatar.name}` : '';
+    header.value = res.data.header ? `https://i.iwara.tv/image/profileHeader/${res.data.header.id}/${res.data.header.name}` : ''
+    // 获取关注状态
+    isMyFollow.value = res.data.user.following || false;
+
+    // 设置 zone-bg 背景
+    const defaultBgStyle = `background-image: url('${kivotos}'); background-size: cover; background-position: center; background-repeat: no-repeat;`;
+
+    if (res.data.header) {
+      try {
+        const headerUrl = `https://i.iwara.tv/image/profileHeader/${res.data.header.id}/${res.data.header.name}`;
+        const bgImageUrl = await getImageIwara(headerUrl);
+        zoneBgStyle.value = `background-image: url('${bgImageUrl}'); background-size: cover; background-position: center; background-repeat: no-repeat;`;
+      } catch (error) {
+        console.error('获取header背景失败:', error);
+        // 失败时使用默认背景
+        zoneBgStyle.value = defaultBgStyle;
+      }
+    } else {
+      // 没有 header 时使用默认背景
+      zoneBgStyle.value = defaultBgStyle;
+    }
+    await Promise.allSettled([
+      getFollowersNum(uid.value),
+      getFansNum(uid.value)
+    ]).finally(() => {
+      state.value = 'success';
+    });
   } catch (error) {
     console.error(error);
     showShortToast('获取用户信息失败');
     state.value = 'error';
+  }
+  async function getFollowersNum(uid: string) {
+    try {
+      const res = await getUserFollowers(uid);
+      if (!res.ok)
+        throw new Error(res.message);
+      followNum.value = res.data.count;
+    } catch (err) {
+      console.error(err);
+    }
+  }
+  async function getFansNum(uid: string) {
+    try {
+      const res = await getUserFans(uid);
+      if (!res.ok)
+        throw new Error(res.message);
+      fansNum.value = res.data.count;
+    } catch (err) {
+      console.error(err);
+    }
   }
 }
 </script>
 
 <template>
   <div id="zoneView">
-    <div class="zone-container" ref="zoneContainerRef" @scroll="handleGlobalScroll" v-if="state === 'success'">
-      <div class="top" :class="{ 'top-green': isTopGreen }" @click="scrollToTop">
-        <span class="btn" @click.stop="goBack">
-          <font-awesome-icon icon="fa-solid fa-angle-left" />
-        </span>
-        <span class="btn" @click.stop="goHome">
-          <font-awesome-icon icon="fa-regular fa-house" />
-        </span>
-      </div>
+    <div class="top" :class="{ 'top-green': isTopGreen }" @click="scrollToTop">
+      <span class="btn" @click.stop="goBack">
+        <font-awesome-icon icon="fa-solid fa-angle-left" />
+      </span>
+      <span class="btn" @click.stop="goHome">
+        <font-awesome-icon icon="fa-regular fa-house" />
+      </span>
+    </div>
+
+    <div v-if="state === 'loading'" class="state-container">
+      <loadingHuawu>正在加载数据</loadingHuawu>
+    </div>
+    <div v-else-if="state === 'error'" class="state-container">
+      <errorHuawu>数据加载失败了喵~</errorHuawu>
+    </div>
+    <div v-else-if="state === 'success'" class="zone-container" ref="zoneContainerRef" @scroll="handleGlobalScroll">
 
       <div class="zone-info" ref="zoneInfoRef">
-        <div class="zone-bg"></div>
-        <UserInfo :nickname="nickname" :userSignature="userSignature" :followNum="followNum" :fansNum="fansNum"
-          :isMyFollow="isMyFollow" :isMyFans="isMyFans" :isMyself="isMyself" @navigate-to="routerGoTo" />
+        <div class="zone-bg" :style="zoneBgStyle"></div>
+        <UserInfo :nickname="nickname" :userSignature="userSignature" :avatar="avatar" :followNum="followNum"
+          :fansNum="fansNum" :isMyFollow="isMyFollow" :isMyFans="isMyFans" :isMyself="isMyself" :uid="uid"
+          @navigate-to="routerGoTo" @follow="(val) => isMyFollow = val" />
       </div>
 
       <!-- 独立吸顶的 tabs 区域，修复滚动后 tabs 被移出页面的问题 -->
@@ -366,34 +434,49 @@ async function getData() {
       <swiper class="tabs-window" :slides-per-view="1" :space-between="0" :auto-height="true" @swiper="onSwiper"
         @slide-change="onSlideChange" @slide-change-transition-end="onSlideChangeTransitionEnd">
         <swiper-slide>
-          <VideoList />
+          <VideoList :uid="uid" />
         </swiper-slide>
         <swiper-slide>
-          <ImageList />
+          <ImageList :uid="uid" />
         </swiper-slide>
         <swiper-slide>
           <PublishList />
         </swiper-slide>
       </swiper>
     </div>
+    <loadingHuawu v-else-if="state === 'loading'" />
+    <errorHuawu v-else />
   </div>
 </template>
 
 <style lang="scss" scoped>
+#zoneView {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background-color: #fafafa;
+}
+
+.state-container {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-top: calc(48px + env(safe-area-inset-top, 0));
+}
+
 .zone-container {
+  flex: 1;
   overflow-y: auto;
   overflow-x: hidden;
-  background-color: #fff;
-  height: 100vh;
-  // scroll-behavior: smooth;
+  background-color: #fafafa;
   position: relative;
+  padding-bottom: env(safe-area-inset-bottom, 0);
 }
 
 .top {
   position: fixed;
   top: 0;
-  left: 0;
-  right: 0;
   z-index: 400;
   height: calc(48px + env(safe-area-inset-top, 0));
   padding-top: env(safe-area-inset-top, 0);
@@ -401,7 +484,6 @@ async function getData() {
   filter: drop-shadow(1px 1px 1px rgba(0, 0, 0, 0.5));
   width: 100%;
   transition: background-color 0.3s ease-in-out;
-  cursor: pointer;
 
   .btn {
     display: inline-flex;
@@ -425,15 +507,11 @@ async function getData() {
   position: relative;
   width: 100%;
   background-color: #fff;
-  margin-bottom: 8px;
+  padding-bottom: 8px;
 
   .zone-bg {
     width: 100%;
     height: 160px;
-    background-image: url('https://picsum.photos/200/300');
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
     background-color: #BDBDBD;
   }
 }
@@ -453,7 +531,6 @@ async function getData() {
 
 .tabs-window {
   width: 100%;
-  background-color: #fff;
 
   :deep(.swiper-wrapper) {
     height: auto;

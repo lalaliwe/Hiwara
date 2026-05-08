@@ -402,7 +402,7 @@ export async function getSubscribeImageList(page: number): Promise<any> {
   }
 }
 // 获取视频列表
-export async function getVideoList(page: number, sort: string, date?: string): Promise<any> {
+export async function getVideoList(page: number, sort: string, date?: string, user?: string): Promise<any> {
   const path = `${API_URL}/videos`;
   const headers = {
     Authorization: `Bearer ${await getAccessToken()}`,
@@ -412,7 +412,8 @@ export async function getVideoList(page: number, sort: string, date?: string): P
     page: page,
     limit: 32,
     sort: sort,
-    date: date
+    ...(date && { date }),
+    ...(user && { user })
   };
   try {
     const response = await getSendRequestIwara(path, headers, query);
@@ -424,7 +425,7 @@ export async function getVideoList(page: number, sort: string, date?: string): P
 }
 
 // 获取插画列表
-export async function getImageList(page: number, sort: string, date?: string): Promise<any> {
+export async function getImageList(page: number, sort: string, date?: string, user?: string): Promise<any> {
   const path = `${API_URL}/images`;
   const headers = {
     Authorization: `Bearer ${await getAccessToken()}`,
@@ -434,7 +435,8 @@ export async function getImageList(page: number, sort: string, date?: string): P
     page: page,
     limit: 32,
     sort: sort,
-    date: date
+    ...(date && { date }),
+    ...(user && { user })
   };
   try {
     const response = await getSendRequestIwara(path, headers, query);

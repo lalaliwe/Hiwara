@@ -1,11 +1,10 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted, onActivated } from 'vue';
-import test1img from '../static/img/test1.jpg';
 import { setStatusBarTextStyle } from '../plugins/navbarStyle'
 import { useRouter, useRoute } from 'vue-router';
 import ImageInfo from '../component/image/info.vue';
-import RecommendList from '../component/image/recommendList.vue';
-import imgPreview from '../component/image/imgPreview.vue';
+import RecommendList from '../component/image/recommend.vue';
+import imgPreview from '../component/image/preview.vue';
 import {
   getImageInfo as api_getImageInfo,
 } from '../core/api';
@@ -55,6 +54,7 @@ const tags = ref<string[]>([]); // 插画标签数组
 
 // 作者信息
 const authorname = ref<string>(''); // 作者名称
+const username = ref<string>(''); // 作者用户名
 const uid = ref<string>(''); // 作者ID
 const fansNum = ref<number>(0); // 粉丝数
 const imageNum = ref<number>(0);  // 插画数量
@@ -156,6 +156,7 @@ async function getImageInfo(): Promise<void> {
     tags.value = imageInfo.tags.map((tag: Tag) => tag.id);
     // 用户信息
     authorname.value = imageInfo.user.name;
+    username.value = imageInfo.user.username;
     uid.value = imageInfo.user.id;
     isFollow.value = imageInfo.user.followedBy;
     isLike.value = imageInfo.liked || false;
@@ -231,15 +232,16 @@ const handleFollow = (isFollowed: boolean) => {
 
       <!-- 第二部分：插画信息区域（已拆分为子组件） -->
       <ImageInfo v-if="isState === 'success'" :title="title" :view-count="viewCount" :created-at="createdAt" :pid="pid"
-        :slug="slug" :resolution="resolution" :synopsis="synopsis" :tags="tags" :authorname="authorname" :uid="uid"
-        :fans-num="fansNum" :image-num="imageNum" :is-follow="isFollow" :is-like="isLike" 
-        @commentTrigger="handleCommentTrigger" @like="handleLike" @follow="handleFollow" />
+        :slug="slug" :resolution="resolution" :synopsis="synopsis" :tags="tags" :authorname="authorname"
+        :username="username" :uid="uid" :fans-num="fansNum" :image-num="imageNum" :is-follow="isFollow"
+        :is-like="isLike" @commentTrigger="handleCommentTrigger" @like="handleLike" @follow="handleFollow" />
       <!-- 第三部分：推荐列表（已拆分为子组件） -->
       <RecommendList :pid="pid" :uid="uid" />
     </div>
     <fullScreen class="drawer" :style="{ right: fullScreenVisible ? '0px' : '-100vw' }" ref="fullScreenRef"
       @close="fullScreenVisible = false" :images="illustrationImages" />
-    <comment class="drawer" :pid="pid" :style="{ right: commentVisible ? '0px' : '-100vw' }" @close="commentVisible = false" />
+    <comment class="drawer" :pid="pid" :style="{ right: commentVisible ? '0px' : '-100vw' }"
+      @close="commentVisible = false" />
   </div>
 </template>
 <style lang="scss" scoped>

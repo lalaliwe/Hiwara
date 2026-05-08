@@ -37,7 +37,7 @@ const formatDate = (dateString: string) => {
   return `${year}年${month}月${day}日 ${hours}:${minutes}`;
 };
 
-const props = defineProps<{
+interface Props {
   title: string, // 标题
   synopsis: string, // 描述
   playNum: number, // 播放数
@@ -51,11 +51,14 @@ const props = defineProps<{
   fansNum: number, // 粉丝数
   videoNum: number, // 视频数
   isFollow: boolean,  // 是否已关注
+  isMyFans?: boolean,  // 是否是粉丝（互粉状态）
   vid: string, // 视频ID
   uid: string, // 用户ID
   download: string, // 下载链接
   slug: string, // 视频slug
-}>()
+}
+
+const props = defineProps<Props>()
 
 const emit = defineEmits<{
   (e: 'like', isLiked: boolean): void;
@@ -397,14 +400,30 @@ function toZone() {
           <!-- <div class="userdata">{{ fansNum }}粉丝 {{ videoNum }}视频</div> -->
         </div>
         <div class="follow">
-          <v-btn class="btn" :color="isFollow ? '#E0E0E0' : '#00796B'" @click="clickFollow" variant="flat">
-            <span v-if="isFollow">
-              <font-awesome-icon icon="fa-solid fa-bars" /> 已关注
-            </span>
-            <span v-else>
-              <font-awesome-icon icon="fa-solid fa-plus" /> 关注
-            </span>
-          </v-btn>
+          <span v-if="!isFollow && !isMyFans">
+            <v-btn variant="flat" color="#00796B" @click="clickFollow" :loading="isFollowing">
+              <font-awesome-icon icon="fa-solid fa-plus" />
+              关注
+            </v-btn>
+          </span>
+          <span v-else-if="isFollow && !isMyFans">
+            <v-btn variant="outlined" color="#00796B" @click="clickFollow" :loading="isFollowing">
+              <font-awesome-icon icon="fa-solid fa-bars" />
+              已关注
+            </v-btn>
+          </span>
+          <span v-else-if="isFollow && isMyFans">
+            <v-btn variant="outlined" color="#00796B" @click="clickFollow" :loading="isFollowing">
+              <font-awesome-icon icon="fa-solid fa-bars" />
+              已互粉
+            </v-btn>
+          </span>
+          <span v-else-if="!isFollow && isMyFans">
+            <v-btn variant="flat" color="#00796B" @click="clickFollow" :loading="isFollowing">
+              <font-awesome-icon icon="fa-solid fa-plus" />
+              回关
+            </v-btn>
+          </span>
         </div>
       </div>
       <div class="more" :class="{ expanded: expand }">

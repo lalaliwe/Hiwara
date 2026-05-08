@@ -1,30 +1,30 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted, watch, nextTick } from 'vue'
+import { getImageIwara, followUser, unfollowUser } from '../../core/api'
+import { showShortToast } from '../../core/toast'
+import defaultAvatarImg from '../../static/img/avatar-default.jpg';
+import avatarPlaceholderImg from '../../static/img/avatar-placeholder.png';
+import avatarErrorImg from '../../static/img/avatar-error.png';
 
 // 定义 props
 interface Props {
   nickname: string;
   userSignature: string;
+  avatar: string;
   followNum: number;
   fansNum: number;
   isMyself: boolean;
   isMyFollow: boolean;
   isMyFans: boolean;
+  uid: string;
 }
 
-withDefaults(defineProps<Props>(), {
-  nickname: '',
-  userSignature: '',
-  followNum: 0,
-  fansNum: 0,
-  isMyself: false,
-  isMyFollow: false,
-  isMyFans: false
-});
+const props = defineProps<Props>();
 
 // 定义 emits
 interface Emits {
   (event: 'navigateTo', path: string, query?: any): void;
+  (event: 'follow', isFollowed: boolean): void;
 }
 
 const emit = defineEmits<Emits>();
@@ -46,6 +46,9 @@ const heights = ref({
   userSignatureFoldHeight: 0,
   userSignatureExpandHeight: 0
 });
+// 关注操作进行中状态
+const isFollowing = ref(false);
+
 // 高度计算
 function calculateHeights() {
   heights.value.usernameFoldHeight = usernameFoldHeightRef.value?.offsetHeight || 0;
@@ -82,6 +85,31 @@ watch(expand, async (val) => {
   }
 }, { immediate: true });
 
+// 头像 URL（响应式）
+const avatarUrl = ref<string>('');
+
+// 加载头像
+async function loadAvatar() {
+  if (!props.avatar || props.avatar.trim() === '') {
+    // avatar 为空，使用默认头像
+    avatarUrl.value = defaultAvatarImg;
+  } else {
+    try {
+      // avatar 不为空，通过 API 获取
+      avatarUrl.value = await getImageIwara(props.avatar);
+    } catch (error) {
+      console.error('Failed to load avatar:', error);
+      // 加载失败时使用错误头像
+      avatarUrl.value = avatarErrorImg;
+    }
+  }
+}
+
+// 监听 avatar prop 变化，立即执行
+watch(() => props.avatar, () => {
+  loadAvatar();
+}, { immediate: true });
+
 onMounted(() => {
   // 高度计算
   calculateHeights();
@@ -91,15 +119,57 @@ onMounted(() => {
   if (userSignatureRef.value)
     userSignatureRef.value.style.height = heights.value.userSignatureFoldHeight + 'px';
 })
+
 // 关注
-function handleFollow(follow: boolean) {
-  // emit('navigateTo', '/follow');
+async function handleFollow(follow: boolean) {
+  // 如果正在执行关注操作，直接返回
+  if (isFollowing.value) return;
+  
+  isFollowing.value = true;
+  
+  try {
+    if (follow) {
+      // 关注用户
+      emit('follow', true);
+      const res = await followUser(props.uid);
+      if (res.ok && res.status === 201) {
+        console.log('关注成功');
+        showShortToast('已关注');
+      } else {
+        console.log('关注失败');
+        showShortToast('关注失败');
+        emit('follow', false);
+      }
+    } else {
+      // 取消关注
+      emit('follow', false);
+      const res = await unfollowUser(props.uid);
+      if (res.ok && res.status === 204) {
+        console.log('取消关注成功');
+        showShortToast('已取消关注');
+      } else {
+        console.log('取消关注失败');
+        showShortToast('取消关注失败');
+        emit('follow', true);
+      }
+    }
+  } catch (error) {
+    console.error('关注请求失败:', error);
+    showShortToast(follow ? '关注失败' : '取消关注失败');
+    emit('follow', !follow);
+  } finally {
+    isFollowing.value = false;
+  }
 }
 </script>
 <template>
   <div class="userInfo">
     <div class="avatar">
-      <v-img class="img" cover src="https://cdn.vuetifyjs.com/images/parallax/material.jpg"></v-img>
+      <v-img class="img" cover :src="avatarUrl">
+        <template v-slot:placeholder>
+          <v-img height="100%" :src="avatarPlaceholderImg" cover></v-img>
+        </template>
+      </v-img>
     </div>
     <div class="userInfoBtn">
       <div class="numBtns">
