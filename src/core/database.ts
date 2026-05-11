@@ -22,6 +22,8 @@ export function initDatabase(): Promise<void> {
       if (userResult.length === 0) {
         await sqlDB.execute(`CREATE TABLE IF NOT EXISTS users (
           uuid TEXT PRIMARY KEY,
+          uid TEXT,
+          username TEXT,
           email TEXT,
           password TEXT,
           token TEXT
@@ -81,7 +83,7 @@ export function checkUserIsLogin(): Promise<boolean> {
 export function login(
   email: string,
   password: string,
-  token: string,
+  token: string
 ): Promise<void> {
   return new Promise(async (resolve, reject) => {
     try {
@@ -93,6 +95,40 @@ export function login(
       );
       console.log('User logged in and saved with uuid:', uuid);
       resolve();
+    } catch (error) {
+      reject(error);
+    }
+  });
+}
+
+// 修改用户信息（uid，username）
+export function updateUserInfo(uid: string, username: string): Promise<void> {
+  return new Promise(async (resolve, reject) => {
+    try {
+      await sqlDB.execute(`UPDATE users SET uid = ?, username = ?`,
+        [uid, username]
+      );
+      console.log('User info updated:', uid, username);
+      resolve();
+    } catch (error) {
+      reject(error);
+    }
+  })
+}
+
+// 获取用户信息（uid 和 username）
+export function getUserInfo(): Promise<{ uid: string | null, username: string | null }> {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const result: Array<any> = await sqlDB.select(`SELECT uid, username FROM users LIMIT 1`);
+      if (result.length > 0) {
+        resolve({
+          uid: result[0].uid || null,
+          username: result[0].username || null
+        });
+      } else {
+        resolve({ uid: null, username: null });
+      }
     } catch (error) {
       reject(error);
     }

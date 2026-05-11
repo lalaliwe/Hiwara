@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import { getSetupData, updateSetupData, checkUserIsLogin } from './database';
+import { getSetupData, updateSetupData, checkUserIsLogin, getUserInfo } from './database';
 
 export const isLogin = defineStore('isLogin', {
   state: () => ({
@@ -35,20 +35,42 @@ export const token = defineStore('token', {
   }
 })
 
-export const muid = defineStore('muid', {
+export const uid = defineStore('uid', {
   state: () => ({ value: null as string | null }),
   actions: {
-    set(muid: string) {
-      this.value = muid;
+    set(uid: string) {
+      this.value = uid;
+    },
+    // 从数据库初始化 uid
+    async initFromDatabase() {
+      try {
+        const userInfo = await getUserInfo();
+        if (userInfo.uid) {
+          this.set(userInfo.uid);
+        }
+      } catch (error) {
+        console.error('Failed to initialize uid:', error);
+      }
     }
   }
 })
 
-export const muname = defineStore('muname', {
+export const uname = defineStore('uname', {
   state: () => ({ value: null as string | null }),
   actions: {
-    set(muname: string) {
-      this.value = muname;
+    set(uname: string) {
+      this.value = uname;
+    },
+    // 从数据库初始化 username
+    async initFromDatabase() {
+      try {
+        const userInfo = await getUserInfo();
+        if (userInfo.username) {
+          this.set(userInfo.username);
+        }
+      } catch (error) {
+        console.error('Failed to initialize uname:', error);
+      }
     }
   }
 })
@@ -153,7 +175,9 @@ export async function initializeAllStores(): Promise<void> {
     // 并行初始化所有 Store
     await Promise.all([
       isLogin().initFromDatabase(),
-      setupStore().loadSetupFromDatabase()
+      setupStore().loadSetupFromDatabase(),
+      uid().initFromDatabase(),
+      uname().initFromDatabase()
     ]);
   } catch (error) {
     console.error('Failed to initialize stores:', error);

@@ -190,7 +190,7 @@ async function shareImage() {
 function clickFollow() {
   // 如果正在执行关注操作，直接返回
   if (isFollowing.value) return;
-  
+
   isFollowing.value = true;
   if (props.isFollow) {
     emit('follow', false);
@@ -235,7 +235,7 @@ function clickFollow() {
 function clickLike() {
   // 如果正在执行点赞操作，直接返回
   if (isLiking.value) return;
-  
+
   isLiking.value = true;
   if (props.isLike) {
     emit('like', false);
@@ -322,25 +322,25 @@ const formatDate = (dateString: string) => {
     </div>
     <div class="follow">
       <span v-if="!isFollow && !isMyFans">
-        <v-btn variant="flat" color="#00796B" @click="clickFollow" :loading="isFollowing">
+        <v-btn size="small" variant="flat" color="#00796B" @click="clickFollow" :loading="isFollowing">
           <font-awesome-icon icon="fa-solid fa-plus" />
           关注
         </v-btn>
       </span>
       <span v-else-if="isFollow && !isMyFans">
-        <v-btn variant="outlined" color="#00796B" @click="clickFollow" :loading="isFollowing">
+        <v-btn size="small" variant="outlined" color="#00796B" @click="clickFollow" :loading="isFollowing">
           <font-awesome-icon icon="fa-solid fa-bars" />
           已关注
         </v-btn>
       </span>
       <span v-else-if="isFollow && isMyFans">
-        <v-btn variant="outlined" color="#00796B" @click="clickFollow" :loading="isFollowing">
+        <v-btn size="small" variant="outlined" color="#00796B" @click="clickFollow" :loading="isFollowing">
           <font-awesome-icon icon="fa-solid fa-bars" />
           已互粉
         </v-btn>
       </span>
       <span v-else-if="!isFollow && isMyFans">
-        <v-btn variant="flat" color="#00796B" @click="clickFollow" :loading="isFollowing">
+        <v-btn size="small" variant="flat" color="#00796B" @click="clickFollow" :loading="isFollowing">
           <font-awesome-icon icon="fa-solid fa-plus" />
           回关
         </v-btn>
@@ -440,6 +440,8 @@ const formatDate = (dateString: string) => {
     display: flex;
     align-items: center;
     justify-content: center;
+    cursor: pointer;
+    user-select: none;
 
     img {
       width: 40px;
@@ -457,6 +459,8 @@ const formatDate = (dateString: string) => {
 
     .authorname {
       font-size: 0.9rem;
+      cursor: pointer;
+      user-select: none;
     }
 
     .userdata {

@@ -8,9 +8,10 @@ import {
 } from '../core/api';
 import {
   login as db_login,
-  getLastLoginAuth
+  getLastLoginAuth,
+  updateUserInfo
 } from '../core/database'; // 导入数据库登录函数
-import { isLogin } from '../core/store';
+import { isLogin, uid, uname } from '../core/store';
 
 const router = useRouter();
 
@@ -83,6 +84,20 @@ async function login() {
         if (result.data && result.data.token) {
           // 在数据库中记录登录用户
           await db_login(username.value, password.value, result.data.token);
+          getMyselfInfo().then(async (res) => {
+            if (res.ok) {
+              const userId = res.data.user.id;
+              const userName = res.data.user.username;
+              updateUserInfo(userId, userName);
+              // 更新 store 中的 uid 和 uname
+              uid().set(userId);
+              uname().set(userName);
+            } else {
+              console.error('Failed to update user info:', res.message);
+            }
+          }).catch((err) => {
+            console.error('Failed to update user info:', err);
+          });
           isLogin().set(true);
           showShortToast('登录成功');
           // 跳转到首页

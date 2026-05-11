@@ -401,25 +401,25 @@ function toZone() {
         </div>
         <div class="follow">
           <span v-if="!isFollow && !isMyFans">
-            <v-btn variant="flat" color="#00796B" @click="clickFollow" :loading="isFollowing">
+            <v-btn size="small" variant="flat" color="#00796B" @click="clickFollow" :loading="isFollowing">
               <font-awesome-icon icon="fa-solid fa-plus" />
               关注
             </v-btn>
           </span>
           <span v-else-if="isFollow && !isMyFans">
-            <v-btn variant="outlined" color="#00796B" @click="clickFollow" :loading="isFollowing">
+            <v-btn size="small" variant="outlined" color="#00796B" @click="clickFollow" :loading="isFollowing">
               <font-awesome-icon icon="fa-solid fa-bars" />
               已关注
             </v-btn>
           </span>
           <span v-else-if="isFollow && isMyFans">
-            <v-btn variant="outlined" color="#00796B" @click="clickFollow" :loading="isFollowing">
+            <v-btn size="small" variant="outlined" color="#00796B" @click="clickFollow" :loading="isFollowing">
               <font-awesome-icon icon="fa-solid fa-bars" />
               已互粉
             </v-btn>
           </span>
           <span v-else-if="!isFollow && isMyFans">
-            <v-btn variant="flat" color="#00796B" @click="clickFollow" :loading="isFollowing">
+            <v-btn size="small" variant="flat" color="#00796B" @click="clickFollow" :loading="isFollowing">
               <font-awesome-icon icon="fa-solid fa-plus" />
               回关
             </v-btn>
@@ -518,6 +518,8 @@ function toZone() {
     display: flex;
     align-items: center;
     justify-content: center;
+    cursor: pointer;
+    user-select: none;
 
     .v-img {
       width: 40px;
@@ -535,6 +537,8 @@ function toZone() {
 
     .authorname {
       font-size: 0.9rem;
+      cursor: pointer;
+      user-select: none;
     }
 
     .userdata {

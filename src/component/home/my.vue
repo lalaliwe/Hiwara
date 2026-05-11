@@ -12,7 +12,6 @@ import {
   getUserFans
 } from '../../core/api'
 import { showShortToast } from '../../core/toast';
-import { muid, muname } from '../../core/store'
 
 const router = useRouter()
 
@@ -42,8 +41,6 @@ async function getUserInfo() {
     nickname.value = userInfoRes.data.user.name;
     username.value = userInfoRes.data.user.username;
     avatar.value = userInfoRes.data.user.avatar;
-    muid().set(userInfoRes.data.user.id);
-    muname().set(userInfoRes.data.user.username);
     const uid = userInfoRes.data.user.id;
     await Promise.allSettled([
       getFollowersNum(uid),
@@ -266,6 +263,8 @@ async function getUserInfo() {
     .avatar {
       display: flex;
       align-items: center;
+      cursor: pointer;
+      user-select: none;
 
       .img {
         width: 64px;
@@ -289,6 +288,8 @@ async function getUserInfo() {
         text-overflow: ellipsis;
         white-space: nowrap;
         font-weight: 500;
+        cursor: pointer;
+        user-select: none;
       }
 
       .username {
@@ -296,6 +297,8 @@ async function getUserInfo() {
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
+        cursor: pointer;
+        user-select: none;
       }
     }
 
@@ -308,6 +311,8 @@ async function getUserInfo() {
         align-items: center;
         height: 48px;
         font-size: 0.9rem;
+        cursor: pointer;
+        user-select: none;
       }
     }
   }

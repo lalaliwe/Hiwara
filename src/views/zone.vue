@@ -15,7 +15,7 @@ import {
   getImageIwara
 } from '../core/api'
 import { showShortToast } from '../core/toast';
-import { muid } from '../core/store';
+import { uid as muid } from '../core/store';
 import kivotos from '../static/img/kivotos.png'
 import loadingHuawu from '../component/loadingHuawu.vue';
 import errorHuawu from '../component/errorHuawu.vue';
@@ -28,7 +28,7 @@ const route = useRoute()
 const router = useRouter()
 
 const isMyself = ref<boolean>(false)
-const username = ref(route.params.username)
+const username = ref<string>(route.params.username as string)
 const uid = ref<string>('')
 const nickname = ref<string>('')
 const userSignature = ref<string>('')
@@ -278,11 +278,6 @@ const onSlideChangeTransitionEnd = (swiper: SwiperType) => {
 
 // 组件激活时恢复tab状态
 onActivated(() => {
-  // 如果路由参数有myself的变化，更新myself状态
-  const newMyself = route.query.myself === 'true';
-  if (isMyself.value !== newMyself) {
-    isMyself.value = newMyself;
-  }
   // 在下一个tick恢复滚动位置
   nextTick(() => {
     restoreScrollPosition(tab.value);
@@ -332,6 +327,7 @@ async function getData() {
     if (!res.ok)
       throw new Error(res.message);
     console.log(res);
+    console.log(muid().value);
     if (res.data.user.id === muid().value)
       isMyself.value = true;
     nickname.value = res.data.user.name;
@@ -414,9 +410,9 @@ async function getData() {
 
       <div class="zone-info" ref="zoneInfoRef">
         <div class="zone-bg" :style="zoneBgStyle"></div>
-        <UserInfo :nickname="nickname" :userSignature="userSignature" :avatar="avatar" :followNum="followNum"
-          :fansNum="fansNum" :isMyFollow="isMyFollow" :isMyFans="isMyFans" :isMyself="isMyself" :uid="uid"
-          @navigate-to="routerGoTo" @follow="(val) => isMyFollow = val" />
+        <UserInfo :username="username" :nickname="nickname" :userSignature="userSignature" :avatar="avatar"
+          :followNum="followNum" :fansNum="fansNum" :isMyFollow="isMyFollow" :isMyFans="isMyFans" :isMyself="isMyself"
+          :uid="uid" @navigate-to="routerGoTo" @follow="(val) => isMyFollow = val" />
       </div>
 
       <!-- 独立吸顶的 tabs 区域，修复滚动后 tabs 被移出页面的问题 -->
@@ -425,7 +421,7 @@ async function getData() {
           <v-tabs v-model="tab" color="#00796B">
             <v-tab value="video">视频</v-tab>
             <v-tab value="image">插画</v-tab>
-            <v-tab value="publish">发布</v-tab>
+            <v-tab value="publish" v-if="false">发布</v-tab>
           </v-tabs>
           <v-divider></v-divider>
         </div>

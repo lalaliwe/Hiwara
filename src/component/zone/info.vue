@@ -8,6 +8,7 @@ import avatarErrorImg from '../../static/img/avatar-error.png';
 
 // 定义 props
 interface Props {
+  username: string;
   nickname: string;
   userSignature: string;
   avatar: string;
@@ -32,17 +33,19 @@ const emit = defineEmits<Emits>();
 // 展开状态
 const expand = ref(false);
 // 需要计算高度的元素
-const usernameRef = ref<HTMLElement | null>(null);
+const nicknameRef = ref<HTMLElement | null>(null);
 const userSignatureRef = ref<HTMLElement | null>(null);
 // 高度计算辅助元素
-const usernameFoldHeightRef = ref<HTMLElement | null>(null);
-const usernameExpandHeightRef = ref<HTMLElement | null>(null);
+const nicknameFoldHeightRef = ref<HTMLElement | null>(null);
+const nicknameExpandHeightRef = ref<HTMLElement | null>(null);
+const usernameHeightRef = ref<HTMLElement | null>(null);
 const userSignatureFoldHeightRef = ref<HTMLElement | null>(null);
 const userSignatureExpandHeightRef = ref<HTMLElement | null>(null);
 // 高度缓存对象
 const heights = ref({
-  usernameFoldHeight: 0,
-  usernameExpandHeight: 0,
+  nicknameFoldHeight: 0,
+  nicknameExpandHeight: 0,
+  usernameHeight: 0,
   userSignatureFoldHeight: 0,
   userSignatureExpandHeight: 0
 });
@@ -51,33 +54,34 @@ const isFollowing = ref(false);
 
 // 高度计算
 function calculateHeights() {
-  heights.value.usernameFoldHeight = usernameFoldHeightRef.value?.offsetHeight || 0;
-  heights.value.usernameExpandHeight = usernameExpandHeightRef.value?.offsetHeight || 0;
+  heights.value.nicknameFoldHeight = nicknameFoldHeightRef.value?.offsetHeight || 0;
+  heights.value.nicknameExpandHeight = nicknameExpandHeightRef.value?.offsetHeight || 0;
+  heights.value.usernameHeight = usernameHeightRef.value?.offsetHeight || 0;
   heights.value.userSignatureFoldHeight = userSignatureFoldHeightRef.value?.offsetHeight || 0;
   heights.value.userSignatureExpandHeight = userSignatureExpandHeightRef.value?.offsetHeight || 0;
 }
 
 // 处理展开/收起逻辑
 watch(expand, async (val) => {
-  if (!usernameRef.value) return;
+  if (!nicknameRef.value) return;
   if (!userSignatureRef.value) return;
 
   if (val) {
     // === 展开逻辑 ===
-    usernameRef.value.style.whiteSpace = 'normal';
+    nicknameRef.value.style.whiteSpace = 'normal';
     userSignatureRef.value.style.whiteSpace = 'normal';
-    usernameRef.value.style.height = heights.value.usernameExpandHeight + 'px';
+    nicknameRef.value.style.height = heights.value.nicknameExpandHeight + 'px';
     userSignatureRef.value.style.height = heights.value.userSignatureExpandHeight + 'px';
   } else {
     // === 折叠逻辑 ===
-    usernameRef.value.style.height = heights.value.usernameFoldHeight + 'px';
+    nicknameRef.value.style.height = heights.value.nicknameFoldHeight + 'px';
     userSignatureRef.value.style.height = heights.value.userSignatureFoldHeight + 'px';
     // 等待一帧让浏览器应用 height 变化，然后设置 whiteSpace
     await nextTick();
     setTimeout(() => {
       if (!expand.value) {
-        if (usernameRef.value)
-          usernameRef.value.style.whiteSpace = 'nowrap';
+        if (nicknameRef.value)
+          nicknameRef.value.style.whiteSpace = 'nowrap';
         if (userSignatureRef.value)
           userSignatureRef.value.style.whiteSpace = 'nowrap';
       }
@@ -114,8 +118,8 @@ onMounted(() => {
   // 高度计算
   calculateHeights();
   // 高度初始值赋值
-  if (usernameRef.value)
-    usernameRef.value.style.height = heights.value.usernameFoldHeight + 'px';
+  if (nicknameRef.value)
+    nicknameRef.value.style.height = heights.value.nicknameFoldHeight + 'px';
   if (userSignatureRef.value)
     userSignatureRef.value.style.height = heights.value.userSignatureFoldHeight + 'px';
 })
@@ -124,9 +128,9 @@ onMounted(() => {
 async function handleFollow(follow: boolean) {
   // 如果正在执行关注操作，直接返回
   if (isFollowing.value) return;
-  
+
   isFollowing.value = true;
-  
+
   try {
     if (follow) {
       // 关注用户
@@ -218,15 +222,19 @@ async function handleFollow(follow: boolean) {
         </span>
       </div>
     </div>
-    <div class="username" @click="expand = !expand">
-      <div class="name fold" ref="usernameRef">{{ nickname }}</div>
+    <div class="nickname" @click="expand = !expand">
+      <div class="name fold" ref="nicknameRef">{{ nickname }}</div>
       <div class="detail">详情</div>
+    </div>
+    <div class="username" :style="{ height: expand ? `${heights.usernameHeight}px` : '0' }">
+      @{{ username }}
     </div>
     <div class="userSignature fold" ref="userSignatureRef">
       {{ userSignature }}</div>
     <div class="calculateHeight">
-      <div class="usernameHeigth fold" ref="usernameFoldHeightRef">{{ nickname }}</div>
-      <div class="usernameHeigth" ref="usernameExpandHeightRef">{{ nickname }}</div>
+      <div class="nicknameHeigth fold" ref="nicknameFoldHeightRef">{{ nickname }}</div>
+      <div class="nicknameHeigth" ref="nicknameExpandHeightRef">{{ nickname }}</div>
+      <div class="usernameHeigth" ref="usernameHeightRef">@{{ username }}</div>
       <div class="userSignatureHeigth fold" ref="userSignatureFoldHeightRef">{{ userSignature }}</div>
       <div class="userSignatureHeigth" ref="userSignatureExpandHeightRef">{{ userSignature }}</div>
     </div>
@@ -268,6 +276,8 @@ async function handleFollow(follow: boolean) {
         .btn {
           display: inline-block;
           padding: 0 16px;
+          cursor: pointer;
+          user-select: none;
 
           .num {
             font-size: 1rem;
@@ -278,7 +288,6 @@ async function handleFollow(follow: boolean) {
             color: #616161;
           }
         }
-
       }
 
       .fill.last {
@@ -293,8 +302,8 @@ async function handleFollow(follow: boolean) {
     text-overflow: ellipsis;
   }
 
-  .username {
-    padding: 10px 16px 8px 16px;
+  .nickname {
+    padding: 10px 16px 0px 16px;
     position: relative;
 
     .name {
@@ -315,6 +324,14 @@ async function handleFollow(follow: boolean) {
     }
   }
 
+  .username {
+    font-size: 0.8rem;
+    color: #616161;
+    padding: 0 16px;
+    transition: height 0.3s ease-in-out;
+    overflow: hidden;
+  }
+
   .userSignature {
     font-size: 0.8rem;
     padding: 0 16px;
@@ -327,10 +344,16 @@ async function handleFollow(follow: boolean) {
     height: 0;
     overflow: hidden;
 
-    .usernameHeigth {
+    .nicknameHeigth {
       padding: 0 16px;
       font-size: 1.2rem;
       padding-right: 28px;
+    }
+
+    .usernameHeigth {
+      font-size: 0.8rem;
+      color: #616161;
+      padding: 0 16px 6px 16px;
     }
 
     .userSignatureHeigth {
