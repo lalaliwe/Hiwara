@@ -83,7 +83,7 @@ async function getUserInfo() {
           <iconMoon theme="outline" size="22" fill="#ffffff" />
         </span>
       </div>
-      <div class="user" @click="routerGoTo(`/zone/${username}`)">
+      <div class="user" @click="routerGoTo(`/zone`)">
         <div class="avatar">
           <v-img class="img" cover src="https://cdn.vuetifyjs.com/images/parallax/material.jpg"></v-img>
         </div>

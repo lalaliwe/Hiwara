@@ -15,7 +15,7 @@ import {
   getImageIwara
 } from '../core/api'
 import { showShortToast } from '../core/toast';
-import { uid as muid } from '../core/store';
+import { uid as muid, uname as muname } from '../core/store';
 import kivotos from '../static/img/kivotos.png'
 import loadingHuawu from '../component/loadingHuawu.vue';
 import errorHuawu from '../component/errorHuawu.vue';
@@ -28,7 +28,7 @@ const route = useRoute()
 const router = useRouter()
 
 const isMyself = ref<boolean>(false)
-const username = ref<string>(route.params.username as string)
+const username = ref<string>((route.params.username as string) || (muname().value ?? ''))
 const uid = ref<string>('')
 const nickname = ref<string>('')
 const userSignature = ref<string>('')
@@ -323,11 +323,12 @@ onUnmounted(() => {
 getData()
 async function getData() {
   try {
+    if (username.value === '')
+      throw new Error('username获取失败');
     const res = await getUserInfo(username.value as string)
     if (!res.ok)
       throw new Error(res.message);
     console.log(res);
-    console.log(muid().value);
     if (res.data.user.id === muid().value)
       isMyself.value = true;
     nickname.value = res.data.user.name;
