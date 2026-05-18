@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted, watch, nextTick } from 'vue'
+import { useRouter } from 'vue-router'
 import { getImageIwara, followUser, unfollowUser } from '../../core/api'
 import { showShortToast } from '../../core/toast'
 import defaultAvatarImg from '../../static/img/avatar-default.jpg';
@@ -29,6 +30,8 @@ interface Emits {
 }
 
 const emit = defineEmits<Emits>();
+
+const router = useRouter();
 
 // 展开状态
 const expand = ref(false);
@@ -165,6 +168,14 @@ async function handleFollow(follow: boolean) {
     isFollowing.value = false;
   }
 }
+
+// 跳转到粉丝/关注列表
+function navigateToFriends(type: 'follow' | 'fans') {
+  router.push({
+    path: `/friends/${props.uid}`,
+    query: { type }
+  });
+}
 </script>
 <template>
   <div class="userInfo">
@@ -178,13 +189,13 @@ async function handleFollow(follow: boolean) {
     <div class="userInfoBtn">
       <div class="numBtns">
         <div class="fill">
-          <div class="btn" @click="$emit('navigateTo', '/friends', { type: 'follow' })">
+          <div class="btn" @click="navigateToFriends('follow')">
             <div class="num">{{ followNum }}</div>
             <div class="label">关注</div>
           </div>
         </div>
         <div class="fill last">
-          <div class="btn" @click="$emit('navigateTo', '/friends', { type: 'fans' })">
+          <div class="btn" @click="navigateToFriends('fans')">
             <div class="num">{{ fansNum }}</div>
             <div class="label">粉丝</div>
           </div>

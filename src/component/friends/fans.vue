@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, onActivated } from 'vue'
 import { getUserFans } from '../../core/api'
 import loadingHuawu from '../loadingHuawu.vue'
 import errorHuawu from '../errorHuawu.vue'
@@ -8,6 +8,7 @@ import userListItem from './userListItem.vue'
 interface ListItem {
   uid: string,
   username: string,
+  nickname: string,
   avatar: string,  // 完整头像URL或'no-avatar'标记，由父组件构造
   signature: string,
   videoNum: number,
@@ -30,29 +31,31 @@ const listItems = ref<ListItem[]>([])
 const listMore = ref(false)
 
 let page = 0
+let scrollPosition = 0 // 记录滚动位置
 
 async function getList(): Promise<any> {
   try {
     // console.log('获取粉丝列表，uid:', props.uid, 'page:', page)
     const res = await getUserFans(props.uid, page)
-    
+
     if (!res.ok) {
       throw new Error(`状态码：${res.status}, 错误信息：${res.statusText}`)
     }
-    
+
     if (res.data.results && res.data.results.length > 0) {
-      console.log(res.data.results)
+      // console.log(res.data.results)
       const newItems = res.data.results.map((item: any) => {
         const user = item.follower
-        
+
         // 构造头像URL，与cardButton.vue的模式一致
-        const avatarUrl = user?.avatar 
+        const avatarUrl = user?.avatar
           ? `https://i.iwara.tv/image/avatar/${user.avatar.id}/${user.avatar.name}`
           : 'no-avatar'
-        
+
         return {
-          uid: user?.id || '',
-          username: user?.name || user?.username || 'Unknown',
+          uid: user.id || '',
+          username: user.username || 'Unknown',
+          nickname: user.name || 'Unknown',
           avatar: avatarUrl,  // 传递完整URL或错误标记
           signature: '',
           videoNum: 0,
@@ -60,15 +63,15 @@ async function getList(): Promise<any> {
           followNum: 0,
           fansNum: 0,
           friendNum: 0,
-          following: user?.following || false,
-          fansing: user?.followedBy || false,
-          friending: user?.friend || false,
+          following: user.following || false,
+          fansing: user.follwedBy || false,
+          friending: user.friend || false,
         }
       })
-      
+
       listItems.value = [...listItems.value, ...newItems]
       page++
-      
+
       return newItems
     } else {
       listMore.value = true
@@ -78,6 +81,10 @@ async function getList(): Promise<any> {
     console.error('获取粉丝列表失败:', error)
     throw error
   }
+}
+
+async function handleScroll(e: Event): Promise<void> {
+  scrollPosition = (e.target as HTMLElement).scrollTop;
 }
 
 async function handleScrollToEnd({ done }: any) {
@@ -109,6 +116,14 @@ onMounted(async () => {
   }
 })
 
+// 组件激活时恢复滚动位置
+onActivated(() => {
+  const infiniteScroll = document.querySelector('.list');
+  if (infiniteScroll) {
+    (infiniteScroll as HTMLElement).scrollTop = scrollPosition;
+  }
+});
+
 defineExpose({
   listItems,
   listMore,
@@ -126,13 +141,10 @@ defineExpose({
   <div v-else-if="listState === 'loading'" class="loading">
     <loadingHuawu>数据加载中</loadingHuawu>
   </div>
-  <v-infinite-scroll v-else color="#00796B" @load="handleScrollToEnd" :disabled="listMore" class="list">
+  <v-infinite-scroll v-else color="#00796B" @load="handleScrollToEnd" :disabled="listMore" class="list"
+    @scroll="handleScroll">
     <div class="list-container">
-      <user-list-item 
-        v-for="(listItem, index) in listItems" 
-        :key="index" 
-        :item="listItem"
-      />
+      <user-list-item v-for="(listItem, index) in listItems" :key="index" :item="listItem" />
     </div>
     <template v-slot:error="{ props }">
       <div class="load-more-failed">

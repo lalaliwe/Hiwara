@@ -325,6 +325,7 @@ async function getData() {
   try {
     if (username.value === '')
       throw new Error('username获取失败');
+    console.log(username.value);
     const res = await getUserInfo(username.value as string)
     if (!res.ok)
       throw new Error(res.message);
@@ -413,7 +414,7 @@ async function getData() {
         <div class="zone-bg" :style="zoneBgStyle"></div>
         <UserInfo :username="username" :nickname="nickname" :userSignature="userSignature" :avatar="avatar"
           :followNum="followNum" :fansNum="fansNum" :isMyFollow="isMyFollow" :isMyFans="isMyFans" :isMyself="isMyself"
-          :uid="uid" @navigate-to="routerGoTo" @follow="(val) => isMyFollow = val" />
+          :uid="uid" @follow="(val) => isMyFollow = val" />
       </div>
 
       <!-- 独立吸顶的 tabs 区域，修复滚动后 tabs 被移出页面的问题 -->

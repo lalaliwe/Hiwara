@@ -11,6 +11,7 @@ const router = useRouter();
 interface ListItem {
   uid: string,
   username: string,
+  nickname: string,
   avatar: string,  // 完整头像URL或'no-avatar'标记，由父组件构造
   signature: string,
   videoNum: number,
@@ -133,10 +134,10 @@ function toZone() {
     </div>
     <div class="list-content" @click="toZone">
       <div class="list-title">
-        {{ item.username }}
+        {{ item.nickname }}
       </div>
     </div>
-    <div class="list-action">
+    <div class="list-action" v-if="false">
       <v-btn :text="getButtonText()" color="#00796B" :variant="getButtonVariant()" @click="toggleFollow" class="btn"
         size="small">
       </v-btn>
@@ -185,9 +186,13 @@ function toZone() {
 
   .list-content {
     flex: 1;
-    min-width: 0;
+    // min-width: 0;
+    height: 48px;
     cursor: pointer;
     user-select: none;
+    display: flex;
+    align-items: center;
+    justify-content: start;
 
     .list-title {
       font-weight: 500;

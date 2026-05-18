@@ -21,14 +21,24 @@ applyPageSettings()
 const router = useRouter()
 const route = useRoute()
 
+const uid = ref<string>((route.params.uid as string) || (muid().value ?? ''))
+
+// 判定是否是用户自己的好友列表
+const isMyself = ref<boolean>(false)
+if (uid.value === muid().value) {
+  isMyself.value = true
+}
+
 const tab = ref<'follow' | 'fans' | 'friend'>()
 tab.value = route.query.type as 'follow' | 'fans' | 'friend'
 
-// console.log('初始化 tab:', tab.value, 'route.query.type:', route.query.type)
+// 如果不是自己的好友列表，默认切换到'follow'标签
+if (!isMyself.value && tab.value === 'friend') {
+  tab.value = 'follow'
+}
 
-const uid = ref<string>((route.params.uid as string) || (muid().value ?? ''))
-
-// console.log('初始化 uid:', uid.value, 'route.params.uid:', route.params.uid, 'muid:', muid().value)
+console.log('uid:', uid.value)
+console.log('isMyself:', isMyself.value)
 
 interface ListItem {
   uid: string,
@@ -64,17 +74,6 @@ let friendSrollTop = 0;
 const followListRef = ref<InstanceType<typeof following>>()
 const fansListRef = ref<InstanceType<typeof fans>>()
 const friendListRef = ref<HTMLElement>()
-
-// 保存滚动条位置
-function handleFollowSroll(e: Event): void {
-  followSrollTop = (e.target as HTMLElement).scrollTop;
-}
-function handleFansSroll(e: Event): void {
-  fansSrollTop = (e.target as HTMLElement).scrollTop;
-}
-function handleFriendSroll(e: Event): void {
-  friendSrollTop = (e.target as HTMLElement).scrollTop;
-}
 
 onActivated(() => {
   // console.log('friends 页面激活')
@@ -113,7 +112,7 @@ onActivated(() => {
           <v-tab value="fans">
             粉丝
           </v-tab>
-          <v-tab value="friend">
+          <v-tab v-if="isMyself" value="friend">
             好友
           </v-tab>
         </v-tabs>
@@ -122,22 +121,13 @@ onActivated(() => {
     </div>
     <v-tabs-window v-model="tab" class="tabs-window">
       <v-tabs-window-item value="follow">
-        <following 
-          ref="followListRef"
-          :uid="uid" 
-        />
+        <following ref="followListRef" :uid="uid" />
       </v-tabs-window-item>
       <v-tabs-window-item value="fans">
-        <fans 
-          ref="fansListRef"
-          :uid="uid" 
-        />
+        <fans ref="fansListRef" :uid="uid" />
       </v-tabs-window-item>
-      <v-tabs-window-item value="friend">
-        <friend 
-          ref="friendListRef"
-          :list-items="friendListData"
-        />
+      <v-tabs-window-item v-if="isMyself" value="friend">
+        <friend ref="friendListRef" :list-items="friendListData" />
       </v-tabs-window-item>
     </v-tabs-window>
   </div>
