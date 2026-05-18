@@ -18,9 +18,6 @@ interface ListItem {
   following: boolean,
   fansing: boolean,
   friending: boolean,
-  myFollowing: boolean,
-  myFansing: boolean,
-  myFriending: boolean,
 }
 
 const props = defineProps<{
@@ -36,7 +33,7 @@ let page = 0
 
 async function getList(): Promise<any> {
   try {
-    console.log('获取粉丝列表，uid:', props.uid, 'page:', page)
+    // console.log('获取粉丝列表，uid:', props.uid, 'page:', page)
     const res = await getUserFans(props.uid, page)
     
     if (!res.ok) {
@@ -44,6 +41,7 @@ async function getList(): Promise<any> {
     }
     
     if (res.data.results && res.data.results.length > 0) {
+      console.log(res.data.results)
       const newItems = res.data.results.map((item: any) => {
         const user = item.follower
         
@@ -65,9 +63,6 @@ async function getList(): Promise<any> {
           following: user?.following || false,
           fansing: user?.followedBy || false,
           friending: user?.friend || false,
-          myFollowing: user?.following || false,
-          myFansing: true,
-          myFriending: user?.friend || false,
         }
       })
       

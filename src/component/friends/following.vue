@@ -18,9 +18,6 @@ interface ListItem {
   following: boolean,
   fansing: boolean,
   friending: boolean,
-  myFollowing: boolean,
-  myFansing: boolean,
-  myFriending: boolean,
 }
 
 const props = defineProps<{
@@ -36,22 +33,23 @@ let page = 0
 
 async function getList(): Promise<any> {
   try {
-    console.log('获取关注列表，uid:', props.uid, 'page:', page)
+    // console.log('获取关注列表，uid:', props.uid, 'page:', page)
     const res = await getUserFollowers(props.uid, page)
-    
+
     if (!res.ok) {
       throw new Error(`状态码：${res.status}, 错误信息：${res.statusText}`)
     }
-    
+
     if (res.data.results && res.data.results.length > 0) {
+      console.log(res.data.results)
       const newItems = res.data.results.map((item: any) => {
         const user = item.user
-        
+
         // 构造头像URL，与cardButton.vue的模式一致
-        const avatarUrl = user?.avatar 
+        const avatarUrl = user?.avatar
           ? `https://i.iwara.tv/image/avatar/${user.avatar.id}/${user.avatar.name}`
           : 'no-avatar'
-        
+
         return {
           uid: user?.id || '',
           username: user?.name || user?.username || 'Unknown',
@@ -65,15 +63,12 @@ async function getList(): Promise<any> {
           following: user?.following || false,
           fansing: user?.followedBy || false,
           friending: user?.friend || false,
-          myFollowing: true,
-          myFansing: user?.followedBy || false,
-          myFriending: user?.friend || false,
         }
       })
-      
+
       listItems.value = [...listItems.value, ...newItems]
       page++
-      
+
       return newItems
     } else {
       listMore.value = true
@@ -133,11 +128,7 @@ defineExpose({
   </div>
   <v-infinite-scroll v-else color="#00796B" @load="handleScrollToEnd" :disabled="listMore" class="list">
     <div class="list-container">
-      <user-list-item 
-        v-for="(listItem, index) in listItems" 
-        :key="index" 
-        :item="listItem"
-      />
+      <user-list-item v-for="(listItem, index) in listItems" :key="index" :item="listItem" />
     </div>
     <template v-slot:error="{ props }">
       <div class="load-more-failed">

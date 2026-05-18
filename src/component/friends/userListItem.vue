@@ -21,9 +21,6 @@ interface ListItem {
   following: boolean,
   fansing: boolean,
   friending: boolean,
-  myFollowing: boolean,
-  myFansing: boolean,
-  myFriending: boolean,
 }
 
 const props = defineProps<{
@@ -42,7 +39,7 @@ async function loadAvatar() {
     // 没有头像信息，已经初始化为默认头像，无需再加载
     return
   }
-  
+
   try {
     const realAvatarUrl = await getImageIwara(props.item.avatar)
     displayAvatar.value = realAvatarUrl
@@ -57,11 +54,11 @@ onMounted(() => {
   loadAvatar()
 })
 
-// 修改关注按钮的处理逻辑
+// 关注按钮的处理逻辑
 async function toggleFollow() {
-  const shouldFollow = !props.item.myFollowing
-  props.item.myFollowing = shouldFollow
-  
+  const shouldFollow = !props.item.following
+  props.item.following = shouldFollow
+
   try {
     if (shouldFollow) {
       const res = await followUser(props.item.uid)
@@ -71,7 +68,7 @@ async function toggleFollow() {
       } else {
         console.log('关注失败')
         showShortToast('关注失败')
-        props.item.myFollowing = !shouldFollow
+        props.item.following = !shouldFollow
       }
     } else {
       const res = await unfollowUser(props.item.uid)
@@ -81,33 +78,33 @@ async function toggleFollow() {
       } else {
         console.log('取消关注失败')
         showShortToast('取消关注失败')
-        props.item.myFollowing = !shouldFollow
+        props.item.following = !shouldFollow
       }
     }
   } catch (error) {
     console.error('关注请求失败:', error)
     showShortToast(shouldFollow ? '关注失败' : '取消关注失败')
-    props.item.myFollowing = !shouldFollow
+    props.item.following = !shouldFollow
   }
 }
 
 function getButtonText(): string {
   // 根据不同场景显示不同的按钮文本
-  if (props.item.myFollowing && props.item.myFansing) {
+  if (props.item.following && props.item.fansing) {
     return '已互粉'
-  } else if (props.item.myFollowing) {
+  } else if (props.item.following) {
     return '已关注'
-  } else if (props.item.myFriending) {
+  } else if (props.item.friending) {
     return '好友'
   } else {
     // 默认根据myFollowing判断
-    return props.item.myFollowing ? '已关注' : '关注'
+    return props.item.following ? '已关注' : '关注'
   }
 }
 
 function getButtonVariant(): 'flat' | 'outlined' | 'text' | 'plain' | 'tonal' | undefined {
   // 已关注/已互粉/好友状态使用outlined样式
-  if (props.item.myFollowing || props.item.myFriending) {
+  if (props.item.following || props.item.friending) {
     return 'outlined'
   }
   return 'flat'
@@ -122,7 +119,7 @@ function toZone() {
 
 <template>
   <div class="list-item">
-    <div class="list-avatar">
+    <div class="list-avatar" @click="toZone">
       <v-img :src="displayAvatar" cover transition="fade-transition" aspect-ratio="1">
         <template v-slot:placeholder>
           <div class="placeholder">
@@ -134,18 +131,13 @@ function toZone() {
         </template>
       </v-img>
     </div>
-    <div class="list-content">
+    <div class="list-content" @click="toZone">
       <div class="list-title">
         {{ item.username }}
       </div>
     </div>
     <div class="list-action">
-      <v-btn 
-        :text="getButtonText()" 
-        color="#00796B"
-        :variant="getButtonVariant()"
-        @click="toggleFollow" 
-        class="btn" 
+      <v-btn :text="getButtonText()" color="#00796B" :variant="getButtonVariant()" @click="toggleFollow" class="btn"
         size="small">
       </v-btn>
     </div>
@@ -166,6 +158,8 @@ function toZone() {
     height: 48px;
     border-radius: 50%;
     overflow: hidden;
+    cursor: pointer;
+    user-select: none;
 
     .placeholder {
       width: 100%;
@@ -192,6 +186,8 @@ function toZone() {
   .list-content {
     flex: 1;
     min-width: 0;
+    cursor: pointer;
+    user-select: none;
 
     .list-title {
       font-weight: 500;

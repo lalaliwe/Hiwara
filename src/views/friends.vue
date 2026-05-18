@@ -24,11 +24,11 @@ const route = useRoute()
 const tab = ref<'follow' | 'fans' | 'friend'>()
 tab.value = route.query.type as 'follow' | 'fans' | 'friend'
 
-console.log('初始化 tab:', tab.value, 'route.query.type:', route.query.type)
+// console.log('初始化 tab:', tab.value, 'route.query.type:', route.query.type)
 
 const uid = ref<string>((route.params.uid as string) || (muid().value ?? ''))
 
-console.log('初始化 uid:', uid.value, 'route.params.uid:', route.params.uid, 'muid:', muid().value)
+// console.log('初始化 uid:', uid.value, 'route.params.uid:', route.params.uid, 'muid:', muid().value)
 
 interface ListItem {
   uid: string,
@@ -77,7 +77,7 @@ function handleFriendSroll(e: Event): void {
 }
 
 onActivated(() => {
-  console.log('friends 页面激活')
+  // console.log('friends 页面激活')
   // 进入页面时，重新应用页面设置
   applyPageSettings()
   // 恢复滚动条位置
