@@ -14,6 +14,7 @@ import {
 } from '../core/api';
 import { showShortToast } from '../core/toast';
 import { setupStore } from '../core/store';
+import { insertVideoHistory } from '../core/database';
 import loadingHuawu from '../component/loadingHuawu.vue';
 import errorHuawu from '../component/errorHuawu.vue';
 
@@ -159,6 +160,21 @@ const fetchVideoInfo = async () => {
 
       // 数据获取成功
       videoInfoState.value = 'success';
+      
+      // 添加视频历史记录
+      try {
+        await insertVideoHistory(
+          data.id,
+          data.title || '',
+          data.user?.name || '',
+          poster.value,
+          data.numViews || 0,
+          data.numLikes || 0
+        );
+        console.log('视频历史记录已添加:', data.id);
+      } catch (error) {
+        console.error('添加视频历史记录失败:', error);
+      }
     } else {
       console.error(`状态码：${res.status}`, `错误信息：${res.statusText}`);
       showShortToast('获取视频信息失败');

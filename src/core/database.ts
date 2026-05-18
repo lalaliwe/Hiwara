@@ -58,6 +58,41 @@ export function initDatabase(): Promise<void> {
         // 插入默认设置数据
         await sqlDB.execute(`INSERT INTO setup (auto_play, reconnect, definition, search_mode, language, video_save_path, image_save_path, aria2_rpc, aria2_token, aria2_download, aria2_switch) VALUES (TRUE, 1, 'Source', 0, 'auto', ?, ?, '', '', '', FALSE);`, [videoSavePath, imageSavePath]);
       }
+
+      // 独立检查并创建视频历史表
+      const videoHistoryResult: Array<{ name: string }> = await sqlDB.select(
+        `SELECT name FROM sqlite_master WHERE type='table' AND name='video_history'`
+      );
+      if (videoHistoryResult.length === 0) {
+        await sqlDB.execute(`CREATE TABLE IF NOT EXISTS video_history (
+          id TEXT,
+          title TEXT,
+          author TEXT,
+          cover_url TEXT,
+          play_count INTEGER,
+          like_count INTEGER,
+          access_time INTEGER
+        );`);
+        console.log('视频历史表创建成功');
+      }
+
+      // 独立检查并创建插画历史表
+      const imageHistoryResult: Array<{ name: string }> = await sqlDB.select(
+        `SELECT name FROM sqlite_master WHERE type='table' AND name='image_history'`
+      );
+      if (imageHistoryResult.length === 0) {
+        await sqlDB.execute(`CREATE TABLE IF NOT EXISTS image_history (
+          id TEXT,
+          title TEXT,
+          author TEXT,
+          cover_url TEXT,
+          play_count INTEGER,
+          like_count INTEGER,
+          access_time INTEGER
+        );`);
+        console.log('插画历史表创建成功');
+      }
+
       resolve();
     } catch (error) {
       reject(error);
@@ -228,4 +263,54 @@ export async function updateSetupData(setupData: any): Promise<void> {
     console.error('Error updating setup data:', error);
     throw error;
   }
+}
+
+// 插入视频历史记录
+export function insertVideoHistory(
+  id: string,
+  title: string,
+  author: string,
+  coverUrl: string,
+  playCount: number,
+  likeCount: number
+): Promise<void> {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const accessTime = Date.now(); // 当前时间戳
+      await sqlDB.execute(
+        `INSERT INTO video_history (id, title, author, cover_url, play_count, like_count, access_time) VALUES (?, ?, ?, ?, ?, ?, ?)`,
+        [id, title, author, coverUrl, playCount, likeCount, accessTime]
+      );
+      console.log('视频历史记录已添加:', id);
+      resolve();
+    } catch (error) {
+      console.error('插入视频历史记录失败:', error);
+      reject(error);
+    }
+  });
+}
+
+// 插入插画历史记录
+export function insertImageHistory(
+  id: string,
+  title: string,
+  author: string,
+  coverUrl: string,
+  playCount: number,
+  likeCount: number
+): Promise<void> {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const accessTime = Date.now(); // 当前时间戳
+      await sqlDB.execute(
+        `INSERT INTO image_history (id, title, author, cover_url, play_count, like_count, access_time) VALUES (?, ?, ?, ?, ?, ?, ?)`,
+        [id, title, author, coverUrl, playCount, likeCount, accessTime]
+      );
+      console.log('插画历史记录已添加:', id);
+      resolve();
+    } catch (error) {
+      console.error('插入插画历史记录失败:', error);
+      reject(error);
+    }
+  });
 }

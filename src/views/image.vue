@@ -9,6 +9,7 @@ import {
   getImageInfo as api_getImageInfo,
 } from '../core/api';
 import { showShortToast } from '../core/toast';
+import { insertImageHistory } from '../core/database';
 import loadingHuawu from '../component/loadingHuawu.vue';
 import errorHuawu from '../component/errorHuawu.vue';
 import fullScreen from '../component/image/fullScreen.vue';
@@ -170,6 +171,26 @@ async function getImageInfo(): Promise<void> {
     });
     // 更新页面状态
     isState.value = 'success';
+    
+    // 添加插画历史记录
+    try {
+      // 使用thumbnail作为封面(参照subscribe.vue的实现)
+      const coverUrl = imageInfo.thumbnail 
+        ? `https://i.iwara.tv/image/thumbnail/${imageInfo.thumbnail.id}/${imageInfo.thumbnail.id}.jpg`
+        : '';
+      
+      await insertImageHistory(
+        pid.value,
+        imageInfo.title,
+        imageInfo.user.name,
+        coverUrl,
+        imageInfo.numViews,
+        imageInfo.liked ? 1 : 0
+      );
+      console.log('插画历史记录已添加:', pid.value);
+    } catch (error) {
+      console.error('添加插画历史记录失败:', error);
+    }
   } catch (error) {
     console.error(`获取插画信息失败：`, error);
     showShortToast('获取插画信息失败');
