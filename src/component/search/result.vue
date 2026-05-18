@@ -106,9 +106,17 @@ function handleImageScroll(event: any): void {
           <v-infinite-scroll color="#00796B">
             <div class="grid">
               <template v-for="item in videoResult" :key="item.id">
-                <cardButton type="video" :id="item.id" :title="item.title" :img="item.img" :author="item.author"
-                  :time="item.time" :viewNum="item.viewNum" :likeNum="item.likeNum" :longNum="item.longNum"
-                  :isR18="item.isR18" />
+                <cardButton type="video" :data="{
+                  id: item.id,
+                  title: item.title,
+                  img: item.img,
+                  author: item.author,
+                  time: item.time,
+                  viewNum: item.viewNum,
+                  likeNum: item.likeNum,
+                  longNum: item.longNum,
+                  isR18: item.isR18
+                }" />
               </template>
             </div>
           </v-infinite-scroll>
@@ -120,9 +128,17 @@ function handleImageScroll(event: any): void {
           <v-infinite-scroll color="#00796B">
             <div class="grid">
               <template v-for="item in imageResult" :key="item.id">
-                <cardButton type="image" :id="item.id" :title="item.title" :img="item.img" :author="item.author"
-                  :time="item.time" :viewNum="item.viewNum" :likeNum="item.likeNum" :longNum="item.longNum"
-                  :isR18="item.isR18" />
+                <cardButton type="image" :data="{
+                  id: item.id,
+                  title: item.title,
+                  img: item.img,
+                  author: item.author,
+                  time: item.time,
+                  viewNum: item.viewNum,
+                  likeNum: item.likeNum,
+                  longNum: item.longNum,
+                  isR18: item.isR18
+                }" />
               </template>
             </div>
           </v-infinite-scroll>

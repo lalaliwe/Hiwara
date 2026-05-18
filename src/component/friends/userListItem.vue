@@ -4,6 +4,9 @@ import { getImageIwara, followUser, unfollowUser } from '../../core/api'
 import iwaraSVG from '../../assets/svg/iwara.svg'
 import defaultAvatarImg from '../../static/img/avatar-default.jpg'
 import { showShortToast } from '../../core/toast'
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
 
 interface ListItem {
   uid: string,
@@ -108,6 +111,12 @@ function getButtonVariant(): 'flat' | 'outlined' | 'text' | 'plain' | 'tonal' | 
     return 'outlined'
   }
   return 'flat'
+}
+
+function toZone() {
+  router.push({
+    path: `/zone/${props.item.username}`,
+  });
 }
 </script>
 

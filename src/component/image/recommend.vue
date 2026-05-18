@@ -90,9 +90,17 @@ async function getImageRecommendByOther() {
         该作者其他插画
       </div>
       <div class="lists">
-        <cardButton v-for="(item, index) in authorOtherVideoList" :key="item.id" type="image" :id="item.id"
-          :title="item.title" :img="item.img" :author="item.author" :time="item.time" :viewNum="item.viewNum"
-          :likeNum="item.likeNum" :longNum="item.longNum" :isR18="item.isR18" />
+        <cardButton v-for="(item, index) in authorOtherVideoList" :key="item.id" type="image" :data="{
+          id: item.id,
+          title: item.title,
+          img: item.img,
+          author: item.author,
+          time: item.time,
+          viewNum: item.viewNum,
+          likeNum: item.likeNum,
+          longNum: item.longNum,
+          isR18: item.isR18
+        }" />
       </div>
     </div>
     <div v-if="recommendVideoList.length > 0">
@@ -100,9 +108,17 @@ async function getImageRecommendByOther() {
         更多推荐
       </div>
       <div class="lists">
-        <cardButton v-for="(item, index) in recommendVideoList" :key="item.id" type="image" :id="item.id"
-          :title="item.title" :img="item.img" :author="item.author" :time="item.time" :viewNum="item.viewNum"
-          :likeNum="item.likeNum" :longNum="item.longNum" :isR18="item.isR18" />
+        <cardButton v-for="(item, index) in recommendVideoList" :key="item.id" type="image" :data="{
+          id: item.id,
+          title: item.title,
+          img: item.img,
+          author: item.author,
+          time: item.time,
+          viewNum: item.viewNum,
+          likeNum: item.likeNum,
+          longNum: item.longNum,
+          isR18: item.isR18
+        }" />
       </div>
     </div>
   </div>

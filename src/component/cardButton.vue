@@ -8,17 +8,22 @@ import { getImageIwara } from '../core/api';
 
 const router = useRouter();
 
+// 定义卡片数据接口
+interface CardData {
+  id?: string;
+  title?: string;
+  img?: string;
+  author?: string;
+  time?: string;
+  viewNum?: number;
+  likeNum?: number;
+  longNum?: number;
+  isR18?: boolean;
+}
+
 const props = defineProps({
   type: { type: String, default: 'video' },
-  id: { type: String },
-  title: { type: String },
-  img: { type: String },
-  author: { type: String },
-  time: { type: String },
-  viewNum: { type: Number },
-  likeNum: { type: Number },
-  longNum: { type: Number },
-  isR18: { type: Boolean, default: false },
+  data: { type: Object as PropType<CardData>, required: true },
 });
 
 // 中文大数单位数组，按从小到大排列
@@ -169,32 +174,32 @@ const formatTimeDisplay = (timeStr: string | undefined): string => {
 };
 
 // 计算属性用于格式化显示的数字
-const formattedViewNum = computed(() => formatNumber(props.viewNum ?? 0));
-const formattedLikeNum = computed(() => formatNumber(props.likeNum ?? 0));
+const formattedViewNum = computed(() => formatNumber(props.data.viewNum ?? 0));
+const formattedLikeNum = computed(() => formatNumber(props.data.likeNum ?? 0));
 // 根据type决定是否格式化longNum：视频类型显示为时间格式，图像类型使用大数格式
 const formattedLongNum = computed(() => {
   if (props.type === 'video') {
     // 视频类型，格式化为时间格式
-    return formatTime(props.longNum ?? 0);
+    return formatTime(props.data.longNum ?? 0);
   } else {
     // 图像类型，使用数字格式化
-    return formatNumber(props.longNum ?? 0);
+    return formatNumber(props.data.longNum ?? 0);
   }
 });
 
 // 格式化后的时间显示
-const formattedTime = computed(() => formatTimeDisplay(props.time));
+const formattedTime = computed(() => formatTimeDisplay(props.data.time));
 
 // 处理图片源，初始状态如果有图片链接则显示空字符串，等待 API 加载
-const displayImg = ref(props.img && props.img !== 'file-loss'
+const displayImg = ref(props.data.img && props.data.img !== 'file-loss'
   ? '' // 初始为空，等待 API 加载完成
-  : (props.img === 'file-loss' ? lossImg : notImg));
+  : (props.data.img === 'file-loss' ? lossImg : notImg));
 
 onMounted(async () => {
-  if (props.img && props.img !== 'file-loss') {
+  if (props.data.img && props.data.img !== 'file-loss') {
     // 使用 API 获取图片，避免直接从网页获取导致的 403 错误
     try {
-      displayImg.value = await getImageIwara(props.img);
+      displayImg.value = await getImageIwara(props.data.img);
     } catch (error) {
       // console.error('Failed to load image via API:', error);
       // 如果 API 失败，尝试回退到直接 URL（可选，或者保持占位图/错误图）
@@ -206,14 +211,14 @@ onMounted(async () => {
 });
 
 async function clickCard() {
-  if (!props.id) {
+  if (!props.data.id) {
     console.error('缺少id');
     return;
   }
   if (props.type === 'video') {
-    router.push({ path: `/player/${props.id}` });
+    router.push({ path: `/player/${props.data.id}` });
   } else if (props.type === 'image') {
-    router.push({ path: `/image/${props.id}` });
+    router.push({ path: `/image/${props.data.id}` });
   }
 }
 </script>
@@ -225,15 +230,15 @@ async function clickCard() {
       <div class="info1">
         <div></div>
         <div class="isR18">
-          <span v-if="isR18">
+          <span v-if="props.data.isR18">
             R-18
           </span>
         </div>
         <div class="viewNum">
-          <span v-if="type === 'video'">
+          <span v-if="props.type === 'video'">
             <font-awesome-icon icon="fa-regular fa-circle-play" />{{ formattedViewNum }}
           </span>
-          <span v-else-if="type === 'image'">
+          <span v-else-if="props.type === 'image'">
             <font-awesome-icon icon="fa-regular fa-eye" />{{ formattedViewNum }}
           </span>
           &nbsp;
@@ -242,7 +247,7 @@ async function clickCard() {
           </span>
         </div>
         <div class="longNum">
-          <span v-if="!(type === 'image' && longNum as number <= 1)">
+          <span v-if="!(props.type === 'image' && props.data.longNum as number <= 1)">
             {{ formattedLongNum }}
           </span>
         </div>
@@ -257,12 +262,12 @@ async function clickCard() {
       </template>
     </v-img>
     <div class="title">
-      <div>{{ title }}</div>
+      <div>{{ props.data.title }}</div>
     </div>
     <div class="info2">
       <div class="content">
         <div class="author">
-          <font-awesome-icon icon="fa-regular fa-user" />{{ author }}
+          <font-awesome-icon icon="fa-regular fa-user" />{{ props.data.author }}
         </div>
         <div class="time">
           {{ formattedTime }}

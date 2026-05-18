@@ -244,9 +244,17 @@ async function getVideoList(tabNum: number): Promise<any> {
           class="list-view" :ref="(el) => setListRef(el, i)" @scroll="(e: Event) => handleScroll(i, e)">
           <div class="grid">
             <template v-for="(listItem, index) in videoList[i]" :key="listItem.id">
-              <cardButton type="video" :id="listItem.id" :title="listItem.title" :img="listItem.img"
-                :author="listItem.author" :time="listItem.time" :viewNum="listItem.viewNum" :likeNum="listItem.likeNum"
-                :longNum="listItem.longNum" :isR18="listItem.isR18" />
+              <cardButton type="video" :data="{
+                id: listItem.id,
+                title: listItem.title,
+                img: listItem.img,
+                author: listItem.author,
+                time: listItem.time,
+                viewNum: listItem.viewNum,
+                likeNum: listItem.likeNum,
+                longNum: listItem.longNum,
+                isR18: listItem.isR18
+              }" />
             </template>
           </div>
           <template v-slot:error="{ props }">

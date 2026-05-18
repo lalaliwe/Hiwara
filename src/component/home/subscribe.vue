@@ -302,9 +302,17 @@ async function getSubscribeImageList(): Promise<any> {
           class="list-view" ref="videoListView" @scroll="handleVideoScroll">
           <div class="grid">
             <template v-for="item in videoList" :key="item.id">
-              <cardButton type="video" :id="item.id" :title="item.title" :img="item.img" :author="item.author"
-                :time="item.time" :viewNum="item.viewNum" :likeNum="item.likeNum" :longNum="item.longNum"
-                :isR18="item.isR18" />
+              <cardButton type="video" :data="{
+                id: item.id,
+                title: item.title,
+                img: item.img,
+                author: item.author,
+                time: item.time,
+                viewNum: item.viewNum,
+                likeNum: item.likeNum,
+                longNum: item.longNum,
+                isR18: item.isR18
+              }" />
             </template>
           </div>
           <template v-slot:error="{ props }">
@@ -334,9 +342,17 @@ async function getSubscribeImageList(): Promise<any> {
           class="list-view" ref="imageListView" @scroll="handleImageScroll">
           <div class="grid">
             <template v-for="item in imageList" :key="item.id">
-              <cardButton type="image" :id="item.id" :title="item.title" :img="item.img" :author="item.author"
-                :time="item.time" :viewNum="item.viewNum" :likeNum="item.likeNum" :longNum="item.longNum"
-                :isR18="item.isR18" />
+              <cardButton type="image" :data="{
+                id: item.id,
+                title: item.title,
+                img: item.img,
+                author: item.author,
+                time: item.time,
+                viewNum: item.viewNum,
+                likeNum: item.likeNum,
+                longNum: item.longNum,
+                isR18: item.isR18
+              }" />
             </template>
           </div>
           <template v-slot:error="{ props }">

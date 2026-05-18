@@ -484,17 +484,33 @@ function toZone() {
           该作者其他视频
         </div>
         <div class="lists" v-if="!isLoadingAuthorVideos && authorOtherVideoList.length > 0">
-          <cardButton v-for="(item, index) in authorOtherVideoList" :key="item.id" type="video" :id="item.id"
-            :title="item.title" :img="item.img" :author="item.author" :time="item.time" :viewNum="item.viewNum"
-            :likeNum="item.likeNum" :longNum="item.longNum" :isR18="item.isR18" class="card-button" />
+          <cardButton v-for="(item, index) in authorOtherVideoList" :key="item.id" type="video" :data="{
+            id: item.id,
+            title: item.title,
+            img: item.img,
+            author: item.author,
+            time: item.time,
+            viewNum: item.viewNum,
+            likeNum: item.likeNum,
+            longNum: item.longNum,
+            isR18: item.isR18
+          }" class="card-button" />
         </div>
         <div class="label" v-if="!isLoadingRecommendVideos && recommendVideoList.length > 0">
           更多推荐
         </div>
         <div class="lists" v-if="!isLoadingRecommendVideos && recommendVideoList.length > 0">
-          <cardButton v-for="(item, index) in recommendVideoList" :key="item.id" type="video" :id="item.id"
-            :title="item.title" :img="item.img" :author="item.author" :time="item.time" :viewNum="item.viewNum"
-            :likeNum="item.likeNum" :longNum="item.longNum" :isR18="item.isR18" class="card-button" />
+          <cardButton v-for="(item, index) in recommendVideoList" :key="item.id" type="video" :data="{
+            id: item.id,
+            title: item.title,
+            img: item.img,
+            author: item.author,
+            time: item.time,
+            viewNum: item.viewNum,
+            likeNum: item.likeNum,
+            longNum: item.longNum,
+            isR18: item.isR18
+          }" class="card-button" />
         </div>
       </div>
     </div>
