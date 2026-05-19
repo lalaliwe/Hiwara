@@ -69,8 +69,8 @@ export function initDatabase(): Promise<void> {
           title TEXT,
           author TEXT,
           cover_url TEXT,
-          play_count INTEGER,
-          like_count INTEGER,
+          long_num INTEGER,
+          create_time INTEGER,
           access_time INTEGER
         );`);
         console.log('视频历史表创建成功');
@@ -86,8 +86,8 @@ export function initDatabase(): Promise<void> {
           title TEXT,
           author TEXT,
           cover_url TEXT,
-          play_count INTEGER,
-          like_count INTEGER,
+          long_num INTEGER,
+          create_time INTEGER,
           access_time INTEGER
         );`);
         console.log('插画历史表创建成功');
@@ -271,15 +271,15 @@ export function insertVideoHistory(
   title: string,
   author: string,
   coverUrl: string,
-  playCount: number,
-  likeCount: number
+  longNum: number,
+  createTime: number
 ): Promise<void> {
   return new Promise(async (resolve, reject) => {
     try {
       const accessTime = Date.now(); // 当前时间戳
       await sqlDB.execute(
-        `INSERT INTO video_history (id, title, author, cover_url, play_count, like_count, access_time) VALUES (?, ?, ?, ?, ?, ?, ?)`,
-        [id, title, author, coverUrl, playCount, likeCount, accessTime]
+        `INSERT INTO video_history (id, title, author, cover_url, long_num, create_time, access_time) VALUES (?, ?, ?, ?, ?, ?, ?)`,
+        [id, title, author, coverUrl, longNum, createTime, accessTime]
       );
       console.log('视频历史记录已添加:', id);
       resolve();
@@ -296,15 +296,15 @@ export function insertImageHistory(
   title: string,
   author: string,
   coverUrl: string,
-  playCount: number,
-  likeCount: number
+  longNum: number,
+  createTime: number
 ): Promise<void> {
   return new Promise(async (resolve, reject) => {
     try {
       const accessTime = Date.now(); // 当前时间戳
       await sqlDB.execute(
-        `INSERT INTO image_history (id, title, author, cover_url, play_count, like_count, access_time) VALUES (?, ?, ?, ?, ?, ?, ?)`,
-        [id, title, author, coverUrl, playCount, likeCount, accessTime]
+        `INSERT INTO image_history (id, title, author, cover_url, long_num, create_time, access_time) VALUES (?, ?, ?, ?, ?, ?, ?)`,
+        [id, title, author, coverUrl, longNum, createTime, accessTime]
       );
       console.log('插画历史记录已添加:', id);
       resolve();
@@ -321,29 +321,24 @@ export function getVideoHistoryList(page: number, pageSize: number = 15): Promis
     try {
       const offset = page * pageSize;
       const result: Array<any> = await sqlDB.select(
-        `SELECT id, title, author, cover_url, play_count, like_count, access_time 
+        `SELECT id, title, author, cover_url, long_num, create_time, access_time 
          FROM video_history 
          ORDER BY access_time DESC 
          LIMIT ? OFFSET ?`,
         [pageSize, offset]
       );
-      
-      console.log('从数据库获取到', result.length, '条视频历史记录');
-      
+      // console.log('从数据库获取到', result.length, '条视频历史记录');
       // 转换数据格式
       const formattedResult = result.map(item => ({
         id: item.id,
         title: item.title,
         author: item.author,
         img: item.cover_url, // 直接返回 cover_url，由子组件调用 getImageIwara 处理
-        time: '', // 可根据需要补充
-        viewNum: item.play_count.toString(),
-        likeNum: item.like_count.toString(),
-        longNum: '', // 可根据需要补充
+        longNum: item.long_num ? item.long_num.toString() : '', // 视频时长
+        createTime: item.create_time ? new Date(item.create_time).toISOString().split('T')[0] : '', // 作品发布时间
         isR18: false, // 数据库中未存储此字段，默认为false
         lastWatchDate: new Date(item.access_time).toISOString().split('T')[0]
       }));
-      
       resolve(formattedResult);
     } catch (error) {
       console.error('获取视频历史记录失败:', error);
@@ -358,29 +353,24 @@ export function getImageHistoryList(page: number, pageSize: number = 15): Promis
     try {
       const offset = page * pageSize;
       const result: Array<any> = await sqlDB.select(
-        `SELECT id, title, author, cover_url, play_count, like_count, access_time 
+        `SELECT id, title, author, cover_url, long_num, create_time, access_time 
          FROM image_history 
          ORDER BY access_time DESC 
          LIMIT ? OFFSET ?`,
         [pageSize, offset]
       );
-      
-      console.log('从数据库获取到', result.length, '条插画历史记录');
-      
+      // console.log('从数据库获取到', result.length, '条插画历史记录');
       // 转换数据格式
       const formattedResult = result.map(item => ({
         id: item.id,
         title: item.title,
         author: item.author,
         img: item.cover_url, // 直接返回 cover_url，由子组件调用 getImageIwara 处理
-        time: '', // 可根据需要补充
-        viewNum: item.play_count.toString(),
-        likeNum: item.like_count.toString(),
-        longNum: '', // 可根据需要补充
+        longNum: item.long_num ? item.long_num.toString() : '', // 插画张数
+        createTime: item.create_time ? new Date(item.create_time).toISOString().split('T')[0] : '', // 作品发布时间
         isR18: false, // 数据库中未存储此字段，默认为false
         lastWatchDate: new Date(item.access_time).toISOString().split('T')[0]
       }));
-      
       resolve(formattedResult);
     } catch (error) {
       console.error('获取插画历史记录失败:', error);

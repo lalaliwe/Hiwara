@@ -10,9 +10,7 @@ interface ListItem {
   title: string;
   img: string;
   author: string;
-  time: string;
-  viewNum: string;
-  likeNum: string;
+  createTime: string;
   longNum: string;
   isR18: boolean;
   lastWatchDate: string;
@@ -23,16 +21,43 @@ const props = defineProps<{
   type: 'video' | 'image'; // 添加类型区分
 }>();
 
+console.log('item:', props.item);
+
 // 处理图片源，初始状态如果有图片链接则显示空字符串，等待 API 加载
 const displayImg = ref(props.item.img ? '' : notImg);
+
+// 格式化时长
+const formatDuration = (seconds: string, type: 'video' | 'image'): string => {
+  if (type === 'image') {
+    return `${seconds}张`;
+  }
+
+  // 视频类型：将秒数转换为时间格式
+  const totalSeconds = parseInt(seconds);
+  if (isNaN(totalSeconds)) {
+    return '0:00';
+  }
+
+  const hours = Math.floor(totalSeconds / 3600);
+  const minutes = Math.floor((totalSeconds % 3600) / 60);
+  const secs = totalSeconds % 60;
+
+  if (hours > 0) {
+    // 有小时：H:MM:SS
+    return `${hours}:${minutes.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+  } else {
+    // 无小时：MM:SS（分钟至少两位）
+    return `${minutes.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+  }
+};
 
 onMounted(async () => {
   if (props.item.img) {
     // 使用 API 获取图片，避免直接从网页获取导致的 403 错误
     try {
-      console.log(`加载${props.type === 'video' ? '视频' : '插画'}历史封面:`, props.item.id);
+      // console.log(`加载${props.type === 'video' ? '视频' : '插画'}历史封面:`, props.item.id);
       displayImg.value = await getImageIwara(props.item.img);
-      console.log(`${props.type === 'video' ? '视频' : '插画'}历史封面加载成功:`, props.item.id);
+      // console.log(`${props.type === 'video' ? '视频' : '插画'}历史封面加载成功:`, props.item.id);
     } catch (error) {
       console.error(`${props.type === 'video' ? '视频' : '插画'}历史封面加载失败:`, props.item.id, error);
       displayImg.value = notImg;
@@ -45,8 +70,10 @@ onMounted(async () => {
   <v-list-item class="list-item">
     <!-- 左侧：预览图 -->
     <template v-slot:prepend>
-      <v-img :src="displayImg" :alt="item.title" aspect-ratio="4/3" width="106.7" height="80" cover
-        class="rounded">
+      <v-img :src="displayImg" :alt="item.title" aspect-ratio="16/10" width="128" height="80" cover class="rounded">
+        <div class="longNum">
+          {{ formatDuration(item.longNum, type) }}
+        </div>
         <template v-slot:placeholder>
           <div class="placeholder">
             <img :src="iwaraSVG" class="img" />
@@ -64,15 +91,12 @@ onMounted(async () => {
         {{ item.title }}
       </div>
       <div class="list-subtitle">
-        {{ item.author }} • {{ item.time }}
+        <font-awesome-icon icon="fa-regular fa-user" />
+        {{ item.author }}
       </div>
       <div class="list-stats">
-        <template v-if="type === 'video'">
-          {{ item.viewNum }}播放 • {{ item.likeNum }}点赞 • {{ item.longNum }}
-        </template>
-        <template v-else>
-          {{ item.viewNum }}浏览 • {{ item.likeNum }}收藏 • {{ item.longNum }}张
-        </template>
+        <font-awesome-icon icon="fa-regular fa-clock" />
+        {{ item.lastWatchDate }}
       </div>
     </div>
 
@@ -87,6 +111,17 @@ onMounted(async () => {
 .list-item {
   border-bottom: 1px solid #eee;
   padding: 8px 16px;
+
+  .longNum {
+    background-color: rgba(0, 0, 0, 0.5);
+    color: #fff;
+    position: absolute;
+    right: 4px;
+    bottom: 4px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    padding: 2px 4px;
+  }
 
   .placeholder {
     width: 100%;
@@ -124,8 +159,8 @@ onMounted(async () => {
     }
 
     .list-stats {
-      font-size: 0.75rem;
-      color: #959595;
+      font-size: 0.8rem;
+      color: #616161;
       margin-top: 4px;
       white-space: nowrap;
       overflow: hidden;

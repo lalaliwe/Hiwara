@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import { getVideoHistoryList } from '../../core/database';
 import { showShortToast } from '../../core/toast';
 import HistoryItem from './HistoryItem.vue';
@@ -12,9 +12,7 @@ interface ListItem {
   title: string;
   img: string;
   author: string;
-  time: string;
-  viewNum: string;
-  likeNum: string;
+  createTime: string;
   longNum: string;
   isR18: boolean;
   lastWatchDate: string;
@@ -34,7 +32,7 @@ type ListState = 'failed' | 'empty' | 'loading' | 'success';
 const videoState = ref<ListState>('loading');
 
 // 加载更多视频数据
-const loadMoreVideoData = async () => {
+const loadMoreVideoData = async ({ done }: any = { done: () => { } }) => {
   if (videoIsLoading.value || videoHasFinished.value) {
     return;
   }
@@ -42,41 +40,44 @@ const loadMoreVideoData = async () => {
   videoIsLoading.value = true;
 
   try {
-    console.log('加载视频历史，页码:', videoPage.value);
+    // console.log('加载视频历史，页码:', videoPage.value);
     const newItems = await getVideoHistoryList(videoPage.value, pageSize);
 
     if (newItems.length > 0) {
+      // 如果是第一页且之前是 loading 状态，更新为 success
+      if (videoPage.value === 0 && videoState.value === 'loading') {
+        videoState.value = 'success';
+      }
+
       // 追加数据
       videoHistory.value = [...videoHistory.value, ...newItems];
       videoPage.value++;
 
-      // 如果是第一页且加载成功，更新状态为 success
-      if (videoPage.value === 1 && videoState.value === 'loading') {
-        videoState.value = 'success';
-      }
-
-      console.log('视频历史加载成功，新增', newItems.length, '条');
+      // console.log('视频历史加载成功，新增', newItems.length, '条');
+      done('ok');
     } else {
       videoHasFinished.value = true;
 
-      // 如果是第一页且没有数据，更新状态为 empty
+      // 如果还没开始加载（第一页）且没有数据，更新为 empty
       if (videoPage.value === 0 && videoState.value === 'loading') {
         videoState.value = 'empty';
       }
 
-      console.log('视频历史已全部加载');
+      // console.log('视频历史已全部加载');
+      done('empty');
     }
   } catch (error) {
     console.error('加载视频历史失败:', error);
     showShortToast('加载视频历史失败');
 
-    // 如果是第一页加载失败，更新状态为 failed
+    // 如果是第一页加载失败，更新为 failed
     if (videoPage.value === 0 && videoState.value === 'loading') {
       videoState.value = 'failed';
     } else {
       // 翻页加载失败，设置失败标记
       videoLoadMoreFailed.value = true;
     }
+    done('error');
   } finally {
     videoIsLoading.value = false;
   }
@@ -89,7 +90,7 @@ const loadVideoDataInternal = async () => {
 
 // 刷新数据
 const refreshData = () => {
-  console.log('刷新视频历史数据');
+  // console.log('刷新视频历史数据');
   // 清空视频列表数据
   videoHistory.value = [];
   videoPage.value = 0;
@@ -106,15 +107,17 @@ const handleErrorClick = () => {
   refreshData();
 };
 
-// 按日期分组数据
-const groupByDate = (items: ListItem[]) => {
+// 按日期分组数据（使用 computed 缓存结果，避免每次渲染都重新计算）
+const groupedVideoHistory = computed(() => {
   const grouped: Record<string, ListItem[]> = {};
 
-  // 按日期排序（最新的在前）
-  items.sort((a, b) => new Date(b.lastWatchDate).getTime() - new Date(a.lastWatchDate).getTime());
+  // 创建副本进行排序，避免修改原数组
+  const sortedItems = [...videoHistory.value].sort((a, b) =>
+    new Date(b.lastWatchDate).getTime() - new Date(a.lastWatchDate).getTime()
+  );
 
   // 按日期分组
-  items.forEach(item => {
+  sortedItems.forEach(item => {
     if (!grouped[item.lastWatchDate]) {
       grouped[item.lastWatchDate] = [];
     }
@@ -122,7 +125,7 @@ const groupByDate = (items: ListItem[]) => {
   });
 
   return grouped;
-};
+});
 
 // 初始加载第一页数据
 loadMoreVideoData();
@@ -166,9 +169,9 @@ defineExpose({
   </div>
 
   <!-- 成功加载状态 -->
-  <v-infinite-scroll v-else ref="videoListView" color="#00796B" :on-load="loadMoreVideoData"
-    :disabled="videoHasFinished || videoLoadMoreFailed" @scroll="handleVideoScroll" class="list-view">
-    <div v-for="(groupItems, date) in groupByDate(videoHistory)" :key="date" class="date-group">
+  <v-infinite-scroll v-else ref="videoListView" color="#00796B" @load="loadMoreVideoData" :disabled="videoHasFinished"
+    @scroll="handleVideoScroll" class="list-view">
+    <div v-for="(groupItems, date) in groupedVideoHistory" :key="date" class="date-group">
       <div class="date-header">{{ date === new Date().toISOString().split('T')[0] ? '今天' : date }}</div>
       <v-list lines="two" class="pa-0">
         <HistoryItem v-for="(item, index) in groupItems" :key="index" :item="item" type="video" />

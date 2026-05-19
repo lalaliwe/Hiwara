@@ -160,16 +160,19 @@ const fetchVideoInfo = async () => {
 
       // 数据获取成功
       videoInfoState.value = 'success';
-      
+
       // 添加视频历史记录
       try {
+        // 解析 createdAt 为时间戳
+        const createTimeTimestamp = data.createdAt ? new Date(data.createdAt).getTime() : 0;
+
         await insertVideoHistory(
           data.id,
           data.title || '',
           data.user?.name || '',
           poster.value,
-          data.numViews || 0,
-          data.numLikes || 0
+          data.file?.duration || 0, // 视频时长（秒）
+          createTimeTimestamp // 作品发布时间
         );
         console.log('视频历史记录已添加:', data.id);
       } catch (error) {

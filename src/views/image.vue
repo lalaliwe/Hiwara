@@ -171,21 +171,24 @@ async function getImageInfo(): Promise<void> {
     });
     // 更新页面状态
     isState.value = 'success';
-    
+
     // 添加插画历史记录
     try {
       // 使用thumbnail作为封面(参照subscribe.vue的实现)
-      const coverUrl = imageInfo.thumbnail 
+      const coverUrl = imageInfo.thumbnail
         ? `https://i.iwara.tv/image/thumbnail/${imageInfo.thumbnail.id}/${imageInfo.thumbnail.id}.jpg`
         : '';
-      
+
+      // 解析 createdAt 为时间戳
+      const createTimeTimestamp = imageInfo.createdAt ? new Date(imageInfo.createdAt).getTime() : 0;
+
       await insertImageHistory(
         pid.value,
         imageInfo.title,
         imageInfo.user.name,
         coverUrl,
-        imageInfo.numViews,
-        imageInfo.liked ? 1 : 0
+        illustrationImages.value.length, // 插画张数
+        createTimeTimestamp // 作品发布时间
       );
       console.log('插画历史记录已添加:', pid.value);
     } catch (error) {

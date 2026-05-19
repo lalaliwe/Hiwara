@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import { getImageHistoryList } from '../../core/database';
 import { showShortToast } from '../../core/toast';
 import HistoryItem from './HistoryItem.vue';
@@ -12,9 +12,7 @@ interface ListItem {
   title: string;
   img: string;
   author: string;
-  time: string;
-  viewNum: string;
-  likeNum: string;
+  createTime: string;
   longNum: string;
   isR18: boolean;
   lastWatchDate: string;
@@ -34,7 +32,7 @@ type ListState = 'failed' | 'empty' | 'loading' | 'success';
 const imageState = ref<ListState>('loading');
 
 // 加载更多插画数据
-const loadMoreImageData = async () => {
+const loadMoreImageData = async ({ done }: any = { done: () => {} }) => {
   if (imageIsLoading.value || imageHasFinished.value) {
     return;
   }
@@ -42,41 +40,44 @@ const loadMoreImageData = async () => {
   imageIsLoading.value = true;
 
   try {
-    console.log('加载插画历史，页码:', imagePage.value);
+    // console.log('加载插画历史，页码:', imagePage.value);
     const newItems = await getImageHistoryList(imagePage.value, pageSize);
     
     if (newItems.length > 0) {
+      // 如果是第一页且之前是 loading 状态，更新为 success
+      if (imagePage.value === 0 && imageState.value === 'loading') {
+        imageState.value = 'success';
+      }
+
       // 追加数据
       imageHistory.value = [...imageHistory.value, ...newItems];
       imagePage.value++;
       
-      // 如果是第一页且加载成功，更新状态为 success
-      if (imagePage.value === 1 && imageState.value === 'loading') {
-        imageState.value = 'success';
-      }
-      
-      console.log('插画历史加载成功，新增', newItems.length, '条');
+      // console.log('插画历史加载成功，新增', newItems.length, '条');
+      done('ok');
     } else {
       imageHasFinished.value = true;
       
-      // 如果是第一页且没有数据，更新状态为 empty
+      // 如果还没开始加载（第一页）且没有数据，更新为 empty
       if (imagePage.value === 0 && imageState.value === 'loading') {
         imageState.value = 'empty';
       }
       
-      console.log('插画历史已全部加载');
+      // console.log('插画历史已全部加载');
+      done('empty');
     }
   } catch (error) {
     console.error('加载插画历史失败:', error);
     showShortToast('加载插画历史失败');
     
-    // 如果是第一页加载失败，更新状态为 failed
+    // 如果是第一页加载失败，更新为 failed
     if (imagePage.value === 0 && imageState.value === 'loading') {
       imageState.value = 'failed';
     } else {
       // 翻页加载失败，设置失败标记
       imageLoadMoreFailed.value = true;
     }
+    done('error');
   } finally {
     imageIsLoading.value = false;
   }
@@ -89,7 +90,7 @@ const loadImageDataInternal = async () => {
 
 // 刷新数据
 const refreshData = () => {
-  console.log('刷新插画历史数据');
+  // console.log('刷新插画历史数据');
   // 清空插画列表数据
   imageHistory.value = [];
   imagePage.value = 0;
@@ -106,15 +107,17 @@ const handleErrorClick = () => {
   refreshData();
 };
 
-// 按日期分组数据
-const groupByDate = (items: ListItem[]) => {
+// 按日期分组数据（使用 computed 缓存结果，避免每次渲染都重新计算）
+const groupedImageHistory = computed(() => {
   const grouped: Record<string, ListItem[]> = {};
-
-  // 按日期排序（最新的在前）
-  items.sort((a, b) => new Date(b.lastWatchDate).getTime() - new Date(a.lastWatchDate).getTime());
+  
+  // 创建副本进行排序，避免修改原数组
+  const sortedItems = [...imageHistory.value].sort((a, b) => 
+    new Date(b.lastWatchDate).getTime() - new Date(a.lastWatchDate).getTime()
+  );
 
   // 按日期分组
-  items.forEach(item => {
+  sortedItems.forEach(item => {
     if (!grouped[item.lastWatchDate]) {
       grouped[item.lastWatchDate] = [];
     }
@@ -122,7 +125,7 @@ const groupByDate = (items: ListItem[]) => {
   });
 
   return grouped;
-};
+});
 
 const imageListView = ref();
 let imageScrollTop = 0;
@@ -170,17 +173,17 @@ loadImageDataInternal();
     v-else
     ref="imageListView" 
     color="#00796B" 
-    :on-load="loadMoreImageData" 
-    :disabled="imageHasFinished || imageLoadMoreFailed"
+    @load="loadMoreImageData" 
+    :disabled="imageHasFinished"
     @scroll="handleImageScroll"
     class="list-view"
   >
-    <div v-for="(groupItems, date) in groupByDate(imageHistory)" :key="date" class="date-group">
+    <div v-for="(groupItems, date) in groupedImageHistory" :key="date" class="date-group">
       <div class="date-header">{{ date === new Date().toISOString().split('T')[0] ? '今天' : date }}</div>
       <v-list lines="two" class="pa-0">
         <HistoryItem 
-          v-for="(item, index) in groupItems" 
-          :key="index" 
+          v-for="item in groupItems" 
+          :key="item.id" 
           :item="item"
           type="image"
         />

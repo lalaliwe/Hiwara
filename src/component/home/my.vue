@@ -4,14 +4,16 @@ import {
   Theme as iconTheme
 } from '@icon-park/vue-next';
 import { useRouter } from 'vue-router'
-import { ref } from 'vue';
+import { ref, onMounted, onActivated, inject, watch, type Ref } from 'vue';
 import {
   getImageIwara,
   getMyselfInfo,
   getUserFollowers,
   getUserFans
 } from '../../core/api'
+import { getVideoHistoryList } from '../../core/database'
 import { showShortToast } from '../../core/toast';
+import HistoryItem from './HistoryItem.vue';
 
 const router = useRouter()
 
@@ -20,6 +22,11 @@ const username = ref<string>('');
 const avatar = ref<string>('');
 const followNum = ref<number>(0);
 const fansNum = ref<number>(0);
+const historyList = ref<any[]>([]);
+const historyContainer = ref<HTMLElement | null>(null);
+
+// 注入父组件提供的isTab响应式引用
+const isTab = inject<Ref<string>>('isTab');
 
 function routerGoTo(path: string, query?: any) {
   if (query) {
@@ -32,7 +39,30 @@ function routerGoTo(path: string, query?: any) {
   }
 }
 // 获取用户个人信息
-getUserInfo();
+// 移除立即调用,改为在生命周期钩子中调用
+// getUserInfo();
+// getHistoryList();
+
+onMounted(() => {
+  getUserInfo();
+  getHistoryList();
+});
+
+onActivated(() => {
+  // 当组件被激活(从缓存中恢复)时重新获取历史记录
+  getHistoryList();
+});
+
+// 监听isTab变化,当切换到my时重新获取数据
+if (isTab) {
+  watch(isTab, (newVal) => {
+    if (newVal === 'my') {
+      console.log('切换到my选项卡,重新获取历史记录');
+      getHistoryList();
+    }
+  });
+}
+
 async function getUserInfo() {
   try {
     const userInfoRes = await getMyselfInfo();
@@ -69,6 +99,25 @@ async function getUserInfo() {
     } catch (err) {
       console.error(err);
     }
+  }
+}
+
+async function getHistoryList() {
+  try {
+    const res = await getVideoHistoryList(0, 6);
+    console.log('获取历史记录:', res);
+    historyList.value = res;
+  } catch (err) {
+    console.error(err);
+    showShortToast('获取历史记录失败');
+  }
+}
+
+// 处理鼠标滚轮横向滚动
+function handleWheelScroll(event: WheelEvent) {
+  if (historyContainer.value) {
+    event.preventDefault();
+    historyContainer.value.scrollLeft += event.deltaY;
   }
 }
 </script>
@@ -119,16 +168,14 @@ async function getUserInfo() {
           <div class="left">历史记录</div>
           <div class="right" @click="routerGoTo('/history')">查看全部</div>
         </div>
-        <div class="history">
-          <div class="videoListCard" v-for="i in 10">
-            <div class="preview">
-              <v-img class="img" cover src="https://cdn.vuetifyjs.com/images/parallax/material.jpg"></v-img>
-            </div>
-            <div class="title">
-              {{ `测试标题-${i}` }}
-            </div>
-          </div>
-          <div class="all-btn" @click="routerGoTo('/history')">查看全部</div>
+        <div class="history" ref="historyContainer" @wheel="handleWheelScroll">
+          <template v-if="historyList.length > 0">
+            <HistoryItem v-for="item in historyList" :key="item.id" :item="item" />
+            <div class="all-btn" @click="routerGoTo('/history')">查看全部</div>
+          </template>
+          <template v-else>
+            <div class="empty-text">暂无历史记录</div>
+          </template>
         </div>
       </div>
       <div class="card">
@@ -395,27 +442,17 @@ async function getUserInfo() {
 
     .history {
       overflow-x: auto;
-      margin: 6px 12px 10px 12px;
+      margin: 8px 12px 10px 12px;
       display: flex;
       flex-wrap: nowrap;
+      align-items: center;
 
-      .videoListCard {
-        margin-right: 6px;
-
-        .preview {
-          .img {
-            width: 100px;
-            aspect-ratio: 16 / 9;
-          }
-        }
-
-        .title {
-          white-space: nowrap;
-          font-size: 0.9rem;
-          width: 100px;
-          overflow: hidden;
-          text-overflow: ellipsis;
-        }
+      .empty-text {
+        font-size: 0.9rem;
+        color: #757575;
+        padding: 20px 0;
+        text-align: center;
+        flex: 1;
       }
 
       .all-btn {
@@ -425,8 +462,10 @@ async function getUserInfo() {
         display: flex;
         align-items: center;
         justify-content: center;
-        flex-shrink: 0; // 防止在flex容器中被压缩
-        min-width: fit-content; // 确保内容能完全显示
+        flex-shrink: 0;
+        min-width: fit-content;
+        cursor: pointer;
+        user-select: none;
       }
     }
 
