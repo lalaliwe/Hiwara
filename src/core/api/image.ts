@@ -1,0 +1,148 @@
+import { API_URL } from './config';
+import { getAccessToken } from './auth';
+import { getSendRequestIwara, postSendRequestIwara, deleteSendRequestIwara } from './iwara';
+
+// 获取用户订阅插画列表
+export async function getSubscribeImageList(page: number): Promise<any> {
+  const path = `${API_URL}/images`;
+  const headers = {
+    Authorization: `Bearer ${await getAccessToken()}`,
+  };
+  const query = {
+    rating: 'all',
+    page: page,
+    limit: 32,
+    subscribed: true
+  };
+  try {
+    const response = await getSendRequestIwara(path, headers, query);
+    return response;
+  } catch (error) {
+    console.error('Get subscribe image list failed:', error);
+    throw error;
+  }
+}
+
+// 获取插画列表
+export async function getImageList(page: number, sort: string, date?: string, user?: string): Promise<any> {
+  const path = `${API_URL}/images`;
+  const headers = {
+    Authorization: `Bearer ${await getAccessToken()}`,
+  };
+  const query = {
+    rating: 'all',
+    page: page,
+    limit: 32,
+    sort: sort,
+    ...(date && { date }),
+    ...(user && { user })
+  };
+  try {
+    const response = await getSendRequestIwara(path, headers, query);
+    return response;
+  } catch (error) {
+    console.error('Get image list failed:', error);
+    throw error;
+  }
+}
+
+// 获取插画信息
+export async function getImageInfo(imageId: string): Promise<any> {
+  const path = `${API_URL}/image/${imageId}`;
+  const headers = {
+    Authorization: `Bearer ${await getAccessToken()}`,
+  };
+  try {
+    console.log(path)
+    const response = await getSendRequestIwara(path, headers);
+    return response;
+  } catch (error) {
+    console.error('Get image info failed:', error);
+    throw error;
+  }
+}
+
+// 点赞插画
+export async function likeImage(imageId: string): Promise<any> {
+  const path = `${API_URL}/image/${imageId}/like`;
+  const headers = {
+    Authorization: `Bearer ${await getAccessToken()}`,
+  };
+  try {
+    const response = await postSendRequestIwara(path, headers);
+    return response;
+  } catch (error) {
+    console.error('Like image failed:', error);
+    throw error;
+  }
+}
+
+// 取消点赞插画
+export async function unlikeImage(imageId: string): Promise<any> {
+  const path = `${API_URL}/image/${imageId}/like`;
+  const headers = {
+    Authorization: `Bearer ${await getAccessToken()}`,
+  };
+  try {
+    const response = await deleteSendRequestIwara(path, headers);
+    return response;
+  } catch (error) {
+    console.error('Unlike image failed:', error);
+    throw error;
+  }
+}
+
+// 获取插画推荐：该用户的其他插画
+export async function getImageRecommendByUser(pid: string, uid: string): Promise<any> {
+  const path = `${API_URL}/images`;
+  const headers = {
+    Authorization: `Bearer ${await getAccessToken()}`,
+  };
+  const query = {
+    rating: 'all',
+    user: uid,
+    exclude: pid,
+    limit: 6
+  };
+  try {
+    const response = await getSendRequestIwara(path, headers, query);
+    return response;
+  } catch (error) {
+    console.error('Get image recommend by user failed:', error);
+    throw error;
+  }
+}
+
+// 获取插画推荐：更多插画
+export async function getImageRecommendByOther(pid: string): Promise<any> {
+  const path = `${API_URL}/image/${pid}/related`;
+  const headers = {
+    Authorization: `Bearer ${await getAccessToken()}`,
+  };
+  try {
+    const response = await getSendRequestIwara(path, headers);
+    return response;
+  } catch (error) {
+    console.error('Get image recommend by other failed:', error);
+    throw error;
+  }
+}
+
+// 获取插画评论
+export async function getImageComments(pid: string, page: number): Promise<any> {
+  const path = `${API_URL}/image/${pid}/comments`;
+  const headers = {
+    Authorization: `Bearer ${await getAccessToken()}`,
+  };
+  const query = {
+    page: page,
+    limit: 32
+  };
+  try {
+    const response = await getSendRequestIwara(path, headers, query);
+    return response;
+  } catch (error) {
+    console.error('Get image comments failed:', error);
+    throw error;
+  }
+}
