@@ -93,3 +93,20 @@ export async function unfollowUser(uid: string): Promise<any> {
     throw error;
   }
 }
+
+// 获取好友列表
+export async function getFriendsList(uid: string, page: number): Promise<any> {
+  const path = `${API_URL}/user/${uid}/friends`;
+  console.log(path);
+  const headers = {
+    Authorization: `Bearer ${await getAccessToken()}`,
+  };
+  const query = { page: page };
+  try {
+    const response = await getSendRequestIwara(path, headers, query);
+    return response;
+  } catch (error) {
+    console.error('Get friends list failed:', error);
+    throw error;
+  }
+}

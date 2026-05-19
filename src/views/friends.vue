@@ -127,7 +127,7 @@ onActivated(() => {
         <fans ref="fansListRef" :uid="uid" />
       </v-tabs-window-item>
       <v-tabs-window-item v-if="isMyself" value="friend">
-        <friend ref="friendListRef" :list-items="friendListData" />
+        <friend ref="friendListRef" :uid="uid" />
       </v-tabs-window-item>
     </v-tabs-window>
   </div>

@@ -44,5 +44,6 @@ export {
   getUserFollowers,
   getUserFans,
   followUser,
-  unfollowUser
+  unfollowUser,
+  getFriendsList
 } from './user';
