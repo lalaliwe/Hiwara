@@ -277,11 +277,28 @@ export function insertVideoHistory(
   return new Promise(async (resolve, reject) => {
     try {
       const accessTime = Date.now(); // 当前时间戳
-      await sqlDB.execute(
-        `INSERT INTO video_history (id, title, author, cover_url, long_num, create_time, access_time) VALUES (?, ?, ?, ?, ?, ?, ?)`,
-        [id, title, author, coverUrl, longNum, createTime, accessTime]
+      
+      // 查询最新的记录ID
+      const latestRecord: Array<{ id: string }> = await sqlDB.select(
+        `SELECT id FROM video_history ORDER BY access_time DESC LIMIT 1`,
+        []
       );
-      console.log('视频历史记录已添加:', id);
+      
+      // 如果最新记录的ID与要插入的ID相同，只更新access_time
+      if (latestRecord.length > 0 && latestRecord[0].id === id) {
+        await sqlDB.execute(
+          `UPDATE video_history SET access_time = ? WHERE id = ?`,
+          [accessTime, id]
+        );
+        console.log('视频历史记录已更新:', id);
+      } else {
+        // 否则插入新记录
+        await sqlDB.execute(
+          `INSERT INTO video_history (id, title, author, cover_url, long_num, create_time, access_time) VALUES (?, ?, ?, ?, ?, ?, ?)`,
+          [id, title, author, coverUrl, longNum, createTime, accessTime]
+        );
+        console.log('视频历史记录已添加:', id);
+      }
       resolve();
     } catch (error) {
       console.error('插入视频历史记录失败:', error);
@@ -302,11 +319,28 @@ export function insertImageHistory(
   return new Promise(async (resolve, reject) => {
     try {
       const accessTime = Date.now(); // 当前时间戳
-      await sqlDB.execute(
-        `INSERT INTO image_history (id, title, author, cover_url, long_num, create_time, access_time) VALUES (?, ?, ?, ?, ?, ?, ?)`,
-        [id, title, author, coverUrl, longNum, createTime, accessTime]
+      
+      // 查询最新的记录ID
+      const latestRecord: Array<{ id: string }> = await sqlDB.select(
+        `SELECT id FROM image_history ORDER BY access_time DESC LIMIT 1`,
+        []
       );
-      console.log('插画历史记录已添加:', id);
+      
+      // 如果最新记录的ID与要插入的ID相同，只更新access_time
+      if (latestRecord.length > 0 && latestRecord[0].id === id) {
+        await sqlDB.execute(
+          `UPDATE image_history SET access_time = ? WHERE id = ?`,
+          [accessTime, id]
+        );
+        console.log('插画历史记录已更新:', id);
+      } else {
+        // 否则插入新记录
+        await sqlDB.execute(
+          `INSERT INTO image_history (id, title, author, cover_url, long_num, create_time, access_time) VALUES (?, ?, ?, ?, ?, ?, ?)`,
+          [id, title, author, coverUrl, longNum, createTime, accessTime]
+        );
+        console.log('插画历史记录已添加:', id);
+      }
       resolve();
     } catch (error) {
       console.error('插入插画历史记录失败:', error);

@@ -1,8 +1,11 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
+import { useRouter } from 'vue-router';
 import { getImageIwara } from '../../core/api';
 import notImg from '../../static/img/not-img.jpg';
 import iwaraSVG from '../../assets/svg/iwara.svg';
+
+const router = useRouter();
 
 // 定义列表项接口
 interface ListItem {
@@ -65,6 +68,19 @@ const formatTime = (timestamp?: number): string => {
   return `${hours}:${minutes}`;
 };
 
+// 点击列表项跳转
+function clickItem() {
+  if (!props.item.id) {
+    console.error('缺少id');
+    return;
+  }
+  if (props.type === 'video') {
+    router.push({ path: `/player/${props.item.id}` });
+  } else if (props.type === 'image') {
+    router.push({ path: `/image/${props.item.id}` });
+  }
+}
+
 onMounted(async () => {
   if (props.item.img) {
     // 使用 API 获取图片，避免直接从网页获取导致的 403 错误
@@ -81,7 +97,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <v-list-item class="list-item">
+  <v-list-item class="list-item" @click="clickItem">
     <!-- 左侧：预览图 -->
     <template v-slot:prepend>
       <v-img :src="displayImg" :alt="item.title" aspect-ratio="16/10" width="128" height="80" cover class="rounded">

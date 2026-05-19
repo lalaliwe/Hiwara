@@ -1,8 +1,11 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
+import { useRouter } from 'vue-router';
 import { getImageIwara } from '../../core/api';
 import notImg from '../../static/img/not-img.jpg';
 import iwaraSVG from '../../assets/svg/iwara.svg';
+
+const router = useRouter();
 
 interface HistoryItemProps {
   item: {
@@ -28,10 +31,19 @@ onMounted(async () => {
     }
   }
 });
+
+// 点击列表项跳转
+function clickItem() {
+  if (!props.item.id) {
+    console.error('缺少id');
+    return;
+  }
+  router.push({ path: `/player/${props.item.id}` });
+}
 </script>
 
 <template>
-  <div class="videoListCard">
+  <div class="videoListCard" @click="clickItem">
     <div class="preview">
       <v-img class="img" cover :src="displayImg">
         <template v-slot:placeholder>
@@ -53,6 +65,8 @@ onMounted(async () => {
 <style lang="scss" scoped>
 .videoListCard {
   margin-right: 8px;
+  cursor: pointer;
+  user-select: none;
 
   .preview {
     .img {
