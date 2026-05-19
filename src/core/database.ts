@@ -314,3 +314,77 @@ export function insertImageHistory(
     }
   });
 }
+
+// 获取视频历史记录列表（分页）
+export function getVideoHistoryList(page: number, pageSize: number = 15): Promise<any[]> {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const offset = page * pageSize;
+      const result: Array<any> = await sqlDB.select(
+        `SELECT id, title, author, cover_url, play_count, like_count, access_time 
+         FROM video_history 
+         ORDER BY access_time DESC 
+         LIMIT ? OFFSET ?`,
+        [pageSize, offset]
+      );
+      
+      console.log('从数据库获取到', result.length, '条视频历史记录');
+      
+      // 转换数据格式
+      const formattedResult = result.map(item => ({
+        id: item.id,
+        title: item.title,
+        author: item.author,
+        img: item.cover_url, // 直接返回 cover_url，由子组件调用 getImageIwara 处理
+        time: '', // 可根据需要补充
+        viewNum: item.play_count.toString(),
+        likeNum: item.like_count.toString(),
+        longNum: '', // 可根据需要补充
+        isR18: false, // 数据库中未存储此字段，默认为false
+        lastWatchDate: new Date(item.access_time).toISOString().split('T')[0]
+      }));
+      
+      resolve(formattedResult);
+    } catch (error) {
+      console.error('获取视频历史记录失败:', error);
+      reject(error);
+    }
+  });
+}
+
+// 获取插画历史记录列表（分页）
+export function getImageHistoryList(page: number, pageSize: number = 15): Promise<any[]> {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const offset = page * pageSize;
+      const result: Array<any> = await sqlDB.select(
+        `SELECT id, title, author, cover_url, play_count, like_count, access_time 
+         FROM image_history 
+         ORDER BY access_time DESC 
+         LIMIT ? OFFSET ?`,
+        [pageSize, offset]
+      );
+      
+      console.log('从数据库获取到', result.length, '条插画历史记录');
+      
+      // 转换数据格式
+      const formattedResult = result.map(item => ({
+        id: item.id,
+        title: item.title,
+        author: item.author,
+        img: item.cover_url, // 直接返回 cover_url，由子组件调用 getImageIwara 处理
+        time: '', // 可根据需要补充
+        viewNum: item.play_count.toString(),
+        likeNum: item.like_count.toString(),
+        longNum: '', // 可根据需要补充
+        isR18: false, // 数据库中未存储此字段，默认为false
+        lastWatchDate: new Date(item.access_time).toISOString().split('T')[0]
+      }));
+      
+      resolve(formattedResult);
+    } catch (error) {
+      console.error('获取插画历史记录失败:', error);
+      reject(error);
+    }
+  });
+}
