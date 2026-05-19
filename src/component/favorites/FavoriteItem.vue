@@ -11,10 +11,10 @@ interface ListItem {
   img: string;
   author: string;
   createTime: string;
-  longNum: string;
+  longNum: number;
   isR18: boolean;
-  lastWatchDate: string;
-  accessTime?: number; // 添加可选的原始时间戳字段
+  favoriteDate: string;
+  favoriteTime?: number; // 添加可选的完整时间戳字段
 }
 
 const props = defineProps<{
@@ -28,13 +28,13 @@ console.log('item:', props.item);
 const displayImg = ref(props.item.img ? '' : notImg);
 
 // 格式化时长
-const formatDuration = (seconds: string, type: 'video' | 'image'): string => {
+const formatDuration = (seconds: number, type: 'video' | 'image'): string => {
   if (type === 'image') {
     return `${seconds}张`;
   }
 
   // 视频类型：将秒数转换为时间格式
-  const totalSeconds = parseInt(seconds);
+  const totalSeconds = seconds;
   if (isNaN(totalSeconds)) {
     return '0:00';
   }
@@ -69,11 +69,9 @@ onMounted(async () => {
   if (props.item.img) {
     // 使用 API 获取图片，避免直接从网页获取导致的 403 错误
     try {
-      // console.log(`加载${props.type === 'video' ? '视频' : '插画'}历史封面:`, props.item.id);
       displayImg.value = await getImageIwara(props.item.img);
-      // console.log(`${props.type === 'video' ? '视频' : '插画'}历史封面加载成功:`, props.item.id);
     } catch (error) {
-      console.error(`${props.type === 'video' ? '视频' : '插画'}历史封面加载失败:`, props.item.id, error);
+      console.error(`${props.type === 'video' ? '视频' : '插画'}收藏封面加载失败:`, props.item.id, error);
       displayImg.value = notImg;
     }
   }
@@ -110,14 +108,9 @@ onMounted(async () => {
       </div>
       <div class="list-stats">
         <font-awesome-icon icon="fa-regular fa-clock" />
-        {{ item.lastWatchDate }} {{ formatTime(item.accessTime) }}
+        {{ item.favoriteDate }} {{ formatTime(item.favoriteTime) }}
       </div>
     </div>
-
-    <!-- 右侧：R18标记 -->
-    <template v-slot:append v-if="item.isR18">
-      <v-chip color="red" size="small" label>R18</v-chip>
-    </template>
   </v-list-item>
 </template>
 

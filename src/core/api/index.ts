@@ -13,6 +13,7 @@ export { login, getAccessToken } from './auth';
 // 导出视频相关 API
 export {
   getSubscribeVideoList,
+  getFavoritesVideoList,
   getVideoList,
   getVideoInfo,
   getVideoFileSQ,
@@ -26,6 +27,7 @@ export {
 // 导出插画相关 API
 export {
   getSubscribeImageList,
+  getFavoritesImageList,
   getImageList,
   getImageInfo,
   likeImage,

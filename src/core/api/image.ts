@@ -23,6 +23,25 @@ export async function getSubscribeImageList(page: number): Promise<any> {
   }
 }
 
+// 获取用户收藏的插画列表
+export async function getFavoritesImageList(page: number): Promise<any> {
+  const path = `${API_URL}/favorites/images`;
+  const headers = {
+    Authorization: `Bearer ${await getAccessToken()}`,
+  };
+  const query = {
+    page: page,
+    limit: 32,
+  };
+  try {
+    const response = await getSendRequestIwara(path, headers, query);
+    return response;
+  } catch (error) {
+    console.error('Get favorites image list failed:', error);
+    throw error;
+  }
+}
+
 // 获取插画列表
 export async function getImageList(page: number, sort: string, date?: string, user?: string): Promise<any> {
   const path = `${API_URL}/images`;

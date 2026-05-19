@@ -337,7 +337,8 @@ export function getVideoHistoryList(page: number, pageSize: number = 15): Promis
         longNum: item.long_num ? item.long_num.toString() : '', // 视频时长
         createTime: item.create_time ? new Date(item.create_time).toISOString().split('T')[0] : '', // 作品发布时间
         isR18: false, // 数据库中未存储此字段，默认为false
-        lastWatchDate: new Date(item.access_time).toISOString().split('T')[0]
+        lastWatchDate: new Date(item.access_time).toISOString().split('T')[0],
+        accessTime: item.access_time // 保留原始时间戳用于显示完整时间
       }));
       resolve(formattedResult);
     } catch (error) {
@@ -369,8 +370,10 @@ export function getImageHistoryList(page: number, pageSize: number = 15): Promis
         longNum: item.long_num ? item.long_num.toString() : '', // 插画张数
         createTime: item.create_time ? new Date(item.create_time).toISOString().split('T')[0] : '', // 作品发布时间
         isR18: false, // 数据库中未存储此字段，默认为false
-        lastWatchDate: new Date(item.access_time).toISOString().split('T')[0]
+        lastWatchDate: new Date(item.access_time).toISOString().split('T')[0],
+        accessTime: item.access_time // 保留原始时间戳用于显示完整时间
       }));
+      
       resolve(formattedResult);
     } catch (error) {
       console.error('获取插画历史记录失败:', error);
