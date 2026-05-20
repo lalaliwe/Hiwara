@@ -18,6 +18,7 @@ export async function getSendRequestIwara(url: string, headers?: any, query?: an
       }
     }
 
+    console.log(finalUrl);
     // 合并默认头信息和用户传入的头信息
     const requestHeaders: Record<string, string> = {
       'Content-Type': 'application/json',

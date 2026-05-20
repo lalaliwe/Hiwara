@@ -1,15 +1,20 @@
 <script setup lang="ts">
 import { ref, computed, nextTick, onMounted, onUnmounted } from 'vue';
+import { getSearchHistoryList } from '../../core/database';
+
+const emit = defineEmits<{
+  search: [keyword: string];
+}>();
 
 // 内部维护搜索历史和推荐数据
 const searchHistory = ref<string[]>([]);
 const searchRecommend = ref<string[]>([]);
 
 // 生成测试数据
-for (let i = 0; i < 100; i++) {
-  searchHistory.value.push(`搜索历史${i}`);
-  searchRecommend.value.push(`搜索推荐${i}`);
-}
+// for (let i = 0; i < 100; i++) {
+//   searchHistory.value.push(`搜索历史${i}`);
+//   searchRecommend.value.push(`搜索推荐${i}`);
+// }
 
 // 折叠展开状态（完全内部管理）
 const historyExpand = ref(false);
@@ -67,7 +72,16 @@ const recommendContainerHeight = computed(() => {
   }
 });
 
-onMounted(() => {
+onMounted(async () => {
+  // 从数据库获取搜索历史（限制显示最近50条）
+  try {
+    const history = await getSearchHistoryList(50);
+    searchHistory.value = history;
+    console.log('搜索历史加载完成:', history.length, '条记录');
+  } catch (error) {
+    console.error('加载搜索历史失败:', error);
+  }
+  
   // 使用 nextTick 确保 DOM 已经渲染完成后再计算高度
   nextTick(() => {
     calculateHeights();
@@ -97,26 +111,32 @@ function toggleHistoryExpand() {
 function toggleRecommendExpand() {
   recommendExpand.value = !recommendExpand.value;
 }
+
+// 点击标签触发搜索
+function handleTagClick(keyword: string) {
+  console.log('点击搜索标签:', keyword);
+  emit('search', keyword);
+}
 </script>
 
 <template>
   <div class="content">
     <div class="tagsContainer">
-      <div class="label" @click="toggleHistoryExpand">
+      <div class="label" @click="toggleHistoryExpand" v-if="searchHistory.length > 0">
         搜索历史
         <font-awesome-icon icon="fa-solid fa-angle-down" :class="{ expanded: historyExpand }" />
       </div>
       <div class="tags" :style="{ height: historyContainerHeight }">
-        <v-chip v-for="tag in searchHistory" size="small" class="tag">
+        <v-chip v-for="tag in searchHistory" size="small" class="tag" @click="handleTagClick(tag)">
           {{ tag }}
         </v-chip>
       </div>
-      <div class="label" @click="toggleRecommendExpand">
+      <div class="label" @click="toggleRecommendExpand" v-if="searchRecommend.length > 0">
         搜索发现
         <font-awesome-icon icon="fa-solid fa-angle-down" :class="{ expanded: recommendExpand }" />
       </div>
       <div class="tags" :style="{ height: recommendContainerHeight }">
-        <v-chip v-for="tag in searchRecommend" size="small" class="tag">
+        <v-chip v-for="tag in searchRecommend" size="small" class="tag" @click="handleTagClick(tag)">
           {{ tag }}
         </v-chip>
       </div>

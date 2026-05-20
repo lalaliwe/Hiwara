@@ -93,6 +93,18 @@ export function initDatabase(): Promise<void> {
         console.log('插画历史表创建成功');
       }
 
+      // 独立检查并创建历史搜索表
+      const searchHistoryResult: Array<{ name: string }> = await sqlDB.select(
+        `SELECT name FROM sqlite_master WHERE type='table' AND name='search_history'`
+      );
+      if (searchHistoryResult.length === 0) {
+        await sqlDB.execute(`CREATE TABLE IF NOT EXISTS search_history (
+          search_text TEXT PRIMARY KEY,
+          search_time INTEGER
+        );`);
+        console.log('历史搜索表创建成功');
+      }
+
       resolve();
     } catch (error) {
       reject(error);
@@ -411,6 +423,67 @@ export function getImageHistoryList(page: number, pageSize: number = 15): Promis
       resolve(formattedResult);
     } catch (error) {
       console.error('获取插画历史记录失败:', error);
+      reject(error);
+    }
+  });
+}
+
+// 插入或更新历史搜索记录
+export function insertSearchHistory(searchText: string): Promise<void> {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const searchTime = Date.now(); // 当前时间戳
+      
+      // 查询是否已存在该搜索文本
+      const existingRecord: Array<{ search_text: string }> = await sqlDB.select(
+        `SELECT search_text FROM search_history WHERE search_text = ?`,
+        [searchText]
+      );
+      
+      if (existingRecord.length > 0) {
+        // 如果已存在，只更新搜索时间
+        await sqlDB.execute(
+          `UPDATE search_history SET search_time = ? WHERE search_text = ?`,
+          [searchTime, searchText]
+        );
+        console.log('历史搜索记录已更新:', searchText);
+      } else {
+        // 否则插入新记录
+        await sqlDB.execute(
+          `INSERT INTO search_history (search_text, search_time) VALUES (?, ?)`,
+          [searchText, searchTime]
+        );
+        console.log('历史搜索记录已添加:', searchText);
+      }
+      resolve();
+    } catch (error) {
+      console.error('插入历史搜索记录失败:', error);
+      reject(error);
+    }
+  });
+}
+
+// 获取历史搜索列表（倒序排序，可选限制数量）
+export function getSearchHistoryList(limit?: number): Promise<string[]> {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let query = `SELECT search_text FROM search_history ORDER BY search_time DESC`;
+      let params: any[] = [];
+      
+      if (limit) {
+        query += ` LIMIT ?`;
+        params.push(limit);
+      }
+      
+      const result: Array<{ search_text: string }> = await sqlDB.select(query, params);
+      
+      // 提取搜索文本数组
+      const searchTexts = result.map(item => item.search_text);
+      
+      console.log('从数据库获取到', searchTexts.length, '条历史搜索记录');
+      resolve(searchTexts);
+    } catch (error) {
+      console.error('获取历史搜索记录失败:', error);
       reject(error);
     }
   });

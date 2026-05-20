@@ -186,3 +186,24 @@ export async function getVideoComments(vid: string, page: number): Promise<any> 
     throw error;
   }
 }
+
+// 搜索
+export async function search(text: string, page: number, type: 'videos' | 'images' | 'users'): Promise<any> {
+  const path = `${API_URL}/search`;
+  const headers = {
+    Authorization: `Bearer ${await getAccessToken()}`,
+  };
+  const query = {
+    query: text,
+    page: page,
+    type: type,
+    sort: 'relevance'
+  };
+  try {
+    const response = await getSendRequestIwara(path, headers, query);
+    return response;
+  } catch (error) {
+    console.error('Search failed:', error);
+    throw error;
+  }
+}

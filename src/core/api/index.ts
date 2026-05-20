@@ -21,7 +21,8 @@ export {
   unlikeVideo,
   getVideoRecommendByUser,
   getVideoRecommendByOther,
-  getVideoComments
+  getVideoComments,
+  search
 } from './video';
 
 // 导出插画相关 API

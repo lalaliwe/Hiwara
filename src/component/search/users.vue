@@ -1,0 +1,206 @@
+<script setup lang="ts">
+import { ref, watch } from 'vue';
+import { search } from '../../core/api/video';
+import loadingHuawu from '../loadingHuawu.vue';
+import errorHuawu from '../errorHuawu.vue';
+import { showShortToast } from '../../core/toast';
+import userListItem from '../friends/userListItem.vue';
+
+const props = defineProps<{
+  keyword: string;
+}>();
+
+interface UserItem {
+  uid: string;
+  username: string;
+  nickname: string;
+  avatar: string;
+}
+
+const userResult = ref<UserItem[]>([]);
+const userPage = ref(0);
+const userLoadMoreFailed = ref(false);
+const userIsLoading = ref(false);
+const userHasFinished = ref(false);
+
+type ListState = 'failed' | 'empty' | 'loading' | 'success';
+const userState = ref<ListState>('loading');
+
+// 加载更多用户数据
+const loadMoreUserData = async ({ done }: any = { done: () => { } }) => {
+  if (userIsLoading.value || userHasFinished.value) return;
+  userIsLoading.value = true;
+
+  try {
+    const res = await search(props.keyword, userPage.value, 'users');
+    console.log('用户搜索 API 返回值:', res);
+    if (!res.ok) throw new Error(`状态码：${res.status}, 错误信息：${res.statusText}`);
+
+    if (res.data.results && res.data.results.length > 0) {
+      if (userPage.value === 0 && userState.value === 'loading') userState.value = 'success';
+
+      const newUsers = res.data.results.map((item: any) => {
+        // 构造头像URL，与 following.vue 的模式一致
+        const avatarUrl = item.avatar
+          ? `https://i.iwara.tv/image/avatar/${item.avatar.id || item.avatar}/${item.avatar.name || 'thumbnail-0.jpg'}`
+          : 'no-avatar';
+
+        return {
+          uid: item.id,
+          username: item.username,
+          nickname: item.name,
+          avatar: avatarUrl
+        };
+      });
+
+      userResult.value = [...userResult.value, ...newUsers];
+      userPage.value++;
+      userLoadMoreFailed.value = false;
+      done('ok');
+    } else {
+      userHasFinished.value = true;
+      if (userPage.value === 0 && userState.value === 'loading') userState.value = 'empty';
+      done('empty');
+    }
+  } catch (error) {
+    console.error('加载用户搜索结果失败:', error);
+    showShortToast('加载用户搜索结果失败');
+    if (userPage.value === 0 && userState.value === 'loading') {
+      userState.value = 'failed';
+    } else {
+      userLoadMoreFailed.value = true;
+    }
+    done('error');
+  } finally {
+    userIsLoading.value = false;
+  }
+};
+
+// 执行搜索（当 keyword 变化时）
+const startSearch = () => {
+  if (props.keyword && userState.value === 'loading') {
+    console.log('用户组件开始搜索:', props.keyword);
+    userResult.value = [];
+    userPage.value = 0;
+    userHasFinished.value = false;
+    userLoadMoreFailed.value = false;
+    loadMoreUserData();
+  }
+};
+
+// 监听 keyword 变化，重新搜索
+watch(() => props.keyword, (newKeyword) => {
+  if (newKeyword && userState.value !== 'loading') {
+    console.log('用户组件关键词变化，重新搜索:', newKeyword);
+    userResult.value = [];
+    userPage.value = 0;
+    userHasFinished.value = false;
+    userLoadMoreFailed.value = false;
+    userState.value = 'loading';
+    loadMoreUserData();
+  }
+});
+
+defineExpose({
+  startSearch
+});
+
+// 点击错误图片刷新数据
+const handleErrorClick = () => {
+  userResult.value = [];
+  userPage.value = 0;
+  userHasFinished.value = false;
+  userLoadMoreFailed.value = false;
+  userState.value = 'loading';
+  loadMoreUserData();
+};
+</script>
+
+<template>
+  <div v-if="userState === 'loading'" class="loading">
+    <loadingHuawu>数据加载中</loadingHuawu>
+  </div>
+  <div v-else-if="userState === 'failed'" class="loading" @click="handleErrorClick">
+    <errorHuawu>用户列表加载失败了喵~</errorHuawu>
+  </div>
+  <div v-else-if="userState === 'empty'" class="loading" @click="handleErrorClick">
+    <errorHuawu>暂无用户内容</errorHuawu>
+  </div>
+  <v-infinite-scroll v-else color="#00796B" @load="loadMoreUserData" :disabled="userHasFinished" class="list-view">
+    <div class="list-container">
+      <user-list-item v-for="(item, index) in userResult" :key="index" :item="{
+        uid: item.uid,
+        username: item.username,
+        nickname: item.nickname,
+        avatar: item.avatar,
+        signature: '',
+        videoNum: 0,
+        imageNum: 0,
+        followNum: 0,
+        fansNum: 0,
+        friendNum: 0,
+        following: false,
+        fansing: false,
+        friending: false
+      }" />
+    </div>
+    <template v-slot:error="{ props }">
+      <div class="load-more-failed">
+        <span>加载失败，</span>
+        <span class="retry-btn" v-bind=props>点击重试</span>
+      </div>
+    </template>
+    <template v-slot:empty>
+      <div class="listEnd">已经到底了喵~</div>
+    </template>
+  </v-infinite-scroll>
+</template>
+
+<style lang="scss" scoped>
+.list-view {
+  $top: calc(env(safe-area-inset-top, 0) + 60px + 36px);
+  $bottom: calc(env(safe-area-inset-bottom, 0));
+  height: calc(100vh - $top - 10px - $bottom);
+  padding-top: calc($top + 10px);
+  padding-bottom: $bottom;
+  overflow: auto;
+
+  &::-webkit-scrollbar-track {
+    margin: calc($top + 4px) 0 calc($bottom + 4px) 0;
+  }
+
+  .list-container {
+    // 包裹容器
+  }
+}
+
+.loading {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.listEnd {
+  color: #757575;
+  padding: 4px 0;
+}
+
+.load-more-failed {
+  text-align: center;
+  padding: 10px 0;
+  color: #757575;
+  font-size: 0.9rem;
+
+  .retry-btn {
+    color: #00796B;
+    cursor: pointer;
+
+    &:hover {
+      opacity: 0.8;
+      text-decoration: underline;
+    }
+  }
+}
+</style>

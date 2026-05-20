@@ -1,10 +1,56 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
+import { insertSearchHistory } from '../../core/database';
 
-const emit = defineEmits(['back']);
+const props = defineProps<{
+  keyword?: string;
+}>();
+
+const emit = defineEmits<{
+  (e: 'back'): void;
+  (e: 'search', keyword: string): void;
+}>();
+
+const searchText = ref('');
+
+// 监听 keyword 变化，同步到输入框
+watch(() => props.keyword, (newKeyword) => {
+  if (newKeyword !== undefined) {
+    searchText.value = newKeyword;
+  }
+});
 
 const handleBack = () => {
   emit('back');
+};
+
+// 执行搜索
+const handleSearch = async () => {
+  const keyword = searchText.value.trim();
+  if (!keyword) {
+    console.log('搜索关键词为空');
+    return;
+  }
+  
+  console.log('执行搜索:', keyword);
+  
+  // 保存搜索历史到数据库（异常独立捕获）
+  try {
+    await insertSearchHistory(keyword);
+    console.log('搜索历史已保存:', keyword);
+  } catch (error) {
+    console.error('保存搜索历史失败:', error);
+  }
+  
+  // 通知父组件切换到 loading 状态并传递关键词
+  emit('search', keyword);
+};
+
+// 处理回车键
+const handleKeydown = (e: KeyboardEvent) => {
+  if (e.key === 'Enter') {
+    handleSearch();
+  }
 };
 </script>
 
@@ -14,12 +60,17 @@ const handleBack = () => {
       <font-awesome-icon icon="fa-solid fa-angle-left" />
     </div>
     <div class="search">
-      <input type="text">
+      <input 
+        type="text" 
+        v-model="searchText"
+        @keydown="handleKeydown"
+        placeholder="输入搜索关键词"
+      >
       <span class="icon">
         <font-awesome-icon icon="fa-solid fa-magnifying-glass" />
       </span>
     </div>
-    <div class="submit-btn">
+    <div class="submit-btn" @click="handleSearch">
       搜索
     </div>
   </div>

@@ -1,148 +1,82 @@
 <script setup lang="ts">
-import { ref, onActivated, watch } from 'vue';
-import cardButton from '../cardButton.vue';
+import { ref, watch, onMounted } from 'vue';
 import { Swiper, SwiperSlide } from 'swiper/vue';
 import type { Swiper as SwiperType } from 'swiper';
 import 'swiper/swiper-bundle.css';
+import SearchVideo from './video.vue';
+import SearchImage from './image.vue';
+import SearchUsers from './users.vue';
 
-interface ListItem {
-  id: string;
-  title: string;
-  img: string;
-  author: string;
-  time: string;
-  viewNum: number;
-  likeNum: number;
-  longNum: number;
-  isR18: boolean;
-}
+const props = defineProps<{
+  keyword: string;
+}>();
 
-const tab = ref('video');
+const tab = ref<'video' | 'image' | 'user'>('video');
+const swiperInstance = ref<SwiperType>();
+const videoRef = ref<InstanceType<typeof SearchVideo>>();
+const imageRef = ref<InstanceType<typeof SearchImage>>();
+const usersRef = ref<InstanceType<typeof SearchUsers>>();
 
-// 内部维护搜索结果数据
-const videoResult = ref<ListItem[]>([]);
-const imageResult = ref<ListItem[]>([]);
-
-// 生成搜索结果测试数据 (从父组件移入)
-for (let i = 0; i < 10; i++) {
-  videoResult.value.push({
-    id: `video_${i}`,
-    title: `视频结果${i}`,
-    img: 'https://picsum.photos/200/300',
-    author: '作者',
-    time: '2023-01-01',
-    viewNum: 1000,
-    likeNum: 100,
-    longNum: 60,
-    isR18: false
-  });
-  imageResult.value.push({
-    id: `image_${i}`,
-    title: `插画结果${i}`,
-    img: 'https://picsum.photos/200/300',
-    author: '作者',
-    time: '2023-01-01',
-    viewNum: 1000,
-    likeNum: 100,
-    longNum: 10,
-    isR18: false
-  });
-}
-
-const videoListView = ref();
-const imageListView = ref();
-const swiperInstance = ref<SwiperType | null>(null);
-let videoScrollTop = 0;
-let imageScrollTop = 0;
-
+// 监听 tab 变化，控制 Swiper 切换并触发数据加载
 watch(tab, (newVal) => {
   if (swiperInstance.value) {
-    const targetIndex = newVal === 'video' ? 0 : 1;
+    const targetIndex = newVal === 'video' ? 0 : newVal === 'image' ? 1 : 2;
     if (swiperInstance.value.activeIndex !== targetIndex) {
       swiperInstance.value.slideTo(targetIndex);
     }
   }
+  
+  // 切换到对应 tab 时，如果该 tab 还未加载数据，则触发加载
+  if (newVal === 'video') {
+    videoRef.value?.startSearch();
+  } else if (newVal === 'image') {
+    imageRef.value?.startSearch();
+  } else if (newVal === 'user') {
+    usersRef.value?.startSearch();
+  }
 });
+
+// 监听 Swiper 滑动，同步更新 tab
+const onSlideChange = (swiper: SwiperType) => {
+  const index = swiper.activeIndex;
+  if (index === 0) tab.value = 'video';
+  else if (index === 1) tab.value = 'image';
+  else if (index === 2) tab.value = 'user';
+};
 
 const onSwiper = (swiper: SwiperType) => {
   swiperInstance.value = swiper;
 };
 
-const onSlideChange = (swiper: SwiperType) => {
-  tab.value = swiper.activeIndex === 0 ? 'video' : 'image';
-};
-
-onActivated(() => {
-  if (videoListView.value && typeof videoListView.value.scrollTo === 'function') {
-    videoListView.value.scrollTo({ top: videoScrollTop });
-  }
-  if (imageListView.value && typeof imageListView.value.scrollTo === 'function') {
-    imageListView.value.scrollTo({ top: imageScrollTop });
+// 组件挂载时，立即加载当前激活的 Tab 数据
+onMounted(() => {
+  // 默认是 video tab，立即触发加载
+  if (tab.value === 'video') {
+    videoRef.value?.startSearch();
   }
 });
-
-function handleVideoScroll(event: any): void {
-  videoScrollTop = event.target.scrollTop;
-}
-
-function handleImageScroll(event: any): void {
-  imageScrollTop = event.target.scrollTop;
-}
 </script>
 
 <template>
-  <div class="content result">
+  <div class="content">
     <div class="tabs">
       <v-tabs v-model="tab" color="#00796B" align-tabs="center" density="compact" grow>
         <v-tab value="video">视频</v-tab>
         <v-tab value="image">插画</v-tab>
+        <v-tab value="user">用户</v-tab>
       </v-tabs>
       <v-divider></v-divider>
     </div>
-    <swiper class="tabs-window" :slides-per-view="1" :space-between="0" @swiper="onSwiper"
-      @slide-change="onSlideChange">
+    
+    <swiper class="tabs-window" :slides-per-view="1" :space-between="0" @swiper="onSwiper" @slide-change="onSlideChange">
       <swiper-slide>
-        <div class="list-view" ref="videoListView" @scroll="handleVideoScroll">
-          <v-infinite-scroll color="#00796B">
-            <div class="grid">
-              <template v-for="item in videoResult" :key="item.id">
-                <cardButton type="video" :data="{
-                  id: item.id,
-                  title: item.title,
-                  img: item.img,
-                  author: item.author,
-                  time: item.time,
-                  viewNum: item.viewNum,
-                  likeNum: item.likeNum,
-                  longNum: item.longNum,
-                  isR18: item.isR18
-                }" />
-              </template>
-            </div>
-          </v-infinite-scroll>
-        </div>
+        <SearchVideo ref="videoRef" :keyword="keyword" />
       </swiper-slide>
-
       <swiper-slide>
-        <div class="list-view" ref="imageListView" @scroll="handleImageScroll">
-          <v-infinite-scroll color="#00796B">
-            <div class="grid">
-              <template v-for="item in imageResult" :key="item.id">
-                <cardButton type="image" :data="{
-                  id: item.id,
-                  title: item.title,
-                  img: item.img,
-                  author: item.author,
-                  time: item.time,
-                  viewNum: item.viewNum,
-                  likeNum: item.likeNum,
-                  longNum: item.longNum,
-                  isR18: item.isR18
-                }" />
-              </template>
-            </div>
-          </v-infinite-scroll>
-        </div>
+        <SearchImage ref="imageRef" :keyword="keyword" />
+      </swiper-slide>
+      <swiper-slide>
+        <SearchUsers ref="usersRef" :keyword="keyword" />
       </swiper-slide>
     </swiper>
   </div>
@@ -157,7 +91,7 @@ function handleImageScroll(event: any): void {
 }
 
 .tabs {
-  position: absolute;
+  position: fixed;
   top: calc(60px + env(safe-area-inset-top, 0));
   z-index: 400;
   width: 100%;
@@ -170,7 +104,7 @@ function handleImageScroll(event: any): void {
   }
 }
 
-/* 修改: 调整 tabs-window 样式以适配 Swiper */
+/* Swiper 容器样式 */
 .tabs-window {
   z-index: 1;
   flex: 1;
@@ -186,24 +120,5 @@ function handleImageScroll(event: any): void {
     height: auto;
     overflow: hidden;
   }
-
-  .list-view {
-    height: 100%;
-    overflow: auto;
-    // 确保列表视图占据完整高度，无额外margin
-    margin: 0;
-    padding: 0;
-
-    .v-infinite-scroll {
-      padding: calc(60px + 36px + 1px + 10px + env(safe-area-inset-top, 0)) 0 env(safe-area-inset-bottom, 0) 0;
-    }
-  }
-}
-
-.grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 10px;
-  padding: 0 10px 0 10px;
 }
 </style>
