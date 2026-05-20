@@ -10,6 +10,9 @@ use network::{
     send_https_request_binary,
 };
 
+mod webview;
+use webview::{inject_webview_script, inject_webview_initialization_script};
+
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
@@ -27,7 +30,9 @@ pub fn run() {
             get_https_request,
             post_https_request,
             delete_https_request,
-            send_https_request_binary
+            send_https_request_binary,
+            inject_webview_script,
+            inject_webview_initialization_script
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

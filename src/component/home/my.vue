@@ -235,25 +235,25 @@ function handleWheelScroll(event: WheelEvent) {
           <div class="left">Iwara服务</div>
         </div>
         <div class="usserFunction">
-          <div class="btn">
+          <div class="btn" @click="routerGoTo('/webview', { url: 'https://www.iwara.tv/account/premium', title: '高级会员' })">
             <div class="icon" style="color: #ff62cd;">
               <font-awesome-icon icon="fa-solid fa-star" />
             </div>
             <div class="text">高级会员</div>
           </div>
-          <div class="btn">
+          <div class="btn" @click="routerGoTo('/webview', { url: 'https://www.iwara.tv/dashboard', title: 'Wura' })">
             <div class="icon" style="color: #dda82b;">
               <font-awesome-icon icon="fa-solid fa-coins" />
             </div>
             <div class="text">Wura</div>
           </div>
-          <div class="btn">
+          <div class="btn" @click="routerGoTo('/webview', { url: 'https://www.iwara.tv/page/faq', title: '常见问题' })">
             <div class="icon">
               <font-awesome-icon icon="fa-solid fa-circle-question" />
             </div>
             <div class="text">常见问题</div>
           </div>
-          <div class="btn">
+          <div class="btn" @click="routerGoTo('/webview', { url: 'https://www.iwara.tv/page/links', title: '相关链接' })">
             <div class="icon">
               <font-awesome-icon icon="fa-solid fa-share-nodes" />
             </div>

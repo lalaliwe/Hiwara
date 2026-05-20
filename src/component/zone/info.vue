@@ -176,6 +176,16 @@ function navigateToFriends(type: 'follow' | 'fans') {
     query: { type }
   });
 }
+// 编辑资料
+function editProfile() {
+  router.push({
+    path: '/webview',
+    query: {
+      url: 'https://www.iwara.tv/account/profile',
+      title: '编辑资料'
+    }
+  });
+}
 </script>
 <template>
   <div class="userInfo">
@@ -203,7 +213,9 @@ function navigateToFriends(type: 'follow' | 'fans') {
       </div>
       <div>
         <span v-if="isMyself">
-          <v-btn variant="outlined" color="#00796B" style="width: 100%;">编辑资料</v-btn>
+          <v-btn variant="outlined" color="#00796B" style="width: 100%;" @click="editProfile">
+            编辑资料
+          </v-btn>
         </span>
         <span v-else>
           <!-- 未关注时显示关注按钮 -->

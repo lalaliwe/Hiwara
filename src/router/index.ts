@@ -10,6 +10,7 @@ import setup from '../views/setup.vue';
 import favorites from '../views/favorites.vue';
 import offlineCache from '../views/offlineCache.vue';
 import login from '../views/login.vue'; // 导入登录页面
+import webviewFrame from '../views/webview.vue';
 
 // setup子页面
 import setup_definition from '../views/setup/definition.vue';
@@ -170,8 +171,14 @@ const routes: Array<RouteRecordRaw & { meta?: RouteMeta }> = [
     name: 'SetupAbout',
     component: setup_about,
     meta: { transition: 'stack', componentName: 'SetupAbout' },
-  }
+  },
   // ------end------
+  {
+    path: '/webview',
+    name: 'Webview',
+    component: webviewFrame,
+    meta: { transition: 'stack', componentName: 'Webview' },
+  }
 ]
 
 const router = createRouter({
