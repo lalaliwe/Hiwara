@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import searchBar from '../../component/home/searchBar.vue';
 import cardButton from '../../component/cardButton.vue';
-// import test1Img from '../../static/img/test1.jpg';
+import DateFilter from './DateFilter.vue';
 import { ref, onActivated, watch, inject } from 'vue';
 import { Swiper, SwiperSlide } from 'swiper/vue';
 import type { Swiper as SwiperType } from 'swiper';
@@ -43,6 +43,9 @@ const loadMoreFailed = ref<boolean[]>(new Array(tabArray.length).fill(false))
 // 每个tab的加载状态：'failed' | 'empty' | 'loading' | 'success'
 type ListState = 'failed' | 'empty' | 'loading' | 'success';
 const state = ref<ListState[]>(new Array(tabArray.length).fill('loading'));
+
+// 全局时间筛选条件（对所有tab生效），格式：'2026' 或 '2026-1'，undefined表示全部年份
+const dateFilter = ref<string | undefined>(undefined);
 
 let showBeen = false;
 const homeTab = inject('isTab') as { value: 'video' | 'image' | 'subscribe' | 'forum' | 'my' };
@@ -173,7 +176,9 @@ async function loadMoreData({ done }: any, index: number) {
 async function getVideoList(tabNum: number): Promise<any> {
   try {
     const sort = tabArray[tabNum].value;
-    const res = await api_getVideoList(page[tabNum], sort);
+    const date = dateFilter.value; // 使用全局时间筛选条件
+    const res = await api_getVideoList(page[tabNum], sort, date);
+    console.log(`获取视频列表 - Tab:${tabNum}, Page:${page[tabNum]}, Sort:${sort}, Date:${date}`);
     // console.log(res);
     if (res.ok) {
       if (res.data.results && res.data.results.length > 0) {
@@ -207,6 +212,24 @@ async function getVideoList(tabNum: number): Promise<any> {
     throw error;
   }
 }
+
+// 时间选择器组件引用
+const dateFilterRef = ref<InstanceType<typeof DateFilter> | null>(null);
+
+// 打开时间选择器
+function openDateFilter() {
+  dateFilterRef.value?.openDrawer();
+}
+
+// 时间选择器确认回调
+function handleDateConfirm(dateParam: string | undefined) {
+  console.log('视频 - 时间筛选变更:', dateParam);
+  // 设置全局时间筛选条件
+  dateFilter.value = dateParam;
+  // 刷新当前tab的数据
+  refreshData();
+}
+
 </script>
 <template>
   <div>
@@ -220,13 +243,19 @@ async function getVideoList(tabNum: number): Promise<any> {
               {{ item.text }}
             </v-tab>
           </v-tabs>
-          <div class="rigth">
+          
+          <!-- 触发按钮 -->
+          <div class="rigth" @click="openDateFilter">
             <font-awesome-icon icon="fa-solid fa-align-right" />
           </div>
         </div>
         <v-divider></v-divider>
       </div>
     </div>
+    
+    <!-- 时间筛选器组件 -->
+    <DateFilter ref="dateFilterRef" v-model="dateFilter" @confirm="handleDateConfirm" />
+    
     <!-- 替换为 Swiper -->
     <swiper class="tabs-window" :slides-per-view="1" :space-between="0" @swiper="onSwiper"
       @slide-change="onSlideChange">
@@ -297,6 +326,11 @@ async function getVideoList(tabNum: number): Promise<any> {
         display: flex;
         justify-content: center;
         align-items: center;
+        cursor: pointer;
+        
+        &:active {
+          opacity: 0.6;
+        }
       }
     }
 

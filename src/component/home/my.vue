@@ -204,7 +204,7 @@ function handleWheelScroll(event: WheelEvent) {
             </div>
             <div class="text">离线缓存</div>
           </div>
-          <div class="btn">
+          <div class="btn" @click="routerGoTo('/webview', { url: 'https://www.iwara.tv/notifications', title: '通知' })">
             <div class="icon">
               <font-awesome-icon icon="fa-solid fa-bell" />
             </div>
@@ -216,7 +216,7 @@ function handleWheelScroll(event: WheelEvent) {
             </div>
             <div class="text">好友</div>
           </div>
-          <div class="btn">
+          <div class="btn" @click="routerGoTo('/webview', { url: 'https://www.iwara.tv/messages', title: '私信' })">
             <div class="icon">
               <font-awesome-icon icon="fa-solid fa-envelope" />
             </div>
