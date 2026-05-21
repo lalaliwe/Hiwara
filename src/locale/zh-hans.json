@@ -42,7 +42,7 @@
         "views": "观看量",
         "likes": "点赞量"
       },
-      "loading": "加载中...",
+      "loading": "数据加载中",
       "noRecords": "暂无视频记录",
       "loadFailed": "加载失败，",
       "retry": "点击重试",
@@ -56,7 +56,7 @@
         "views": "观看量",
         "likes": "点赞量"
       },
-      "loading": "加载中...",
+      "loading": "数据加载中",
       "noRecords": "暂无插画记录",
       "loadFailed": "加载失败，",
       "retry": "点击重试",
@@ -97,7 +97,7 @@
     "title": "历史",
     "video": {
       "tab": "视频",
-      "loading": "加载中...",
+      "loading": "数据加载中",
       "error": "错误",
       "noRecords": "暂无视频历史",
       "today": "今天",
@@ -107,7 +107,7 @@
     },
     "image": {
       "tab": "插画",
-      "loading": "加载中...",
+      "loading": "数据加载中",
       "error": "错误",
       "noRecords": "暂无插画历史",
       "today": "今天",

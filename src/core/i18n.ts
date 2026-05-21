@@ -2,27 +2,27 @@ import { createI18n } from 'vue-i18n';
 import { setupStore } from './store';
 
 // 导入语言文件（使用 BCP 47 语言标签）
-import zhHans from '../locales/zh-Hans.json';
-import zhHant from '../locales/zh-Hant.json';
-import en from '../locales/en.json';
-import ja from '../locales/ja.json';
-import ko from '../locales/ko.json';
-import fr from '../locales/fr.json';
-import es from '../locales/es.json';
-import pt from '../locales/pt.json';
-import de from '../locales/de.json';
-import it from '../locales/it.json';
-import ru from '../locales/ru.json';
-import uk from '../locales/uk.json';
-import th from '../locales/th.json';
-import vi from '../locales/vi.json';
-import km from '../locales/km.json';
-import hi from '../locales/hi.json';
-import ar from '../locales/ar.json';
-import he from '../locales/he.json';
-import bo from '../locales/bo.json';
-import ug from '../locales/ug.json';
-import kk from '../locales/kk.json';
+import zhHans from '../locale/zh-hans.json';
+import zhHant from '../locale/zh-hant.json';
+import en from '../locale/en.json';
+import ja from '../locale/ja.json';
+import ko from '../locale/ko.json';
+import fr from '../locale/fr.json';
+import es from '../locale/es.json';
+import pt from '../locale/pt.json';
+import de from '../locale/de.json';
+import it from '../locale/it.json';
+import ru from '../locale/ru.json';
+import uk from '../locale/uk.json';
+import th from '../locale/th.json';
+import vi from '../locale/vi.json';
+import km from '../locale/km.json';
+import hi from '../locale/hi.json';
+import ar from '../locale/ar.json';
+import he from '../locale/he.json';
+import bo from '../locale/bo.json';
+import ug from '../locale/ug.json';
+import kk from '../locale/kk.json';
 
 // 定义支持的语言类型（BCP 47 标准）
 type SupportedLocale = 'auto' | 'en' | 'zh-Hans' | 'zh-Hant' | 'ja' | 'ko' | 'fr' | 'es' | 'pt' | 'de' | 'it' | 'ru' | 'uk' | 'th' | 'vi' | 'km' | 'hi' | 'ar' | 'he' | 'bo' | 'ug' | 'kk';
@@ -159,7 +159,7 @@ export function createI18nInstance() {
   const i18n = createI18n({
     legacy: false, // 使用 Composition API 模式
     locale: getCurrentLocale(), // 初始语言
-    fallbackLocale: 'zh-Hans', // 回退语言
+    fallbackLocale: 'en', // 回退语言改为英语
     messages: messages as any, // 语言包
   });
   

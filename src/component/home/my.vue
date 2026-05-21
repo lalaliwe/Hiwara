@@ -236,7 +236,7 @@ function handleWheelScroll(event: WheelEvent) {
       </div>
       <div class="card">
         <div class="label">
-          <div class="left">{{ t('my.iwaraServices') }}</div>
+          <div class="left">{{ t('home.my.iwaraServices') }}</div>
         </div>
         <div class="usserFunction">
           <div class="btn"
