@@ -28,20 +28,9 @@ const goBack = () => {
 // 定义选项卡
 const tab = ref('video');
 
-// 获取子组件引用
-const videoHistoryRef = ref();
-const imageHistoryRef = ref();
-
-// 页面激活时恢复滚动位置
+// 页面激活时应用页面设置（子组件内部已自行处理滚动位置恢复）
 onActivated(() => {
   applyPageSettings()
-  
-  // 根据当前选中的标签页恢复对应子组件的滚动位置
-  if (tab.value === 'video' && videoHistoryRef.value) {
-    videoHistoryRef.value.restoreScroll();
-  } else if (tab.value === 'image' && imageHistoryRef.value) {
-    imageHistoryRef.value.restoreScroll();
-  }
 });
 </script>
 
@@ -73,10 +62,10 @@ onActivated(() => {
     </div>
     <v-tabs-window v-model="tab" class="tabs-window">
       <v-tabs-window-item value="video">
-        <VideoHistory ref="videoHistoryRef" />
+        <VideoHistory />
       </v-tabs-window-item>
       <v-tabs-window-item value="image">
-        <ImageHistory ref="imageHistoryRef" />
+        <ImageHistory />
       </v-tabs-window-item>
     </v-tabs-window>
   </div>

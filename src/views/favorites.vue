@@ -26,20 +26,9 @@ const goBack = () => {
 // 定义选项卡，默认为 'video'
 const tab = ref<'video' | 'image'>(route.query.type === 'image' ? 'image' : 'video');
 
-// 获取子组件引用
-const videoFavoritesRef = ref();
-const imageFavoritesRef = ref();
-
-// 页面激活时恢复滚动位置
+// 页面激活时应用设置（子组件内部自动处理滚动位置恢复）
 onActivated(() => {
   applyPageSettings()
-  
-  // 根据当前选中的标签页恢复对应子组件的滚动位置
-  if (tab.value === 'video' && videoFavoritesRef.value) {
-    videoFavoritesRef.value.restoreScroll();
-  } else if (tab.value === 'image' && imageFavoritesRef.value) {
-    imageFavoritesRef.value.restoreScroll();
-  }
 });
 </script>
 

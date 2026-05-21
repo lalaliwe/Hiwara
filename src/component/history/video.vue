@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue';
+import { ref, computed, onActivated, onDeactivated } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { getVideoHistoryList } from '../../core/database';
 import { showShortToast } from '../../core/toast';
@@ -154,13 +154,20 @@ function handleVideoScroll(event: Event): void {
 }
 
 // 页面激活时恢复滚动位置
+onActivated(() => {
+  if (videoListView.value && videoListView.value.$el) {
+    videoListView.value.$el.scrollTop = videoScrollTop;
+  }
+});
+
+// 页面停用时保存滚动位置（已在handleVideoScroll中实时保存）
+onDeactivated(() => {
+  // 滚动位置已在滚动事件中实时保存，这里可以执行其他清理操作
+});
+
+// 暴露刷新方法供父组件调用
 defineExpose({
-  restoreScroll: () => {
-    if (videoListView.value && typeof videoListView.value.scrollTo === 'function') {
-      videoListView.value.scrollTo({ top: videoScrollTop });
-    }
-  },
-  refreshData // 暴露刷新方法供父组件调用
+  refreshData
 });
 </script>
 

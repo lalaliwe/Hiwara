@@ -167,7 +167,7 @@ function handleWheelScroll(event: WheelEvent) {
     <div class="content">
       <div class="card">
         <div class="label">
-          <div class="left">{{ t('home.my.history') }}</div>
+          <div class="left" @click="routerGoTo('/history')">{{ t('home.my.history') }}</div>
           <div class="right" @click="routerGoTo('/history')">{{ t('home.my.viewAllHistory') }}</div>
         </div>
         <div class="history" ref="historyContainer" @wheel="handleWheelScroll">

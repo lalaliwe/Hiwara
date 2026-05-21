@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue';
+import { ref, computed, onActivated, onDeactivated } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { getImageHistoryList } from '../../core/database';
 import { showShortToast } from '../../core/toast';
@@ -151,13 +151,20 @@ function handleImageScroll(event: Event): void {
 }
 
 // 页面激活时恢复滚动位置
+onActivated(() => {
+  if (imageListView.value && imageListView.value.$el) {
+    imageListView.value.$el.scrollTop = imageScrollTop;
+  }
+});
+
+// 页面停用时保存滚动位置（已在handleImageScroll中实时保存）
+onDeactivated(() => {
+  // 滚动位置已在滚动事件中实时保存，这里可以执行其他清理操作
+});
+
+// 暴露刷新方法供父组件调用
 defineExpose({
-  restoreScroll: () => {
-    if (imageListView.value && typeof imageListView.value.scrollTo === 'function') {
-      imageListView.value.scrollTo({ top: imageScrollTop });
-    }
-  },
-  refreshData // 暴露刷新方法供父组件调用
+  refreshData
 });
 
 // 初始加载第一页数据
