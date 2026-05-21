@@ -90,7 +90,32 @@
     "forum": {
       "posts": "منشورات",
       "topics": "مواضيع",
-      "repliedAt": "تم الرد في"
+      "repliedAt": "تم الرد في",
+      "latestPost": "أحدث منشور",
+      "groups": {
+        "admin": "المشرف",
+        "moderator": "مشرف",
+        "japanese": "اليابانية",
+        "chinese": "الصينية"
+      },
+      "sections": {
+        "announcement": "إعلانات",
+        "announcement_desc": "معلومات مهمة",
+        "feedback": "ملاحظات",
+        "feedback_desc": "أفكار واقتراحات ومخاوف",
+        "help": "مساعدة",
+        "help_desc": "المساعدة في مشكلات الموقع",
+        "general": "عام",
+        "general_desc": "كل شيء آخر",
+        "guide": "دليل",
+        "guide_desc": "معلومات مفيدة أو أدلة \"كيفية\"",
+        "helpQuestion": "مساعدة/سؤال",
+        "helpQuestion_desc": "أسئلة غير متعلقة بالموقع",
+        "request": "طلب",
+        "request_desc": "المساعدة في البحث أو الإنشاء",
+        "share": "مشاركة",
+        "share_desc": "مشاركة النماذج والحركات أو الإكسسوارات الأخرى"
+      }
     }
   },
   "history": {

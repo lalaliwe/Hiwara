@@ -90,7 +90,32 @@
     "forum": {
       "posts": "投稿",
       "topics": "トピック",
-      "repliedAt": "返信日時"
+      "repliedAt": "返信日時",
+      "latestPost": "最新の投稿",
+      "groups": {
+        "admin": "管理者",
+        "moderator": "モデレーター",
+        "japanese": "日本語",
+        "chinese": "中国語"
+      },
+      "sections": {
+        "announcement": "お知らせ",
+        "announcement_desc": "重要な情報",
+        "feedback": "フィードバック",
+        "feedback_desc": "アイデア、提案、懸念事項",
+        "help": "ヘルプ",
+        "help_desc": "サイト関連の問題を解決",
+        "general": "一般",
+        "general_desc": "その他すべて",
+        "guide": "ガイド",
+        "guide_desc": "役立つ情報や「方法」ガイド",
+        "helpQuestion": "ヘルプ/質問",
+        "helpQuestion_desc": "サイトに関係ない質問",
+        "request": "リクエスト",
+        "request_desc": "作成や発見の支援",
+        "share": "シェア",
+        "share_desc": "モデル、動作、その他アクセサリーを共有"
+      }
     }
   },
   "history": {

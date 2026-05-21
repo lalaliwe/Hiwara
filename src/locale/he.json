@@ -90,7 +90,32 @@
     "forum": {
       "posts": "פרסומים",
       "topics": "נושאים",
-      "repliedAt": "הושב ב"
+      "repliedAt": "הושב ב",
+      "latestPost": "פוסט אחרון",
+      "groups": {
+        "admin": "מנהל",
+        "moderator": "מנהל",
+        "japanese": "יפנית",
+        "chinese": "סינית"
+      },
+      "sections": {
+        "announcement": "הודעות",
+        "announcement_desc": "מידע חשוב",
+        "feedback": "משוב",
+        "feedback_desc": "רעיונות, הצעות וחששות",
+        "help": "עזרה",
+        "help_desc": "עזרה בבעיות הקשורות לאתר",
+        "general": "כללי",
+        "general_desc": "כל השאר",
+        "guide": "מדריך",
+        "guide_desc": "מידע שימושי או מדריכי \"איך לעשות\"",
+        "helpQuestion": "עזרה/שאלה",
+        "helpQuestion_desc": "שאלות שאינן קשורות לאתר",
+        "request": "בקשה",
+        "request_desc": "עזרה במציאה או יצירה",
+        "share": "שיתוף",
+        "share_desc": "שיתוף דגמים, אנימציות או אביזרים אחרים"
+      }
     }
   },
   "history": {

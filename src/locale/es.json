@@ -90,7 +90,32 @@
     "forum": {
       "posts": "Publicaciones",
       "topics": "Temas",
-      "repliedAt": "Respondido el"
+      "repliedAt": "Respondido el",
+      "latestPost": "Última publicación",
+      "groups": {
+        "admin": "Admin",
+        "moderator": "Moderador",
+        "japanese": "Japonés",
+        "chinese": "Chino"
+      },
+      "sections": {
+        "announcement": "Anuncios",
+        "announcement_desc": "Información importante",
+        "feedback": "Comentarios",
+        "feedback_desc": "Ideas, sugerencias e inquietudes",
+        "help": "Ayuda",
+        "help_desc": "Ayuda con problemas del sitio",
+        "general": "General",
+        "general_desc": "Todo lo demás",
+        "guide": "Guía",
+        "guide_desc": "Información útil o guías de \"cómo hacer\"",
+        "helpQuestion": "Ayuda/Pregunta",
+        "helpQuestion_desc": "Preguntas no relacionadas con el sitio",
+        "request": "Solicitud",
+        "request_desc": "Ayuda para buscar o crear",
+        "share": "Compartir",
+        "share_desc": "Compartir modelos, animaciones u otros accesorios"
+      }
     }
   },
   "history": {

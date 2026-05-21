@@ -90,7 +90,32 @@
     "forum": {
       "posts": "पोस्ट",
       "topics": "विषय",
-      "repliedAt": "उत्तर दिया गया"
+      "repliedAt": "उत्तर दिया गया",
+      "latestPost": "नवीनतम पोस्ट",
+      "groups": {
+        "admin": "व्यवस्थापक",
+        "moderator": "मॉडरेटर",
+        "japanese": "जापानी",
+        "chinese": "चीनी"
+      },
+      "sections": {
+        "announcement": "घोषणाएं",
+        "announcement_desc": "महत्वपूर्ण जानकारी",
+        "feedback": "प्रतिक्रिया",
+        "feedback_desc": "विचार, सुझाव और चिंताएं",
+        "help": "सहायता",
+        "help_desc": "साइट से संबंधित समस्याओं में सहायता",
+        "general": "सामान्य",
+        "general_desc": "बाकी सब कुछ",
+        "guide": "गाइड",
+        "guide_desc": "उपयोगी जानकारी या \"कैसे करें\" गाइड",
+        "helpQuestion": "सहायता/प्रश्न",
+        "helpQuestion_desc": "साइट से संबंधित नहीं प्रश्न",
+        "request": "अनुरोध",
+        "request_desc": "खोजने या बनाने में सहायता",
+        "share": "साझा करें",
+        "share_desc": "मॉडल, एनिमेशन या अन्य एक्सेसरीज़ साझा करें"
+      }
     }
   },
   "history": {

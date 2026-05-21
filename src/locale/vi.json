@@ -90,7 +90,32 @@
     "forum": {
       "posts": "Bài đăng",
       "topics": "Chủ đề",
-      "repliedAt": "Trả lời lúc"
+      "repliedAt": "Trả lời lúc",
+      "latestPost": "Bài đăng mới nhất",
+      "groups": {
+        "admin": "Quản trị viên",
+        "moderator": "Người kiểm duyệt",
+        "japanese": "Tiếng Nhật",
+        "chinese": "Tiếng Trung"
+      },
+      "sections": {
+        "announcement": "Thông báo",
+        "announcement_desc": "Thông tin quan trọng",
+        "feedback": "Phản hồi",
+        "feedback_desc": "Ý tưởng, đề xuất và mối quan tâm",
+        "help": "Trợ giúp",
+        "help_desc": "Trợ giúp các vấn đề liên quan đến trang web",
+        "general": "Chung",
+        "general_desc": "Mọi thứ khác",
+        "guide": "Hướng dẫn",
+        "guide_desc": "Thông tin hữu ích hoặc hướng dẫn \"cách làm\"",
+        "helpQuestion": "Trợ giúp/Câu hỏi",
+        "helpQuestion_desc": "Câu hỏi không liên quan đến trang web",
+        "request": "Yêu cầu",
+        "request_desc": "Trợ giúp tìm kiếm hoặc sáng tạo",
+        "share": "Chia sẻ",
+        "share_desc": "Chia sẻ mô hình, hoạt ảnh hoặc phụ kiện khác"
+      }
     }
   },
   "history": {

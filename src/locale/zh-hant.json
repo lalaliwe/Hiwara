@@ -90,7 +90,32 @@
     "forum": {
       "posts": "發布",
       "topics": "主題",
-      "repliedAt": "回覆於"
+      "repliedAt": "回覆於",
+      "latestPost": "最新發布",
+      "groups": {
+        "admin": "站長",
+        "moderator": "版主",
+        "japanese": "日語區",
+        "chinese": "中文區"
+      },
+      "sections": {
+        "announcement": "公告",
+        "announcement_desc": "重要資訊",
+        "feedback": "反饋",
+        "feedback_desc": "想法、建議和顧慮",
+        "help": "幫助",
+        "help_desc": "幫助解決網站相關問題",
+        "general": "普通",
+        "general_desc": "其他一切",
+        "guide": "指南",
+        "guide_desc": "有用的資訊或「如何」指南",
+        "helpQuestion": "幫助/問題",
+        "helpQuestion_desc": "與網站無關的問題",
+        "request": "請求",
+        "request_desc": "幫助尋找或創造",
+        "share": "分享",
+        "share_desc": "分享模型、動作或其他アクセサリー"
+      }
     }
   },
   "history": {

@@ -1,16 +1,16 @@
-// 导出配置常量
+// 配置常量
 export { API_URL, FILESQ_URL } from './config';
 
-// 导出基础请求工具
+// 基础请求工具
 export { getSendRequest, postSendRequest, deleteRequest } from './base';
 
-// 导出 Iwara 专用请求函数
+// Iwara 专用请求函数
 export { getSendRequestIwara, postSendRequestIwara, deleteSendRequestIwara, getImageIwara } from './iwara';
 
-// 导出认证相关 API
+// 认证 API
 export { login, getAccessToken } from './auth';
 
-// 导出视频相关 API
+// 视频 API
 export {
   getSubscribeVideoList,
   getFavoritesVideoList,
@@ -25,7 +25,7 @@ export {
   search
 } from './video';
 
-// 导出插画相关 API
+// 插画 API
 export {
   getSubscribeImageList,
   getFavoritesImageList,
@@ -38,7 +38,7 @@ export {
   getImageComments
 } from './image';
 
-// 导出用户相关 API
+// 用户 API
 export {
   getMyselfInfo,
   getUserInfo,
@@ -48,3 +48,8 @@ export {
   unfollowUser,
   getFriendsList
 } from './user';
+
+// 论坛 API
+export {
+  getForumHome
+} from './forum';

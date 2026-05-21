@@ -90,7 +90,32 @@
     "forum": {
       "posts": "发布",
       "topics": "主题",
-      "repliedAt": "回复于"
+      "repliedAt": "发布于",
+      "latestPost": "最新发布",
+      "groups": {
+        "admin": "站长",
+        "moderator": "版主",
+        "japanese": "日语区",
+        "chinese": "中文区"
+      },
+      "sections": {
+        "announcement": "公告",
+        "announcement_desc": "重要信息",
+        "feedback": "反馈",
+        "feedback_desc": "想法、建议和顾虑",
+        "help": "帮助",
+        "help_desc": "帮助解决网站相关问题",
+        "general": "普通",
+        "general_desc": "其他一切",
+        "guide": "指南",
+        "guide_desc": "有用的信息或者 \"如何\" 指南",
+        "helpQuestion": "帮助/问题",
+        "helpQuestion_desc": "与网站无关的问题",
+        "request": "请求",
+        "request_desc": "帮助寻找或创造",
+        "share": "分享",
+        "share_desc": "分享模型，動作或者其他アクセサリー"
+      }
     }
   },
   "history": {
