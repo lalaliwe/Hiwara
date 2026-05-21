@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue'
+import { useI18n } from 'vue-i18n'
 import {
   Video as iconVideo,
   Pic as iconPic,
@@ -7,6 +8,8 @@ import {
   Comments as iconComments,
   User as iconUser
 } from '@icon-park/vue-next';
+
+const { t } = useI18n();
 
 // 定义Tab类型
 type TabType = 'video' | 'image' | 'subscribe' | 'forum' | 'my';
@@ -54,7 +57,7 @@ function refresh(tab: TabType) {
       <div>
         <iconVideo theme="outline" :size="btnFontSize" :fill="value === 'video' ? '#00796B' : '#616161'" />
         <br>
-        <span>视频</span>
+        <span>{{ t('home.navigation.video') }}</span>
       </div>
     </div>
     <div class="btn" :class="{ active: value === 'image' }" @click="changeValue('image')" @dblclick="refresh('image')"
@@ -62,7 +65,7 @@ function refresh(tab: TabType) {
       <div>
         <iconPic theme="outline" :size="btnFontSize" :fill="value === 'image' ? '#00796B' : '#616161'" />
         <br>
-        <span>插画</span>
+        <span>{{ t('home.navigation.image') }}</span>
       </div>
     </div>
     <div class="btn" :class="{ active: value === 'subscribe' }" @click="changeValue('subscribe')"
@@ -70,7 +73,7 @@ function refresh(tab: TabType) {
       <div>
         <iconRss theme="outline" :size="btnFontSize" :fill="value === 'subscribe' ? '#00796B' : '#616161'" />
         <br>
-        <span>订阅</span>
+        <span>{{ t('home.navigation.subscribe') }}</span>
       </div>
     </div>
     <div class="btn" :class="{ active: value === 'forum' }" @click="changeValue('forum')" @dblclick="refresh('forum')"
@@ -78,14 +81,14 @@ function refresh(tab: TabType) {
       <div>
         <iconComments theme="outline" :size="btnFontSize" :fill="value === 'forum' ? '#00796B' : '#616161'" />
         <br>
-        <span>论坛</span>
+        <span>{{ t('home.navigation.forum') }}</span>
       </div>
     </div>
     <div class="btn" :class="{ active: value === 'my' }" @click="changeValue('my')" v-ripple>
       <div>
         <iconUser theme="outline" :size="btnFontSize" :fill="value === 'my' ? '#00796B' : '#616161'" />
         <br>
-        <span>我的</span>
+        <span>{{ t('home.navigation.my') }}</span>
       </div>
     </div>
   </div>
@@ -109,6 +112,7 @@ function refresh(tab: TabType) {
     align-items: center;
     justify-content: center;
     height: 60px;
+    text-align: center;
 
     &.active {
       background-color: rgba(0, 121, 107, 0.2);

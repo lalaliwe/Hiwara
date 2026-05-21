@@ -3,6 +3,7 @@ import searchBar from '../../component/home/searchBar.vue';
 import cardButton from '../../component/cardButton.vue';
 // import test1Img from '../../static/img/test1.jpg';
 import { ref, onActivated, watch, inject } from 'vue';
+import { useI18n } from 'vue-i18n';
 import { Swiper, SwiperSlide } from 'swiper/vue';
 import type { Swiper as SwiperType } from 'swiper';
 import 'swiper/swiper-bundle.css';
@@ -14,6 +15,8 @@ import loadingHuawu from '../loadingHuawu.vue';
 import errorHuawu from '../errorHuawu.vue';
 import { showShortToast } from '../../core/toast';
 import type { VInfiniteScroll } from 'vuetify/components'
+
+const { t } = useI18n();
 
 const videoListView = ref<InstanceType<typeof VInfiniteScroll>>();
 const imageListView = ref<InstanceType<typeof VInfiniteScroll>>();
@@ -279,8 +282,8 @@ async function getSubscribeImageList(): Promise<any> {
       <div class="tabs">
         <!-- 保留 Vuetify 的 Tab 头部作为 UI 展示 -->
         <v-tabs v-model="tab" color="#00796B" align-tabs="center" density="compact" grow>
-          <v-tab value="video">视频</v-tab>
-          <v-tab value="image">插画</v-tab>
+          <v-tab value="video">{{ t('home.navigation.video') }}</v-tab>
+          <v-tab value="image">{{ t('home.navigation.image') }}</v-tab>
         </v-tabs>
         <v-divider></v-divider>
       </div>
@@ -290,13 +293,13 @@ async function getSubscribeImageList(): Promise<any> {
       @slide-change="onSlideChange">
       <swiper-slide>
         <div v-if="videoState === 'failed'" class="loading" @click="handleVideoErrorClick">
-          <errorHuawu>视频列表加载失败了喵~</errorHuawu>
+          <errorHuawu>{{ t('home.video.loadFailed') }}{{ t('home.navigation.video') }}</errorHuawu>
         </div>
         <div v-else-if="videoState === 'empty'" class="loading" @click="handleVideoErrorClick">
-          <errorHuawu>暂无视频内容</errorHuawu>
+          <errorHuawu>{{ t('home.navigation.video') }}{{ t('home.video.noRecords') }}</errorHuawu>
         </div>
         <div v-else-if="videoState === 'loading'" class="loading">
-          <loadingHuawu>数据加载中</loadingHuawu>
+          <loadingHuawu>{{ t('home.video.loading') }}</loadingHuawu>
         </div>
         <v-infinite-scroll v-else color="#00796B" @load="videoListHandleScrollToEnd" :disabled="videoListMore"
           class="list-view" ref="videoListView" @scroll="handleVideoScroll">
@@ -317,26 +320,26 @@ async function getSubscribeImageList(): Promise<any> {
           </div>
           <template v-slot:error="{ props }">
             <div class="load-more-failed">
-              <span>加载失败，</span>
-              <span class="retry-btn" v-bind=props>点击重试</span>
+              <span>{{ t('home.video.loadFailed') }}</span>
+              <span class="retry-btn" v-bind=props>{{ t('home.video.retry') }}</span>
             </div>
           </template>
           <template v-slot:empty>
             <div class="listEnd">
-              已经到底了
+              {{ t('home.video.reachedBottom') }}
             </div>
           </template>
         </v-infinite-scroll>
       </swiper-slide>
       <swiper-slide>
         <div v-if="imageState === 'failed'" class="loading" @click="handleImageErrorClick">
-          <errorHuawu>插画列表加载失败了喵~</errorHuawu>
+          <errorHuawu>{{ t('home.image.loadFailed') }}{{ t('home.navigation.image') }}</errorHuawu>
         </div>
         <div v-else-if="imageState === 'empty'" class="loading" @click="handleImageErrorClick">
-          <errorHuawu>暂无插画内容</errorHuawu>
+          <errorHuawu>{{ t('home.navigation.image') }}{{ t('home.image.noRecords') }}</errorHuawu>
         </div>
         <div v-else-if="imageState === 'loading'" class="loading">
-          <loadingHuawu>数据加载中</loadingHuawu>
+          <loadingHuawu>{{ t('home.image.loading') }}</loadingHuawu>
         </div>
         <v-infinite-scroll v-else color="#00796B" @load="imageListHandleScrollToEnd" :disabled="imageListMore"
           class="list-view" ref="imageListView" @scroll="handleImageScroll">
@@ -357,13 +360,13 @@ async function getSubscribeImageList(): Promise<any> {
           </div>
           <template v-slot:error="{ props }">
             <div class="load-more-failed">
-              <span>加载失败，</span>
-              <span class="retry-btn" v-bind=props>点击重试</span>
+              <span>{{ t('home.image.loadFailed') }}</span>
+              <span class="retry-btn" v-bind=props>{{ t('home.image.retry') }}</span>
             </div>
           </template>
           <template v-slot:empty>
             <div class="listEnd">
-              已经到底了喵~
+              {{ t('home.image.reachedBottom') }}
             </div>
           </template>
         </v-infinite-scroll>

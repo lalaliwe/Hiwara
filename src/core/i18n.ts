@@ -154,16 +154,20 @@ function getCurrentLocale(): ResolvedLocale {
   return (messages[storeLanguage as keyof typeof messages] ? storeLanguage : 'zh-Hans') as ResolvedLocale;
 }
 
-// 创建 i18n 实例
-const i18n = createI18n({
-  legacy: false, // 使用 Composition API 模式
-  locale: getCurrentLocale(), // 初始语言
-  fallbackLocale: 'zh-Hans', // 回退语言
-  messages, // 语言包
-});
+// 创建 i18n 实例的工厂函数
+export function createI18nInstance() {
+  const i18n = createI18n({
+    legacy: false, // 使用 Composition API 模式
+    locale: getCurrentLocale(), // 初始语言
+    fallbackLocale: 'zh-Hans', // 回退语言
+    messages: messages as any, // 语言包
+  });
+  
+  return i18n;
+}
 
 // 导出语言切换函数
-export function setLanguage(locale: SupportedLocale) {
+export function setLanguage(i18n: ReturnType<typeof createI18nInstance>, locale: SupportedLocale) {
   // 如果设置为 auto,则检测浏览器语言
   let resolvedLocale: ResolvedLocale;
   if (locale === 'auto') {
@@ -177,9 +181,7 @@ export function setLanguage(locale: SupportedLocale) {
 }
 
 // 导出初始化函数(用于在应用启动时根据 store 设置语言)
-export function initI18nLanguage() {
+export function initI18nLanguage(i18n: ReturnType<typeof createI18nInstance>) {
   const currentLocale = getCurrentLocale();
   i18n.global.locale.value = currentLocale;
 }
-
-export default i18n;

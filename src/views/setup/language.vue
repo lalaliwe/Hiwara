@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import { setupStore } from '../../core/store'
 import { storeToRefs } from 'pinia'
 
@@ -8,6 +9,7 @@ defineOptions({
 })
 
 const router = useRouter()
+const { locale } = useI18n()
 const setup = setupStore()
 const { language } = storeToRefs(setup)
 
@@ -31,7 +33,7 @@ const languages = [
   { label: '高棉语', subLabel: 'ភាសាខ្មែរ', value: 'km' },
   { label: '印地语', subLabel: 'भाषा', value: 'hi' },
   { label: '阿拉伯语', subLabel: 'العربية', value: 'ar' },
-  { label: '希伯来语', subLabel: 'עברית', value: 'he ' },
+  { label: '希伯来语', subLabel: 'עברית', value: 'he' },
   { label: '藏文', subLabel: 'བོད་ཡིག', value: 'bo' },
   { label: '维吾尔语', subLabel: 'ئۇيغۇر تىلى', value: 'ug' },
   { label: '哈萨克语', subLabel: 'қазақ тілі', value: 'kk' }
@@ -45,6 +47,59 @@ const goBack = () => {
 // 选择语言
 const selectLanguage = async (langValue: string) => {
   await setup.updateSetting('language', langValue);
+  
+  // 立即更新 i18n 的语言
+  if (langValue === 'auto') {
+    // 如果设置为 auto,检测浏览器语言
+    const browserLang = navigator.language;
+    if (browserLang === 'zh' || browserLang.startsWith('zh-CN') || browserLang.startsWith('zh-SG')) {
+      locale.value = 'zh-Hans';
+    } else if (browserLang.startsWith('zh-TW') || browserLang.startsWith('zh-HK') || browserLang.startsWith('zh-MO')) {
+      locale.value = 'zh-Hant';
+    } else if (browserLang.startsWith('ja')) {
+      locale.value = 'ja';
+    } else if (browserLang.startsWith('ko')) {
+      locale.value = 'ko';
+    } else if (browserLang.startsWith('fr')) {
+      locale.value = 'fr';
+    } else if (browserLang.startsWith('es')) {
+      locale.value = 'es';
+    } else if (browserLang.startsWith('pt')) {
+      locale.value = 'pt';
+    } else if (browserLang.startsWith('de')) {
+      locale.value = 'de';
+    } else if (browserLang.startsWith('it')) {
+      locale.value = 'it';
+    } else if (browserLang.startsWith('ru')) {
+      locale.value = 'ru';
+    } else if (browserLang.startsWith('uk')) {
+      locale.value = 'uk';
+    } else if (browserLang.startsWith('th')) {
+      locale.value = 'th';
+    } else if (browserLang.startsWith('vi')) {
+      locale.value = 'vi';
+    } else if (browserLang.startsWith('km')) {
+      locale.value = 'km';
+    } else if (browserLang.startsWith('hi')) {
+      locale.value = 'hi';
+    } else if (browserLang.startsWith('ar')) {
+      locale.value = 'ar';
+    } else if (browserLang.startsWith('he')) {
+      locale.value = 'he';
+    } else if (browserLang.startsWith('bo')) {
+      locale.value = 'bo';
+    } else if (browserLang.startsWith('ug')) {
+      locale.value = 'ug';
+    } else if (browserLang.startsWith('kk')) {
+      locale.value = 'kk';
+    } else {
+      locale.value = 'en';
+    }
+  } else {
+    // 直接使用选择的语言
+    locale.value = langValue;
+  }
+  
   router.back();
 }
 </script>

@@ -1,59 +1,119 @@
 {
-  "common": {
-    "loading": "Caricamento...",
-    "error": "Errore",
-    "success": "Successo",
-    "cancel": "Annulla",
-    "confirm": "Conferma",
-    "save": "Salva",
-    "delete": "Elimina",
-    "edit": "Modifica",
-    "search": "Cerca",
-    "back": "Indietro",
-    "next": "Avanti",
-    "previous": "Precedente",
-    "close": "Chiudi",
-    "open": "Apri",
-    "yes": "Sì",
-    "no": "No"
+  "common": {},
+  "home": {
+    "navigation": {
+      "video": "Video",
+      "image": "Illustrazioni",
+      "subscribe": "Iscrizioni",
+      "forum": "Forum",
+      "my": "Il mio profilo"
+    },
+    "searchBar": {
+      "placeholder": "Cerca"
+    },
+    "dateFilter": {
+      "selectTime": "Seleziona periodo",
+      "year": "Anno",
+      "monthLabel": "Mese",
+      "allYears": "Tutti gli anni",
+      "fullYear": "Intero anno",
+      "months": {
+        "1": "Gennaio",
+        "2": "Febbraio",
+        "3": "Marzo",
+        "4": "Aprile",
+        "5": "Maggio",
+        "6": "Giugno",
+        "7": "Luglio",
+        "8": "Agosto",
+        "9": "Settembre",
+        "10": "Ottobre",
+        "11": "Novembre",
+        "12": "Dicembre"
+      },
+      "confirm": "Conferma",
+      "reset": "Reimposta"
+    },
+    "video": {
+      "sortTabs": {
+        "date": "Più recenti",
+        "trending": "Di tendenza",
+        "popularity": "Popolari",
+        "views": "Visualizzazioni",
+        "likes": "Mi piace"
+      },
+      "loading": "Caricamento...",
+      "noRecords": "Nessun record video",
+      "loadFailed": "Caricamento fallito, ",
+      "retry": "Clicca per riprovare",
+      "reachedBottom": "Fine raggiunta"
+    },
+    "image": {
+      "sortTabs": {
+        "date": "Più recenti",
+        "trending": "Di tendenza",
+        "popularity": "Popolari",
+        "views": "Visualizzazioni",
+        "likes": "Mi piace"
+      },
+      "loading": "Caricamento...",
+      "noRecords": "Nessun record illustrazioni",
+      "loadFailed": "Caricamento fallito, ",
+      "retry": "Clicca per riprovare",
+      "reachedBottom": "Fine raggiunta"
+    },
+    "toast": {
+      "pressAgainToExit": "Premi di nuovo per uscire dall'app"
+    },
+    "my": {
+      "space": "Spazio",
+      "followers": "Seguiti",
+      "fans": "Fan",
+      "history": "Cronologia",
+      "viewAllHistory": "Vedi tutto",
+      "videoFavorites": "Video preferiti",
+      "imageFavorites": "Illustrazioni preferite",
+      "playlist": "Playlist",
+      "offlineCache": "Cache offline",
+      "notifications": "Notifiche",
+      "friends": "Amici",
+      "messages": "Messaggi",
+      "settings": "Impostazioni",
+      "iwaraServices": "Servizi Iwara",
+      "premium": "Premium",
+      "wura": "Wura",
+      "faq": "FAQ",
+      "links": "Link",
+      "aboutText": "Questa applicazione segue la licenza open source MPL-2.0. Si prega di non utilizzarla per scopi commerciali.",
+      "noRecords": "Nessun record {type}"
+    },
+    "forum": {
+      "posts": "Post",
+      "topics": "Argomenti",
+      "repliedAt": "Risposto il"
+    }
   },
-  "navigation": {
-    "home": "Home",
-    "search": "Cerca",
-    "favorites": "Preferiti",
-    "history": "Cronologia",
-    "friends": "Amici",
-    "zone": "Zona",
-    "settings": "Impostazioni"
-  },
-  "player": {
-    "play": "Riproduci",
-    "pause": "Pausa",
-    "fullscreen": "Schermo intero",
-    "exitFullscreen": "Esci da schermo intero",
-    "volume": "Volume",
-    "mute": "Muto",
-    "unmute": "Riattiva audio",
-    "quality": "Qualità",
-    "speed": "Velocità",
-    "subtitle": "Sottotitoli",
-    "download": "Scarica"
-  },
-  "setup": {
-    "title": "Impostazioni",
-    "general": "Impostazioni generali",
-    "autoPlay": "Riproduzione automatica",
-    "reconnect": "Tentativi di riconnessione",
-    "definition": "Qualità predefinita",
-    "searchMode": "Modalità di ricerca",
-    "language": "Lingua",
-    "paths": "Impostazioni percorso",
-    "videoSavePath": "Percorso salvataggio video",
-    "imageSavePath": "Percorso salvataggio immagini",
-    "aria2": "Impostazioni Aria2",
-    "aria2Rpc": "URL RPC",
-    "aria2Token": "Token segreto",
-    "aria2Download": "Directory di download",
-    "aria2Switch": "Abilita Aria2"
+  "history": {
+    "title": "Cronologia",
+    "video": {
+      "tab": "Video",
+      "loading": "Caricamento...",
+      "error": "Errore",
+      "noRecords": "Nessuna cronologia video",
+      "today": "Oggi",
+      "loadFailed": "Caricamento fallito, ",
+      "retry": "Clicca per riprovare",
+      "reachedBottom": "Fine raggiunta"
+    },
+    "image": {
+      "tab": "Illustrazioni",
+      "loading": "Caricamento...",
+      "error": "Errore",
+      "noRecords": "Nessuna cronologia illustrazioni",
+      "today": "Oggi",
+      "loadFailed": "Caricamento fallito, ",
+      "retry": "Clicca per riprovare",
+      "reachedBottom": "Fine raggiunta"
+    }
   }
 }

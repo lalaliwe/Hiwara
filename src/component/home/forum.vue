@@ -1,4 +1,8 @@
 <script setup lang="ts">
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
+
 interface ForumSection {
   title: string;
   description: string;
@@ -60,8 +64,8 @@ const forumData: ForumGroup[] = [
         posts: 100,
         topics: 1000,
         latestTitle: "最新发布",
-        latestContent: "测试文本测试文本测试文本",
-        author: "测试作者",
+        latestContent: "测试文本测试文本テストテキスト",
+        author: "テストユーザー",
         date: "2025-01-01 12:00"
       },
       {
@@ -70,8 +74,8 @@ const forumData: ForumGroup[] = [
         posts: 100,
         topics: 1000,
         latestTitle: "最新发布",
-        latestContent: "测试文本测试文本测试文本",
-        author: "测试作者",
+        latestContent: "テストテキストテストテキストテストテキスト",
+        author: "テストユーザー",
         date: "2025-01-01 12:00"
       },
       {
@@ -80,8 +84,8 @@ const forumData: ForumGroup[] = [
         posts: 100,
         topics: 1000,
         latestTitle: "最新发布",
-        latestContent: "测试文本测试文本测试文本",
-        author: "测试作者",
+        latestContent: "テストテキストテストテキストテストテキスト",
+        author: "テストユーザー",
         date: "2025-01-01 12:00"
       },
       {
@@ -90,18 +94,18 @@ const forumData: ForumGroup[] = [
         posts: 100,
         topics: 1000,
         latestTitle: "最新发布",
-        latestContent: "测试文本测试文本测试文本",
-        author: "测试作者",
+        latestContent: "テストテキストテストテキストテストテキスト",
+        author: "テストユーザー",
         date: "2025-01-01 12:00"
       },
       {
         title: "分享",
-        description: "分享模型，动作或者其他配件",
+        description: "分享模型，動作或者其他アクセサリー",
         posts: 100,
         topics: 1000,
         latestTitle: "最新发布",
-        latestContent: "测试文本测试文本测试文本",
-        author: "测试作者",
+        latestContent: "テストテキストテストテキストテストテキスト",
+        author: "テストユーザー",
         date: "2025-01-01 12:00"
       }
     ]
@@ -115,8 +119,8 @@ const forumData: ForumGroup[] = [
         posts: 100,
         topics: 1000,
         latestTitle: "最新发布",
-        latestContent: "测试文本测试文本测试文本",
-        author: "测试作者",
+        latestContent: "テストテキストテストテキストテストテキスト",
+        author: "テストユーザー",
         date: "2025-01-01 12:00"
       },
       {
@@ -125,7 +129,7 @@ const forumData: ForumGroup[] = [
         posts: 100,
         topics: 1000,
         latestTitle: "最新发布",
-        latestContent: "测试文本テストテキストテストテキスト",
+        latestContent: "テストテキストテストテキストテストテキスト",
         author: "テストユーザー",
         date: "2025-01-01 12:00"
       },
@@ -160,8 +164,8 @@ const forumData: ForumGroup[] = [
         posts: 100,
         topics: 1000,
         latestTitle: "最新发布",
-        latestContent: "测试文本测试文本测试文本",
-        author: "测试作者",
+        latestContent: "テストテキストテストテキストテストテキスト",
+        author: "テストユーザー",
         date: "2025-01-01 12:00"
       },
       {
@@ -170,7 +174,7 @@ const forumData: ForumGroup[] = [
         posts: 100,
         topics: 1000,
         latestTitle: "最新发布",
-        latestContent: "测试文本テストテキストテストテキスト",
+        latestContent: "テストテキストテストテキストテストテキスト",
         author: "テストユーザー",
         date: "2025-01-01 12:00"
       },
@@ -203,7 +207,7 @@ const forumData: ForumGroup[] = [
   <div class="container">
     <div class="topBar">
       <div class="label">
-        论坛
+        {{ t('home.navigation.forum') }}
       </div>
     </div>
     <div class="content">
@@ -222,8 +226,8 @@ const forumData: ForumGroup[] = [
             </div>
             <div class="right">
               <div>
-                <div>发布：<span class="gray">{{ section.posts }}</span></div>
-                <div>主题：<span class="gray">{{ section.topics }}</span></div>
+                <div>{{ t('forum.posts') }}：<span class="gray">{{ section.posts }}</span></div>
+                <div>{{ t('forum.topics') }}：<span class="gray">{{ section.topics }}</span></div>
               </div>
             </div>
           </div>
@@ -236,7 +240,7 @@ const forumData: ForumGroup[] = [
           <div class="user">
             <span class="gray">{{ section.author }}</span>
             &nbsp;
-            <span>回复于</span>
+            <span>{{ t('forum.repliedAt') }}</span>
             &nbsp;
             <span class="gray">{{ section.date }}</span>
           </div>

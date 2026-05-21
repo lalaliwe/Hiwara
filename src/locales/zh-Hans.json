@@ -1,65 +1,119 @@
 {
-  "common": {
-    "loading": "加载中...",
-    "error": "错误",
-    "success": "成功",
-    "cancel": "取消",
-    "confirm": "确认",
-    "save": "保存",
-    "delete": "删除",
-    "edit": "编辑",
-    "search": "搜索",
-    "back": "返回",
-    "next": "下一步",
-    "previous": "上一步",
-    "close": "关闭",
-    "open": "打开",
-    "yes": "是",
-    "no": "否",
-    "today": "今天",
-    "loadFailed": "加载失败，",
-    "retry": "点击重试",
-    "reachedBottom": "已经到底了喵~"
+  "common": {},
+  "home": {
+    "navigation": {
+      "video": "视频",
+      "image": "插画",
+      "subscribe": "订阅",
+      "forum": "论坛",
+      "my": "我的"
+    },
+    "searchBar": {
+      "placeholder": "搜索"
+    },
+    "dateFilter": {
+      "selectTime": "选择时间",
+      "year": "年份",
+      "monthLabel": "月份",
+      "allYears": "全部年份",
+      "fullYear": "全年",
+      "months": {
+        "1": "一月",
+        "2": "二月",
+        "3": "三月",
+        "4": "四月",
+        "5": "五月",
+        "6": "六月",
+        "7": "七月",
+        "8": "八月",
+        "9": "九月",
+        "10": "十月",
+        "11": "十一月",
+        "12": "十二月"
+      },
+      "confirm": "确定",
+      "reset": "重置"
+    },
+    "video": {
+      "sortTabs": {
+        "date": "最新",
+        "trending": "流行",
+        "popularity": "人气",
+        "views": "观看量",
+        "likes": "点赞量"
+      },
+      "loading": "加载中...",
+      "noRecords": "暂无视频记录",
+      "loadFailed": "加载失败，",
+      "retry": "点击重试",
+      "reachedBottom": "到底了"
+    },
+    "image": {
+      "sortTabs": {
+        "date": "最新",
+        "trending": "流行",
+        "popularity": "人气",
+        "views": "观看量",
+        "likes": "点赞量"
+      },
+      "loading": "加载中...",
+      "noRecords": "暂无插画记录",
+      "loadFailed": "加载失败，",
+      "retry": "点击重试",
+      "reachedBottom": "到底了"
+    },
+    "toast": {
+      "pressAgainToExit": "再按一次返回键退出应用"
+    },
+    "my": {
+      "space": "空间",
+      "followers": "关注",
+      "fans": "粉丝",
+      "history": "历史记录",
+      "viewAllHistory": "查看全部",
+      "videoFavorites": "视频收藏",
+      "imageFavorites": "插画收藏",
+      "playlist": "播放列表",
+      "offlineCache": "离线缓存",
+      "notifications": "通知",
+      "friends": "好友",
+      "messages": "私信",
+      "settings": "设置",
+      "iwaraServices": "Iwara服务",
+      "premium": "高级会员",
+      "wura": "Wura",
+      "faq": "常见问题",
+      "links": "相关链接",
+      "aboutText": "本应用遵循MPL-2.0开源协议，请勿用于任何商业用途。",
+      "noRecords": "{type}暂无记录"
+    },
+    "forum": {
+      "posts": "发布",
+      "topics": "主题",
+      "repliedAt": "回复于"
+    }
   },
-  "navigation": {
-    "home": "首页",
-    "search": "搜索",
-    "favorites": "收藏",
-    "history": "历史",
-    "friends": "好友",
-    "zone": "空间",
-    "settings": "设置"
-  },
-  "player": {
-    "play": "播放",
-    "pause": "暂停",
-    "fullscreen": "全屏",
-    "exitFullscreen": "退出全屏",
-    "volume": "音量",
-    "mute": "静音",
-    "unmute": "取消静音",
-    "quality": "清晰度",
-    "speed": "速度",
-    "subtitle": "字幕",
-    "download": "下载",
-    "video": "视频",
-    "image": "插画"
-  },
-  "setup": {
-    "title": "设置",
-    "general": "通用设置",
-    "autoPlay": "自动播放",
-    "reconnect": "重连次数",
-    "definition": "默认清晰度",
-    "searchMode": "搜索模式",
-    "language": "语言",
-    "paths": "路径设置",
-    "videoSavePath": "视频保存路径",
-    "imageSavePath": "图片保存路径",
-    "aria2": "Aria2 设置",
-    "aria2Rpc": "RPC 地址",
-    "aria2Token": "密钥",
-    "aria2Download": "下载目录",
-    "aria2Switch": "启用 Aria2"
+  "history": {
+    "title": "历史",
+    "video": {
+      "tab": "视频",
+      "loading": "加载中...",
+      "error": "错误",
+      "noRecords": "暂无视频历史",
+      "today": "今天",
+      "loadFailed": "加载失败，",
+      "retry": "点击重试",
+      "reachedBottom": "到底了"
+    },
+    "image": {
+      "tab": "插画",
+      "loading": "加载中...",
+      "error": "错误",
+      "noRecords": "暂无插画历史",
+      "today": "今天",
+      "loadFailed": "加载失败，",
+      "retry": "点击重试",
+      "reachedBottom": "到底了"
+    }
   }
 }

@@ -1,59 +1,119 @@
 {
-  "common": {
-    "loading": "Wird geladen...",
-    "error": "Fehler",
-    "success": "Erfolg",
-    "cancel": "Abbrechen",
-    "confirm": "Bestätigen",
-    "save": "Speichern",
-    "delete": "Löschen",
-    "edit": "Bearbeiten",
-    "search": "Suchen",
-    "back": "Zurück",
-    "next": "Weiter",
-    "previous": "Zurück",
-    "close": "Schließen",
-    "open": "Öffnen",
-    "yes": "Ja",
-    "no": "Nein"
+  "common": {},
+  "home": {
+    "navigation": {
+      "video": "Video",
+      "image": "Illustrationen",
+      "subscribe": "Abonnements",
+      "forum": "Forum",
+      "my": "Mein Profil"
+    },
+    "searchBar": {
+      "placeholder": "Suchen"
+    },
+    "dateFilter": {
+      "selectTime": "Zeitraum auswählen",
+      "year": "Jahr",
+      "monthLabel": "Monat",
+      "allYears": "Alle Jahre",
+      "fullYear": "Ganzes Jahr",
+      "months": {
+        "1": "Januar",
+        "2": "Februar",
+        "3": "März",
+        "4": "April",
+        "5": "Mai",
+        "6": "Juni",
+        "7": "Juli",
+        "8": "August",
+        "9": "September",
+        "10": "Oktober",
+        "11": "November",
+        "12": "Dezember"
+      },
+      "confirm": "Bestätigen",
+      "reset": "Zurücksetzen"
+    },
+    "video": {
+      "sortTabs": {
+        "date": "Neueste",
+        "trending": "Trends",
+        "popularity": "Beliebt",
+        "views": "Aufrufe",
+        "likes": "Likes"
+      },
+      "loading": "Wird geladen...",
+      "noRecords": "Keine Video-Aufzeichnungen",
+      "loadFailed": "Laden fehlgeschlagen, ",
+      "retry": "Klicken zum Wiederholen",
+      "reachedBottom": "Ende erreicht"
+    },
+    "image": {
+      "sortTabs": {
+        "date": "Neueste",
+        "trending": "Trends",
+        "popularity": "Beliebt",
+        "views": "Aufrufe",
+        "likes": "Likes"
+      },
+      "loading": "Wird geladen...",
+      "noRecords": "Keine Illustrations-Aufzeichnungen",
+      "loadFailed": "Laden fehlgeschlagen, ",
+      "retry": "Klicken zum Wiederholen",
+      "reachedBottom": "Ende erreicht"
+    },
+    "toast": {
+      "pressAgainToExit": "Erneut drücken, um die App zu verlassen"
+    },
+    "my": {
+      "space": "Bereich",
+      "followers": "Folge ich",
+      "fans": "Fans",
+      "history": "Verlauf",
+      "viewAllHistory": "Alle anzeigen",
+      "videoFavorites": "Video-Favoriten",
+      "imageFavorites": "Illustrations-Favoriten",
+      "playlist": "Wiedergabeliste",
+      "offlineCache": "Offline-Cache",
+      "notifications": "Benachrichtigungen",
+      "friends": "Freunde",
+      "messages": "Nachrichten",
+      "settings": "Einstellungen",
+      "iwaraServices": "Iwara-Dienste",
+      "premium": "Premium",
+      "wura": "Wura",
+      "faq": "FAQ",
+      "links": "Links",
+      "aboutText": "Diese Anwendung folgt der MPL-2.0 Open-Source-Lizenz. Bitte verwenden Sie sie nicht für kommerzielle Zwecke.",
+      "noRecords": "Keine {type}-Aufzeichnungen"
+    },
+    "forum": {
+      "posts": "Beiträge",
+      "topics": "Themen",
+      "repliedAt": "Geantwortet am"
+    }
   },
-  "navigation": {
-    "home": "Startseite",
-    "search": "Suche",
-    "favorites": "Favoriten",
-    "history": "Verlauf",
-    "friends": "Freunde",
-    "zone": "Zone",
-    "settings": "Einstellungen"
-  },
-  "player": {
-    "play": "Abspielen",
-    "pause": "Pause",
-    "fullscreen": "Vollbild",
-    "exitFullscreen": "Vollbild beenden",
-    "volume": "Lautstärke",
-    "mute": "Stummschalten",
-    "unmute": "Stummschaltung aufheben",
-    "quality": "Qualität",
-    "speed": "Geschwindigkeit",
-    "subtitle": "Untertitel",
-    "download": "Herunterladen"
-  },
-  "setup": {
-    "title": "Einstellungen",
-    "general": "Allgemeine Einstellungen",
-    "autoPlay": "Automatische Wiedergabe",
-    "reconnect": "Wiederverbindungsversuche",
-    "definition": "Standardqualität",
-    "searchMode": "Suchmodus",
-    "language": "Sprache",
-    "paths": "Pfadeinstellungen",
-    "videoSavePath": "Video-Speicherpfad",
-    "imageSavePath": "Bild-Speicherpfad",
-    "aria2": "Aria2-Einstellungen",
-    "aria2Rpc": "RPC-URL",
-    "aria2Token": "Geheimtoken",
-    "aria2Download": "Download-Verzeichnis",
-    "aria2Switch": "Aria2 aktivieren"
+  "history": {
+    "title": "Verlauf",
+    "video": {
+      "tab": "Video",
+      "loading": "Wird geladen...",
+      "error": "Fehler",
+      "noRecords": "Kein Video-Verlauf",
+      "today": "Heute",
+      "loadFailed": "Laden fehlgeschlagen, ",
+      "retry": "Klicken zum Wiederholen",
+      "reachedBottom": "Ende erreicht"
+    },
+    "image": {
+      "tab": "Illustrationen",
+      "loading": "Wird geladen...",
+      "error": "Fehler",
+      "noRecords": "Kein Illustrations-Verlauf",
+      "today": "Heute",
+      "loadFailed": "Laden fehlgeschlagen, ",
+      "retry": "Klicken zum Wiederholen",
+      "reachedBottom": "Ende erreicht"
+    }
   }
 }

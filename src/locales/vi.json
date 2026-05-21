@@ -1,59 +1,119 @@
 {
-  "common": {
-    "loading": "Đang tải...",
-    "error": "Lỗi",
-    "success": "Thành công",
-    "cancel": "Hủy",
-    "confirm": "Xác nhận",
-    "save": "Lưu",
-    "delete": "Xóa",
-    "edit": "Chỉnh sửa",
-    "search": "Tìm kiếm",
-    "back": "Quay lại",
-    "next": "Tiếp theo",
-    "previous": "Trước",
-    "close": "Đóng",
-    "open": "Mở",
-    "yes": "Có",
-    "no": "Không"
+  "common": {},
+  "home": {
+    "navigation": {
+      "video": "Video",
+      "image": "Hình minh họa",
+      "subscribe": "Đăng ký",
+      "forum": "Diễn đàn",
+      "my": "Trang của tôi"
+    },
+    "searchBar": {
+      "placeholder": "Tìm kiếm"
+    },
+    "dateFilter": {
+      "selectTime": "Chọn thời gian",
+      "year": "Năm",
+      "monthLabel": "Tháng",
+      "allYears": "Tất cả các năm",
+      "fullYear": "Cả năm",
+      "months": {
+        "1": "Tháng 1",
+        "2": "Tháng 2",
+        "3": "Tháng 3",
+        "4": "Tháng 4",
+        "5": "Tháng 5",
+        "6": "Tháng 6",
+        "7": "Tháng 7",
+        "8": "Tháng 8",
+        "9": "Tháng 9",
+        "10": "Tháng 10",
+        "11": "Tháng 11",
+        "12": "Tháng 12"
+      },
+      "confirm": "Xác nhận",
+      "reset": "Đặt lại"
+    },
+    "video": {
+      "sortTabs": {
+        "date": "Mới nhất",
+        "trending": "Xu hướng",
+        "popularity": "Phổ biến",
+        "views": "Lượt xem",
+        "likes": "Lượt thích"
+      },
+      "loading": "Đang tải...",
+      "noRecords": "Không có bản ghi video",
+      "loadFailed": "Tải thất bại, ",
+      "retry": "Nhấp để thử lại",
+      "reachedBottom": "Đã đến cuối"
+    },
+    "image": {
+      "sortTabs": {
+        "date": "Mới nhất",
+        "trending": "Xu hướng",
+        "popularity": "Phổ biến",
+        "views": "Lượt xem",
+        "likes": "Lượt thích"
+      },
+      "loading": "Đang tải...",
+      "noRecords": "Không có bản ghi hình minh họa",
+      "loadFailed": "Tải thất bại, ",
+      "retry": "Nhấp để thử lại",
+      "reachedBottom": "Đã đến cuối"
+    },
+    "toast": {
+      "pressAgainToExit": "Nhấn lần nữa để thoát ứng dụng"
+    },
+    "my": {
+      "space": "Không gian",
+      "followers": "Đang theo dõi",
+      "fans": "Người hâm mộ",
+      "history": "Lịch sử",
+      "viewAllHistory": "Xem tất cả",
+      "videoFavorites": "Video yêu thích",
+      "imageFavorites": "Hình minh họa yêu thích",
+      "playlist": "Danh sách phát",
+      "offlineCache": "Bộ nhớ đệm ngoại tuyến",
+      "notifications": "Thông báo",
+      "friends": "Bạn bè",
+      "messages": "Tin nhắn",
+      "settings": "Cài đặt",
+      "iwaraServices": "Dịch vụ Iwara",
+      "premium": "Premium",
+      "wura": "Wura",
+      "faq": "Câu hỏi thường gặp",
+      "links": "Liên kết",
+      "aboutText": "Ứng dụng này tuân theo giấy phép nguồn mở MPL-2.0. Vui lòng không sử dụng cho mục đích thương mại.",
+      "noRecords": "Không có bản ghi {type}"
+    },
+    "forum": {
+      "posts": "Bài đăng",
+      "topics": "Chủ đề",
+      "repliedAt": "Trả lời lúc"
+    }
   },
-  "navigation": {
-    "home": "Trang chủ",
-    "search": "Tìm kiếm",
-    "favorites": "Yêu thích",
-    "history": "Lịch sử",
-    "friends": "Bạn bè",
-    "zone": "Khu vực",
-    "settings": "Cài đặt"
-  },
-  "player": {
-    "play": "Phát",
-    "pause": "Tạm dừng",
-    "fullscreen": "Toàn màn hình",
-    "exitFullscreen": "Thoát toàn màn hình",
-    "volume": "Âm lượng",
-    "mute": "Tắt tiếng",
-    "unmute": "Bật tiếng",
-    "quality": "Chất lượng",
-    "speed": "Tốc độ",
-    "subtitle": "Phụ đề",
-    "download": "Tải xuống"
-  },
-  "setup": {
-    "title": "Cài đặt",
-    "general": "Cài đặt chung",
-    "autoPlay": "Tự động phát",
-    "reconnect": "Số lần kết nối lại",
-    "definition": "Chất lượng mặc định",
-    "searchMode": "Chế độ tìm kiếm",
-    "language": "Ngôn ngữ",
-    "paths": "Cài đặt đường dẫn",
-    "videoSavePath": "Đường dẫn lưu video",
-    "imageSavePath": "Đường dẫn lưu ảnh",
-    "aria2": "Cài đặt Aria2",
-    "aria2Rpc": "URL RPC",
-    "aria2Token": "Token bí mật",
-    "aria2Download": "Thư mục tải xuống",
-    "aria2Switch": "Bật Aria2"
+  "history": {
+    "title": "Lịch sử",
+    "video": {
+      "tab": "Video",
+      "loading": "Đang tải...",
+      "error": "Lỗi",
+      "noRecords": "Không có lịch sử video",
+      "today": "Hôm nay",
+      "loadFailed": "Tải thất bại, ",
+      "retry": "Nhấp để thử lại",
+      "reachedBottom": "Đã đến cuối"
+    },
+    "image": {
+      "tab": "Hình minh họa",
+      "loading": "Đang tải...",
+      "error": "Lỗi",
+      "noRecords": "Không có lịch sử hình minh họa",
+      "today": "Hôm nay",
+      "loadFailed": "Tải thất bại, ",
+      "retry": "Nhấp để thử lại",
+      "reachedBottom": "Đã đến cuối"
+    }
   }
 }

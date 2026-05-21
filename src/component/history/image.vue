@@ -158,20 +158,15 @@ loadImageDataInternal();
 <template>
   <!-- 加载状态 -->
   <div v-if="imageState === 'loading'" class="loading">
-    <loadingHuawu>{{ t('common.loading') }}</loadingHuawu>
-    <!-- 数据加载中 -->
+    <loadingHuawu>{{ t('history.image.loading') }}</loadingHuawu>
   </div>
-  
-  <!-- 加载失败状态 -->
+
   <div v-else-if="imageState === 'failed'" class="loading" @click="handleErrorClick">
-    <errorHuawu>{{ t('player.image') }}{{ t('navigation.history') }}{{ t('common.error') }}</errorHuawu>
-    <!-- 插画历史加载失败了喵~ -->
+    <errorHuawu>{{ t('history.image.error') }}</errorHuawu>
   </div>
-  
-  <!-- 空数据状态 -->
+
   <div v-else-if="imageState === 'empty'" class="loading" @click="handleErrorClick">
-    <errorHuawu>{{ t('common.no') }}{{ t('player.image') }}{{ t('navigation.history') }}</errorHuawu>
-    <!-- 暂无插画历史记录 -->
+    <errorHuawu>{{ t('history.image.noRecords') }}</errorHuawu>
   </div>
   
   <!-- 成功加载状态 -->
@@ -185,7 +180,7 @@ loadImageDataInternal();
     class="list-view"
   >
     <div v-for="(groupItems, date) in groupedImageHistory" :key="date" class="date-group">
-      <div class="date-header">{{ date === new Date().toISOString().split('T')[0] ? t('common.today') : date }}</div>
+      <div class="date-header">{{ date === new Date().toISOString().split('T')[0] ? t('history.image.today') : date }}</div>
       <!-- {{ date === new Date().toISOString().split('T')[0] ? '今天' : date }} -->
       <v-list lines="two" class="pa-0">
         <HistoryItem 
@@ -200,18 +195,15 @@ loadImageDataInternal();
     <!-- 加载失败提示 -->
     <template v-slot:error="{ props }">
       <div class="load-more-failed">
-        <span>{{ t('common.loadFailed') }}</span>
-        <!-- 加载失败， -->
-        <span class="retry-btn" v-bind="props">{{ t('common.retry') }}</span>
-        <!-- 点击重试 -->
+        <span>{{ t('history.image.loadFailed') }}</span>
+        <span class="retry-btn" v-bind="props">{{ t('history.image.retry') }}</span>
       </div>
     </template>
     
     <!-- 已到底部提示 -->
     <template v-slot:empty>
       <div class="listEnd">
-        {{ t('common.reachedBottom') }}
-        <!-- 已经到底了喵~ -->
+        {{ t('history.image.reachedBottom') }}
       </div>
     </template>
   </v-infinite-scroll>

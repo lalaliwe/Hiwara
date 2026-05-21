@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import { inject, ref } from 'vue';
+import { useI18n } from 'vue-i18n';
 import { useRouter } from 'vue-router';
 
+const { t } = useI18n();
 const router = useRouter();
 const isAI = ref(false)
 
@@ -24,7 +26,7 @@ function toSearch() {
       <div class="input">
         <span>
           <font-awesome-icon icon="fa-solid fa-magnifying-glass" />
-          搜索
+          {{ t('home.searchBar.placeholder') }}
         </span>
       </div>
     </div>

@@ -2,7 +2,8 @@
 import searchBar from '../../component/home/searchBar.vue';
 import cardButton from '../../component/cardButton.vue';
 import DateFilter from './DateFilter.vue';
-import { ref, onActivated, watch, inject } from 'vue';
+import { ref, computed, onActivated, watch, inject } from 'vue';
+import { useI18n } from 'vue-i18n';
 import { Swiper, SwiperSlide } from 'swiper/vue';
 import type { Swiper as SwiperType } from 'swiper';
 import 'swiper/swiper-bundle.css';
@@ -12,14 +13,16 @@ import errorHuawu from '../errorHuawu.vue';
 import { showShortToast } from '../../core/toast';
 import type { VInfiniteScroll } from 'vuetify/components'
 
+const { t } = useI18n();
+
 const tab = ref<'date' | 'trending' | 'popularity' | 'views' | 'likes'>('date');
-const tabArray = [
-  { value: 'date', text: '最新' },
-  { value: 'trending', text: '流行' },
-  { value: 'popularity', text: '人气' },
-  { value: 'views', text: '观看量' },
-  { value: 'likes', text: '点赞量' },
-];
+const tabArray = computed(() => [
+  { value: 'date', text: t('home.video.sortTabs.date') },
+  { value: 'trending', text: t('home.video.sortTabs.trending') },
+  { value: 'popularity', text: t('home.video.sortTabs.popularity') },
+  { value: 'views', text: t('home.video.sortTabs.views') },
+  { value: 'likes', text: t('home.video.sortTabs.likes') },
+]);
 
 interface ListItem {
   id: string;
@@ -33,16 +36,16 @@ interface ListItem {
   isR18: boolean;
 }
 
-const videoList = ref<ListItem[][]>(Array.from({ length: tabArray.length }, () => []));
-let page: number[] = new Array(tabArray.length).fill(0);
-const listMore = ref<boolean[]>(new Array(tabArray.length).fill(false))
+const videoList = ref<ListItem[][]>(Array.from({ length: tabArray.value.length }, () => []));
+let page: number[] = new Array(tabArray.value.length).fill(0);
+const listMore = ref<boolean[]>(new Array(tabArray.value.length).fill(false))
 
 // 加载更多失败标记
-const loadMoreFailed = ref<boolean[]>(new Array(tabArray.length).fill(false))
+const loadMoreFailed = ref<boolean[]>(new Array(tabArray.value.length).fill(false))
 
 // 每个tab的加载状态：'failed' | 'empty' | 'loading' | 'success'
 type ListState = 'failed' | 'empty' | 'loading' | 'success';
-const state = ref<ListState[]>(new Array(tabArray.length).fill('loading'));
+const state = ref<ListState[]>(new Array(tabArray.value.length).fill('loading'));
 
 // 全局时间筛选条件（对所有tab生效），格式：'2026' 或 '2026-1'，undefined表示全部年份
 const dateFilter = ref<string | undefined>(undefined);
@@ -65,7 +68,7 @@ watch(refreshToken, () => {
 });
 
 const listRefs = ref<InstanceType<typeof VInfiniteScroll>[]>([]);;
-let scrollTopArray: number[] = new Array(tabArray.length).fill(0);
+let scrollTopArray: number[] = new Array(tabArray.value.length).fill(0);
 
 const setListRef = (el: any, index: number) => {
   if (el) {
@@ -90,7 +93,7 @@ const onSwiper = (swiper: SwiperType) => {
 // 1. 监听 tab 变化，控制 Swiper 切换
 watch(tab, (newVal) => {
   if (swiperInstance.value) {
-    const targetIndex = tabArray.findIndex(item => item.value === newVal);
+    const targetIndex = tabArray.value.findIndex(item => item.value === newVal);
     // 防止滑动 swiper 触发 tab 改变后，又触发 watch 导致的互相死循环
     if (targetIndex !== -1 && swiperInstance.value.activeIndex !== targetIndex) {
       swiperInstance.value.slideTo(targetIndex);
@@ -102,7 +105,7 @@ watch(tab, (newVal) => {
 
 // 2. 监听 Swiper 滑动，反控 tab 变化
 const onSlideChange = (swiper: SwiperType) => {
-  const targetItem = tabArray[swiper.activeIndex];
+  const targetItem = tabArray.value[swiper.activeIndex];
   if (targetItem && tab.value !== targetItem.value) {
     tab.value = targetItem.value as any;
   }
@@ -119,7 +122,7 @@ onActivated(() => {
 
 // 初始获取视频列表数据
 function initGetVideoListData() {
-  const tabIndex = tabArray.findIndex(item => item.value === tab.value);
+  const tabIndex = tabArray.value.findIndex(item => item.value === tab.value);
   if (state.value[tabIndex] === 'loading') {
     getVideoList(tabIndex).then((res) => {
       if (res.length > 0)
@@ -133,7 +136,7 @@ function initGetVideoListData() {
 }
 // 刷新数据
 function refreshData() {
-  const tabIndex = tabArray.findIndex(item => item.value === tab.value);
+  const tabIndex = tabArray.value.findIndex(item => item.value === tab.value);
   if (tabIndex !== -1) {
     // 清空当前 Tab 的数据
     videoList.value[tabIndex] = [];
@@ -154,7 +157,7 @@ function refreshData() {
 }
 // 点击错误图片刷新数据
 function handleErrorClick(index: number) {
-  const tabIndex = tabArray.findIndex(item => item.value === tab.value);
+  const tabIndex = tabArray.value.findIndex(item => item.value === tab.value);
   if (tabIndex === index) {
     refreshData();
   }
@@ -175,7 +178,7 @@ async function loadMoreData({ done }: any, index: number) {
 // 获取视频列表
 async function getVideoList(tabNum: number): Promise<any> {
   try {
-    const sort = tabArray[tabNum].value;
+    const sort = tabArray.value[tabNum].value;
     const date = dateFilter.value; // 使用全局时间筛选条件
     const res = await api_getVideoList(page[tabNum], sort, date);
     console.log(`获取视频列表 - Tab:${tabNum}, Page:${page[tabNum]}, Sort:${sort}, Date:${date}`);
@@ -261,13 +264,13 @@ function handleDateConfirm(dateParam: string | undefined) {
       @slide-change="onSlideChange">
       <swiper-slide v-for="(item, i) in tabArray" :key="`tabs-window_${item.value}`">
         <div v-if="state[i] === 'failed'" class="loading" @click="handleErrorClick(i)">
-          <errorHuawu>视频列表加载失败了喵~</errorHuawu>
+          <errorHuawu>{{ t('home.video.loadFailed') }}{{ t('home.navigation.video') }}</errorHuawu>
         </div>
         <div v-else-if="state[i] === 'empty'" class="loading" @click="handleErrorClick(i)">
-          <errorHuawu>暂无视频内容</errorHuawu>
+          <errorHuawu>{{ t('home.navigation.video') }}{{ t('home.video.noRecords') }}</errorHuawu>
         </div>
         <div v-else-if="state[i] === 'loading'" class="loading">
-          <loadingHuawu>数据加载中</loadingHuawu>
+          <loadingHuawu>{{ t('home.video.loading') }}</loadingHuawu>
         </div>
         <v-infinite-scroll v-else color="#00796B" @load="(state) => loadMoreData(state, i)" :disabled="listMore[i]"
           class="list-view" :ref="(el) => setListRef(el, i)" @scroll="(e: Event) => handleScroll(i, e)">
@@ -288,13 +291,13 @@ function handleDateConfirm(dateParam: string | undefined) {
           </div>
           <template v-slot:error="{ props }">
             <div class="load-more-failed">
-              <span>加载失败，</span>
-              <span class="retry-btn" v-bind=props>点击重试</span>
+              <span>{{ t('home.video.loadFailed') }}</span>
+              <span class="retry-btn" v-bind=props>{{ t('home.video.retry') }}</span>
             </div>
           </template>
           <template v-slot:empty>
             <div class="listEnd">
-              已经到底了
+              {{ t('home.video.reachedBottom') }}
             </div>
           </template>
         </v-infinite-scroll>

@@ -1,59 +1,119 @@
 {
-  "common": {
-    "loading": "Chargement...",
-    "error": "Erreur",
-    "success": "Succès",
-    "cancel": "Annuler",
-    "confirm": "Confirmer",
-    "save": "Enregistrer",
-    "delete": "Supprimer",
-    "edit": "Modifier",
-    "search": "Rechercher",
-    "back": "Retour",
-    "next": "Suivant",
-    "previous": "Précédent",
-    "close": "Fermer",
-    "open": "Ouvrir",
-    "yes": "Oui",
-    "no": "Non"
+  "common": {},
+  "home": {
+    "navigation": {
+      "video": "Vidéo",
+      "image": "Illustrations",
+      "subscribe": "Abonnements",
+      "forum": "Forum",
+      "my": "Mon compte"
+    },
+    "searchBar": {
+      "placeholder": "Rechercher"
+    },
+    "dateFilter": {
+      "selectTime": "Sélectionner la période",
+      "year": "Année",
+      "monthLabel": "Mois",
+      "allYears": "Toutes les années",
+      "fullYear": "Toute l'année",
+      "months": {
+        "1": "Janvier",
+        "2": "Février",
+        "3": "Mars",
+        "4": "Avril",
+        "5": "Mai",
+        "6": "Juin",
+        "7": "Juillet",
+        "8": "Août",
+        "9": "Septembre",
+        "10": "Octobre",
+        "11": "Novembre",
+        "12": "Décembre"
+      },
+      "confirm": "Confirmer",
+      "reset": "Réinitialiser"
+    },
+    "video": {
+      "sortTabs": {
+        "date": "Récentes",
+        "trending": "Tendances",
+        "popularity": "Populaires",
+        "views": "Vues",
+        "likes": "J'aime"
+      },
+      "loading": "Chargement...",
+      "noRecords": "Aucun enregistrement vidéo",
+      "loadFailed": "Échec du chargement, ",
+      "retry": "Cliquez pour réessayer",
+      "reachedBottom": "Bas de page atteint"
+    },
+    "image": {
+      "sortTabs": {
+        "date": "Récentes",
+        "trending": "Tendances",
+        "popularity": "Populaires",
+        "views": "Vues",
+        "likes": "J'aime"
+      },
+      "loading": "Chargement...",
+      "noRecords": "Aucun enregistrement d'illustration",
+      "loadFailed": "Échec du chargement, ",
+      "retry": "Cliquez pour réessayer",
+      "reachedBottom": "Bas de page atteint"
+    },
+    "toast": {
+      "pressAgainToExit": "Appuyez à nouveau pour quitter l'application"
+    },
+    "my": {
+      "space": "Espace",
+      "followers": "Abonnements",
+      "fans": "Fans",
+      "history": "Historique",
+      "viewAllHistory": "Voir tout",
+      "videoFavorites": "Vidéos favorites",
+      "imageFavorites": "Illustrations favorites",
+      "playlist": "Liste de lecture",
+      "offlineCache": "Cache hors ligne",
+      "notifications": "Notifications",
+      "friends": "Amis",
+      "messages": "Messages",
+      "settings": "Paramètres",
+      "iwaraServices": "Services Iwara",
+      "premium": "Premium",
+      "wura": "Wura",
+      "faq": "FAQ",
+      "links": "Liens",
+      "aboutText": "Cette application suit la licence open source MPL-2.0. Veuillez ne pas l'utiliser à des fins commerciales.",
+      "noRecords": "Aucun enregistrement {type}"
+    },
+    "forum": {
+      "posts": "Publications",
+      "topics": "Sujets",
+      "repliedAt": "Répondu le"
+    }
   },
-  "navigation": {
-    "home": "Accueil",
-    "search": "Recherche",
-    "favorites": "Favoris",
-    "history": "Historique",
-    "friends": "Amis",
-    "zone": "Zone",
-    "settings": "Paramètres"
-  },
-  "player": {
-    "play": "Lire",
-    "pause": "Pause",
-    "fullscreen": "Plein écran",
-    "exitFullscreen": "Quitter le plein écran",
-    "volume": "Volume",
-    "mute": "Muet",
-    "unmute": "Réactiver le son",
-    "quality": "Qualité",
-    "speed": "Vitesse",
-    "subtitle": "Sous-titres",
-    "download": "Télécharger"
-  },
-  "setup": {
-    "title": "Paramètres",
-    "general": "Paramètres généraux",
-    "autoPlay": "Lecture automatique",
-    "reconnect": "Tentatives de reconnexion",
-    "definition": "Qualité par défaut",
-    "searchMode": "Mode de recherche",
-    "language": "Langue",
-    "paths": "Paramètres de chemin",
-    "videoSavePath": "Chemin de sauvegarde vidéo",
-    "imageSavePath": "Chemin de sauvegarde image",
-    "aria2": "Paramètres Aria2",
-    "aria2Rpc": "URL RPC",
-    "aria2Token": "Jeton secret",
-    "aria2Download": "Répertoire de téléchargement",
-    "aria2Switch": "Activer Aria2"
+  "history": {
+    "title": "Historique",
+    "video": {
+      "tab": "Vidéo",
+      "loading": "Chargement...",
+      "error": "Erreur",
+      "noRecords": "Aucun historique vidéo",
+      "today": "Aujourd'hui",
+      "loadFailed": "Échec du chargement, ",
+      "retry": "Cliquez pour réessayer",
+      "reachedBottom": "Bas de page atteint"
+    },
+    "image": {
+      "tab": "Illustrations",
+      "loading": "Chargement...",
+      "error": "Erreur",
+      "noRecords": "Aucun historique d'illustrations",
+      "today": "Aujourd'hui",
+      "loadFailed": "Échec du chargement, ",
+      "retry": "Cliquez pour réessayer",
+      "reachedBottom": "Bas de page atteint"
+    }
   }
 }

@@ -1,59 +1,119 @@
 {
-  "common": {
-    "loading": "جاري التحميل...",
-    "error": "خطأ",
-    "success": "نجاح",
-    "cancel": "إلغاء",
-    "confirm": "تأكيد",
-    "save": "حفظ",
-    "delete": "حذف",
-    "edit": "تعديل",
-    "search": "بحث",
-    "back": "رجوع",
-    "next": "التالي",
-    "previous": "السابق",
-    "close": "إغلاق",
-    "open": "فتح",
-    "yes": "نعم",
-    "no": "لا"
+  "common": {},
+  "home": {
+    "navigation": {
+      "video": "فيديو",
+      "image": "رسوم توضيحية",
+      "subscribe": "اشتراكات",
+      "forum": "منتدى",
+      "my": "صفحتي"
+    },
+    "searchBar": {
+      "placeholder": "بحث"
+    },
+    "dateFilter": {
+      "selectTime": "اختر الوقت",
+      "year": "السنة",
+      "monthLabel": "الشهر",
+      "allYears": "جميع السنوات",
+      "fullYear": "السنة كاملة",
+      "months": {
+        "1": "يناير",
+        "2": "فبراير",
+        "3": "مارس",
+        "4": "أبريل",
+        "5": "مايو",
+        "6": "يونيو",
+        "7": "يوليو",
+        "8": "أغسطس",
+        "9": "سبتمبر",
+        "10": "أكتوبر",
+        "11": "نوفمبر",
+        "12": "ديسمبر"
+      },
+      "confirm": "تأكيد",
+      "reset": "إعادة تعيين"
+    },
+    "video": {
+      "sortTabs": {
+        "date": "الأحدث",
+        "trending": "الرائج",
+        "popularity": "الأكثر شعبية",
+        "views": "المشاهدات",
+        "likes": "الإعجابات"
+      },
+      "loading": "جاري التحميل...",
+      "noRecords": "لا توجد سجلات فيديو",
+      "loadFailed": "فشل التحميل، ",
+      "retry": "انقر لإعادة المحاولة",
+      "reachedBottom": "تم الوصول إلى النهاية"
+    },
+    "image": {
+      "sortTabs": {
+        "date": "الأحدث",
+        "trending": "الرائج",
+        "popularity": "الأكثر شعبية",
+        "views": "المشاهدات",
+        "likes": "الإعجابات"
+      },
+      "loading": "جاري التحميل...",
+      "noRecords": "لا توجد سجلات رسوم توضيحية",
+      "loadFailed": "فشل التحميل، ",
+      "retry": "انقر لإعادة المحاولة",
+      "reachedBottom": "تم الوصول إلى النهاية"
+    },
+    "toast": {
+      "pressAgainToExit": "اضغط مرة أخرى للخروج من التطبيق"
+    },
+    "my": {
+      "space": "المساحة",
+      "followers": "متابَعون",
+      "fans": "معجبون",
+      "history": "السجل",
+      "viewAllHistory": "عرض الكل",
+      "videoFavorites": "مقاطع الفيديو المفضلة",
+      "imageFavorites": "الرسوم التوضيحية المفضلة",
+      "playlist": "قائمة التشغيل",
+      "offlineCache": "ذاكرة التخزين المؤقت دون اتصال",
+      "notifications": "الإشعارات",
+      "friends": "الأصدقاء",
+      "messages": "الرسائل",
+      "settings": "الإعدادات",
+      "iwaraServices": "خدمات Iwara",
+      "premium": "بريميوم",
+      "wura": "Wura",
+      "faq": "الأسئلة الشائعة",
+      "links": "روابط",
+      "aboutText": "يتبع هذا التطبيق ترخيص MPL-2.0 مفتوح المصدر. يرجى عدم استخدامه لأي أغراض تجارية.",
+      "noRecords": "لا توجد سجلات {type}"
+    },
+    "forum": {
+      "posts": "منشورات",
+      "topics": "مواضيع",
+      "repliedAt": "تم الرد في"
+    }
   },
-  "navigation": {
-    "home": "الرئيسية",
-    "search": "بحث",
-    "favorites": "المفضلة",
-    "history": "السجل",
-    "friends": "الأصدقاء",
-    "zone": "المنطقة",
-    "settings": "الإعدادات"
-  },
-  "player": {
-    "play": "تشغيل",
-    "pause": "إيقاف مؤقت",
-    "fullscreen": "ملء الشاشة",
-    "exitFullscreen": "الخروج من ملء الشاشة",
-    "volume": "مستوى الصوت",
-    "mute": "كتم الصوت",
-    "unmute": "إلغاء كتم الصوت",
-    "quality": "الجودة",
-    "speed": "السرعة",
-    "subtitle": "الترجمة",
-    "download": "تنزيل"
-  },
-  "setup": {
-    "title": "الإعدادات",
-    "general": "الإعدادات العامة",
-    "autoPlay": "التشغيل التلقائي",
-    "reconnect": "محاولات إعادة الاتصال",
-    "definition": "الجودة الافتراضية",
-    "searchMode": "وضع البحث",
-    "language": "اللغة",
-    "paths": "إعدادات المسار",
-    "videoSavePath": "مسار حفظ الفيديو",
-    "imageSavePath": "مسار حفظ الصور",
-    "aria2": "إعدادات Aria2",
-    "aria2Rpc": "عنوان RPC",
-    "aria2Token": "الرمز السري",
-    "aria2Download": "دليل التنزيل",
-    "aria2Switch": "تمكين Aria2"
+  "history": {
+    "title": "السجل",
+    "video": {
+      "tab": "فيديو",
+      "loading": "جاري التحميل...",
+      "error": "خطأ",
+      "noRecords": "لا يوجد سجل فيديو",
+      "today": "اليوم",
+      "loadFailed": "فشل التحميل، ",
+      "retry": "انقر لإعادة المحاولة",
+      "reachedBottom": "تم الوصول إلى النهاية"
+    },
+    "image": {
+      "tab": "رسوم توضيحية",
+      "loading": "جاري التحميل...",
+      "error": "خطأ",
+      "noRecords": "لا يوجد سجل رسوم توضيحية",
+      "today": "اليوم",
+      "loadFailed": "فشل التحميل، ",
+      "retry": "انقر لإعادة المحاولة",
+      "reachedBottom": "تم الوصول إلى النهاية"
+    }
   }
 }

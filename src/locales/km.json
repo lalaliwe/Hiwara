@@ -1,59 +1,119 @@
 {
-  "common": {
-    "loading": "កំពុងផ្ទុក...",
-    "error": "កំហុស",
-    "success": "ជោគជ័យ",
-    "cancel": "បោះបង់",
-    "confirm": "បញ្ជាក់",
-    "save": "រក្សាទុក",
-    "delete": "លុប",
-    "edit": "កែសម្រួល",
-    "search": "ស្វែងរក",
-    "back": "ត្រឡប់",
-    "next": "បន្ទាប់",
-    "previous": "មុន",
-    "close": "បិទ",
-    "open": "បើក",
-    "yes": "បាទ/ចាស",
-    "no": "ទេ"
+  "common": {},
+  "home": {
+    "navigation": {
+      "video": "វីដេអូ",
+      "image": "រូបភាព",
+      "subscribe": "ជាវ",
+      "forum": "វេទិកា",
+      "my": "ទំព័ររបស់ខ្ញុំ"
+    },
+    "searchBar": {
+      "placeholder": "ស្វែងរក"
+    },
+    "dateFilter": {
+      "selectTime": "ជ្រើសរើសពេលវេលា",
+      "year": "ឆ្នាំ",
+      "monthLabel": "ខែ",
+      "allYears": "គ្រប់ឆ្នាំ",
+      "fullYear": "ពេញមួយឆ្នាំ",
+      "months": {
+        "1": "មករា",
+        "2": "កុម្ភៈ",
+        "3": "មីនា",
+        "4": "មេសា",
+        "5": "ឧសភា",
+        "6": "មិថុនា",
+        "7": "កក្កដា",
+        "8": "សីហា",
+        "9": "កញ្ញា",
+        "10": "តុលា",
+        "11": "វិច្ឆិកា",
+        "12": "ធ្នូ"
+      },
+      "confirm": "បញ្ជាក់",
+      "reset": "កំណត់ឡើងវិញ"
+    },
+    "video": {
+      "sortTabs": {
+        "date": "ថ្មីបំផុត",
+        "trending": "ពេញនិយម",
+        "popularity": "ពេញនិយម",
+        "views": "ចំនួនមើល",
+        "likes": "ចំនួនចូលចិត្ត"
+      },
+      "loading": "កំពុងផ្ទុក...",
+      "noRecords": "គ្មានកំណត់ត្រាវីដេអូ",
+      "loadFailed": "ការផ្ទុកបរាជ័យ, ",
+      "retry": "ចុចដើម្បីសាកល្បងម្តងទៀត",
+      "reachedBottom": "បានដល់បាត"
+    },
+    "image": {
+      "sortTabs": {
+        "date": "ថ្មីបំផុត",
+        "trending": "ពេញនិយម",
+        "popularity": "ពេញនិយម",
+        "views": "ចំនួនមើល",
+        "likes": "ចំនួនចូលចិត្ត"
+      },
+      "loading": "កំពុងផ្ទុក...",
+      "noRecords": "គ្មានកំណត់ត្រារូបភាព",
+      "loadFailed": "ការផ្ទុកបរាជ័យ, ",
+      "retry": "ចុចដើម្បីសាកល្បងម្តងទៀត",
+      "reachedBottom": "បានដល់បាត"
+    },
+    "toast": {
+      "pressAgainToExit": "ចុចម្តងទៀតដើម្បីចាកចេញពីកម្មវិធី"
+    },
+    "my": {
+      "space": "ទំហំ",
+      "followers": "កំពុងតាមដាន",
+      "fans": "អ្នកគាំទ្រ",
+      "history": "ប្រវត្តិ",
+      "viewAllHistory": "មើលទាំងអស់",
+      "videoFavorites": "វីដេអូដែលពេញចិត្ត",
+      "imageFavorites": "រូបភាពដែលពេញចិត្ត",
+      "playlist": "បញ្ជីចាក់",
+      "offlineCache": "ឃ្លាំងសម្ងាត់ក្រៅបណ្តាញ",
+      "notifications": "ការជូនដំណឹង",
+      "friends": "មិត្តភក្តិ",
+      "messages": "សារ",
+      "settings": "ការកំណត់",
+      "iwaraServices": "សេវាកម្ម Iwara",
+      "premium": "ប្រភេទពិសេស",
+      "wura": "Wura",
+      "faq": "សំណួរដែលគេសួរញឹកញាប់",
+      "links": "តំណភ្ជាប់",
+      "aboutText": "កម្មវិធីនេះអនុវត្តតាមអាជ្ញាប័ណ្ណប្រភពបើក MPL-2.0។ សូមកុំប្រើវាសម្រាប់គោលបំណងពាណិជ្ជកម្ម។",
+      "noRecords": "គ្មានកំណត់ត្រា {type}"
+    },
+    "forum": {
+      "posts": "ការបង្ហោះ",
+      "topics": "ប្រធានបទ",
+      "repliedAt": "បានឆ្លើយតបនៅ"
+    }
   },
-  "navigation": {
-    "home": "ទំព័រដើម",
-    "search": "ស្វែងរក",
-    "favorites": "ចំណូលចិត្ត",
-    "history": "ប្រវត្តិ",
-    "friends": "មិត្តភក្តិ",
-    "zone": "តំបន់",
-    "settings": "ការកំណត់"
-  },
-  "player": {
-    "play": "ចាក់",
-    "pause": "ផ្អាក",
-    "fullscreen": "អេក្រង់ពេញ",
-    "exitFullscreen": "ចេញពីអេក្រង់ពេញ",
-    "volume": "កម្រិតសំឡេង",
-    "mute": "បិទសំឡេង",
-    "unmute": "បើកសំឡេង",
-    "quality": "គុណភាព",
-    "speed": "ល្បឿន",
-    "subtitle": "ចំណងជើងរង",
-    "download": "ទាញយក"
-  },
-  "setup": {
-    "title": "ការកំណត់",
-    "general": "ការកំណត់ទូទៅ",
-    "autoPlay": "ចាក់ស្វ័យប្រវត្តិ",
-    "reconnect": "ចំនួនដងភ្ជាប់ឡើងវិញ",
-    "definition": "គុណភាពលំនាំដើម",
-    "searchMode": "របៀបស្វែងរក",
-    "language": "ភាសា",
-    "paths": "ការកំណត់ផ្លូវ",
-    "videoSavePath": "ផ្លូវរក្សាទុកវីដេអូ",
-    "imageSavePath": "ផ្លូវរក្សាទុករូបភាព",
-    "aria2": "ការកំណត់ Aria2",
-    "aria2Rpc": "URL RPC",
-    "aria2Token": "Token សម្ងាត់",
-    "aria2Download": "ថតសំរាប់ទាញយក",
-    "aria2Switch": "បើក Aria2"
+  "history": {
+    "title": "ប្រវត្តិ",
+    "video": {
+      "tab": "វីដេអូ",
+      "loading": "កំពុងផ្ទុក...",
+      "error": "កំហុស",
+      "noRecords": "គ្មានប្រវត្តិវីដេអូ",
+      "today": "ថ្ងៃនេះ",
+      "loadFailed": "ការផ្ទុកបរាជ័យ, ",
+      "retry": "ចុចដើម្បីសាកល្បងម្តងទៀត",
+      "reachedBottom": "បានដល់បាត"
+    },
+    "image": {
+      "tab": "រូបភាព",
+      "loading": "កំពុងផ្ទុក...",
+      "error": "កំហុស",
+      "noRecords": "គ្មានប្រវត្តិរូបភាព",
+      "today": "ថ្ងៃនេះ",
+      "loadFailed": "ការផ្ទុកបរាជ័យ, ",
+      "retry": "ចុចដើម្បីសាកល្បងម្តងទៀត",
+      "reachedBottom": "បានដល់បាត"
+    }
   }
 }

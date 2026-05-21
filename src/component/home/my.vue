@@ -5,6 +5,7 @@ import {
 } from '@icon-park/vue-next';
 import { useRouter } from 'vue-router'
 import { ref, onMounted, onActivated, inject, watch, type Ref } from 'vue';
+import { useI18n } from 'vue-i18n';
 import {
   getImageIwara,
   getMyselfInfo,
@@ -15,6 +16,7 @@ import { getVideoHistoryList } from '../../core/database'
 import { showShortToast } from '../../core/toast';
 import HistoryItem from './HistoryItem.vue';
 
+const { t } = useI18n();
 const router = useRouter()
 
 const nickname = ref<string>('');
@@ -78,7 +80,7 @@ async function getUserInfo() {
     ])
   } catch (err) {
     console.error(err);
-    showShortToast('获取用户信息失败');
+    showShortToast(t('home.toast.getUserInfoFailed'));
   }
   async function getFollowersNum(uid: string) {
     try {
@@ -109,7 +111,7 @@ async function getHistoryList() {
     historyList.value = res;
   } catch (err) {
     console.error(err);
-    showShortToast('获取历史记录失败');
+    showShortToast(t('home.toast.getHistoryFailed'));
   }
 }
 
@@ -142,7 +144,7 @@ function handleWheelScroll(event: WheelEvent) {
         </div>
         <div class="right">
           <div class="btn">
-            空间
+            {{ t('home.my.space') }}
             <font-awesome-icon icon="fa-solid fa-angle-right" />
           </div>
         </div>
@@ -151,13 +153,13 @@ function handleWheelScroll(event: WheelEvent) {
         <div class="fill">
           <div class="btn" @click="routerGoTo('/friends', { type: 'follow' })">
             <div class="num">{{ followNum }}</div>
-            <div class="label">关注</div>
+            <div class="label">{{ t('home.my.followers') }}</div>
           </div>
         </div>
         <div class="fill last">
           <div class="btn" @click="routerGoTo('/friends', { type: 'fans' })">
             <div class="num">{{ fansNum }}</div>
-            <div class="label">粉丝</div>
+            <div class="label">{{ t('home.my.fans') }}</div>
           </div>
         </div>
       </div>
@@ -165,16 +167,16 @@ function handleWheelScroll(event: WheelEvent) {
     <div class="content">
       <div class="card">
         <div class="label">
-          <div class="left">历史记录</div>
-          <div class="right" @click="routerGoTo('/history')">查看全部</div>
+          <div class="left">{{ t('home.my.history') }}</div>
+          <div class="right" @click="routerGoTo('/history')">{{ t('home.my.viewAllHistory') }}</div>
         </div>
         <div class="history" ref="historyContainer" @wheel="handleWheelScroll">
           <template v-if="historyList.length > 0">
             <HistoryItem v-for="item in historyList" :key="item.id" :item="item" />
-            <div class="all-btn" @click="routerGoTo('/history')">查看全部</div>
+            <div class="all-btn" @click="routerGoTo('/history')">{{ t('home.my.viewAllHistory') }}</div>
           </template>
           <template v-else>
-            <div class="empty-text">暂无历史记录</div>
+            <div class="empty-text">{{ t('home.my.noRecords', { type: t('home.my.history') }) }}</div>
           </template>
         </div>
       </div>
@@ -184,87 +186,93 @@ function handleWheelScroll(event: WheelEvent) {
             <div class="icon">
               <font-awesome-icon icon="fa-solid fa-film" />
             </div>
-            <div class="text">视频收藏</div>
+            <div class="text">{{ t('home.my.videoFavorites') }}</div>
           </div>
           <div class="btn" @click="routerGoTo('/favorites', { type: 'image' })">
             <div class="icon">
               <font-awesome-icon icon="fa-solid fa-images" />
             </div>
-            <div class="text">插画收藏</div>
+            <div class="text">{{ t('home.my.imageFavorites') }}</div>
           </div>
           <div class="btn">
             <div class="icon">
               <font-awesome-icon icon="fa-solid fa-forward-fast" />
             </div>
-            <div class="text">播放列表</div>
+            <div class="text">{{ t('home.my.playlist') }}</div>
           </div>
           <div class="btn" @click="routerGoTo('/offline-cache')">
             <div class="icon">
               <font-awesome-icon icon="fa-solid fa-download" />
             </div>
-            <div class="text">离线缓存</div>
+            <div class="text">{{ t('home.my.offlineCache') }}</div>
           </div>
-          <div class="btn" @click="routerGoTo('/webview', { url: 'https://www.iwara.tv/notifications', title: '通知' })">
+          <div class="btn"
+            @click="routerGoTo('/webview', { url: 'https://www.iwara.tv/notifications', title: t('home.my.notifications') })">
             <div class="icon">
               <font-awesome-icon icon="fa-solid fa-bell" />
             </div>
-            <div class="text">通知</div>
+            <div class="text">{{ t('home.my.notifications') }}</div>
           </div>
           <div class="btn" @click="routerGoTo('/friends', { type: 'friend' })">
             <div class="icon">
               <font-awesome-icon icon="fa-solid fa-user-group" />
             </div>
-            <div class="text">好友</div>
+            <div class="text">{{ t('home.my.friends') }}</div>
           </div>
-          <div class="btn" @click="routerGoTo('/webview', { url: 'https://www.iwara.tv/messages', title: '私信' })">
+          <div class="btn"
+            @click="routerGoTo('/webview', { url: 'https://www.iwara.tv/messages', title: t('home.my.messages') })">
             <div class="icon">
               <font-awesome-icon icon="fa-solid fa-envelope" />
             </div>
-            <div class="text">私信</div>
+            <div class="text">{{ t('home.my.messages') }}</div>
           </div>
           <div class="btn" @click="routerGoTo('/setup')">
             <div class="icon">
               <font-awesome-icon icon="fa-solid fa-gear" />
             </div>
-            <div class="text">设置</div>
+            <div class="text">{{ t('home.my.settings') }}</div>
           </div>
         </div>
       </div>
       <div class="card">
         <div class="label">
-          <div class="left">Iwara服务</div>
+          <div class="left">{{ t('my.iwaraServices') }}</div>
         </div>
         <div class="usserFunction">
-          <div class="btn" @click="routerGoTo('/webview', { url: 'https://www.iwara.tv/account/premium', title: '高级会员' })">
+          <div class="btn"
+            @click="routerGoTo('/webview', { url: 'https://www.iwara.tv/account/premium', title: t('home.my.premium') })">
             <div class="icon" style="color: #ff62cd;">
               <font-awesome-icon icon="fa-solid fa-star" />
             </div>
-            <div class="text">高级会员</div>
+            <div class="text">{{ t('home.my.premium') }}</div>
           </div>
-          <div class="btn" @click="routerGoTo('/webview', { url: 'https://www.iwara.tv/dashboard', title: 'Wura' })">
+          <div class="btn"
+            @click="routerGoTo('/webview', { url: 'https://www.iwara.tv/dashboard', title: t('home.my.wura') })">
             <div class="icon" style="color: #dda82b;">
               <font-awesome-icon icon="fa-solid fa-coins" />
             </div>
-            <div class="text">Wura</div>
+            <div class="text">{{ t('home.my.wura') }}</div>
           </div>
-          <div class="btn" @click="routerGoTo('/webview', { url: 'https://www.iwara.tv/page/faq', title: '常见问题' })">
+          <div class="btn"
+            @click="routerGoTo('/webview', { url: 'https://www.iwara.tv/page/faq', title: t('home.my.faq') })">
             <div class="icon">
               <font-awesome-icon icon="fa-solid fa-circle-question" />
             </div>
-            <div class="text">常见问题</div>
+            <div class="text">{{ t('home.my.faq') }}</div>
           </div>
-          <div class="btn" @click="routerGoTo('/webview', { url: 'https://www.iwara.tv/page/links', title: '相关链接' })">
+          <div class="btn"
+            @click="routerGoTo('/webview', { url: 'https://www.iwara.tv/page/links', title: t('home.my.links') })">
             <div class="icon">
               <font-awesome-icon icon="fa-solid fa-share-nodes" />
             </div>
-            <div class="text">相关链接</div>
+            <div class="text">{{ t('home.my.links') }}</div>
           </div>
         </div>
       </div>
       <div class="about">
         <span class="logo">Hiwara</span>
         <br>
-        本应用遵循MPL-2.0开源协议，请勿用于任何商业用途。
+        {{ t('home.my.aboutText') }}
         <br>
         ©2023-2026 Hiwara Team
       </div>

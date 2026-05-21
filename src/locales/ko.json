@@ -1,59 +1,119 @@
 {
-  "common": {
-    "loading": "로딩 중...",
-    "error": "오류",
-    "success": "성공",
-    "cancel": "취소",
-    "confirm": "확인",
-    "save": "저장",
-    "delete": "삭제",
-    "edit": "편집",
-    "search": "검색",
-    "back": "뒤로",
-    "next": "다음",
-    "previous": "이전",
-    "close": "닫기",
-    "open": "열기",
-    "yes": "예",
-    "no": "아니오"
+  "common": {},
+  "home": {
+    "navigation": {
+      "video": "동영상",
+      "image": "일러스트",
+      "subscribe": "구독",
+      "forum": "포럼",
+      "my": "내 페이지"
+    },
+    "searchBar": {
+      "placeholder": "검색"
+    },
+    "dateFilter": {
+      "selectTime": "시간 선택",
+      "year": "년도",
+      "monthLabel": "월",
+      "allYears": "모든 년도",
+      "fullYear": "전체 연도",
+      "months": {
+        "1": "1월",
+        "2": "2월",
+        "3": "3월",
+        "4": "4월",
+        "5": "5월",
+        "6": "6월",
+        "7": "7월",
+        "8": "8월",
+        "9": "9월",
+        "10": "10월",
+        "11": "11월",
+        "12": "12월"
+      },
+      "confirm": "확인",
+      "reset": "초기화"
+    },
+    "video": {
+      "sortTabs": {
+        "date": "최신순",
+        "trending": "트렌딩",
+        "popularity": "인기",
+        "views": "조회수",
+        "likes": "좋아요수"
+      },
+      "loading": "로딩 중...",
+      "noRecords": "동영상 기록이 없습니다",
+      "loadFailed": "로딩 실패,",
+      "retry": "클릭하여 재시도",
+      "reachedBottom": "마지막입니다"
+    },
+    "image": {
+      "sortTabs": {
+        "date": "최신순",
+        "trending": "트렌딩",
+        "popularity": "인기",
+        "views": "조회수",
+        "likes": "좋아요수"
+      },
+      "loading": "로딩 중...",
+      "noRecords": "일러스트 기록이 없습니다",
+      "loadFailed": "로딩 실패,",
+      "retry": "클릭하여 재시도",
+      "reachedBottom": "마지막입니다"
+    },
+    "toast": {
+      "pressAgainToExit": "뒤로 가기를 한 번 더 누르면 앱이 종료됩니다"
+    },
+    "my": {
+      "space": "공간",
+      "followers": "팔로우",
+      "fans": "팬",
+      "history": "기록",
+      "viewAllHistory": "전체 보기",
+      "videoFavorites": "동영상 즐겨찾기",
+      "imageFavorites": "일러스트 즐겨찾기",
+      "playlist": "재생 목록",
+      "offlineCache": "오프라인 캐시",
+      "notifications": "알림",
+      "friends": "친구",
+      "messages": "메시지",
+      "settings": "설정",
+      "iwaraServices": "Iwara 서비스",
+      "premium": "프리미엄 회원",
+      "wura": "Wura",
+      "faq": "자주 묻는 질문",
+      "links": "관련 링크",
+      "aboutText": "본 앱은 MPL-2.0 오픈 소스 라이선스를 따릅니다. 상업적 목적으로 사용하지 마십시오.",
+      "noRecords": "{type} 기록이 없습니다"
+    },
+    "forum": {
+      "posts": "게시물",
+      "topics": "주제",
+      "repliedAt": "답변 시간"
+    }
   },
-  "navigation": {
-    "home": "홈",
-    "search": "검색",
-    "favorites": "즐겨찾기",
-    "history": "기록",
-    "friends": "친구",
-    "zone": "공간",
-    "settings": "설정"
-  },
-  "player": {
-    "play": "재생",
-    "pause": "일시정지",
-    "fullscreen": "전체화면",
-    "exitFullscreen": "전체화면 종료",
-    "volume": "볼륨",
-    "mute": "음소거",
-    "unmute": "음소거 해제",
-    "quality": "화질",
-    "speed": "속도",
-    "subtitle": "자막",
-    "download": "다운로드"
-  },
-  "setup": {
-    "title": "설정",
-    "general": "일반 설정",
-    "autoPlay": "자동 재생",
-    "reconnect": "재연결 횟수",
-    "definition": "기본 화질",
-    "searchMode": "검색 모드",
-    "language": "언어",
-    "paths": "경로 설정",
-    "videoSavePath": "동영상 저장 경로",
-    "imageSavePath": "이미지 저장 경로",
-    "aria2": "Aria2 설정",
-    "aria2Rpc": "RPC 주소",
-    "aria2Token": "토큰",
-    "aria2Download": "다운로드 디렉토리",
-    "aria2Switch": "Aria2 활성화"
+  "history": {
+    "title": "기록",
+    "video": {
+      "tab": "동영상",
+      "loading": "로딩 중...",
+      "error": "오류",
+      "noRecords": "동영상 기록이 없습니다",
+      "today": "오늘",
+      "loadFailed": "로딩 실패,",
+      "retry": "클릭하여 재시도",
+      "reachedBottom": "마지막입니다"
+    },
+    "image": {
+      "tab": "일러스트",
+      "loading": "로딩 중...",
+      "error": "오류",
+      "noRecords": "일러스트 기록이 없습니다",
+      "today": "오늘",
+      "loadFailed": "로딩 실패,",
+      "retry": "클릭하여 재시도",
+      "reachedBottom": "마지막입니다"
+    }
   }
 }

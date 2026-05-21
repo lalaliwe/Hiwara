@@ -53,18 +53,18 @@ onActivated(() => {
           <font-awesome-icon icon="fa-solid fa-angle-left" />
         </div>
         <div class="label">
-          {{ t('navigation.history') }}
+          {{ t('history.title') }}
           <!-- 历史记录 -->
         </div>
       </div>
       <div class="tabs">
         <v-tabs v-model="tab" color="#00796B" align-tabs="center" density="compact" grow>
           <v-tab value="video">
-            {{ t('player.video') }}
+            {{ t('history.video.tab') }}
             <!-- 视频 -->
           </v-tab>
           <v-tab value="image">
-            {{ t('player.image') }}
+            {{ t('history.image.tab') }}
             <!-- 插画 -->
           </v-tab>
         </v-tabs>

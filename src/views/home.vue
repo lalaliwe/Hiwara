@@ -6,11 +6,14 @@ import homeSubscribe from '../component/home/subscribe.vue';
 import homeForum from '../component/home/forum.vue';
 import homeMy from '../component/home/my.vue';
 import { ref, onMounted, onBeforeUnmount, onActivated, provide } from 'vue';
+import { useI18n } from 'vue-i18n';
 // import { on } from 'hammerjs';
 import { lockPortrait } from '../plugins/useOrientation'
 import { setStatusBarTextStyle } from '../plugins/navbarStyle'
 import { showShortToast } from '../core/toast';
 import { moveTaskToBack } from '../plugins/appControl';
+
+const { t } = useI18n();
 
 // 定义Tab类型
 type TabType = 'video' | 'image' | 'subscribe' | 'forum' | 'my';
@@ -65,7 +68,7 @@ const handleBackPressed = () => {
     // 如果不在订阅页面，则切换到订阅页面
     isTab.value = 'subscribe';
     // 记录点击时间，以便实现双击退出
-    showShortToast('再按一次返回键退出应用');
+    showShortToast(t('home.toast.pressAgainToExit'));
     lastBackPressedTime = currentTime;
   } else {
     // 如果已经在订阅页面，执行双击退出逻辑
@@ -73,7 +76,7 @@ const handleBackPressed = () => {
       moveTaskToBack(); // 执行退出
     } else {
       // 第一次点击，提示用户再按一次退出
-      showShortToast('再按一次返回键退出应用');
+      showShortToast(t('home.toast.pressAgainToExit'));
       lastBackPressedTime = currentTime;
     }
   }

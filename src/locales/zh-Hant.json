@@ -1,65 +1,119 @@
 {
-  "common": {
-    "loading": "載入中...",
-    "error": "錯誤",
-    "success": "成功",
-    "cancel": "取消",
-    "confirm": "確認",
-    "save": "儲存",
-    "delete": "刪除",
-    "edit": "編輯",
-    "search": "搜尋",
-    "back": "返回",
-    "next": "下一步",
-    "previous": "上一步",
-    "close": "關閉",
-    "open": "開啟",
-    "yes": "是",
-    "no": "否",
-    "today": "今天",
-    "loadFailed": "載入失敗，",
-    "retry": "點擊重試",
-    "reachedBottom": "已經到底了喵~"
+  "common": {},
+  "home": {
+    "navigation": {
+      "video": "影片",
+      "image": "插畫",
+      "subscribe": "訂閱",
+      "forum": "論壇",
+      "my": "我的"
+    },
+    "searchBar": {
+      "placeholder": "搜尋"
+    },
+    "dateFilter": {
+      "selectTime": "選擇時間",
+      "year": "年份",
+      "monthLabel": "月份",
+      "allYears": "全部年份",
+      "fullYear": "全年",
+      "months": {
+        "1": "一月",
+        "2": "二月",
+        "3": "三月",
+        "4": "四月",
+        "5": "五月",
+        "6": "六月",
+        "7": "七月",
+        "8": "八月",
+        "9": "九月",
+        "10": "十月",
+        "11": "十一月",
+        "12": "十二月"
+      },
+      "confirm": "確定",
+      "reset": "重設"
+    },
+    "video": {
+      "sortTabs": {
+        "date": "最新",
+        "trending": "熱門",
+        "popularity": "人氣",
+        "views": "觀看次數",
+        "likes": "喜歡次數"
+      },
+      "loading": "載入中...",
+      "noRecords": "暫無影片記錄",
+      "loadFailed": "載入失敗，",
+      "retry": "點擊重試",
+      "reachedBottom": "到底了"
+    },
+    "image": {
+      "sortTabs": {
+        "date": "最新",
+        "trending": "熱門",
+        "popularity": "人氣",
+        "views": "觀看次數",
+        "likes": "喜歡次數"
+      },
+      "loading": "載入中...",
+      "noRecords": "暫無插畫記錄",
+      "loadFailed": "載入失敗，",
+      "retry": "點擊重試",
+      "reachedBottom": "到底了"
+    },
+    "toast": {
+      "pressAgainToExit": "再按一次返回鍵退出應用"
+    },
+    "my": {
+      "space": "空間",
+      "followers": "關注",
+      "fans": "粉絲",
+      "history": "歷史記錄",
+      "viewAllHistory": "查看全部",
+      "videoFavorites": "影片收藏",
+      "imageFavorites": "插畫收藏",
+      "playlist": "播放清單",
+      "offlineCache": "離線快取",
+      "notifications": "通知",
+      "friends": "好友",
+      "messages": "私訊",
+      "settings": "設定",
+      "iwaraServices": "Iwara服務",
+      "premium": "高級會員",
+      "wura": "Wura",
+      "faq": "常見問題",
+      "links": "相關連結",
+      "aboutText": "本應用程式遵循MPL-2.0開源協議，請勿用於任何商業用途。",
+      "noRecords": "{type}暫無記錄"
+    },
+    "forum": {
+      "posts": "發布",
+      "topics": "主題",
+      "repliedAt": "回覆於"
+    }
   },
-  "navigation": {
-    "home": "首頁",
-    "search": "搜尋",
-    "favorites": "收藏",
-    "history": "歷史",
-    "friends": "好友",
-    "zone": "空間",
-    "settings": "設定"
-  },
-  "player": {
-    "play": "播放",
-    "pause": "暫停",
-    "fullscreen": "全螢幕",
-    "exitFullscreen": "退出全螢幕",
-    "volume": "音量",
-    "mute": "靜音",
-    "unmute": "取消靜音",
-    "quality": "畫質",
-    "speed": "速度",
-    "subtitle": "字幕",
-    "download": "下載",
-    "video": "影片",
-    "image": "插畫"
-  },
-  "setup": {
-    "title": "設定",
-    "general": "一般設定",
-    "autoPlay": "自動播放",
-    "reconnect": "重連次數",
-    "definition": "預設畫質",
-    "searchMode": "搜尋模式",
-    "language": "語言",
-    "paths": "路徑設定",
-    "videoSavePath": "影片儲存路徑",
-    "imageSavePath": "圖片儲存路徑",
-    "aria2": "Aria2 設定",
-    "aria2Rpc": "RPC 位址",
-    "aria2Token": "金鑰",
-    "aria2Download": "下載目錄",
-    "aria2Switch": "啟用 Aria2"
+  "history": {
+    "title": "歷史",
+    "video": {
+      "tab": "影片",
+      "loading": "載入中...",
+      "error": "錯誤",
+      "noRecords": "暫無影片歷史",
+      "today": "今天",
+      "loadFailed": "載入失敗，",
+      "retry": "點擊重試",
+      "reachedBottom": "到底了"
+    },
+    "image": {
+      "tab": "插畫",
+      "loading": "載入中...",
+      "error": "錯誤",
+      "noRecords": "暫無插畫歷史",
+      "today": "今天",
+      "loadFailed": "載入失敗，",
+      "retry": "點擊重試",
+      "reachedBottom": "到底了"
+    }
   }
 }

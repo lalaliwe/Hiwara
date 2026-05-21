@@ -158,19 +158,19 @@ defineExpose({
 <template>
   <!-- 加载状态 -->
   <div v-if="videoState === 'loading'" class="loading">
-    <loadingHuawu>{{ t('common.loading') }}</loadingHuawu>
+    <loadingHuawu>{{ t('history.video.loading') }}</loadingHuawu>
     <!-- 数据加载中 -->
   </div>
 
   <!-- 加载失败状态 -->
   <div v-else-if="videoState === 'failed'" class="loading" @click="handleErrorClick">
-    <errorHuawu>{{ t('player.video') }}{{ t('navigation.history') }}{{ t('common.error') }}</errorHuawu>
+    <errorHuawu>{{ t('history.video.error') }}</errorHuawu>
     <!-- 视频历史加载失败了喵~ -->
   </div>
 
   <!-- 空数据状态 -->
   <div v-else-if="videoState === 'empty'" class="loading" @click="handleErrorClick">
-    <errorHuawu>{{ t('common.no') }}{{ t('player.video') }}{{ t('navigation.history') }}</errorHuawu>
+    <errorHuawu>{{ t('history.video.noRecords') }}</errorHuawu>
     <!-- 暂无视频历史记录 -->
   </div>
 
@@ -178,7 +178,7 @@ defineExpose({
   <v-infinite-scroll v-else ref="videoListView" color="#00796B" @load="loadMoreVideoData" :disabled="videoHasFinished"
     @scroll="handleVideoScroll" class="list-view">
     <div v-for="(groupItems, date) in groupedVideoHistory" :key="date" class="date-group">
-      <div class="date-header">{{ date === new Date().toISOString().split('T')[0] ? t('common.today') : date }}</div>
+      <div class="date-header">{{ date === new Date().toISOString().split('T')[0] ? t('history.video.today') : date }}</div>
       <!-- {{ date === new Date().toISOString().split('T')[0] ? '今天' : date }} -->
       <v-list lines="two" class="pa-0">
         <HistoryItem v-for="(item, index) in groupItems" :key="index" :item="item" type="video" />
@@ -187,16 +187,16 @@ defineExpose({
     <!-- 加载失败提示 -->
     <template v-slot:error="{ props }">
       <div class="load-more-failed">
-        <span>{{ t('common.loadFailed') }}</span>
+        <span>{{ t('history.video.loadFailed') }}</span>
         <!-- 加载失败， -->
-        <span class="retry-btn" v-bind="props">{{ t('common.retry') }}</span>
+        <span class="retry-btn" v-bind="props">{{ t('history.video.retry') }}</span>
         <!-- 点击重试 -->
       </div>
     </template>
     <!-- 已到底部提示 -->
     <template v-slot:empty>
       <div class="listEnd">
-        {{ t('common.reachedBottom') }}
+        {{ t('history.video.reachedBottom') }}
         <!-- 已经到底了喵~ -->
       </div>
     </template>

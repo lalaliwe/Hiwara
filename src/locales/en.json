@@ -1,65 +1,119 @@
 {
-  "common": {
-    "loading": "Loading...",
-    "error": "Error",
-    "success": "Success",
-    "cancel": "Cancel",
-    "confirm": "Confirm",
-    "save": "Save",
-    "delete": "Delete",
-    "edit": "Edit",
-    "search": "Search",
-    "back": "Back",
-    "next": "Next",
-    "previous": "Previous",
-    "close": "Close",
-    "open": "Open",
-    "yes": "Yes",
-    "no": "No",
-    "today": "Today",
-    "loadFailed": "Load failed, ",
-    "retry": "Click to retry",
-    "reachedBottom": "Reached the bottom~"
+  "common": {},
+  "home": {
+    "navigation": {
+      "video": "Video",
+      "image": "Image",
+      "subscribe": "Subscribe",
+      "forum": "Forum",
+      "my": "My"
+    },
+    "searchBar": {
+      "placeholder": "Search"
+    },
+    "dateFilter": {
+      "selectTime": "Select Time",
+      "year": "Year",
+      "monthLabel": "Month",
+      "allYears": "All Years",
+      "fullYear": "Full Year",
+      "months": {
+        "1": "January",
+        "2": "February",
+        "3": "March",
+        "4": "April",
+        "5": "May",
+        "6": "June",
+        "7": "July",
+        "8": "August",
+        "9": "September",
+        "10": "October",
+        "11": "November",
+        "12": "December"
+      },
+      "confirm": "Confirm",
+      "reset": "Reset"
+    },
+    "video": {
+      "sortTabs": {
+        "date": "Latest",
+        "trending": "Trending",
+        "popularity": "Popular",
+        "views": "Views",
+        "likes": "Likes"
+      },
+      "loading": "Loading...",
+      "noRecords": "No video records",
+      "loadFailed": "Load failed, ",
+      "retry": "Click to retry",
+      "reachedBottom": "Reached bottom"
+    },
+    "image": {
+      "sortTabs": {
+        "date": "Latest",
+        "trending": "Trending",
+        "popularity": "Popular",
+        "views": "Views",
+        "likes": "Likes"
+      },
+      "loading": "Loading...",
+      "noRecords": "No image records",
+      "loadFailed": "Load failed, ",
+      "retry": "Click to retry",
+      "reachedBottom": "Reached bottom"
+    },
+    "toast": {
+      "pressAgainToExit": "Press again to exit"
+    },
+    "my": {
+      "space": "Space",
+      "followers": "Following",
+      "fans": "Fans",
+      "history": "History",
+      "viewAllHistory": "View All",
+      "videoFavorites": "Video Favorites",
+      "imageFavorites": "Image Favorites",
+      "playlist": "Playlist",
+      "offlineCache": "Offline Cache",
+      "notifications": "Notifications",
+      "friends": "Friends",
+      "messages": "Messages",
+      "settings": "Settings",
+      "iwaraServices": "Iwara Services",
+      "premium": "Premium",
+      "wura": "Wura",
+      "faq": "FAQ",
+      "links": "Links",
+      "aboutText": "This application follows the MPL-2.0 open source license. Please do not use it for any commercial purposes.",
+      "noRecords": "No {type} records"
+    },
+    "forum": {
+      "posts": "Posts",
+      "topics": "Topics",
+      "repliedAt": "Replied at"
+    }
   },
-  "navigation": {
-    "home": "Home",
-    "search": "Search",
-    "favorites": "Favorites",
-    "history": "History",
-    "friends": "Friends",
-    "zone": "Zone",
-    "settings": "Settings"
-  },
-  "player": {
-    "play": "Play",
-    "pause": "Pause",
-    "fullscreen": "Fullscreen",
-    "exitFullscreen": "Exit Fullscreen",
-    "volume": "Volume",
-    "mute": "Mute",
-    "unmute": "Unmute",
-    "quality": "Quality",
-    "speed": "Speed",
-    "subtitle": "Subtitle",
-    "download": "Download",
-    "video": "Video",
-    "image": "Image"
-  },
-  "setup": {
-    "title": "Settings",
-    "general": "General Settings",
-    "autoPlay": "Auto Play",
-    "reconnect": "Reconnect Attempts",
-    "definition": "Default Quality",
-    "searchMode": "Search Mode",
-    "language": "Language",
-    "paths": "Path Settings",
-    "videoSavePath": "Video Save Path",
-    "imageSavePath": "Image Save Path",
-    "aria2": "Aria2 Settings",
-    "aria2Rpc": "RPC URL",
-    "aria2Token": "Secret Token",
-    "aria2Download": "Download Directory",
-    "aria2Switch": "Enable Aria2"
+  "history": {
+    "title": "History",
+    "video": {
+      "tab": "Video",
+      "loading": "Loading...",
+      "error": "Error",
+      "noRecords": "No video history",
+      "today": "Today",
+      "loadFailed": "Load failed, ",
+      "retry": "Click to retry",
+      "reachedBottom": "Reached bottom"
+    },
+    "image": {
+      "tab": "Image",
+      "loading": "Loading...",
+      "error": "Error",
+      "noRecords": "No image history",
+      "today": "Today",
+      "loadFailed": "Load failed, ",
+      "retry": "Click to retry",
+      "reachedBottom": "Reached bottom"
+    }
   }
 }

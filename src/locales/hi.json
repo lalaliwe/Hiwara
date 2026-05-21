@@ -1,59 +1,119 @@
 {
-  "common": {
-    "loading": "लोड हो रहा है...",
-    "error": "त्रुटि",
-    "success": "सफलता",
-    "cancel": "रद्द करें",
-    "confirm": "पुष्टि करें",
-    "save": "सहेजें",
-    "delete": "हटाएं",
-    "edit": "संपादित करें",
-    "search": "खोजें",
-    "back": "वापस",
-    "next": "अगला",
-    "previous": "पिछला",
-    "close": "बंद करें",
-    "open": "खोलें",
-    "yes": "हाँ",
-    "no": "नहीं"
+  "common": {},
+  "home": {
+    "navigation": {
+      "video": "वीडियो",
+      "image": "चित्र",
+      "subscribe": "सदस्यता",
+      "forum": "फ़ोरम",
+      "my": "मेरा पेज"
+    },
+    "searchBar": {
+      "placeholder": "खोजें"
+    },
+    "dateFilter": {
+      "selectTime": "समय चुनें",
+      "year": "वर्ष",
+      "monthLabel": "माह",
+      "allYears": "सभी वर्ष",
+      "fullYear": "पूरा वर्ष",
+      "months": {
+        "1": "जनवरी",
+        "2": "फरवरी",
+        "3": "मार्च",
+        "4": "अप्रैल",
+        "5": "मई",
+        "6": "जून",
+        "7": "जुलाई",
+        "8": "अगस्त",
+        "9": "सितंबर",
+        "10": "अक्टूबर",
+        "11": "नवंबर",
+        "12": "दिसंबर"
+      },
+      "confirm": "पुष्टि करें",
+      "reset": "रीसेट"
+    },
+    "video": {
+      "sortTabs": {
+        "date": "नवीनतम",
+        "trending": "ट्रेंडिंग",
+        "popularity": "लोकप्रिय",
+        "views": "दर्शक संख्या",
+        "likes": "लाइक्स"
+      },
+      "loading": "लोड हो रहा है...",
+      "noRecords": "कोई वीडियो रिकॉर्ड नहीं",
+      "loadFailed": "लोड करने में विफल, ",
+      "retry": "पुनः प्रयास करने के लिए क्लिक करें",
+      "reachedBottom": "अंत तक पहुंच गए"
+    },
+    "image": {
+      "sortTabs": {
+        "date": "नवीनतम",
+        "trending": "ट्रेंडिंग",
+        "popularity": "लोकप्रिय",
+        "views": "दर्शक संख्या",
+        "likes": "लाइक्स"
+      },
+      "loading": "लोड हो रहा है...",
+      "noRecords": "कोई चित्र रिकॉर्ड नहीं",
+      "loadFailed": "लोड करने में विफल, ",
+      "retry": "पुनः प्रयास करने के लिए क्लिक करें",
+      "reachedBottom": "अंत तक पहुंच गए"
+    },
+    "toast": {
+      "pressAgainToExit": "ऐप से बाहर निकलने के लिए फिर से दबाएं"
+    },
+    "my": {
+      "space": "स्थान",
+      "followers": "फ़ॉलो कर रहे हैं",
+      "fans": "प्रशंसक",
+      "history": "इतिहास",
+      "viewAllHistory": "सभी देखें",
+      "videoFavorites": "वीडियो पसंदीदा",
+      "imageFavorites": "चित्र पसंदीदा",
+      "playlist": "प्लेलिस्ट",
+      "offlineCache": "ऑफ़लाइन कैश",
+      "notifications": "सूचनाएं",
+      "friends": "मित्र",
+      "messages": "संदेश",
+      "settings": "सेटिंग्स",
+      "iwaraServices": "Iwara सेवाएं",
+      "premium": "प्रीमियम",
+      "wura": "Wura",
+      "faq": "अक्सर पूछे जाने वाले प्रश्न",
+      "links": "लिंक",
+      "aboutText": "यह एप्लिकेशन MPL-2.0 ओपन सोर्स लाइसेंस का पालन करता है। कृपया इसे व्यावसायिक उद्देश्यों के लिए उपयोग न करें।",
+      "noRecords": "{type} कोई रिकॉर्ड नहीं"
+    },
+    "forum": {
+      "posts": "पोस्ट",
+      "topics": "विषय",
+      "repliedAt": "उत्तर दिया गया"
+    }
   },
-  "navigation": {
-    "home": "होम",
-    "search": "खोज",
-    "favorites": "पसंदीदा",
-    "history": "इतिहास",
-    "friends": "मित्र",
-    "zone": "ज़ोन",
-    "settings": "सेटिंग्स"
-  },
-  "player": {
-    "play": "चलाएं",
-    "pause": "रोकें",
-    "fullscreen": "पूर्ण स्क्रीन",
-    "exitFullscreen": "पूर्ण स्क्रीन से बाहर निकलें",
-    "volume": "आवाज़",
-    "mute": "म्यूट",
-    "unmute": "अनम्यूट",
-    "quality": "गुणवत्ता",
-    "speed": "गति",
-    "subtitle": "उपशीर्षक",
-    "download": "डाउनलोड"
-  },
-  "setup": {
-    "title": "सेटिंग्स",
-    "general": "सामान्य सेटिंग्स",
-    "autoPlay": "स्वतः प्ले",
-    "reconnect": "पुनः कनेक्ट प्रयास",
-    "definition": "डिफ़ॉल्ट गुणवत्ता",
-    "searchMode": "खोज मोड",
-    "language": "भाषा",
-    "paths": "पथ सेटिंग्स",
-    "videoSavePath": "वीडियो सहेजने का पथ",
-    "imageSavePath": "छवि सहेजने का पथ",
-    "aria2": "Aria2 सेटिंग्स",
-    "aria2Rpc": "RPC URL",
-    "aria2Token": "सीक्रेट टोकन",
-    "aria2Download": "डाउनलोड डायरेक्टरी",
-    "aria2Switch": "Aria2 सक्षम करें"
+  "history": {
+    "title": "इतिहास",
+    "video": {
+      "tab": "वीडियो",
+      "loading": "लोड हो रहा है...",
+      "error": "त्रुटि",
+      "noRecords": "कोई वीडियो इतिहास नहीं",
+      "today": "आज",
+      "loadFailed": "लोड करने में विफल, ",
+      "retry": "पुनः प्रयास करने के लिए क्लिक करें",
+      "reachedBottom": "अंत तक पहुंच गए"
+    },
+    "image": {
+      "tab": "चित्र",
+      "loading": "लोड हो रहा है...",
+      "error": "त्रुटि",
+      "noRecords": "कोई चित्र इतिहास नहीं",
+      "today": "आज",
+      "loadFailed": "लोड करने में विफल, ",
+      "retry": "पुनः प्रयास करने के लिए क्लिक करें",
+      "reachedBottom": "अंत तक पहुंच गए"
+    }
   }
 }

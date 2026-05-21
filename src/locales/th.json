@@ -1,59 +1,119 @@
 {
-  "common": {
-    "loading": "กำลังโหลด...",
-    "error": "ข้อผิดพลาด",
-    "success": "สำเร็จ",
-    "cancel": "ยกเลิก",
-    "confirm": "ยืนยัน",
-    "save": "บันทึก",
-    "delete": "ลบ",
-    "edit": "แก้ไข",
-    "search": "ค้นหา",
-    "back": "กลับ",
-    "next": "ถัดไป",
-    "previous": "ก่อนหน้า",
-    "close": "ปิด",
-    "open": "เปิด",
-    "yes": "ใช่",
-    "no": "ไม่"
+  "common": {},
+  "home": {
+    "navigation": {
+      "video": "วิดีโอ",
+      "image": "ภาพประกอบ",
+      "subscribe": "ติดตาม",
+      "forum": "ฟอรัม",
+      "my": "หน้าของฉัน"
+    },
+    "searchBar": {
+      "placeholder": "ค้นหา"
+    },
+    "dateFilter": {
+      "selectTime": "เลือกเวลา",
+      "year": "ปี",
+      "monthLabel": "เดือน",
+      "allYears": "ทุกปี",
+      "fullYear": "ทั้งปี",
+      "months": {
+        "1": "มกราคม",
+        "2": "กุมภาพันธ์",
+        "3": "มีนาคม",
+        "4": "เมษายน",
+        "5": "พฤษภาคม",
+        "6": "มิถุนายน",
+        "7": "กรกฎาคม",
+        "8": "สิงหาคม",
+        "9": "กันยายน",
+        "10": "ตุลาคม",
+        "11": "พฤศจิกายน",
+        "12": "ธันวาคม"
+      },
+      "confirm": "ยืนยัน",
+      "reset": "รีเซ็ต"
+    },
+    "video": {
+      "sortTabs": {
+        "date": "ล่าสุด",
+        "trending": "มาแรง",
+        "popularity": "ยอดนิยม",
+        "views": "ยอดวิว",
+        "likes": "ยอดไลก์"
+      },
+      "loading": "กำลังโหลด...",
+      "noRecords": "ไม่มีบันทึกวิดีโอ",
+      "loadFailed": "โหลดล้มเหลว, ",
+      "retry": "คลิกเพื่อลองใหม่",
+      "reachedBottom": "ถึงด้านล่างแล้ว"
+    },
+    "image": {
+      "sortTabs": {
+        "date": "ล่าสุด",
+        "trending": "มาแรง",
+        "popularity": "ยอดนิยม",
+        "views": "ยอดวิว",
+        "likes": "ยอดไลก์"
+      },
+      "loading": "กำลังโหลด...",
+      "noRecords": "ไม่มีบันทึกภาพประกอบ",
+      "loadFailed": "โหลดล้มเหลว, ",
+      "retry": "คลิกเพื่อลองใหม่",
+      "reachedBottom": "ถึงด้านล่างแล้ว"
+    },
+    "toast": {
+      "pressAgainToExit": "กดอีกครั้งเพื่อออกจากแอป"
+    },
+    "my": {
+      "space": "พื้นที่",
+      "followers": "กำลังติดตาม",
+      "fans": "แฟนคลับ",
+      "history": "ประวัติ",
+      "viewAllHistory": "ดูทั้งหมด",
+      "videoFavorites": "วิดีโอที่ชื่นชอบ",
+      "imageFavorites": "ภาพประกอบที่ชื่นชอบ",
+      "playlist": "เพลย์ลิสต์",
+      "offlineCache": "แคชออฟไลน์",
+      "notifications": "การแจ้งเตือน",
+      "friends": "เพื่อน",
+      "messages": "ข้อความ",
+      "settings": "การตั้งค่า",
+      "iwaraServices": "บริการ Iwara",
+      "premium": "พรีเมียม",
+      "wura": "Wura",
+      "faq": "คำถามที่พบบ่อย",
+      "links": "ลิงก์",
+      "aboutText": "แอปพลิเคชันนี้เป็นไปตามใบอนุญาตโอเพนซอร์ส MPL-2.0 กรุณาอย่าใช้เพื่อวัตถุประสงค์ทางการค้า",
+      "noRecords": "ไม่มีบันทึก {type}"
+    },
+    "forum": {
+      "posts": "โพสต์",
+      "topics": "หัวข้อ",
+      "repliedAt": "ตอบกลับเมื่อ"
+    }
   },
-  "navigation": {
-    "home": "หน้าแรก",
-    "search": "ค้นหา",
-    "favorites": "รายการโปรด",
-    "history": "ประวัติ",
-    "friends": "เพื่อน",
-    "zone": "โซน",
-    "settings": "การตั้งค่า"
-  },
-  "player": {
-    "play": "เล่น",
-    "pause": "หยุดชั่วคราว",
-    "fullscreen": "เต็มหน้าจอ",
-    "exitFullscreen": "ออกจากเต็มหน้าจอ",
-    "volume": "ระดับเสียง",
-    "mute": "ปิดเสียง",
-    "unmute": "เปิดเสียง",
-    "quality": "คุณภาพ",
-    "speed": "ความเร็ว",
-    "subtitle": "คำบรรยาย",
-    "download": "ดาวน์โหลด"
-  },
-  "setup": {
-    "title": "การตั้งค่า",
-    "general": "การตั้งค่าทั่วไป",
-    "autoPlay": "เล่นอัตโนมัติ",
-    "reconnect": "จำนวนครั้งในการเชื่อมต่อใหม่",
-    "definition": "คุณภาพเริ่มต้น",
-    "searchMode": "โหมดการค้นหา",
-    "language": "ภาษา",
-    "paths": "การตั้งค่าเส้นทาง",
-    "videoSavePath": "เส้นทางการบันทึกวิดีโอ",
-    "imageSavePath": "เส้นทางการบันทึกภาพ",
-    "aria2": "การตั้งค่า Aria2",
-    "aria2Rpc": "URL RPC",
-    "aria2Token": "โทเค็นลับ",
-    "aria2Download": "ไดเรกทอรีการดาวน์โหลด",
-    "aria2Switch": "เปิดใช้งาน Aria2"
+  "history": {
+    "title": "ประวัติ",
+    "video": {
+      "tab": "วิดีโอ",
+      "loading": "กำลังโหลด...",
+      "error": "ข้อผิดพลาด",
+      "noRecords": "ไม่มีประวัติวิดีโอ",
+      "today": "วันนี้",
+      "loadFailed": "โหลดล้มเหลว, ",
+      "retry": "คลิกเพื่อลองใหม่",
+      "reachedBottom": "ถึงด้านล่างแล้ว"
+    },
+    "image": {
+      "tab": "ภาพประกอบ",
+      "loading": "กำลังโหลด...",
+      "error": "ข้อผิดพลาด",
+      "noRecords": "ไม่มีประวัติภาพประกอบ",
+      "today": "วันนี้",
+      "loadFailed": "โหลดล้มเหลว, ",
+      "retry": "คลิกเพื่อลองใหม่",
+      "reachedBottom": "ถึงด้านล่างแล้ว"
+    }
   }
 }

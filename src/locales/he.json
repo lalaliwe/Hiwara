@@ -1,59 +1,119 @@
 {
-  "common": {
-    "loading": "טוען...",
-    "error": "שגיאה",
-    "success": "הצלחה",
-    "cancel": "ביטול",
-    "confirm": "אישור",
-    "save": "שמור",
-    "delete": "מחק",
-    "edit": "ערוך",
-    "search": "חפש",
-    "back": "חזור",
-    "next": "הבא",
-    "previous": "הקודם",
-    "close": "סגור",
-    "open": "פתח",
-    "yes": "כן",
-    "no": "לא"
+  "common": {},
+  "home": {
+    "navigation": {
+      "video": "וידאו",
+      "image": "איורים",
+      "subscribe": "מנויים",
+      "forum": "פורום",
+      "my": "הדף שלי"
+    },
+    "searchBar": {
+      "placeholder": "חיפוש"
+    },
+    "dateFilter": {
+      "selectTime": "בחר זמן",
+      "year": "שנה",
+      "monthLabel": "חודש",
+      "allYears": "כל השנים",
+      "fullYear": "שנה מלאה",
+      "months": {
+        "1": "ינואר",
+        "2": "פברואר",
+        "3": "מרץ",
+        "4": "אפריל",
+        "5": "מאי",
+        "6": "יוני",
+        "7": "יולי",
+        "8": "אוגוסט",
+        "9": "ספטמבר",
+        "10": "אוקטובר",
+        "11": "נובמבר",
+        "12": "דצמבר"
+      },
+      "confirm": "אישור",
+      "reset": "איפוס"
+    },
+    "video": {
+      "sortTabs": {
+        "date": "החדשים ביותר",
+        "trending": "טרנדיים",
+        "popularity": "פופולריים",
+        "views": "צפיות",
+        "likes": "לייקים"
+      },
+      "loading": "טוען...",
+      "noRecords": "אין רשומות וידאו",
+      "loadFailed": "טעינה נכשלה, ",
+      "retry": "לחץ לניסיון חוזר",
+      "reachedBottom": "הגעת לסוף"
+    },
+    "image": {
+      "sortTabs": {
+        "date": "החדשים ביותר",
+        "trending": "טרנדיים",
+        "popularity": "פופולריים",
+        "views": "צפיות",
+        "likes": "לייקים"
+      },
+      "loading": "טוען...",
+      "noRecords": "אין רשומות איורים",
+      "loadFailed": "טעינה נכשלה, ",
+      "retry": "לחץ לניסיון חוזר",
+      "reachedBottom": "הגעת לסוף"
+    },
+    "toast": {
+      "pressAgainToExit": "לחץ שוב כדי לצאת מהאפליקציה"
+    },
+    "my": {
+      "space": "מרחב",
+      "followers": "עוקבים אחרי",
+      "fans": "מעריצים",
+      "history": "היסטוריה",
+      "viewAllHistory": "הצג הכל",
+      "videoFavorites": "וידאו מועדפים",
+      "imageFavorites": "איורים מועדפים",
+      "playlist": "רשימת השמעה",
+      "offlineCache": "מטמון לא מקוון",
+      "notifications": "התראות",
+      "friends": "חברים",
+      "messages": "הודעות",
+      "settings": "הגדרות",
+      "iwaraServices": "שירותי Iwara",
+      "premium": "פרימיום",
+      "wura": "Wura",
+      "faq": "שאלות נפוצות",
+      "links": "קישורים",
+      "aboutText": "אפליקציה זו פועלת לפי רישיון הקוד הפתוח MPL-2.0. אנא אל תשתמש בה למטרות מסחריות.",
+      "noRecords": "אין רשומות {type}"
+    },
+    "forum": {
+      "posts": "פרסומים",
+      "topics": "נושאים",
+      "repliedAt": "הושב ב"
+    }
   },
-  "navigation": {
-    "home": "דף הבית",
-    "search": "חיפוש",
-    "favorites": "מועדפים",
-    "history": "היסטוריה",
-    "friends": "חברים",
-    "zone": "אזור",
-    "settings": "הגדרות"
-  },
-  "player": {
-    "play": "נגן",
-    "pause": "השהה",
-    "fullscreen": "מסך מלא",
-    "exitFullscreen": "יציאה ממסך מלא",
-    "volume": "עוצמת קול",
-    "mute": "השתק",
-    "unmute": "בטל השתקה",
-    "quality": "איכות",
-    "speed": "מהירות",
-    "subtitle": "כתוביות",
-    "download": "הורד"
-  },
-  "setup": {
-    "title": "הגדרות",
-    "general": "הגדרות כלליות",
-    "autoPlay": "הפעלה אוטומטית",
-    "reconnect": "ניסיונות התחברות מחדש",
-    "definition": "איכות ברירת מחדל",
-    "searchMode": "מצב חיפוש",
-    "language": "שפה",
-    "paths": "הגדרות נתיב",
-    "videoSavePath": "נתיב שמירת וידאו",
-    "imageSavePath": "נתיב שמירת תמונות",
-    "aria2": "הגדרות Aria2",
-    "aria2Rpc": "כתובת RPC",
-    "aria2Token": "אסימון סודי",
-    "aria2Download": "ספריית הורדות",
-    "aria2Switch": "הפעל Aria2"
+  "history": {
+    "title": "היסטוריה",
+    "video": {
+      "tab": "וידאו",
+      "loading": "טוען...",
+      "error": "שגיאה",
+      "noRecords": "אין היסטוריית וידאו",
+      "today": "היום",
+      "loadFailed": "טעינה נכשלה, ",
+      "retry": "לחץ לניסיון חוזר",
+      "reachedBottom": "הגעת לסוף"
+    },
+    "image": {
+      "tab": "איורים",
+      "loading": "טוען...",
+      "error": "שגיאה",
+      "noRecords": "אין היסטוריית איורים",
+      "today": "היום",
+      "loadFailed": "טעינה נכשלה, ",
+      "retry": "לחץ לניסיון חוזר",
+      "reachedBottom": "הגעת לסוף"
+    }
   }
 }

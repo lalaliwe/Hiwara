@@ -1,59 +1,119 @@
 {
-  "common": {
-    "loading": "Carregando...",
-    "error": "Erro",
-    "success": "Sucesso",
-    "cancel": "Cancelar",
-    "confirm": "Confirmar",
-    "save": "Salvar",
-    "delete": "Excluir",
-    "edit": "Editar",
-    "search": "Pesquisar",
-    "back": "Voltar",
-    "next": "Próximo",
-    "previous": "Anterior",
-    "close": "Fechar",
-    "open": "Abrir",
-    "yes": "Sim",
-    "no": "Não"
+  "common": {},
+  "home": {
+    "navigation": {
+      "video": "Vídeo",
+      "image": "Ilustrações",
+      "subscribe": "Inscrições",
+      "forum": "Fórum",
+      "my": "Meu perfil"
+    },
+    "searchBar": {
+      "placeholder": "Pesquisar"
+    },
+    "dateFilter": {
+      "selectTime": "Selecionar período",
+      "year": "Ano",
+      "monthLabel": "Mês",
+      "allYears": "Todos os anos",
+      "fullYear": "Ano inteiro",
+      "months": {
+        "1": "Janeiro",
+        "2": "Fevereiro",
+        "3": "Março",
+        "4": "Abril",
+        "5": "Maio",
+        "6": "Junho",
+        "7": "Julho",
+        "8": "Agosto",
+        "9": "Setembro",
+        "10": "Outubro",
+        "11": "Novembro",
+        "12": "Dezembro"
+      },
+      "confirm": "Confirmar",
+      "reset": "Redefinir"
+    },
+    "video": {
+      "sortTabs": {
+        "date": "Mais recentes",
+        "trending": "Em alta",
+        "popularity": "Populares",
+        "views": "Visualizações",
+        "likes": "Curtidas"
+      },
+      "loading": "Carregando...",
+      "noRecords": "Sem registros de vídeo",
+      "loadFailed": "Falha ao carregar, ",
+      "retry": "Clique para tentar novamente",
+      "reachedBottom": "Fim atingido"
+    },
+    "image": {
+      "sortTabs": {
+        "date": "Mais recentes",
+        "trending": "Em alta",
+        "popularity": "Populares",
+        "views": "Visualizações",
+        "likes": "Curtidas"
+      },
+      "loading": "Carregando...",
+      "noRecords": "Sem registros de ilustrações",
+      "loadFailed": "Falha ao carregar, ",
+      "retry": "Clique para tentar novamente",
+      "reachedBottom": "Fim atingido"
+    },
+    "toast": {
+      "pressAgainToExit": "Pressione novamente para sair do aplicativo"
+    },
+    "my": {
+      "space": "Espaço",
+      "followers": "Seguindo",
+      "fans": "Fãs",
+      "history": "Histórico",
+      "viewAllHistory": "Ver tudo",
+      "videoFavorites": "Vídeos favoritos",
+      "imageFavorites": "Ilustrações favoritas",
+      "playlist": "Lista de reprodução",
+      "offlineCache": "Cache offline",
+      "notifications": "Notificações",
+      "friends": "Amigos",
+      "messages": "Mensagens",
+      "settings": "Configurações",
+      "iwaraServices": "Serviços Iwara",
+      "premium": "Premium",
+      "wura": "Wura",
+      "faq": "Perguntas frequentes",
+      "links": "Links",
+      "aboutText": "Este aplicativo segue a licença de código aberto MPL-2.0. Por favor, não o use para fins comerciais.",
+      "noRecords": "Sem registros de {type}"
+    },
+    "forum": {
+      "posts": "Postagens",
+      "topics": "Tópicos",
+      "repliedAt": "Respondido em"
+    }
   },
-  "navigation": {
-    "home": "Início",
-    "search": "Pesquisa",
-    "favorites": "Favoritos",
-    "history": "Histórico",
-    "friends": "Amigos",
-    "zone": "Zona",
-    "settings": "Configurações"
-  },
-  "player": {
-    "play": "Reproduzir",
-    "pause": "Pausar",
-    "fullscreen": "Tela cheia",
-    "exitFullscreen": "Sair da tela cheia",
-    "volume": "Volume",
-    "mute": "Mudo",
-    "unmute": "Ativar som",
-    "quality": "Qualidade",
-    "speed": "Velocidade",
-    "subtitle": "Legendas",
-    "download": "Baixar"
-  },
-  "setup": {
-    "title": "Configurações",
-    "general": "Configurações gerais",
-    "autoPlay": "Reprodução automática",
-    "reconnect": "Tentativas de reconexão",
-    "definition": "Qualidade padrão",
-    "searchMode": "Modo de pesquisa",
-    "language": "Idioma",
-    "paths": "Configurações de caminho",
-    "videoSavePath": "Caminho de salvamento de vídeo",
-    "imageSavePath": "Caminho de salvamento de imagem",
-    "aria2": "Configurações do Aria2",
-    "aria2Rpc": "URL RPC",
-    "aria2Token": "Token secreto",
-    "aria2Download": "Diretório de download",
-    "aria2Switch": "Habilitar Aria2"
+  "history": {
+    "title": "Histórico",
+    "video": {
+      "tab": "Vídeo",
+      "loading": "Carregando...",
+      "error": "Erro",
+      "noRecords": "Sem histórico de vídeos",
+      "today": "Hoje",
+      "loadFailed": "Falha ao carregar, ",
+      "retry": "Clique para tentar novamente",
+      "reachedBottom": "Fim atingido"
+    },
+    "image": {
+      "tab": "Ilustrações",
+      "loading": "Carregando...",
+      "error": "Erro",
+      "noRecords": "Sem histórico de ilustrações",
+      "today": "Hoje",
+      "loadFailed": "Falha ao carregar, ",
+      "retry": "Clique para tentar novamente",
+      "reachedBottom": "Fim atingido"
+    }
   }
 }

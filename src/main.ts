@@ -37,7 +37,7 @@ await initDatabase();
 import { initializeAllStores } from "./core/store";
 
 // 引入 i18n
-import i18n, { initI18nLanguage } from "./core/i18n";
+import { createI18nInstance, initI18nLanguage } from "./core/i18n";
 
 // 检测是否为桌面端（非触摸设备）
 const isDesktop = !window.matchMedia('(pointer: coarse)').matches;
@@ -51,7 +51,11 @@ const pinia = createPinia();
 app.use(pinia);
 app.use(router);
 app.use(vuetify);
+
+// 在 Pinia 安装后创建 i18n 实例
+const i18n = createI18nInstance();
 app.use(i18n);
+
 install(app);
 install(app, 'i');
 library.add(fas, far, fab)
@@ -62,7 +66,7 @@ app.config.globalProperties.$hammer = Hammer;
 await initializeAllStores();
 
 // 初始化 i18n 语言（根据 store 中的设置）
-initI18nLanguage();
+initI18nLanguage(i18n);
 
 app.mount("#app");
 

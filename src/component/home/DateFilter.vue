@@ -1,5 +1,8 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
 
 // Props
 interface Props {
@@ -20,25 +23,40 @@ const emit = defineEmits<{
 const drawerVisible = ref(false);
 
 // 选择器状态
-const selectedYear = ref<string | number>('全部年份');
-const selectedMonth = ref<string>('全年');
+const selectedYear = ref<string | number>('all'); // 'all' 表示全部年份
+const selectedMonth = ref<number>(0); // 0 表示全年，1-12表示具体月份
 
 // 生成年份列表（全部年份 + 2014-今年）
-const yearList = computed<(string | number)[]>(() => {
+const yearList = computed<{ title: string; value: string | number }[]>(() => {
   const currentYear = new Date().getFullYear();
-  const years: (string | number)[] = ['全部年份'];
+  const years: { title: string; value: string | number }[] = [
+    { title: t('home.dateFilter.allYears'), value: 'all' }
+  ];
   for (let year = currentYear; year >= 2014; year--) {
-    years.push(year);
+    years.push({ title: String(year), value: year });
   }
   return years;
 });
 
 // 月份列表
-const monthList = ['全年', '1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'];
+const monthList = computed<{ title: string; value: number }[]>(() => {
+  const months: { title: string; value: number }[] = [
+    { title: t('home.dateFilter.fullYear'), value: 0 }
+  ];
+  
+  // 从i18n获取月份名称数组
+  for (let i = 1; i <= 12; i++) {
+    months.push({ 
+      title: t(`home.dateFilter.months.${i}`), 
+      value: i 
+    });
+  }
+  return months;
+});
 
 // 判断月份是否禁用
 const isMonthDisabled = computed(() => {
-  return selectedYear.value === '全部年份';
+  return selectedYear.value === 'all';
 });
 
 // 打开抽屉时，根据当前筛选条件恢复选择器状态
@@ -46,26 +64,28 @@ function openDrawer() {
   if (props.modelValue) {
     const parts = props.modelValue.split('-');
     selectedYear.value = parseInt(parts[0]);
-    selectedMonth.value = parts.length > 1 ? `${parts[1]}月` : '全年';
+    selectedMonth.value = parts.length > 1 ? parseInt(parts[1]) : 0;
   } else {
-    selectedYear.value = '全部年份';
-    selectedMonth.value = '全年';
+    selectedYear.value = 'all';
+    selectedMonth.value = 0;
   }
   drawerVisible.value = true;
 }
 
 // 生成时间参数字符串
 function generateDateParam(): string | undefined {
-  if (selectedYear.value === '全部年份') {
+  // 1. 全部年份：不发送date
+  if (selectedYear.value === 'all') {
     return undefined;
   }
   
-  if (selectedMonth.value === '全年') {
+  // 2. 指定某年全部月份：发送示例2024
+  if (selectedMonth.value === 0) {
     return String(selectedYear.value);
-  } else {
-    const monthNum = selectedMonth.value.replace('月', '');
-    return `${selectedYear.value}-${monthNum}`;
   }
+  
+  // 3. 指定年月：发送示例2024-1
+  return `${selectedYear.value}-${selectedMonth.value}`;
 }
 
 // 确认选择
@@ -91,8 +111,8 @@ function confirmSelection() {
 // 重置选择
 function resetSelection() {
   console.log('时间选择器 - 重置');
-  selectedYear.value = '全部年份';
-  selectedMonth.value = '全年';
+  selectedYear.value = 'all';
+  selectedMonth.value = 0;
 }
 
 // 暴露方法给父组件
@@ -106,7 +126,7 @@ defineExpose({
   <v-bottom-sheet v-model="drawerVisible" inset>
     <v-sheet class="pa-4">
       <div class="drawer-header">
-        <h3 class="drawer-title">选择时间</h3>
+        <h3 class="drawer-title">{{ t('home.dateFilter.selectTime') }}</h3>
         <v-btn icon variant="text" size="small" @click="drawerVisible = false">
           <font-awesome-icon icon="fa-solid fa-xmark" />
         </v-btn>
@@ -117,10 +137,12 @@ defineExpose({
       <div class="selector-container">
         <!-- 年份选择器 -->
         <div class="selector-item">
-          <label class="selector-label">年份</label>
+          <label class="selector-label">{{ t('home.dateFilter.year') }}</label>
           <v-select
             v-model="selectedYear"
             :items="yearList"
+            item-title="title"
+            item-value="value"
             variant="outlined"
             density="comfortable"
             hide-details
@@ -130,11 +152,13 @@ defineExpose({
         
         <!-- 月份选择器 -->
         <div class="selector-item">
-          <label class="selector-label">月份</label>
+          <label class="selector-label">{{ t('home.dateFilter.monthLabel') }}</label>
           <v-select
             v-model="selectedMonth"
             :items="monthList"
             :disabled="isMonthDisabled"
+            item-title="title"
+            item-value="value"
             variant="outlined"
             density="comfortable"
             hide-details
@@ -152,7 +176,7 @@ defineExpose({
           size="large"
           @click="resetSelection"
         >
-          重置
+          {{ t('home.dateFilter.reset') }}
         </v-btn>
         <v-btn
           block
@@ -160,7 +184,7 @@ defineExpose({
           size="large"
           @click="confirmSelection"
         >
-          确认
+          {{ t('home.dateFilter.confirm') }}
         </v-btn>
       </div>
     </v-sheet>
