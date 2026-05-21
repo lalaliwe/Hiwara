@@ -1,5 +1,89 @@
 {
   "common": {},
+  "setup": {
+    "title": "Einstellungen",
+    "autoPlay": "Automatische Wiedergabe",
+    "defaultDefinition": "Standardqualität",
+    "defaultSearchMode": "Standard-Suchmodus",
+    "downloadSettings": "Download-Einstellungen",
+    "aria2Settings": "Aria2-Einstellungen",
+    "language": "Sprache (Language)",
+    "about": "Über",
+    "logout": "Abmelden",
+    "enabled": "Aktiviert",
+    "disabled": "Deaktiviert",
+    "keywordSearch": "Stichwortsuche",
+    "tagSearch": "Tag-Suche",
+    "original": "Original",
+    "aboutPage": {
+      "title": "Über",
+      "version": "Version",
+      "versionType": "Versionstyp",
+      "beta": "Beta",
+      "buildTime": "Build-Zeit",
+      "deviceType": "Gerätetyp",
+      "mobile": "Mobil",
+      "desktop": "Desktop",
+      "osName": "OS-Name",
+      "osVersion": "OS-Version",
+      "webview": "WebView",
+      "webviewVersion": "WebView-Version",
+      "checkUpdate": "Nach Updates suchen",
+      "openSourceLicense": "Open-Source-Lizenz",
+      "unknown": "Unbekannt",
+      "loading": "Daten laden"
+    },
+    "aria2Page": {
+      "title": "Aria2-Einstellungen",
+      "enableAria2": "Aria2 aktivieren",
+      "rpcAddress": "Aria2 RPC-Adresse",
+      "rpcPlaceholder": "RPC-Adresse z.B. http://127.0.0.1:6800/jsonrpc",
+      "token": "Aria2 TOKEN",
+      "tokenPlaceholder": "TOKEN eingeben",
+      "downloadDir": "Aria2 Download-Verzeichnis",
+      "downloadDirPlaceholder": "Download-Verzeichnis z.B. ~/Downloads/Iwara",
+      "tip": "Hinweis: Das Download-Verzeichnis sollte das Aria2-Serververzeichnis sein, nicht das lokale Verzeichnis."
+    },
+    "definitionPage": {
+      "title": "Standardqualität"
+    },
+    "downloadPage": {
+      "title": "Download-Einstellungen",
+      "videoSavePath": "Video-Speicherpfad",
+      "imageSavePath": "Bild-Speicherpfad",
+      "notSet": "Nicht festgelegt",
+      "selectVideoPath": "Video-Speicherpfad auswählen",
+      "selectImagePath": "Bild-Speicherpfad auswählen"
+    },
+    "languagePage": {
+      "title": "Sprache (Language)",
+      "followSystem": "System folgen",
+      "english": "Englisch",
+      "simplifiedChinese": "Vereinfachtes Chinesisch",
+      "traditionalChinese": "Traditionelles Chinesisch",
+      "japanese": "Japanisch",
+      "korean": "Koreanisch",
+      "french": "Französisch",
+      "spanish": "Spanisch",
+      "portuguese": "Portugiesisch",
+      "german": "Deutsch",
+      "italian": "Italienisch",
+      "russian": "Russisch",
+      "ukrainian": "Ukrainisch",
+      "thai": "Thailändisch",
+      "vietnamese": "Vietnamesisch",
+      "khmer": "Khmer",
+      "hindi": "Hindi",
+      "arabic": "Arabisch",
+      "hebrew": "Hebräisch",
+      "tibetan": "Tibetisch",
+      "uyghur": "Uigurisch",
+      "kazakh": "Kasachisch"
+    },
+    "searchModePage": {
+      "title": "Standard-Suchmodus"
+    }
+  },
   "home": {
     "navigation": {
       "video": "Video",

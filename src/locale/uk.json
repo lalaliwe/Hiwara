@@ -1,5 +1,89 @@
 {
   "common": {},
+  "setup": {
+    "title": "Налаштування",
+    "autoPlay": "Автовідтворення",
+    "defaultDefinition": "Якість за замовчуванням",
+    "defaultSearchMode": "Режим пошуку за замовчуванням",
+    "downloadSettings": "Налаштування завантаження",
+    "aria2Settings": "Налаштування Aria2",
+    "language": "Мова (Language)",
+    "about": "Про програму",
+    "logout": "Вийти",
+    "enabled": "Увімкнено",
+    "disabled": "Вимкнено",
+    "keywordSearch": "Пошук за ключовими словами",
+    "tagSearch": "Пошук за тегами",
+    "original": "Оригінал",
+    "aboutPage": {
+      "title": "Про програму",
+      "version": "Версія",
+      "versionType": "Тип версії",
+      "beta": "Бета",
+      "buildTime": "Час збірки",
+      "deviceType": "Тип пристрою",
+      "mobile": "Мобільний",
+      "desktop": "Настільний",
+      "osName": "Назва ОС",
+      "osVersion": "Версія ОС",
+      "webview": "WebView",
+      "webviewVersion": "Версія WebView",
+      "checkUpdate": "Перевірити оновлення",
+      "openSourceLicense": "Ліцензія з відкритим кодом",
+      "unknown": "Невідомо",
+      "loading": "Завантаження даних"
+    },
+    "aria2Page": {
+      "title": "Налаштування Aria2",
+      "enableAria2": "Увімкнути Aria2",
+      "rpcAddress": "RPC-адреса Aria2",
+      "rpcPlaceholder": "RPC-адреса наприклад: http://127.0.0.1:6800/jsonrpc",
+      "token": "Aria2 TOKEN",
+      "tokenPlaceholder": "Введіть TOKEN",
+      "downloadDir": "Каталог завантаження Aria2",
+      "downloadDirPlaceholder": "Каталог завантаження наприклад: ~/Downloads/Iwara",
+      "tip": "Підказка: Каталог завантаження повинен бути каталогом сервера Aria2, а не локальним каталогом."
+    },
+    "definitionPage": {
+      "title": "Якість за замовчуванням"
+    },
+    "downloadPage": {
+      "title": "Налаштування завантаження",
+      "videoSavePath": "Шлях збереження відео",
+      "imageSavePath": "Шлях збереження зображень",
+      "notSet": "Не встановлено",
+      "selectVideoPath": "Вибрати шлях для відео",
+      "selectImagePath": "Вибрати шлях для зображень"
+    },
+    "languagePage": {
+      "title": "Мова (Language)",
+      "followSystem": "Як у системі",
+      "english": "Англійська",
+      "simplifiedChinese": "Спрощена китайська",
+      "traditionalChinese": "Традиційна китайська",
+      "japanese": "Японська",
+      "korean": "Корейська",
+      "french": "Французька",
+      "spanish": "Іспанська",
+      "portuguese": "Португальська",
+      "german": "Німецька",
+      "italian": "Італійська",
+      "russian": "Російська",
+      "ukrainian": "Українська",
+      "thai": "Тайська",
+      "vietnamese": "В'єтнамська",
+      "khmer": "Кхмерська",
+      "hindi": "Хінді",
+      "arabic": "Арабська",
+      "hebrew": "Іврит",
+      "tibetan": "Тибетська",
+      "uyghur": "Уйгурська",
+      "kazakh": "Казахська"
+    },
+    "searchModePage": {
+      "title": "Режим пошуку за замовчуванням"
+    }
+  },
   "home": {
     "navigation": {
       "video": "Відео",

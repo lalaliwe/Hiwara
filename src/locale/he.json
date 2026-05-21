@@ -1,5 +1,89 @@
 {
   "common": {},
+  "setup": {
+    "title": "הגדרות",
+    "autoPlay": "הפעלה אוטומטית",
+    "defaultDefinition": "איכות ברירת מחדל",
+    "defaultSearchMode": "מצב חיפוש ברירת מחדל",
+    "downloadSettings": "הגדרות הורדה",
+    "aria2Settings": "הגדרות Aria2",
+    "language": "שפה (Language)",
+    "about": "אודות",
+    "logout": "התנתק",
+    "enabled": "מופעל",
+    "disabled": "מושבת",
+    "keywordSearch": "חיפוש לפי מילת מפתח",
+    "tagSearch": "חיפוש לפי תגית",
+    "original": "מקור",
+    "aboutPage": {
+      "title": "אודות",
+      "version": "גרסה",
+      "versionType": "סוג גרסה",
+      "beta": "בטא",
+      "buildTime": "זמן בנייה",
+      "deviceType": "סוג מכשיר",
+      "mobile": "נייד",
+      "desktop": "שולחן עבודה",
+      "osName": "שם מערכת הפעלה",
+      "osVersion": "גרסת מערכת הפעלה",
+      "webview": "WebView",
+      "webviewVersion": "גרסת WebView",
+      "checkUpdate": "בדוק עדכונים",
+      "openSourceLicense": "רישיון קוד פתוח",
+      "unknown": "לא ידוע",
+      "loading": "טוען נתונים"
+    },
+    "aria2Page": {
+      "title": "הגדרות Aria2",
+      "enableAria2": "הפעל Aria2",
+      "rpcAddress": "כתובת RPC של Aria2",
+      "rpcPlaceholder": "כתובת RPC לדוגמה: http://127.0.0.1:6800/jsonrpc",
+      "token": "Aria2 TOKEN",
+      "tokenPlaceholder": "הכנס TOKEN",
+      "downloadDir": "תיקיית הורדות Aria2",
+      "downloadDirPlaceholder": "תיקיית הורדות לדוגמה: ~/Downloads/Iwara",
+      "tip": "טיפ: תיקיית ההורדות צריכה להיות תיקיית שרת Aria2, לא תיקייה מקומית."
+    },
+    "definitionPage": {
+      "title": "איכות ברירת מחדל"
+    },
+    "downloadPage": {
+      "title": "הגדרות הורדה",
+      "videoSavePath": "נתיב שמירת וידאו",
+      "imageSavePath": "נתיב שמירת תמונה",
+      "notSet": "לא הוגדר",
+      "selectVideoPath": "בחר נתיב שמירת וידאו",
+      "selectImagePath": "בחר נתיב שמירת תמונה"
+    },
+    "languagePage": {
+      "title": "שפה (Language)",
+      "followSystem": "עקוב אחר המערכת",
+      "english": "אנגלית",
+      "simplifiedChinese": "סינית מפושטת",
+      "traditionalChinese": "סינית מסורתית",
+      "japanese": "יפנית",
+      "korean": "קוריאנית",
+      "french": "צרפתית",
+      "spanish": "ספרדית",
+      "portuguese": "פורטוגזית",
+      "german": "גרמנית",
+      "italian": "איטלקית",
+      "russian": "רוסית",
+      "ukrainian": "אוקראינית",
+      "thai": "תאית",
+      "vietnamese": "וייטנאמית",
+      "khmer": "חמרית",
+      "hindi": "הינדי",
+      "arabic": "ערבית",
+      "hebrew": "עברית",
+      "tibetan": "טיבטית",
+      "uyghur": "אויגורית",
+      "kazakh": "קזחית"
+    },
+    "searchModePage": {
+      "title": "מצב חיפוש ברירת מחדל"
+    }
+  },
   "home": {
     "navigation": {
       "video": "וידאו",

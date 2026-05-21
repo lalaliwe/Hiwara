@@ -1,5 +1,89 @@
 {
   "common": {},
+  "setup": {
+    "title": "Параметрлер",
+    "autoPlay": "Авто ойнату",
+    "defaultDefinition": "Әдепкі сапа",
+    "defaultSearchMode": "Әдепкі іздеу режимі",
+    "downloadSettings": "Жүктеу параметрлері",
+    "aria2Settings": "Aria2 параметрлері",
+    "language": "Тіл (Language)",
+    "about": "Қосымша туралы",
+    "logout": "Шығу",
+    "enabled": "Қосылған",
+    "disabled": "Өшірілген",
+    "keywordSearch": "Кілт сөзбен іздеу",
+    "tagSearch": "Тегпен іздеу",
+    "original": "Түпнұсқа",
+    "aboutPage": {
+      "title": "Қосымша туралы",
+      "version": "Нұсқа",
+      "versionType": "Нұсқа түрі",
+      "beta": "Бета",
+      "buildTime": "Құрастыру уақыты",
+      "deviceType": "Құрылғы түрі",
+      "mobile": "Мобильді",
+      "desktop": "Үстелдік",
+      "osName": "ОЖ атауы",
+      "osVersion": "ОЖ нұсқасы",
+      "webview": "WebView",
+      "webviewVersion": "WebView нұсқасы",
+      "checkUpdate": "Жаңартуды тексеру",
+      "openSourceLicense": "Ашық бастапқы лицензия",
+      "unknown": "Белгісіз",
+      "loading": "Деректер жүктелуде"
+    },
+    "aria2Page": {
+      "title": "Aria2 параметрлері",
+      "enableAria2": "Aria2 қосу",
+      "rpcAddress": "Aria2 RPC мекенжайы",
+      "rpcPlaceholder": "RPC мекенжайы мысалы: http://127.0.0.1:6800/jsonrpc",
+      "token": "Aria2 TOKEN",
+      "tokenPlaceholder": "TOKEN енгізіңіз",
+      "downloadDir": "Aria2 жүктеу каталогы",
+      "downloadDirPlaceholder": "Жүктеу каталогы мысалы: ~/Downloads/Iwara",
+      "tip": "Кеңес: Жүктеу каталогы Aria2 серверінің каталогы болуы керек, жергілікті каталог емес."
+    },
+    "definitionPage": {
+      "title": "Әдепкі сапа"
+    },
+    "downloadPage": {
+      "title": "Жүктеу параметрлері",
+      "videoSavePath": "Бейне сақтау жолы",
+      "imageSavePath": "Сурет сақтау жолы",
+      "notSet": "Орнатылмаған",
+      "selectVideoPath": "Бейне сақтау жолын таңдау",
+      "selectImagePath": "Сурет сақтау жолын таңдау"
+    },
+    "languagePage": {
+      "title": "Тіл (Language)",
+      "followSystem": "Жүйеге сәйкес",
+      "english": "Ағылшын",
+      "simplifiedChinese": "Жеңілдетілген қытай",
+      "traditionalChinese": "Дәстүрлі қытай",
+      "japanese": "Жапон",
+      "korean": "Корей",
+      "french": "Француз",
+      "spanish": "Испан",
+      "portuguese": "Португал",
+      "german": "Неміс",
+      "italian": "Итальян",
+      "russian": "Орыс",
+      "ukrainian": "Украин",
+      "thai": "Тай",
+      "vietnamese": "Вьетнам",
+      "khmer": "Кхмер",
+      "hindi": "Хинди",
+      "arabic": "Араб",
+      "hebrew": "Иврит",
+      "tibetan": "Тибет",
+      "uyghur": "Ұйғыр",
+      "kazakh": "Қазақ"
+    },
+    "searchModePage": {
+      "title": "Әдепкі іздеу режимі"
+    }
+  },
   "home": {
     "navigation": {
       "video": "Бейне",

@@ -1,5 +1,89 @@
 {
   "common": {},
+  "setup": {
+    "title": "Настройки",
+    "autoPlay": "Автовоспроизведение",
+    "defaultDefinition": "Качество по умолчанию",
+    "defaultSearchMode": "Режим поиска по умолчанию",
+    "downloadSettings": "Настройки загрузки",
+    "aria2Settings": "Настройки Aria2",
+    "language": "Язык (Language)",
+    "about": "О программе",
+    "logout": "Выйти",
+    "enabled": "Включено",
+    "disabled": "Отключено",
+    "keywordSearch": "Поиск по ключевым словам",
+    "tagSearch": "Поиск по тегам",
+    "original": "Оригинал",
+    "aboutPage": {
+      "title": "О программе",
+      "version": "Версия",
+      "versionType": "Тип версии",
+      "beta": "Бета",
+      "buildTime": "Время сборки",
+      "deviceType": "Тип устройства",
+      "mobile": "Мобильный",
+      "desktop": "Настольный",
+      "osName": "Имя ОС",
+      "osVersion": "Версия ОС",
+      "webview": "WebView",
+      "webviewVersion": "Версия WebView",
+      "checkUpdate": "Проверить обновления",
+      "openSourceLicense": "Лицензия с открытым исходным кодом",
+      "unknown": "Неизвестно",
+      "loading": "Загрузка данных"
+    },
+    "aria2Page": {
+      "title": "Настройки Aria2",
+      "enableAria2": "Включить Aria2",
+      "rpcAddress": "RPC-адрес Aria2",
+      "rpcPlaceholder": "RPC-адрес например: http://127.0.0.1:6800/jsonrpc",
+      "token": "Aria2 TOKEN",
+      "tokenPlaceholder": "Введите TOKEN",
+      "downloadDir": "Каталог загрузки Aria2",
+      "downloadDirPlaceholder": "Каталог загрузки например: ~/Downloads/Iwara",
+      "tip": "Подсказка: Каталог загрузки должен быть каталогом сервера Aria2, а не локальным каталогом."
+    },
+    "definitionPage": {
+      "title": "Качество по умолчанию"
+    },
+    "downloadPage": {
+      "title": "Настройки загрузки",
+      "videoSavePath": "Путь сохранения видео",
+      "imageSavePath": "Путь сохранения изображений",
+      "notSet": "Не задано",
+      "selectVideoPath": "Выбрать путь для видео",
+      "selectImagePath": "Выбрать путь для изображений"
+    },
+    "languagePage": {
+      "title": "Язык (Language)",
+      "followSystem": "Как в системе",
+      "english": "Английский",
+      "simplifiedChinese": "Упрощенный китайский",
+      "traditionalChinese": "Традиционный китайский",
+      "japanese": "Японский",
+      "korean": "Корейский",
+      "french": "Французский",
+      "spanish": "Испанский",
+      "portuguese": "Португальский",
+      "german": "Немецкий",
+      "italian": "Итальянский",
+      "russian": "Русский",
+      "ukrainian": "Украинский",
+      "thai": "Тайский",
+      "vietnamese": "Вьетнамский",
+      "khmer": "Кхмерский",
+      "hindi": "Хинди",
+      "arabic": "Арабский",
+      "hebrew": "Иврит",
+      "tibetan": "Тибетский",
+      "uyghur": "Уйгурский",
+      "kazakh": "Казахский"
+    },
+    "searchModePage": {
+      "title": "Режим поиска по умолчанию"
+    }
+  },
   "home": {
     "navigation": {
       "video": "Видео",

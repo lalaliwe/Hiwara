@@ -1,5 +1,89 @@
 {
   "common": {},
+  "setup": {
+    "title": "การตั้งค่า",
+    "autoPlay": "เล่นอัตโนมัติ",
+    "defaultDefinition": "คุณภาพเริ่มต้น",
+    "defaultSearchMode": "โหมดค้นหาเริ่มต้น",
+    "downloadSettings": "การตั้งค่าดาวน์โหลด",
+    "aria2Settings": "การตั้งค่า Aria2",
+    "language": "ภาษา (Language)",
+    "about": "เกี่ยวกับ",
+    "logout": "ออกจากระบบ",
+    "enabled": "เปิดใช้งาน",
+    "disabled": "ปิดใช้งาน",
+    "keywordSearch": "ค้นหาด้วยคำสำคัญ",
+    "tagSearch": "ค้นหาด้วยแท็ก",
+    "original": "ต้นฉบับ",
+    "aboutPage": {
+      "title": "เกี่ยวกับ",
+      "version": "เวอร์ชัน",
+      "versionType": "ประเภทเวอร์ชัน",
+      "beta": "เบต้า",
+      "buildTime": "เวลาสร้าง",
+      "deviceType": "ประเภทอุปกรณ์",
+      "mobile": "มือถือ",
+      "desktop": "เดสก์ท็อป",
+      "osName": "ชื่อ OS",
+      "osVersion": "เวอร์ชัน OS",
+      "webview": "WebView",
+      "webviewVersion": "เวอร์ชัน WebView",
+      "checkUpdate": "ตรวจสอบอัปเดต",
+      "openSourceLicense": "ใบอนุญาตโอเพนซอร์ส",
+      "unknown": "ไม่ทราบ",
+      "loading": "กำลังโหลดข้อมูล"
+    },
+    "aria2Page": {
+      "title": "การตั้งค่า Aria2",
+      "enableAria2": "เปิดใช้งาน Aria2",
+      "rpcAddress": "ที่อยู่ RPC Aria2",
+      "rpcPlaceholder": "ที่อยู่ RPC เช่น http://127.0.0.1:6800/jsonrpc",
+      "token": "Aria2 TOKEN",
+      "tokenPlaceholder": "ป้อน TOKEN",
+      "downloadDir": "ไดเรกทอรีดาวน์โหลด Aria2",
+      "downloadDirPlaceholder": "ไดเรกทอรีดาวน์โหลด เช่น ~/Downloads/Iwara",
+      "tip": "เคล็ดลับ: ไดเรกทอรีดาวน์โหลดควรเป็นไดเรกทอรีของเซิร์ฟเวอร์ Aria2 ไม่ใช่ไดเรกทอรีท้องถิ่น"
+    },
+    "definitionPage": {
+      "title": "คุณภาพเริ่มต้น"
+    },
+    "downloadPage": {
+      "title": "การตั้งค่าดาวน์โหลด",
+      "videoSavePath": "เส้นทางบันทึกวิดีโอ",
+      "imageSavePath": "เส้นทางบันทึกรูปภาพ",
+      "notSet": "ไม่ได้ตั้งค่า",
+      "selectVideoPath": "เลือกเส้นทางบันทึกวิดีโอ",
+      "selectImagePath": "เลือกเส้นทางบันทึกรูปภาพ"
+    },
+    "languagePage": {
+      "title": "ภาษา (Language)",
+      "followSystem": "ตามระบบ",
+      "english": "อังกฤษ",
+      "simplifiedChinese": "จีนตัวย่อ",
+      "traditionalChinese": "จีนตัวเต็ม",
+      "japanese": "ญี่ปุ่น",
+      "korean": "เกาหลี",
+      "french": "ฝรั่งเศส",
+      "spanish": "สเปน",
+      "portuguese": "โปรตุเกส",
+      "german": "เยอรมัน",
+      "italian": "อิตาลี",
+      "russian": "รัสเซีย",
+      "ukrainian": "ยูเครน",
+      "thai": "ไทย",
+      "vietnamese": "เวียดนาม",
+      "khmer": "เขมร",
+      "hindi": "ฮินดี",
+      "arabic": "อาหรับ",
+      "hebrew": "ฮีบรู",
+      "tibetan": "ทิเบต",
+      "uyghur": "อุยกูร์",
+      "kazakh": "คาซัค"
+    },
+    "searchModePage": {
+      "title": "โหมดค้นหาเริ่มต้น"
+    }
+  },
   "home": {
     "navigation": {
       "video": "วิดีโอ",

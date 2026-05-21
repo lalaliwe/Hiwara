@@ -1,5 +1,89 @@
 {
   "common": {},
+  "setup": {
+    "title": "Settings",
+    "autoPlay": "Auto Play",
+    "defaultDefinition": "Default Quality",
+    "defaultSearchMode": "Default Search Mode",
+    "downloadSettings": "Download Settings",
+    "aria2Settings": "Aria2 Settings",
+    "language": "Language (Language)",
+    "about": "About",
+    "logout": "Log Out",
+    "enabled": "Enabled",
+    "disabled": "Disabled",
+    "keywordSearch": "Keyword Search",
+    "tagSearch": "Tag Search",
+    "original": "Original",
+    "aboutPage": {
+      "title": "About",
+      "version": "Version",
+      "versionType": "Version Type",
+      "beta": "Beta",
+      "buildTime": "Build Time",
+      "deviceType": "Device Type",
+      "mobile": "Mobile",
+      "desktop": "Desktop",
+      "osName": "OS Name",
+      "osVersion": "OS Version",
+      "webview": "WebView",
+      "webviewVersion": "WebView Version",
+      "checkUpdate": "Check Update",
+      "openSourceLicense": "Open Source License",
+      "unknown": "Unknown",
+      "loading": "Loading data"
+    },
+    "aria2Page": {
+      "title": "Aria2 Settings",
+      "enableAria2": "Enable Aria2",
+      "rpcAddress": "Aria2 RPC Address",
+      "rpcPlaceholder": "RPC Address e.g. http://127.0.0.1:6800/jsonrpc",
+      "token": "Aria2 TOKEN",
+      "tokenPlaceholder": "Enter TOKEN",
+      "downloadDir": "Aria2 Download Directory",
+      "downloadDirPlaceholder": "Download Directory e.g. ~/Downloads/Iwara",
+      "tip": "Tip: The download directory should be the Aria2 server directory, not the local directory."
+    },
+    "definitionPage": {
+      "title": "Default Quality"
+    },
+    "downloadPage": {
+      "title": "Download Settings",
+      "videoSavePath": "Video Save Path",
+      "imageSavePath": "Image Save Path",
+      "notSet": "Not Set",
+      "selectVideoPath": "Select Video Save Path",
+      "selectImagePath": "Select Image Save Path"
+    },
+    "languagePage": {
+      "title": "Language (Language)",
+      "followSystem": "Follow System",
+      "english": "English",
+      "simplifiedChinese": "Simplified Chinese",
+      "traditionalChinese": "Traditional Chinese",
+      "japanese": "Japanese",
+      "korean": "Korean",
+      "french": "French",
+      "spanish": "Spanish",
+      "portuguese": "Portuguese",
+      "german": "German",
+      "italian": "Italian",
+      "russian": "Russian",
+      "ukrainian": "Ukrainian",
+      "thai": "Thai",
+      "vietnamese": "Vietnamese",
+      "khmer": "Khmer",
+      "hindi": "Hindi",
+      "arabic": "Arabic",
+      "hebrew": "Hebrew",
+      "tibetan": "Tibetan",
+      "uyghur": "Uyghur",
+      "kazakh": "Kazakh"
+    },
+    "searchModePage": {
+      "title": "Default Search Mode"
+    }
+  },
   "home": {
     "navigation": {
       "video": "Video",

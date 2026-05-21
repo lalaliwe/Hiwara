@@ -1,21 +1,23 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import { getDeviceInfo } from '../../plugins/deviceInfo'
 
 defineOptions({
   name: 'SetupAbout'
 })
 
+const { t } = useI18n()
 const router = useRouter()
 
 // 响应式数据
 const version = ref('0.1.0')
-const buildTime = ref('加载中...')
-const deviceType = ref('加载中...')
-const osName = ref('加载中...')
-const osVersion = ref('加载中...')
-const webViewName = ref('加载中...')
+const buildTime = ref(t('setup.aboutPage.loading'))
+const deviceType = ref(t('setup.aboutPage.loading'))
+const osName = ref(t('setup.aboutPage.loading'))
+const osVersion = ref(t('setup.aboutPage.loading'))
+const webViewName = ref(t('setup.aboutPage.loading'))
 const webViewVersion = ref('')
 
 // 返回上一页
@@ -47,11 +49,11 @@ const loadDeviceInfo = async () => {
     
     // 判断设备类型
     const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
-    deviceType.value = isMobile ? '移动端' : '桌面端'
+    deviceType.value = isMobile ? t('setup.aboutPage.mobile') : t('setup.aboutPage.desktop')
     
     // OS 信息
-    osName.value = info.osName || '未知'
-    osVersion.value = info.osVersion || '未知'
+    osName.value = info.osName || t('setup.aboutPage.unknown')
+    osVersion.value = info.osVersion || t('setup.aboutPage.unknown')
     
     // WebView 信息 - 从 userAgent 中解析真实的 WebView 引擎和版本
     const userAgent = navigator.userAgent
@@ -104,15 +106,15 @@ const loadDeviceInfo = async () => {
         webViewVersion.value = ''
       }
     } else {
-      webViewName.value = '未知'
+      webViewName.value = t('setup.aboutPage.unknown')
       webViewVersion.value = ''
     }
   } catch (error) {
     console.error('获取设备信息失败:', error)
-    deviceType.value = '未知'
-    osName.value = '未知'
-    osVersion.value = '未知'
-    webViewName.value = '未知'
+    deviceType.value = t('setup.aboutPage.unknown')
+    osName.value = t('setup.aboutPage.unknown')
+    osVersion.value = t('setup.aboutPage.unknown')
+    webViewName.value = t('setup.aboutPage.unknown')
     webViewVersion.value = ''
   }
 }
@@ -133,7 +135,7 @@ onMounted(() => {
         <font-awesome-icon icon="fa-solid fa-angle-left" />
       </div>
       <div class="label">
-        关于
+        {{ t('setup.aboutPage.title') }}
       </div>
     </div>
     <!-- 内容区域 -->
@@ -146,27 +148,27 @@ onMounted(() => {
       </div>
     </div>
     <div class="item">
-      <div class="label">版本号</div>
+      <div class="label">{{ t('setup.aboutPage.version') }}</div>
       <div class="value">{{ version }}</div>
     </div>
     <div class="item">
-      <div class="label">版本类型</div>
-      <div class="value">测试版</div>
+      <div class="label">{{ t('setup.aboutPage.versionType') }}</div>
+      <div class="value">{{ t('setup.aboutPage.beta') }}</div>
     </div>
     <div class="item">
-      <div class="label">构建时间</div>
+      <div class="label">{{ t('setup.aboutPage.buildTime') }}</div>
       <div class="value">{{ buildTime }}</div>
     </div>
     <div class="item">
-      <div class="label">设备类型</div>
+      <div class="label">{{ t('setup.aboutPage.deviceType') }}</div>
       <div class="value">
-        <font-awesome-icon :icon="deviceType === '桌面端' ? 'fa-solid fa-desktop' : 'fa-solid fa-mobile-screen'" />
+        <font-awesome-icon :icon="deviceType === t('setup.aboutPage.desktop') ? 'fa-solid fa-desktop' : 'fa-solid fa-mobile-screen'" />
         &nbsp;
         {{ deviceType }}
       </div>
     </div>
     <div class="item">
-      <div class="label">OS名称</div>
+      <div class="label">{{ t('setup.aboutPage.osName') }}</div>
       <div class="value">
         <font-awesome-icon :icon="getOsIcon()" />
         &nbsp;
@@ -174,25 +176,25 @@ onMounted(() => {
       </div>
     </div>
     <div class="item">
-      <div class="label">OS版本</div>
+      <div class="label">{{ t('setup.aboutPage.osVersion') }}</div>
       <div class="value">{{ osVersion }}</div>
     </div>
     <div class="item">
-      <div class="label">WebView</div>
+      <div class="label">{{ t('setup.aboutPage.webview') }}</div>
       <div class="value">{{ webViewName }}</div>
     </div>
     <div class="item" v-if="webViewVersion">
-      <div class="label">WebView版本</div>
+      <div class="label">{{ t('setup.aboutPage.webviewVersion') }}</div>
       <div class="value">{{ webViewVersion }}</div>
     </div>
     <div class="item">
-      <div class="label">检查更新</div>
+      <div class="label">{{ t('setup.aboutPage.checkUpdate') }}</div>
       <div class="value">
         <font-awesome-icon icon="fa-solid fa-angle-right" />
       </div>
     </div>
     <div class="item">
-      <div class="label">开源许可</div>
+      <div class="label">{{ t('setup.aboutPage.openSourceLicense') }}</div>
       <div class="value">
         <font-awesome-icon icon="fa-solid fa-angle-right" />
       </div>

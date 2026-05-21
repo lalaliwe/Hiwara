@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import { setupStore } from '../../core/store'
 import { storeToRefs } from 'pinia'
 // 导入Tauri的dialog插件
@@ -9,6 +10,7 @@ defineOptions({
   name: 'SetupDownload'
 })
 
+const { t } = useI18n()
 const router = useRouter()
 const setup = setupStore()
 const { videoSavePath, imageSavePath } = storeToRefs(setup)
@@ -23,7 +25,7 @@ const selectVideoSavePath = async () => {
   const selectedPath = await open({
     directory: true,  // 只能选择目录
     multiple: false,  // 只能选择单个目录
-    title: '选择视频保存路径'
+    title: t('setup.downloadPage.selectVideoPath')
   });
 
   if (selectedPath) {
@@ -37,7 +39,7 @@ const selectImageSavePath = async () => {
   const selectedPath = await open({
     directory: true,  // 只能选择目录
     multiple: false,  // 只能选择单个目录
-    title: '选择图片保存路径'
+    title: t('setup.downloadPage.selectImagePath')
   });
 
   if (selectedPath) {
@@ -54,17 +56,17 @@ const selectImageSavePath = async () => {
         <font-awesome-icon icon="fa-solid fa-angle-left" />
       </div>
       <div class="label">
-        下载设置
+        {{ t('setup.downloadPage.title') }}
       </div>
     </div>
     <!-- 内容区域 -->
     <div class="item" @click="selectVideoSavePath">
-      <div class="label">视频保存路径</div>
-      <div class="path-display">{{ videoSavePath || '未设置' }}</div>
+      <div class="label">{{ t('setup.downloadPage.videoSavePath') }}</div>
+      <div class="path-display">{{ videoSavePath || t('setup.downloadPage.notSet') }}</div>
     </div>
     <div class="item" @click="selectImageSavePath">
-      <div class="label">图片保存路径</div>
-      <div class="path-display">{{ imageSavePath || '未设置' }}</div>
+      <div class="label">{{ t('setup.downloadPage.imageSavePath') }}</div>
+      <div class="path-display">{{ imageSavePath || t('setup.downloadPage.notSet') }}</div>
     </div>
   </div>
 </template>

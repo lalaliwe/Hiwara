@@ -1,5 +1,89 @@
 {
   "common": {},
+  "setup": {
+    "title": "ការកំណត់",
+    "autoPlay": "ចាក់ស្វ័យប្រវត្តិ",
+    "defaultDefinition": "គុណភាពលំនាំដើម",
+    "defaultSearchMode": "របៀបស្វែងរកលំនាំដើម",
+    "downloadSettings": "ការកំណត់ទាញយក",
+    "aria2Settings": "ការកំណត់ Aria2",
+    "language": "ភាសា (Language)",
+    "about": "អំពី",
+    "logout": "ចាកចេញ",
+    "enabled": "បានបើក",
+    "disabled": "បានបិទ",
+    "keywordSearch": "ស្វែងរកតាមពាក្យគន្លឹះ",
+    "tagSearch": "ស្វែងរកតាមស្លាក",
+    "original": "ដើម",
+    "aboutPage": {
+      "title": "អំពី",
+      "version": "កំណែ",
+      "versionType": "ប្រភេទកំណែ",
+      "beta": "បេតា",
+      "buildTime": "ពេលវេលាបង្កើត",
+      "deviceType": "ប្រភេទឧបករណ៍",
+      "mobile": "ទូរស័ព្ទ",
+      "desktop": "កុំព្យូទ័រ",
+      "osName": "ឈ្មោះ OS",
+      "osVersion": "កំណែ OS",
+      "webview": "WebView",
+      "webviewVersion": "កំណែ WebView",
+      "checkUpdate": "ពិនិត្យបច្ចុប្បន្នភាព",
+      "openSourceLicense": "អាជ្ញាប័ណ្ណប្រភពបើកចំហ",
+      "unknown": "មិនស្គាល់",
+      "loading": "កំពុងផ្ទុកទិន្នន័យ"
+    },
+    "aria2Page": {
+      "title": "ការកំណត់ Aria2",
+      "enableAria2": "បើក Aria2",
+      "rpcAddress": "អាសយដ្ឋាន RPC Aria2",
+      "rpcPlaceholder": "អាសយដ្ឋាន RPC ឧទាហរណ៍: http://127.0.0.1:6800/jsonrpc",
+      "token": "Aria2 TOKEN",
+      "tokenPlaceholder": "បញ្ចូល TOKEN",
+      "downloadDir": "ថតទាញយក Aria2",
+      "downloadDirPlaceholder": "ថតទាញយក ឧទាហរណ៍: ~/Downloads/Iwara",
+      "tip": "ព័ត៌មានជំនួយ: ថតទាញយកគួរតែជាថតម៉ាស៊ីនមេ Aria2 មិនមែនថតមូលដ្ឋានទេ។"
+    },
+    "definitionPage": {
+      "title": "គុណភាពលំនាំដើម"
+    },
+    "downloadPage": {
+      "title": "ការកំណត់ទាញយក",
+      "videoSavePath": "ផ្លូវរក្សាទុកវីដេអូ",
+      "imageSavePath": "ផ្លូវរក្សាទុករូបភាព",
+      "notSet": "មិនបានកំណត់",
+      "selectVideoPath": "ជ្រើសរើសផ្លូវរក្សាទុកវីដេអូ",
+      "selectImagePath": "ជ្រើសរើសផ្លូវរក្សាទុករូបភាព"
+    },
+    "languagePage": {
+      "title": "ភាសា (Language)",
+      "followSystem": "តាមប្រព័ន្ធ",
+      "english": "អង់គ្លេស",
+      "simplifiedChinese": "ចិនសាមញ្ញ",
+      "traditionalChinese": "ចិនបុរាណ",
+      "japanese": "ជប៉ុន",
+      "korean": "កូរ៉េ",
+      "french": "បារាំង",
+      "spanish": "អេស្ប៉ាញ",
+      "portuguese": "ព័រទុយហ្គាល់",
+      "german": "អាល្លឺម៉ង់",
+      "italian": "អ៊ីតាលី",
+      "russian": "រុស្ស៊ី",
+      "ukrainian": "អ៊ុយក្រែន",
+      "thai": "ថៃ",
+      "vietnamese": "វៀតណាម",
+      "khmer": "ភាសាខ្មែរ",
+      "hindi": "ហិណ្ឌី",
+      "arabic": "អារ៉ាប់",
+      "hebrew": "ហេប្រឺ",
+      "tibetan": "ទីបេ",
+      "uyghur": "អ៊ុយហ្គួរ",
+      "kazakh": "កាហ្សាក់"
+    },
+    "searchModePage": {
+      "title": "របៀបស្វែងរកលំនាំដើម"
+    }
+  },
   "home": {
     "navigation": {
       "video": "វីដេអូ",

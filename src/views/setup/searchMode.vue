@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import { setupStore } from '../../core/store'
 import { storeToRefs } from 'pinia'
 
@@ -7,6 +8,7 @@ defineOptions({
   name: 'SetupSearchMode'
 })
 
+const { t } = useI18n()
 const router = useRouter()
 const setup = setupStore()
 const { searchMode } = storeToRefs(setup)
@@ -30,18 +32,18 @@ const setSearchMode = async (mode: number) => {
         <font-awesome-icon icon="fa-solid fa-angle-left" />
       </div>
       <div class="label">
-        默认搜索模式
+        {{ t('setup.searchModePage.title') }}
       </div>
     </div>
     <!-- 内容区域 -->
     <div class="item" @click="setSearchMode(0)">
-      <div class="label">关键字搜索</div>
+      <div class="label">{{ t('setup.keywordSearch') }}</div>
       <div class="value">
         <font-awesome-icon icon="fa-solid fa-check" v-if="searchMode === 0" />
       </div>
     </div>
     <div class="item" @click="setSearchMode(1)">
-      <div class="label">标签搜索</div>
+      <div class="label">{{ t('setup.tagSearch') }}</div>
       <div class="value">
         <font-awesome-icon icon="fa-solid fa-check" v-if="searchMode === 1" />
       </div>

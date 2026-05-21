@@ -8,6 +8,7 @@ defineOptions({
   name: 'SetupLanguage'
 })
 
+const { t } = useI18n()
 const router = useRouter()
 const { locale } = useI18n()
 const setup = setupStore()
@@ -15,28 +16,28 @@ const { language } = storeToRefs(setup)
 
 // 定义语言列表
 const languages = [
-  { label: '跟随系统', subLabel: '', value: 'auto' },
-  { label: '英语', subLabel: 'English', value: 'en' },
-  { label: '简体中文', subLabel: '简体中文', value: 'zh-Hans' },
-  { label: '繁体中文', subLabel: '繁體中文', value: 'zh-Hant' },
-  { label: '日语', subLabel: '日本語', value: 'ja' },
-  { label: '韩语', subLabel: '한국어', value: 'ko' },
-  { label: '法语', subLabel: 'Français', value: 'fr' },
-  { label: '西班牙语', subLabel: 'Español', value: 'es' },
-  { label: '葡萄牙语', subLabel: 'Português', value: 'pt' },
-  { label: '德语', subLabel: 'Deutsch', value: 'de' },
-  { label: '意大利语', subLabel: 'Italiano', value: 'it' },
-  { label: '俄语', subLabel: 'Русский', value: 'ru' },
-  { label: '乌克兰语', subLabel: 'Українська', value: 'uk' },
-  { label: '泰语', subLabel: 'ภาษาไทย', value: 'th' },
-  { label: '越南语', subLabel: 'Tiếng Việt', value: 'vi' },
-  { label: '高棉语', subLabel: 'ភាសាខ្មែរ', value: 'km' },
-  { label: '印地语', subLabel: 'भाषा', value: 'hi' },
-  { label: '阿拉伯语', subLabel: 'العربية', value: 'ar' },
-  { label: '希伯来语', subLabel: 'עברית', value: 'he' },
-  { label: '藏文', subLabel: 'བོད་ཡིག', value: 'bo' },
-  { label: '维吾尔语', subLabel: 'ئۇيغۇر تىلى', value: 'ug' },
-  { label: '哈萨克语', subLabel: 'қазақ тілі', value: 'kk' }
+  { label: t('setup.languagePage.followSystem'), subLabel: '', value: 'auto' },
+  { label: t('setup.languagePage.english'), subLabel: 'English', value: 'en' },
+  { label: t('setup.languagePage.simplifiedChinese'), subLabel: '简体中文', value: 'zh-Hans' },
+  { label: t('setup.languagePage.traditionalChinese'), subLabel: '繁體中文', value: 'zh-Hant' },
+  { label: t('setup.languagePage.japanese'), subLabel: '日本語', value: 'ja' },
+  { label: t('setup.languagePage.korean'), subLabel: '한국어', value: 'ko' },
+  { label: t('setup.languagePage.french'), subLabel: 'Français', value: 'fr' },
+  { label: t('setup.languagePage.spanish'), subLabel: 'Español', value: 'es' },
+  { label: t('setup.languagePage.portuguese'), subLabel: 'Português', value: 'pt' },
+  { label: t('setup.languagePage.german'), subLabel: 'Deutsch', value: 'de' },
+  { label: t('setup.languagePage.italian'), subLabel: 'Italiano', value: 'it' },
+  { label: t('setup.languagePage.russian'), subLabel: 'Русский', value: 'ru' },
+  { label: t('setup.languagePage.ukrainian'), subLabel: 'Українська', value: 'uk' },
+  { label: t('setup.languagePage.thai'), subLabel: 'ภาษาไทย', value: 'th' },
+  { label: t('setup.languagePage.vietnamese'), subLabel: 'Tiếng Việt', value: 'vi' },
+  { label: t('setup.languagePage.khmer'), subLabel: 'ភាសាខ្មែរ', value: 'km' },
+  { label: t('setup.languagePage.hindi'), subLabel: 'भाषा', value: 'hi' },
+  { label: t('setup.languagePage.arabic'), subLabel: 'العربية', value: 'ar' },
+  { label: t('setup.languagePage.hebrew'), subLabel: 'עברית', value: 'he' },
+  { label: t('setup.languagePage.tibetan'), subLabel: 'བོད་ཡིག', value: 'bo' },
+  { label: t('setup.languagePage.uyghur'), subLabel: 'ئۇيغۇر تىلى', value: 'ug' },
+  { label: t('setup.languagePage.kazakh'), subLabel: 'қазақ тілі', value: 'kk' }
 ]
 
 // 返回上一页
@@ -111,7 +112,7 @@ const selectLanguage = async (langValue: string) => {
         <font-awesome-icon icon="fa-solid fa-angle-left" />
       </div>
       <div class="label">
-        语言（Language）
+        {{ t('setup.languagePage.title') }}
       </div>
     </div>
     <!-- 内容区域 -->

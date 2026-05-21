@@ -1,5 +1,89 @@
 {
   "common": {},
+  "setup": {
+    "title": "تەڭشەكلەر",
+    "autoPlay": "ئاپتوماتىك قويۇش",
+    "defaultDefinition": "كۆڭۈلدىكى سۈپەت",
+    "defaultSearchMode": "كۆڭۈلدىكى ئىزدەش ئۇسۇلى",
+    "downloadSettings": "چۈشۈرۈش تەڭشەكلىرى",
+    "aria2Settings": "Aria2 تەڭشەكلىرى",
+    "language": "تىل (Language)",
+    "about": "ھەققىدە",
+    "logout": "چېكىنىش",
+    "enabled": "قوزغىتىلغان",
+    "disabled": "توسۇلغان",
+    "keywordSearch": "ئاچقۇچلۇق سۆز ئىزدەش",
+    "tagSearch": "خەت ئىزدەش",
+    "original": "ئەسلى",
+    "aboutPage": {
+      "title": "ھەققىدە",
+      "version": "نەشرى",
+      "versionType": "نەشر تۈرى",
+      "beta": "سىناق نەشرى",
+      "buildTime": "قۇرۇش ۋاقتى",
+      "deviceType": "ئۈسكۈنە تۈرى",
+      "mobile": "يانفون",
+      "desktop": "يۈزئۈستى",
+      "osName": "OS نامى",
+      "osVersion": "OS نەشرى",
+      "webview": "WebView",
+      "webviewVersion": "WebView نەشرى",
+      "checkUpdate": "يېڭىلانمىنى تەكشۈرۈش",
+      "openSourceLicense": "ئوچۇق كودلىنىشى",
+      "unknown": "نامەلۇم",
+      "loading": "سانلىق مەلۇمات يۈكلىنىۋاتىدۇ"
+    },
+    "aria2Page": {
+      "title": "Aria2 تەڭشەكلىرى",
+      "enableAria2": "Aria2 نى قوزغىتىش",
+      "rpcAddress": "Aria2 RPC ئادرېسى",
+      "rpcPlaceholder": "RPC ئادرېسى مىسال: http://127.0.0.1:6800/jsonrpc",
+      "token": "Aria2 TOKEN",
+      "tokenPlaceholder": "TOKEN كىرگۈزۈڭ",
+      "downloadDir": "Aria2 چۈشۈرۈش مۇندەرىجىسى",
+      "downloadDirPlaceholder": "چۈشۈرۈش مۇندەرىجىسى مىسال: ~/Downloads/Iwara",
+      "tip": "ئەسكەرتىش: چۈشۈرۈش مۇندەرىجىسى Aria2 مۇلازىمېتىرىنىڭ مۇندەرىجىسى بولۇشى كېرەك، يەرلىك مۇندەرىجە ئەمەس."
+    },
+    "definitionPage": {
+      "title": "سۈپەت"
+    },
+    "downloadPage": {
+      "title": "چۈشۈرۈش تەڭشەكلىرى",
+      "videoSavePath": "ۋىدىيو ساقلاش يولى",
+      "imageSavePath": "رەسىم ساقلاش يولى",
+      "notSet": "تەڭشەنمىگەن",
+      "selectVideoPath": "ۋىدىيو ساقلاش يولىنى تاللاش",
+      "selectImagePath": "رەسىم ساقلاش يولىنى تاللاش"
+    },
+    "languagePage": {
+      "title": "تىل (Language)",
+      "followSystem": "سىستېمىغا ئەگىشىش",
+      "english": "ئىنگلىز تىلى",
+      "simplifiedChinese": "ئاددىيلاشتۇرۇلغان خەنزۇ تىلى",
+      "traditionalChinese": "ئەنئەنىۋى خەنزۇ تىلى",
+      "japanese": "ياپون تىلى",
+      "korean": "كورېيە تىلى",
+      "french": "فىرانسۇز تىلى",
+      "spanish": "ئىسپان تىلى",
+      "portuguese": "پورتۇگال تىلى",
+      "german": "گېرمان تىلى",
+      "italian": "ئىتالىيان تىلى",
+      "russian": "رۇس تىلى",
+      "ukrainian": "ئۇكرائىنا تىلى",
+      "thai": "تايلاند تىلى",
+      "vietnamese": "ۋىيېتنام تىلى",
+      "khmer": "خمېر تىلى",
+      "hindi": "ھىندى تىلى",
+      "arabic": "ئەرەب تىلى",
+      "hebrew": "ئىبرانىي تىلى",
+      "tibetan": "تىبەت تىلى",
+      "uyghur": "ئۇيغۇر تىلى",
+      "kazakh": "قازاق تىلى"
+    },
+    "searchModePage": {
+      "title": "كۆڭۈلدىكى ئىزدەش ئۇسۇلى"
+    }
+  },
   "home": {
     "navigation": {
       "video": "سىن",

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import { setStatusBarTextStyle } from '../plugins/navbarStyle'
 import { setupStore } from '../core/store'
 import { storeToRefs } from 'pinia'
@@ -8,11 +9,12 @@ defineOptions({
   name: 'Setup'
 })
 
-/** 
+/**
  * 不会返回此页面，无需onActivated
  */
 setStatusBarTextStyle('light')
 
+const { t } = useI18n()
 const router = useRouter()
 const setup = setupStore()
 const { autoPlay, definition, searchMode, aria2Switch, language } = storeToRefs(setup)
@@ -30,6 +32,35 @@ function routerGoTo(path: string) {
 const toggleAutoPlay = async (value: boolean | null) => {
   await setup.updateSetting('autoPlay', Boolean(value));
 };
+
+// 获取语言显示文本
+const getLanguageLabel = (lang: string) => {
+  const langMap: Record<string, string> = {
+    auto: t('setup.languagePage.followSystem'),
+    'zh-Hans': t('setup.languagePage.simplifiedChinese'),
+    en: t('setup.languagePage.english'),
+    ja: t('setup.languagePage.japanese'),
+    ko: t('setup.languagePage.korean'),
+    fr: t('setup.languagePage.french'),
+    es: t('setup.languagePage.spanish'),
+    pt: t('setup.languagePage.portuguese'),
+    de: t('setup.languagePage.german'),
+    it: t('setup.languagePage.italian'),
+    ru: t('setup.languagePage.russian'),
+    uk: t('setup.languagePage.ukrainian'),
+    th: t('setup.languagePage.thai'),
+    vi: t('setup.languagePage.vietnamese'),
+    km: t('setup.languagePage.khmer'),
+    hi: t('setup.languagePage.hindi'),
+    ar: t('setup.languagePage.arabic'),
+    he: t('setup.languagePage.hebrew'),
+    bo: t('setup.languagePage.tibetan'),
+    ug: t('setup.languagePage.uyghur'),
+    kk: t('setup.languagePage.kazakh'),
+    'zh-Hant': t('setup.languagePage.traditionalChinese')
+  }
+  return langMap[lang] || 'English'
+}
 </script>
 
 <template>
@@ -39,79 +70,56 @@ const toggleAutoPlay = async (value: boolean | null) => {
         <font-awesome-icon icon="fa-solid fa-angle-left" />
       </div>
       <div class="label">
-        设置
+        {{ t('setup.title') }}
       </div>
     </div>
     <!-- 内容区域 -->
     <div class="item" style="border-top: solid 1px #BDBDBD;">
-      <div class="label">自动播放</div>
+      <div class="label">{{ t('setup.autoPlay') }}</div>
       <div class="value">
-        <v-switch 
-          v-model="autoPlay" 
+        <v-switch
+          v-model="autoPlay"
           @update:model-value="toggleAutoPlay"
-          density="compact" 
+          density="compact"
           color="#00796B"
         ></v-switch>
       </div>
     </div>
     <div class="item" @click="routerGoTo('/setup/definition')">
-      <div class="label">默认清晰度</div>
+      <div class="label">{{ t('setup.defaultDefinition') }}</div>
       <div class="value">
-        <span>{{ 
-          definition === '360' ? '360P' : 
-          definition === '540' ? '540P' : 
-          '原画' 
+        <span>{{
+          definition === '360' ? '360P' :
+          definition === '540' ? '540P' :
+          t('setup.original')
         }}</span>
         <font-awesome-icon icon="fa-solid fa-angle-right" />
       </div>
     </div>
     <div class="item" @click="routerGoTo('/setup/searchMode')">
-      <div class="label">默认搜索模式</div>
+      <div class="label">{{ t('setup.defaultSearchMode') }}</div>
       <div class="value">
-        <span>{{ searchMode === 0 ? '关键字搜索' : '标签搜索' }}</span>
+        <span>{{ searchMode === 0 ? t('setup.keywordSearch') : t('setup.tagSearch') }}</span>
         <font-awesome-icon icon="fa-solid fa-angle-right" />
       </div>
     </div>
     <div class="item" @click="routerGoTo('/setup/download')">
-      <div class="label">下载设置</div>
+      <div class="label">{{ t('setup.downloadSettings') }}</div>
       <div class="value">
         <font-awesome-icon icon="fa-solid fa-angle-right" />
       </div>
     </div>
     <div class="item" @click="routerGoTo('/setup/aria2')">
-      <div class="label">Aria2设置</div>
+      <div class="label">{{ t('setup.aria2Settings') }}</div>
       <div class="value">
-        <span>{{ aria2Switch ? '已启用' : '未启用' }}</span>
+        <span>{{ aria2Switch ? t('setup.enabled') : t('setup.disabled') }}</span>
         <font-awesome-icon icon="fa-solid fa-angle-right" />
       </div>
     </div>
     <div class="item" @click="routerGoTo('/setup/language')">
-      <div class="label">语言（Language）</div>
+      <div class="label">{{ t('setup.language') }}</div>
       <div class="value">
-        <span>{{ 
-          language === 'auto' ? '跟随系统' : 
-          language === 'zh-Hans' ? '简体中文' :
-          language === 'en' ? 'English' :
-          language === 'ja' ? '日本語' :
-          language === 'ko' ? '한국어' :
-          language === 'fr' ? 'Français' :
-          language === 'es' ? 'Español' :
-          language === 'pt' ? 'Português' :
-          language === 'de' ? 'Deutsch' :
-          language === 'it' ? 'Italiano' :
-          language === 'ru' ? 'Русский' :
-          language === 'uk' ? 'Українська' :
-          language === 'th' ? 'ภาษาไทย' :
-          language === 'vi' ? 'Tiếng Việt' :
-          language === 'km' ? 'ភាសាខ្មែរ' :
-          language === 'hi' ? 'भाषा' :
-          language === 'ar' ? 'العربية' :
-          language === 'he' ? 'עברית' :
-          language === 'bo' ? 'བོད་ཡིག' :
-          language === 'ug' ? 'ئۇيغۇر تىلى' :
-          language === 'kk' ? 'қазақ тілі' :
-          'English' 
-        }}</span>
+        <span>{{ getLanguageLabel(language) }}</span>
         <font-awesome-icon icon="fa-solid fa-angle-right" />
       </div>
     </div>
@@ -122,13 +130,13 @@ const toggleAutoPlay = async (value: boolean | null) => {
       </div>
     </div> -->
     <div class="item" @click="routerGoTo('/setup/about')">
-      <div class="label">关于</div>
+      <div class="label">{{ t('setup.about') }}</div>
       <div class="value">
         <font-awesome-icon icon="fa-solid fa-angle-right" />
       </div>
     </div>
     <div class="item">
-      <div class="label">退出登录</div>
+      <div class="label">{{ t('setup.logout') }}</div>
       <div class="value">
         <font-awesome-icon icon="fa-solid fa-angle-right" />
       </div>

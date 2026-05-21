@@ -1,5 +1,89 @@
 {
   "common": {},
+  "setup": {
+    "title": "Cài đặt",
+    "autoPlay": "Tự động phát",
+    "defaultDefinition": "Chất lượng mặc định",
+    "defaultSearchMode": "Chế độ tìm kiếm mặc định",
+    "downloadSettings": "Cài đặt tải xuống",
+    "aria2Settings": "Cài đặt Aria2",
+    "language": "Ngôn ngữ (Language)",
+    "about": "Giới thiệu",
+    "logout": "Đăng xuất",
+    "enabled": "Đã bật",
+    "disabled": "Đã tắt",
+    "keywordSearch": "Tìm kiếm từ khóa",
+    "tagSearch": "Tìm kiếm thẻ",
+    "original": "Gốc",
+    "aboutPage": {
+      "title": "Giới thiệu",
+      "version": "Phiên bản",
+      "versionType": "Loại phiên bản",
+      "beta": "Beta",
+      "buildTime": "Thời gian xây dựng",
+      "deviceType": "Loại thiết bị",
+      "mobile": "Di động",
+      "desktop": "Máy tính",
+      "osName": "Tên OS",
+      "osVersion": "Phiên bản OS",
+      "webview": "WebView",
+      "webviewVersion": "Phiên bản WebView",
+      "checkUpdate": "Kiểm tra cập nhật",
+      "openSourceLicense": "Giấy phép mã nguồn mở",
+      "unknown": "Không xác định",
+      "loading": "Đang tải dữ liệu"
+    },
+    "aria2Page": {
+      "title": "Cài đặt Aria2",
+      "enableAria2": "Bật Aria2",
+      "rpcAddress": "Địa chỉ RPC Aria2",
+      "rpcPlaceholder": "Địa chỉ RPC ví dụ: http://127.0.0.1:6800/jsonrpc",
+      "token": "Aria2 TOKEN",
+      "tokenPlaceholder": "Nhập TOKEN",
+      "downloadDir": "Thư mục tải xuống Aria2",
+      "downloadDirPlaceholder": "Thư mục tải xuống ví dụ: ~/Downloads/Iwara",
+      "tip": "Mẹo: Thư mục tải xuống phải là thư mục máy chủ Aria2, không phải thư mục cục bộ."
+    },
+    "definitionPage": {
+      "title": "Chất lượng mặc định"
+    },
+    "downloadPage": {
+      "title": "Cài đặt tải xuống",
+      "videoSavePath": "Đường dẫn lưu video",
+      "imageSavePath": "Đường dẫn lưu ảnh",
+      "notSet": "Chưa đặt",
+      "selectVideoPath": "Chọn đường dẫn lưu video",
+      "selectImagePath": "Chọn đường dẫn lưu ảnh"
+    },
+    "languagePage": {
+      "title": "Ngôn ngữ (Language)",
+      "followSystem": "Theo hệ thống",
+      "english": "Tiếng Anh",
+      "simplifiedChinese": "Tiếng Trung giản thể",
+      "traditionalChinese": "Tiếng Trung phồn thể",
+      "japanese": "Tiếng Nhật",
+      "korean": "Tiếng Hàn",
+      "french": "Tiếng Pháp",
+      "spanish": "Tiếng Tây Ban Nha",
+      "portuguese": "Tiếng Bồ Đào Nha",
+      "german": "Tiếng Đức",
+      "italian": "Tiếng Ý",
+      "russian": "Tiếng Nga",
+      "ukrainian": "Tiếng Ukraina",
+      "thai": "Tiếng Thái",
+      "vietnamese": "Tiếng Việt",
+      "khmer": "Tiếng Khmer",
+      "hindi": "Tiếng Hindi",
+      "arabic": "Tiếng Ả Rập",
+      "hebrew": "Tiếng Do Thái",
+      "tibetan": "Tiếng Tây Tạng",
+      "uyghur": "Tiếng Duy Ngô Nhĩ",
+      "kazakh": "Tiếng Kazakh"
+    },
+    "searchModePage": {
+      "title": "Chế độ tìm kiếm mặc định"
+    }
+  },
   "home": {
     "navigation": {
       "video": "Video",

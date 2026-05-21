@@ -1,5 +1,89 @@
 {
   "common": {},
+  "setup": {
+    "title": "設定",
+    "autoPlay": "自動播放",
+    "defaultDefinition": "預設畫質",
+    "defaultSearchMode": "預設搜尋模式",
+    "downloadSettings": "下載設定",
+    "aria2Settings": "Aria2設定",
+    "language": "語言（Language）",
+    "about": "關於",
+    "logout": "登出",
+    "enabled": "已啟用",
+    "disabled": "未啟用",
+    "keywordSearch": "關鍵字搜尋",
+    "tagSearch": "標籤搜尋",
+    "original": "原畫",
+    "aboutPage": {
+      "title": "關於",
+      "version": "版本號",
+      "versionType": "版本類型",
+      "beta": "測試版",
+      "buildTime": "構建時間",
+      "deviceType": "裝置類型",
+      "mobile": "行動端",
+      "desktop": "桌面端",
+      "osName": "OS名稱",
+      "osVersion": "OS版本",
+      "webview": "WebView",
+      "webviewVersion": "WebView版本",
+      "checkUpdate": "檢查更新",
+      "openSourceLicense": "開源許可",
+      "unknown": "未知",
+      "loading": "數據載入中"
+    },
+    "aria2Page": {
+      "title": "Aria2設定",
+      "enableAria2": "啟用Aria2",
+      "rpcAddress": "Aria2 RPC位址",
+      "rpcPlaceholder": "RPC位址 範例：http://127.0.0.1:6800/jsonrpc",
+      "token": "Aria2 TOKEN",
+      "tokenPlaceholder": "請輸入TOKEN",
+      "downloadDir": "Aria2 下載目錄",
+      "downloadDirPlaceholder": "下載目錄 範例：~/Downloads/Iwara",
+      "tip": "提示：下載目錄應為Aria2伺服器目錄而非本地目錄。"
+    },
+    "definitionPage": {
+      "title": "預設畫質"
+    },
+    "downloadPage": {
+      "title": "下載設定",
+      "videoSavePath": "影片儲存路徑",
+      "imageSavePath": "圖片儲存路徑",
+      "notSet": "未設定",
+      "selectVideoPath": "選擇影片儲存路徑",
+      "selectImagePath": "選擇圖片儲存路徑"
+    },
+    "languagePage": {
+      "title": "語言（Language）",
+      "followSystem": "跟隨系統",
+      "english": "英語",
+      "simplifiedChinese": "簡體中文",
+      "traditionalChinese": "繁體中文",
+      "japanese": "日語",
+      "korean": "韓語",
+      "french": "法語",
+      "spanish": "西班牙語",
+      "portuguese": "葡萄牙語",
+      "german": "德語",
+      "italian": "義大利語",
+      "russian": "俄語",
+      "ukrainian": "烏克蘭語",
+      "thai": "泰語",
+      "vietnamese": "越南語",
+      "khmer": "高棉語",
+      "hindi": "印地語",
+      "arabic": "阿拉伯語",
+      "hebrew": "希伯來語",
+      "tibetan": "藏文",
+      "uyghur": "維吾爾語",
+      "kazakh": "哈薩克語"
+    },
+    "searchModePage": {
+      "title": "預設搜尋模式"
+    }
+  },
   "home": {
     "navigation": {
       "video": "影片",

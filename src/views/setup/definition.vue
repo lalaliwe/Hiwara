@@ -1,11 +1,13 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import { setupStore } from '../../core/store'
 
 defineOptions({
   name: 'SetupDefinition'
 })
 
+const { t } = useI18n()
 const router = useRouter()
 const setup = setupStore()
 
@@ -28,7 +30,7 @@ const setDefinition = async (def: string) => {
         <font-awesome-icon icon="fa-solid fa-angle-left" />
       </div>
       <div class="label">
-        默认清晰度
+        {{ t('setup.definitionPage.title') }}
       </div>
     </div>
     <!-- 内容区域 -->
@@ -45,7 +47,7 @@ const setDefinition = async (def: string) => {
       </div>
     </div>
     <div class="item" @click="setDefinition('Source')">
-      <div class="label">原画</div>
+      <div class="label">{{ t('setup.original') }}</div>
       <div class="value">
         <font-awesome-icon icon="fa-solid fa-check" v-if="setup.definition === 'Source'" />
       </div>

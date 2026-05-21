@@ -1,5 +1,89 @@
 {
   "common": {},
+  "setup": {
+    "title": "सेटिंग्स",
+    "autoPlay": "ऑटो प्ले",
+    "defaultDefinition": "डिफ़ॉल्ट गुणवत्ता",
+    "defaultSearchMode": "डिफ़ॉल्ट खोज मोड",
+    "downloadSettings": "डाउनलोड सेटिंग्स",
+    "aria2Settings": "Aria2 सेटिंग्स",
+    "language": "भाषा (Language)",
+    "about": "हमारे बारे में",
+    "logout": "लॉग आउट",
+    "enabled": "सक्षम",
+    "disabled": "अक्षम",
+    "keywordSearch": "कीवर्ड खोज",
+    "tagSearch": "टैग खोज",
+    "original": "मूल",
+    "aboutPage": {
+      "title": "हमारे बारे में",
+      "version": "संस्करण",
+      "versionType": "संस्करण प्रकार",
+      "beta": "बीटा",
+      "buildTime": "निर्माण समय",
+      "deviceType": "डिवाइस प्रकार",
+      "mobile": "मोबाइल",
+      "desktop": "डेस्कटॉप",
+      "osName": "OS नाम",
+      "osVersion": "OS संस्करण",
+      "webview": "WebView",
+      "webviewVersion": "WebView संस्करण",
+      "checkUpdate": "अपडेट जांचें",
+      "openSourceLicense": "ओपन सोर्स लाइसेंस",
+      "unknown": "अज्ञात",
+      "loading": "डेटा लोड हो रहा है"
+    },
+    "aria2Page": {
+      "title": "Aria2 सेटिंग्स",
+      "enableAria2": "Aria2 सक्षम करें",
+      "rpcAddress": "Aria2 RPC पता",
+      "rpcPlaceholder": "RPC पता उदाहरण: http://127.0.0.1:6800/jsonrpc",
+      "token": "Aria2 TOKEN",
+      "tokenPlaceholder": "TOKEN दर्ज करें",
+      "downloadDir": "Aria2 डाउनलोड निर्देशिका",
+      "downloadDirPlaceholder": "डाउनलोड निर्देशिका उदाहरण: ~/Downloads/Iwara",
+      "tip": "सुझाव: डाउनलोड निर्देशिका Aria2 सर्वर निर्देशिका होनी चाहिए, स्थानीय निर्देशिका नहीं।"
+    },
+    "definitionPage": {
+      "title": "डिफ़ॉल्ट गुणवत्ता"
+    },
+    "downloadPage": {
+      "title": "डाउनलोड सेटिंग्स",
+      "videoSavePath": "वीडियो सहेजें पथ",
+      "imageSavePath": "छवि सहेजें पथ",
+      "notSet": "सेट नहीं",
+      "selectVideoPath": "वीडियो पथ चुनें",
+      "selectImagePath": "छवि पथ चुनें"
+    },
+    "languagePage": {
+      "title": "भाषा (Language)",
+      "followSystem": "सिस्टम का पालन करें",
+      "english": "अंग्रेज़ी",
+      "simplifiedChinese": "सरलीकृत चीनी",
+      "traditionalChinese": "पारंपरिक चीनी",
+      "japanese": "जापानी",
+      "korean": "कोरियाई",
+      "french": "फ़्रेंच",
+      "spanish": "स्पेनिश",
+      "portuguese": "पुर्तगाली",
+      "german": "जर्मन",
+      "italian": "इतालवी",
+      "russian": "रूसी",
+      "ukrainian": "यूक्रेनी",
+      "thai": "थाई",
+      "vietnamese": "वियतनामी",
+      "khmer": "खमेर",
+      "hindi": "हिंदी",
+      "arabic": "अरबी",
+      "hebrew": "हिब्रू",
+      "tibetan": "तिब्बती",
+      "uyghur": "उइघुर",
+      "kazakh": "कज़ाख"
+    },
+    "searchModePage": {
+      "title": "डिफ़ॉल्ट खोज मोड"
+    }
+  },
   "home": {
     "navigation": {
       "video": "वीडियो",

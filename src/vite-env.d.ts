@@ -30,3 +30,6 @@ declare module '*.webp' {
   const content: string;
   export default content;
 }
+
+// Vite define 全局变量声明
+declare const __BUILD_TIME__: string;

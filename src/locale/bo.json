@@ -1,5 +1,89 @@
 {
   "common": {},
+  "setup": {
+    "title": "སྒྲིག་བཀོད།",
+    "autoPlay": "རང་འཁོར་གཏོང་བ།",
+    "defaultDefinition": "སྔོན་ཐག་གཅོད་ཀྱི་སྤུས་ཚད།",
+    "defaultSearchMode": "སྔོན་ཐག་གཅོད་ཀྱི་འཚོལ་བསྡུའི་རྣམ་པ།",
+    "downloadSettings": "ཕབ་ལེན་སྒྲིག་བཀོད།",
+    "aria2Settings": "Aria2 སྒྲིག་བཀོད།",
+    "language": "སྐད་ཡིག (Language)",
+    "about": "སྐོར་ལ།",
+    "logout": "ཕྱིར་འབུད།",
+    "enabled": "བེད་སྤྱོད་བྱེད་ཆོག",
+    "disabled": "བེད་སྤྱོད་མི་ཆོག",
+    "keywordSearch": "གནད་ཚིག་འཚོལ་བསྡུ།",
+    "tagSearch": "ཐག་འཚོལ་བསྡུ།",
+    "original": "གཞི་རྩའི་པར།",
+    "aboutPage": {
+      "title": "སྐོར་ལ།",
+      "version": "པར་གཞིའི་ཨང་།",
+      "versionType": "པར་གཞིའི་རིགས།",
+      "beta": "ཚོད་ལྟའི་པར་གཞི།",
+      "buildTime": "བཟོ་སྐྲུན་དུས་ཚོད།",
+      "deviceType": "ཡོ་བྱད་ཀྱི་རིགས།",
+      "mobile": "ལག་ཐོག་ཁྱེར་ཆས།",
+      "desktop": "ཀུན་སྤྱོད་ཆས།",
+      "osName": "OS མིང་།",
+      "osVersion": "OS པར་གཞི།",
+      "webview": "WebView",
+      "webviewVersion": "WebView པར་གཞི།",
+      "checkUpdate": "གསར་བཅོས་ལ་ལྟ་བ།",
+      "openSourceLicense": "ཁ་ཕྱེའི་འབྱུང་ཁུངས་ཆོག་མཆན།",
+      "unknown": "མི་གསལ།",
+      "loading": "གཞི་གྲངས་འཇུག་བཞིན་ཡོད།"
+    },
+    "aria2Page": {
+      "title": "Aria2 སྒྲིག་བཀོད།",
+      "enableAria2": "Aria2 བེད་སྤྱོད་བྱེད་ཆོག",
+      "rpcAddress": "Aria2 RPC ཁ་བྱང་།",
+      "rpcPlaceholder": "RPC ཁ་བྱང་། དཔེར་ན། http://127.0.0.1:6800/jsonrpc",
+      "token": "Aria2 TOKEN",
+      "tokenPlaceholder": "TOKEN ཞུགས།",
+      "downloadDir": "Aria2 ཕབ་ལེན་ཁྱིམ་ཐོ།",
+      "downloadDirPlaceholder": "ཕབ་ལེན་ཁྱིམ་ཐོ། དཔེར་ན། ~/Downloads/Iwara",
+      "tip": "གསལ་བཤད། ཕབ་ལེན་ཁྱིམ་ཐོ་ནི་ Aria2 མཛོད་འཕྲུལ་གྱི་ཁྱིམ་ཐོ་ཡིན་དགོས། ས་གནས་ཀྱི་ཁྱིམ་ཐོ་མིན།"
+    },
+    "definitionPage": {
+      "title": "སྔོན་ཐག་གཅོད་ཀྱི་སྤུས་ཚད།"
+    },
+    "downloadPage": {
+      "title": "ཕབ་ལེན་སྒྲིག་བཀོད།",
+      "videoSavePath": "བརྙན་ཕབ་ཉར་ལམ།",
+      "imageSavePath": "པར་ཕབ་ཉར་ལམ།",
+      "notSet": "མ་བཀོད།",
+      "selectVideoPath": "བརྙན་ཕབ་ཉར་ལམ་འདེམས།",
+      "selectImagePath": "པར་ཕབ་ཉར་ལམ་འདེམས།"
+    },
+    "languagePage": {
+      "title": "སྐད་ཡིག (Language)",
+      "followSystem": "མ་ལག་ལ་རྗེས་སུ་འབྲངས།",
+      "english": "དབྱིན་ཡིག",
+      "simplifiedChinese": "རྒྱ་ཡིག་སླས་བསྡུས།",
+      "traditionalChinese": "རྒྱ་ཡིག་སྔ་མ།",
+      "japanese": "ཉི་ཧོང་ཡིག",
+      "korean": "ཀོ་རི་ཡའི་ཡིག",
+      "french": "ཧྥ་རན་སིའི་ཡིག",
+      "spanish": "སི་པན་ཡིག",
+      "portuguese": "ཕོ་ཐུ་ཡལ་ཡིག",
+      "german": "འཇར་མན་ཡིག",
+      "italian": "ཨི་ཐ་ལིའི་ཡིག",
+      "russian": "ཨུ་རུ་སུའི་ཡིག",
+      "ukrainian": "ཡུ་ཁྲའི་ནི་ཡིག",
+      "thai": "ཐའི་ཡིག",
+      "vietnamese": "ཝི་ཡེ་ཏ་ནམ་ཡིག",
+      "khmer": "ཁ་མེར་ཡིག",
+      "hindi": "ཧིན་དི་ཡིག",
+      "arabic": "ཨ་རབ་ཡིག",
+      "hebrew": "ཧི་བྷྲུ་ཡིག",
+      "tibetan": "བོད་ཡིག",
+      "uyghur": "ཡུ་གུར་ཡིག",
+      "kazakh": "ཀཛ་ཀིས་ཏན་ཡིག"
+    },
+    "searchModePage": {
+      "title": "སྔོན་ཐག་གཅོད་ཀྱི་འཚོལ་བསྡུའི་རྣམ་པ།"
+    }
+  },
   "home": {
     "navigation": {
       "video": "བརྙན་ཐུང",

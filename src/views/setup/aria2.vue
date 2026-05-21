@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import { setupStore } from '../../core/store'
 import { storeToRefs } from 'pinia'
 
@@ -7,6 +8,7 @@ defineOptions({
   name: 'SetupAria2'
 })
 
+const { t } = useI18n()
 const router = useRouter()
 const setup = setupStore()
 const { aria2Switch, aria2Rpc, aria2Token, aria2Download } = storeToRefs(setup)
@@ -47,41 +49,41 @@ const updateAria2Download = async (event: Event) => {
         <font-awesome-icon icon="fa-solid fa-angle-left" />
       </div>
       <div class="label">
-        Aria2设置
+        {{ t('setup.aria2Page.title') }}
       </div>
     </div>
     <!-- 内容区域 -->
     <div class="item1">
-      <div class="label">启用Aria2</div>
+      <div class="label">{{ t('setup.aria2Page.enableAria2') }}</div>
       <div class="icon">
-        <v-switch 
-          v-model="aria2Switch" 
+        <v-switch
+          v-model="aria2Switch"
           @update:model-value="toggleAria2Switch"
-          density="compact" 
+          density="compact"
           color="#00796B"
         ></v-switch>
       </div>
     </div>
     <div class="item2">
-      <div class="label">Aria2 RPC地址</div>
-      <v-text-field 
-        class="input" 
-        label="RPC地址 示例：http://127.0.0.1:6800/jsonrpc" 
-        color="#00796B" 
+      <div class="label">{{ t('setup.aria2Page.rpcAddress') }}</div>
+      <v-text-field
+        class="input"
+        :label="t('setup.aria2Page.rpcPlaceholder')"
+        color="#00796B"
         hide-details
-        density="comfortable" 
+        density="comfortable"
         variant="underlined"
         :model-value="aria2Rpc"
         @change="updateAria2Rpc"
       ></v-text-field>
     </div>
     <div class="item2">
-      <div class="label">Aria2 TOKEN</div>
-      <v-text-field 
-        class="input" 
-        label="请输入TOKEN" 
-        color="#00796B" 
-        hide-details 
+      <div class="label">{{ t('setup.aria2Page.token') }}</div>
+      <v-text-field
+        class="input"
+        :label="t('setup.aria2Page.tokenPlaceholder')"
+        color="#00796B"
+        hide-details
         density="comfortable"
         variant="underlined"
         :model-value="aria2Token"
@@ -89,12 +91,12 @@ const updateAria2Download = async (event: Event) => {
       ></v-text-field>
     </div>
     <div class="item2">
-      <div class="label">Aria2 下载目录</div>
-      <v-text-field 
-        class="input" 
-        label="下载目录 示例：~/Downloads/Iwara" 
-        color="#00796B" 
-        hide-details 
+      <div class="label">{{ t('setup.aria2Page.downloadDir') }}</div>
+      <v-text-field
+        class="input"
+        :label="t('setup.aria2Page.downloadDirPlaceholder')"
+        color="#00796B"
+        hide-details
         density="comfortable"
         variant="underlined"
         :model-value="aria2Download"
@@ -102,7 +104,7 @@ const updateAria2Download = async (event: Event) => {
       ></v-text-field>
       <div class="tips">
         <font-awesome-icon icon="fa-solid fa-circle-exclamation" />
-        提示：下载目录应为Aria2服务器目录而非本地目录。
+        {{ t('setup.aria2Page.tip') }}
       </div>
     </div>
   </div>

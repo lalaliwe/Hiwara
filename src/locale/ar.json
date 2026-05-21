@@ -1,5 +1,89 @@
 {
   "common": {},
+  "setup": {
+    "title": "الإعدادات",
+    "autoPlay": "التشغيل التلقائي",
+    "defaultDefinition": "الجودة الافتراضية",
+    "defaultSearchMode": "وضع البحث الافتراضي",
+    "downloadSettings": "إعدادات التحميل",
+    "aria2Settings": "إعدادات Aria2",
+    "language": "اللغة (Language)",
+    "about": "حول",
+    "logout": "تسجيل الخروج",
+    "enabled": "مفعل",
+    "disabled": "معطل",
+    "keywordSearch": "البحث بالكلمات المفتاحية",
+    "tagSearch": "البحث بالوسوم",
+    "original": "أصلي",
+    "aboutPage": {
+      "title": "حول",
+      "version": "الإصدار",
+      "versionType": "نوع الإصدار",
+      "beta": "بيتا",
+      "buildTime": "وقت البناء",
+      "deviceType": "نوع الجهاز",
+      "mobile": "محمول",
+      "desktop": "سطح المكتب",
+      "osName": "اسم نظام التشغيل",
+      "osVersion": "إصدار نظام التشغيل",
+      "webview": "WebView",
+      "webviewVersion": "إصدار WebView",
+      "checkUpdate": "التحقق من التحديثات",
+      "openSourceLicense": "رخصة المصدر المفتوح",
+      "unknown": "غير معروف",
+      "loading": "جارٍ تحميل البيانات"
+    },
+    "aria2Page": {
+      "title": "إعدادات Aria2",
+      "enableAria2": "تفعيل Aria2",
+      "rpcAddress": "عنوان RPC لـ Aria2",
+      "rpcPlaceholder": "عنوان RPC مثال: http://127.0.0.1:6800/jsonrpc",
+      "token": "Aria2 TOKEN",
+      "tokenPlaceholder": "أدخل TOKEN",
+      "downloadDir": "دليل التحميل لـ Aria2",
+      "downloadDirPlaceholder": "دليل التحميل مثال: ~/Downloads/Iwara",
+      "tip": "تلميح: يجب أن يكون دليل التحميل هو دليل خادم Aria2 وليس الدليل المحلي."
+    },
+    "definitionPage": {
+      "title": "الجودة الافتراضية"
+    },
+    "downloadPage": {
+      "title": "إعدادات التحميل",
+      "videoSavePath": "مسار حفظ الفيديو",
+      "imageSavePath": "مسار حفظ الصور",
+      "notSet": "غير مضبوط",
+      "selectVideoPath": "اختيار مسار حفظ الفيديو",
+      "selectImagePath": "اختيار مسار حفظ الصور"
+    },
+    "languagePage": {
+      "title": "اللغة (Language)",
+      "followSystem": "اتباع النظام",
+      "english": "الإنجليزية",
+      "simplifiedChinese": "الصينية المبسطة",
+      "traditionalChinese": "الصينية التقليدية",
+      "japanese": "اليابانية",
+      "korean": "الكورية",
+      "french": "الفرنسية",
+      "spanish": "الإسبانية",
+      "portuguese": "البرتغالية",
+      "german": "الألمانية",
+      "italian": "الإيطالية",
+      "russian": "الروسية",
+      "ukrainian": "الأوكرانية",
+      "thai": "التايلاندية",
+      "vietnamese": "الفيتنامية",
+      "khmer": "الخميرية",
+      "hindi": "الهندية",
+      "arabic": "العربية",
+      "hebrew": "العبرية",
+      "tibetan": "التبتية",
+      "uyghur": "الأويغورية",
+      "kazakh": "الكازاخستانية"
+    },
+    "searchModePage": {
+      "title": "وضع البحث الافتراضي"
+    }
+  },
   "home": {
     "navigation": {
       "video": "فيديو",

@@ -1,5 +1,89 @@
 {
   "common": {},
+  "setup": {
+    "title": "Ajustes",
+    "autoPlay": "Reproducción automática",
+    "defaultDefinition": "Calidad predeterminada",
+    "defaultSearchMode": "Modo de búsqueda predeterminado",
+    "downloadSettings": "Configuración de descarga",
+    "aria2Settings": "Configuración de Aria2",
+    "language": "Idioma (Language)",
+    "about": "Acerca de",
+    "logout": "Cerrar sesión",
+    "enabled": "Activado",
+    "disabled": "Desactivado",
+    "keywordSearch": "Búsqueda por palabra clave",
+    "tagSearch": "Búsqueda por etiqueta",
+    "original": "Original",
+    "aboutPage": {
+      "title": "Acerca de",
+      "version": "Versión",
+      "versionType": "Tipo de versión",
+      "beta": "Beta",
+      "buildTime": "Fecha de compilación",
+      "deviceType": "Tipo de dispositivo",
+      "mobile": "Móvil",
+      "desktop": "Escritorio",
+      "osName": "Nombre del SO",
+      "osVersion": "Versión del SO",
+      "webview": "WebView",
+      "webviewVersion": "Versión de WebView",
+      "checkUpdate": "Buscar actualizaciones",
+      "openSourceLicense": "Licencia de código abierto",
+      "unknown": "Desconocido",
+      "loading": "Cargando datos"
+    },
+    "aria2Page": {
+      "title": "Configuración de Aria2",
+      "enableAria2": "Activar Aria2",
+      "rpcAddress": "Dirección RPC de Aria2",
+      "rpcPlaceholder": "Dirección RPC ej: http://127.0.0.1:6800/jsonrpc",
+      "token": "Aria2 TOKEN",
+      "tokenPlaceholder": "Ingrese el TOKEN",
+      "downloadDir": "Directorio de descarga de Aria2",
+      "downloadDirPlaceholder": "Directorio de descarga ej: ~/Downloads/Iwara",
+      "tip": "Consejo: El directorio de descarga debe ser el del servidor Aria2, no el directorio local."
+    },
+    "definitionPage": {
+      "title": "Calidad predeterminada"
+    },
+    "downloadPage": {
+      "title": "Configuración de descarga",
+      "videoSavePath": "Ruta de guardado de video",
+      "imageSavePath": "Ruta de guardado de imagen",
+      "notSet": "No establecido",
+      "selectVideoPath": "Seleccionar ruta de video",
+      "selectImagePath": "Seleccionar ruta de imagen"
+    },
+    "languagePage": {
+      "title": "Idioma (Language)",
+      "followSystem": "Seguir sistema",
+      "english": "Inglés",
+      "simplifiedChinese": "Chino simplificado",
+      "traditionalChinese": "Chino tradicional",
+      "japanese": "Japonés",
+      "korean": "Coreano",
+      "french": "Francés",
+      "spanish": "Español",
+      "portuguese": "Portugués",
+      "german": "Alemán",
+      "italian": "Italiano",
+      "russian": "Ruso",
+      "ukrainian": "Ucraniano",
+      "thai": "Tailandés",
+      "vietnamese": "Vietnamita",
+      "khmer": "Jemer",
+      "hindi": "Hindi",
+      "arabic": "Árabe",
+      "hebrew": "Hebreo",
+      "tibetan": "Tibetano",
+      "uyghur": "Uigur",
+      "kazakh": "Kazajo"
+    },
+    "searchModePage": {
+      "title": "Modo de búsqueda predeterminado"
+    }
+  },
   "home": {
     "navigation": {
       "video": "Vídeo",
