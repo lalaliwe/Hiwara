@@ -1,0 +1,59 @@
+{
+  "common": {
+    "loading": "กำลังโหลด...",
+    "error": "ข้อผิดพลาด",
+    "success": "สำเร็จ",
+    "cancel": "ยกเลิก",
+    "confirm": "ยืนยัน",
+    "save": "บันทึก",
+    "delete": "ลบ",
+    "edit": "แก้ไข",
+    "search": "ค้นหา",
+    "back": "กลับ",
+    "next": "ถัดไป",
+    "previous": "ก่อนหน้า",
+    "close": "ปิด",
+    "open": "เปิด",
+    "yes": "ใช่",
+    "no": "ไม่"
+  },
+  "navigation": {
+    "home": "หน้าแรก",
+    "search": "ค้นหา",
+    "favorites": "รายการโปรด",
+    "history": "ประวัติ",
+    "friends": "เพื่อน",
+    "zone": "โซน",
+    "settings": "การตั้งค่า"
+  },
+  "player": {
+    "play": "เล่น",
+    "pause": "หยุดชั่วคราว",
+    "fullscreen": "เต็มหน้าจอ",
+    "exitFullscreen": "ออกจากเต็มหน้าจอ",
+    "volume": "ระดับเสียง",
+    "mute": "ปิดเสียง",
+    "unmute": "เปิดเสียง",
+    "quality": "คุณภาพ",
+    "speed": "ความเร็ว",
+    "subtitle": "คำบรรยาย",
+    "download": "ดาวน์โหลด"
+  },
+  "setup": {
+    "title": "การตั้งค่า",
+    "general": "การตั้งค่าทั่วไป",
+    "autoPlay": "เล่นอัตโนมัติ",
+    "reconnect": "จำนวนครั้งในการเชื่อมต่อใหม่",
+    "definition": "คุณภาพเริ่มต้น",
+    "searchMode": "โหมดการค้นหา",
+    "language": "ภาษา",
+    "paths": "การตั้งค่าเส้นทาง",
+    "videoSavePath": "เส้นทางการบันทึกวิดีโอ",
+    "imageSavePath": "เส้นทางการบันทึกภาพ",
+    "aria2": "การตั้งค่า Aria2",
+    "aria2Rpc": "URL RPC",
+    "aria2Token": "โทเค็นลับ",
+    "aria2Download": "ไดเรกทอรีการดาวน์โหลด",
+    "aria2Switch": "เปิดใช้งาน Aria2"
+  }
+}

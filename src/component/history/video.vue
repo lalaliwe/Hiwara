@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
+import { useI18n } from 'vue-i18n';
 import { getVideoHistoryList } from '../../core/database';
 import { showShortToast } from '../../core/toast';
 import HistoryItem from './HistoryItem.vue';
@@ -17,6 +18,8 @@ interface ListItem {
   isR18: boolean;
   lastWatchDate: string;
 }
+
+const { t } = useI18n();
 
 const videoHistory = ref<ListItem[]>([]);
 const videoPage = ref(0); // 改为从0开始，与subscribe.vue保持一致
@@ -68,7 +71,7 @@ const loadMoreVideoData = async ({ done }: any = { done: () => { } }) => {
     }
   } catch (error) {
     console.error('加载视频历史失败:', error);
-    showShortToast('加载视频历史失败');
+    showShortToast(t('common.error'));
 
     // 如果是第一页加载失败，更新为 failed
     if (videoPage.value === 0 && videoState.value === 'loading') {
@@ -155,24 +158,28 @@ defineExpose({
 <template>
   <!-- 加载状态 -->
   <div v-if="videoState === 'loading'" class="loading">
-    <loadingHuawu>数据加载中</loadingHuawu>
+    <loadingHuawu>{{ t('common.loading') }}</loadingHuawu>
+    <!-- 数据加载中 -->
   </div>
 
   <!-- 加载失败状态 -->
   <div v-else-if="videoState === 'failed'" class="loading" @click="handleErrorClick">
-    <errorHuawu>视频历史加载失败了喵~</errorHuawu>
+    <errorHuawu>{{ t('player.video') }}{{ t('navigation.history') }}{{ t('common.error') }}</errorHuawu>
+    <!-- 视频历史加载失败了喵~ -->
   </div>
 
   <!-- 空数据状态 -->
   <div v-else-if="videoState === 'empty'" class="loading" @click="handleErrorClick">
-    <errorHuawu>暂无视频历史记录</errorHuawu>
+    <errorHuawu>{{ t('common.no') }}{{ t('player.video') }}{{ t('navigation.history') }}</errorHuawu>
+    <!-- 暂无视频历史记录 -->
   </div>
 
   <!-- 成功加载状态 -->
   <v-infinite-scroll v-else ref="videoListView" color="#00796B" @load="loadMoreVideoData" :disabled="videoHasFinished"
     @scroll="handleVideoScroll" class="list-view">
     <div v-for="(groupItems, date) in groupedVideoHistory" :key="date" class="date-group">
-      <div class="date-header">{{ date === new Date().toISOString().split('T')[0] ? '今天' : date }}</div>
+      <div class="date-header">{{ date === new Date().toISOString().split('T')[0] ? t('common.today') : date }}</div>
+      <!-- {{ date === new Date().toISOString().split('T')[0] ? '今天' : date }} -->
       <v-list lines="two" class="pa-0">
         <HistoryItem v-for="(item, index) in groupItems" :key="index" :item="item" type="video" />
       </v-list>
@@ -180,14 +187,17 @@ defineExpose({
     <!-- 加载失败提示 -->
     <template v-slot:error="{ props }">
       <div class="load-more-failed">
-        <span>加载失败，</span>
-        <span class="retry-btn" v-bind="props">点击重试</span>
+        <span>{{ t('common.loadFailed') }}</span>
+        <!-- 加载失败， -->
+        <span class="retry-btn" v-bind="props">{{ t('common.retry') }}</span>
+        <!-- 点击重试 -->
       </div>
     </template>
     <!-- 已到底部提示 -->
     <template v-slot:empty>
       <div class="listEnd">
-        已经到底了喵~
+        {{ t('common.reachedBottom') }}
+        <!-- 已经到底了喵~ -->
       </div>
     </template>
   </v-infinite-scroll>

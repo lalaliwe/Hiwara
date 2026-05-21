@@ -36,6 +36,9 @@ await initDatabase();
 // 引入store和统一初始化函数
 import { initializeAllStores } from "./core/store";
 
+// 引入 i18n
+import i18n, { initI18nLanguage } from "./core/i18n";
+
 // 检测是否为桌面端（非触摸设备）
 const isDesktop = !window.matchMedia('(pointer: coarse)').matches;
 if (isDesktop) {
@@ -48,6 +51,7 @@ const pinia = createPinia();
 app.use(pinia);
 app.use(router);
 app.use(vuetify);
+app.use(i18n);
 install(app);
 install(app, 'i');
 library.add(fas, far, fab)
@@ -56,6 +60,10 @@ app.config.globalProperties.$hammer = Hammer;
 
 // 在挂载应用之前，统一初始化所有 Store
 await initializeAllStores();
+
+// 初始化 i18n 语言（根据 store 中的设置）
+initI18nLanguage();
+
 app.mount("#app");
 
 router.isReady().then(() => {

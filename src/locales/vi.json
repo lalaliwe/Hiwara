@@ -1,0 +1,59 @@
+{
+  "common": {
+    "loading": "Đang tải...",
+    "error": "Lỗi",
+    "success": "Thành công",
+    "cancel": "Hủy",
+    "confirm": "Xác nhận",
+    "save": "Lưu",
+    "delete": "Xóa",
+    "edit": "Chỉnh sửa",
+    "search": "Tìm kiếm",
+    "back": "Quay lại",
+    "next": "Tiếp theo",
+    "previous": "Trước",
+    "close": "Đóng",
+    "open": "Mở",
+    "yes": "Có",
+    "no": "Không"
+  },
+  "navigation": {
+    "home": "Trang chủ",
+    "search": "Tìm kiếm",
+    "favorites": "Yêu thích",
+    "history": "Lịch sử",
+    "friends": "Bạn bè",
+    "zone": "Khu vực",
+    "settings": "Cài đặt"
+  },
+  "player": {
+    "play": "Phát",
+    "pause": "Tạm dừng",
+    "fullscreen": "Toàn màn hình",
+    "exitFullscreen": "Thoát toàn màn hình",
+    "volume": "Âm lượng",
+    "mute": "Tắt tiếng",
+    "unmute": "Bật tiếng",
+    "quality": "Chất lượng",
+    "speed": "Tốc độ",
+    "subtitle": "Phụ đề",
+    "download": "Tải xuống"
+  },
+  "setup": {
+    "title": "Cài đặt",
+    "general": "Cài đặt chung",
+    "autoPlay": "Tự động phát",
+    "reconnect": "Số lần kết nối lại",
+    "definition": "Chất lượng mặc định",
+    "searchMode": "Chế độ tìm kiếm",
+    "language": "Ngôn ngữ",
+    "paths": "Cài đặt đường dẫn",
+    "videoSavePath": "Đường dẫn lưu video",
+    "imageSavePath": "Đường dẫn lưu ảnh",
+    "aria2": "Cài đặt Aria2",
+    "aria2Rpc": "URL RPC",
+    "aria2Token": "Token bí mật",
+    "aria2Download": "Thư mục tải xuống",
+    "aria2Switch": "Bật Aria2"
+  }
+}

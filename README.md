@@ -151,16 +151,16 @@ TBD
 * ✅ 视频列表 | Video list
 * ✅ 图片列表 | Image list
 * ✅ 视频播放 | Video playback
-* ⬜ 图片查看 | Image viewer
-* ⬜ 个人主页 | User profile
-* ⬜ 空间查看 | Space view
-* ⬜ 搜索 | Search
-* ⬜ 关注、订阅、收藏、评论 | Follow, subscribe, favorite, comment
+* ✅ 图片查看 | Image viewer
+* ✅ 个人主页 | User profile
+* ✅ 空间查看 | Space view
+* ✅ 搜索 | Search
+* ✅ 关注、订阅、收藏、评论 | Follow, subscribe, favorite, comment
 * ⬜ 分析及外链下载 | Analysis and external link downloads
 * ⬜ 播放列表 | Playlist
-* ⬜ 历史记录 | History
-* ⬜ 关注列表 | Following list
-* ⬜ 粉丝列表 | Followers list
+* ✅ 历史记录 | History
+* ✅ 关注列表 | Following list
+* ✅ 粉丝列表 | Followers list
 * ✅ 设置 | Settings
 * ⬜ 桌面端适配 | Desktop adaptation
 * ⬜ 平板电脑适配 | Tablet adaptation

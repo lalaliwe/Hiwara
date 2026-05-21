@@ -1,0 +1,59 @@
+{
+  "common": {
+    "loading": "Carregando...",
+    "error": "Erro",
+    "success": "Sucesso",
+    "cancel": "Cancelar",
+    "confirm": "Confirmar",
+    "save": "Salvar",
+    "delete": "Excluir",
+    "edit": "Editar",
+    "search": "Pesquisar",
+    "back": "Voltar",
+    "next": "Próximo",
+    "previous": "Anterior",
+    "close": "Fechar",
+    "open": "Abrir",
+    "yes": "Sim",
+    "no": "Não"
+  },
+  "navigation": {
+    "home": "Início",
+    "search": "Pesquisa",
+    "favorites": "Favoritos",
+    "history": "Histórico",
+    "friends": "Amigos",
+    "zone": "Zona",
+    "settings": "Configurações"
+  },
+  "player": {
+    "play": "Reproduzir",
+    "pause": "Pausar",
+    "fullscreen": "Tela cheia",
+    "exitFullscreen": "Sair da tela cheia",
+    "volume": "Volume",
+    "mute": "Mudo",
+    "unmute": "Ativar som",
+    "quality": "Qualidade",
+    "speed": "Velocidade",
+    "subtitle": "Legendas",
+    "download": "Baixar"
+  },
+  "setup": {
+    "title": "Configurações",
+    "general": "Configurações gerais",
+    "autoPlay": "Reprodução automática",
+    "reconnect": "Tentativas de reconexão",
+    "definition": "Qualidade padrão",
+    "searchMode": "Modo de pesquisa",
+    "language": "Idioma",
+    "paths": "Configurações de caminho",
+    "videoSavePath": "Caminho de salvamento de vídeo",
+    "imageSavePath": "Caminho de salvamento de imagem",
+    "aria2": "Configurações do Aria2",
+    "aria2Rpc": "URL RPC",
+    "aria2Token": "Token secreto",
+    "aria2Download": "Diretório de download",
+    "aria2Switch": "Habilitar Aria2"
+  }
+}

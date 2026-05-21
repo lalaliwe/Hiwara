@@ -1,0 +1,59 @@
+{
+  "common": {
+    "loading": "로딩 중...",
+    "error": "오류",
+    "success": "성공",
+    "cancel": "취소",
+    "confirm": "확인",
+    "save": "저장",
+    "delete": "삭제",
+    "edit": "편집",
+    "search": "검색",
+    "back": "뒤로",
+    "next": "다음",
+    "previous": "이전",
+    "close": "닫기",
+    "open": "열기",
+    "yes": "예",
+    "no": "아니오"
+  },
+  "navigation": {
+    "home": "홈",
+    "search": "검색",
+    "favorites": "즐겨찾기",
+    "history": "기록",
+    "friends": "친구",
+    "zone": "공간",
+    "settings": "설정"
+  },
+  "player": {
+    "play": "재생",
+    "pause": "일시정지",
+    "fullscreen": "전체화면",
+    "exitFullscreen": "전체화면 종료",
+    "volume": "볼륨",
+    "mute": "음소거",
+    "unmute": "음소거 해제",
+    "quality": "화질",
+    "speed": "속도",
+    "subtitle": "자막",
+    "download": "다운로드"
+  },
+  "setup": {
+    "title": "설정",
+    "general": "일반 설정",
+    "autoPlay": "자동 재생",
+    "reconnect": "재연결 횟수",
+    "definition": "기본 화질",
+    "searchMode": "검색 모드",
+    "language": "언어",
+    "paths": "경로 설정",
+    "videoSavePath": "동영상 저장 경로",
+    "imageSavePath": "이미지 저장 경로",
+    "aria2": "Aria2 설정",
+    "aria2Rpc": "RPC 주소",
+    "aria2Token": "토큰",
+    "aria2Download": "다운로드 디렉토리",
+    "aria2Switch": "Aria2 활성화"
+  }
+}

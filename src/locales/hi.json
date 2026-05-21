@@ -1,0 +1,59 @@
+{
+  "common": {
+    "loading": "लोड हो रहा है...",
+    "error": "त्रुटि",
+    "success": "सफलता",
+    "cancel": "रद्द करें",
+    "confirm": "पुष्टि करें",
+    "save": "सहेजें",
+    "delete": "हटाएं",
+    "edit": "संपादित करें",
+    "search": "खोजें",
+    "back": "वापस",
+    "next": "अगला",
+    "previous": "पिछला",
+    "close": "बंद करें",
+    "open": "खोलें",
+    "yes": "हाँ",
+    "no": "नहीं"
+  },
+  "navigation": {
+    "home": "होम",
+    "search": "खोज",
+    "favorites": "पसंदीदा",
+    "history": "इतिहास",
+    "friends": "मित्र",
+    "zone": "ज़ोन",
+    "settings": "सेटिंग्स"
+  },
+  "player": {
+    "play": "चलाएं",
+    "pause": "रोकें",
+    "fullscreen": "पूर्ण स्क्रीन",
+    "exitFullscreen": "पूर्ण स्क्रीन से बाहर निकलें",
+    "volume": "आवाज़",
+    "mute": "म्यूट",
+    "unmute": "अनम्यूट",
+    "quality": "गुणवत्ता",
+    "speed": "गति",
+    "subtitle": "उपशीर्षक",
+    "download": "डाउनलोड"
+  },
+  "setup": {
+    "title": "सेटिंग्स",
+    "general": "सामान्य सेटिंग्स",
+    "autoPlay": "स्वतः प्ले",
+    "reconnect": "पुनः कनेक्ट प्रयास",
+    "definition": "डिफ़ॉल्ट गुणवत्ता",
+    "searchMode": "खोज मोड",
+    "language": "भाषा",
+    "paths": "पथ सेटिंग्स",
+    "videoSavePath": "वीडियो सहेजने का पथ",
+    "imageSavePath": "छवि सहेजने का पथ",
+    "aria2": "Aria2 सेटिंग्स",
+    "aria2Rpc": "RPC URL",
+    "aria2Token": "सीक्रेट टोकन",
+    "aria2Download": "डाउनलोड डायरेक्टरी",
+    "aria2Switch": "Aria2 सक्षम करें"
+  }
+}

@@ -1,0 +1,59 @@
+{
+  "common": {
+    "loading": "កំពុងផ្ទុក...",
+    "error": "កំហុស",
+    "success": "ជោគជ័យ",
+    "cancel": "បោះបង់",
+    "confirm": "បញ្ជាក់",
+    "save": "រក្សាទុក",
+    "delete": "លុប",
+    "edit": "កែសម្រួល",
+    "search": "ស្វែងរក",
+    "back": "ត្រឡប់",
+    "next": "បន្ទាប់",
+    "previous": "មុន",
+    "close": "បិទ",
+    "open": "បើក",
+    "yes": "បាទ/ចាស",
+    "no": "ទេ"
+  },
+  "navigation": {
+    "home": "ទំព័រដើម",
+    "search": "ស្វែងរក",
+    "favorites": "ចំណូលចិត្ត",
+    "history": "ប្រវត្តិ",
+    "friends": "មិត្តភក្តិ",
+    "zone": "តំបន់",
+    "settings": "ការកំណត់"
+  },
+  "player": {
+    "play": "ចាក់",
+    "pause": "ផ្អាក",
+    "fullscreen": "អេក្រង់ពេញ",
+    "exitFullscreen": "ចេញពីអេក្រង់ពេញ",
+    "volume": "កម្រិតសំឡេង",
+    "mute": "បិទសំឡេង",
+    "unmute": "បើកសំឡេង",
+    "quality": "គុណភាព",
+    "speed": "ល្បឿន",
+    "subtitle": "ចំណងជើងរង",
+    "download": "ទាញយក"
+  },
+  "setup": {
+    "title": "ការកំណត់",
+    "general": "ការកំណត់ទូទៅ",
+    "autoPlay": "ចាក់ស្វ័យប្រវត្តិ",
+    "reconnect": "ចំនួនដងភ្ជាប់ឡើងវិញ",
+    "definition": "គុណភាពលំនាំដើម",
+    "searchMode": "របៀបស្វែងរក",
+    "language": "ភាសា",
+    "paths": "ការកំណត់ផ្លូវ",
+    "videoSavePath": "ផ្លូវរក្សាទុកវីដេអូ",
+    "imageSavePath": "ផ្លូវរក្សាទុករូបភាព",
+    "aria2": "ការកំណត់ Aria2",
+    "aria2Rpc": "URL RPC",
+    "aria2Token": "Token សម្ងាត់",
+    "aria2Download": "ថតសំរាប់ទាញយក",
+    "aria2Switch": "បើក Aria2"
+  }
+}

@@ -1,0 +1,59 @@
+{
+  "common": {
+    "loading": "جاري التحميل...",
+    "error": "خطأ",
+    "success": "نجاح",
+    "cancel": "إلغاء",
+    "confirm": "تأكيد",
+    "save": "حفظ",
+    "delete": "حذف",
+    "edit": "تعديل",
+    "search": "بحث",
+    "back": "رجوع",
+    "next": "التالي",
+    "previous": "السابق",
+    "close": "إغلاق",
+    "open": "فتح",
+    "yes": "نعم",
+    "no": "لا"
+  },
+  "navigation": {
+    "home": "الرئيسية",
+    "search": "بحث",
+    "favorites": "المفضلة",
+    "history": "السجل",
+    "friends": "الأصدقاء",
+    "zone": "المنطقة",
+    "settings": "الإعدادات"
+  },
+  "player": {
+    "play": "تشغيل",
+    "pause": "إيقاف مؤقت",
+    "fullscreen": "ملء الشاشة",
+    "exitFullscreen": "الخروج من ملء الشاشة",
+    "volume": "مستوى الصوت",
+    "mute": "كتم الصوت",
+    "unmute": "إلغاء كتم الصوت",
+    "quality": "الجودة",
+    "speed": "السرعة",
+    "subtitle": "الترجمة",
+    "download": "تنزيل"
+  },
+  "setup": {
+    "title": "الإعدادات",
+    "general": "الإعدادات العامة",
+    "autoPlay": "التشغيل التلقائي",
+    "reconnect": "محاولات إعادة الاتصال",
+    "definition": "الجودة الافتراضية",
+    "searchMode": "وضع البحث",
+    "language": "اللغة",
+    "paths": "إعدادات المسار",
+    "videoSavePath": "مسار حفظ الفيديو",
+    "imageSavePath": "مسار حفظ الصور",
+    "aria2": "إعدادات Aria2",
+    "aria2Rpc": "عنوان RPC",
+    "aria2Token": "الرمز السري",
+    "aria2Download": "دليل التنزيل",
+    "aria2Switch": "تمكين Aria2"
+  }
+}

@@ -1,0 +1,59 @@
+{
+  "common": {
+    "loading": "טוען...",
+    "error": "שגיאה",
+    "success": "הצלחה",
+    "cancel": "ביטול",
+    "confirm": "אישור",
+    "save": "שמור",
+    "delete": "מחק",
+    "edit": "ערוך",
+    "search": "חפש",
+    "back": "חזור",
+    "next": "הבא",
+    "previous": "הקודם",
+    "close": "סגור",
+    "open": "פתח",
+    "yes": "כן",
+    "no": "לא"
+  },
+  "navigation": {
+    "home": "דף הבית",
+    "search": "חיפוש",
+    "favorites": "מועדפים",
+    "history": "היסטוריה",
+    "friends": "חברים",
+    "zone": "אזור",
+    "settings": "הגדרות"
+  },
+  "player": {
+    "play": "נגן",
+    "pause": "השהה",
+    "fullscreen": "מסך מלא",
+    "exitFullscreen": "יציאה ממסך מלא",
+    "volume": "עוצמת קול",
+    "mute": "השתק",
+    "unmute": "בטל השתקה",
+    "quality": "איכות",
+    "speed": "מהירות",
+    "subtitle": "כתוביות",
+    "download": "הורד"
+  },
+  "setup": {
+    "title": "הגדרות",
+    "general": "הגדרות כלליות",
+    "autoPlay": "הפעלה אוטומטית",
+    "reconnect": "ניסיונות התחברות מחדש",
+    "definition": "איכות ברירת מחדל",
+    "searchMode": "מצב חיפוש",
+    "language": "שפה",
+    "paths": "הגדרות נתיב",
+    "videoSavePath": "נתיב שמירת וידאו",
+    "imageSavePath": "נתיב שמירת תמונות",
+    "aria2": "הגדרות Aria2",
+    "aria2Rpc": "כתובת RPC",
+    "aria2Token": "אסימון סודי",
+    "aria2Download": "ספריית הורדות",
+    "aria2Switch": "הפעל Aria2"
+  }
+}

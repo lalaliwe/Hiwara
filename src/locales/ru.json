@@ -1,0 +1,59 @@
+{
+  "common": {
+    "loading": "Загрузка...",
+    "error": "Ошибка",
+    "success": "Успех",
+    "cancel": "Отмена",
+    "confirm": "Подтвердить",
+    "save": "Сохранить",
+    "delete": "Удалить",
+    "edit": "Редактировать",
+    "search": "Поиск",
+    "back": "Назад",
+    "next": "Далее",
+    "previous": "Назад",
+    "close": "Закрыть",
+    "open": "Открыть",
+    "yes": "Да",
+    "no": "Нет"
+  },
+  "navigation": {
+    "home": "Главная",
+    "search": "Поиск",
+    "favorites": "Избранное",
+    "history": "История",
+    "friends": "Друзья",
+    "zone": "Зона",
+    "settings": "Настройки"
+  },
+  "player": {
+    "play": "Воспроизвести",
+    "pause": "Пауза",
+    "fullscreen": "Полный экран",
+    "exitFullscreen": "Выйти из полного экрана",
+    "volume": "Громкость",
+    "mute": "Отключить звук",
+    "unmute": "Включить звук",
+    "quality": "Качество",
+    "speed": "Скорость",
+    "subtitle": "Субтитры",
+    "download": "Скачать"
+  },
+  "setup": {
+    "title": "Настройки",
+    "general": "Общие настройки",
+    "autoPlay": "Автовоспроизведение",
+    "reconnect": "Попытки переподключения",
+    "definition": "Качество по умолчанию",
+    "searchMode": "Режим поиска",
+    "language": "Язык",
+    "paths": "Настройки путей",
+    "videoSavePath": "Путь сохранения видео",
+    "imageSavePath": "Путь сохранения изображений",
+    "aria2": "Настройки Aria2",
+    "aria2Rpc": "URL RPC",
+    "aria2Token": "Секретный токен",
+    "aria2Download": "Каталог загрузки",
+    "aria2Switch": "Включить Aria2"
+  }
+}

@@ -1,0 +1,59 @@
+{
+  "common": {
+    "loading": "ལོད་འདྲེན་བྱེད་བཞིན་པ...",
+    "error": "ནོར་འཁྲུལ",
+    "success": "གྲུབ་འབྲས",
+    "cancel": "འདོར་བ",
+    "confirm": "གཏན་ཁེལ",
+    "save": "ཉར་ཚགས",
+    "delete": "སུབ་པ",
+    "edit": "སྒྲིག་བཅོས",
+    "search": "འཚོལ་ཞིབ",
+    "back": "ཕྱིར་ལོག",
+    "next": "རྗེས་མ",
+    "previous": "སྔོན་མ",
+    "close": "རྒྱག་པ",
+    "open": "འབྱེད་པ",
+    "yes": "ཡིན",
+    "no": "མིན"
+  },
+  "navigation": {
+    "home": "གཙོ་ངོས",
+    "search": "འཚོལ་ཞིབ",
+    "favorites": "དགའ་མོས",
+    "history": "ལོ་རྒྱུས",
+    "friends": "གྲོགས་པོ",
+    "zone": "ཁུལ",
+    "settings": "སྒྲིག་བཀོད"
+  },
+  "player": {
+    "play": "འཁྲབ་སྟོན",
+    "pause": "མཚམས་འཇོག",
+    "fullscreen": "ཡོལ་གང་",
+    "exitFullscreen": "ཡོལ་གང་ནས་ཐོན་པ",
+    "volume": "སྐད་ཚད",
+    "mute": "སྐད་མེད",
+    "unmute": "སྐད་ཡོད",
+    "quality": "གཤིས་ཚད",
+    "speed": "མྱུར་ཚད",
+    "subtitle": "ཡིག་འབྲུ",
+    "download": "ཕབ་ལེན"
+  },
+  "setup": {
+    "title": "སྒྲིག་བཀོད",
+    "general": "སྤྱི་སྒྲིག་བཀོད",
+    "autoPlay": "རང་འགུལ་འཁྲབ་སྟོན",
+    "reconnect": "བསྐྱར་འཁྲིད་ཐེངས་གྲངས",
+    "definition": "སྔོན་འཇོག་གཤིས་ཚད",
+    "searchMode": "འཚོལ་ཞིབ་མོད",
+    "language": "སྐད་ཡིག",
+    "paths": "ལམ་ཐིག་སྒྲིག་བཀོད",
+    "videoSavePath": "བརྙན་འཕྲིན་ཉར་ཚགས་ལམ་ཐིག",
+    "imageSavePath": "པར་ཉར་ཚགས་ལམ་ཐིག",
+    "aria2": "Aria2 སྒྲིག་བཀོད",
+    "aria2Rpc": "RPC ཡིག་ཁུགས",
+    "aria2Token": "གསང་བའི་ཐོབ་ཐང",
+    "aria2Download": "ཕབ་ལེན་ཡིག་ཁུགས",
+    "aria2Switch": "Aria2 སྤྱོད་པ"
+  }
+}

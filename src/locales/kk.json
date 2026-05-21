@@ -1,0 +1,59 @@
+{
+  "common": {
+    "loading": "Жүктелуде...",
+    "error": "Қате",
+    "success": "Сәтті",
+    "cancel": "Болдырмау",
+    "confirm": "Растау",
+    "save": "Сақтау",
+    "delete": "Жою",
+    "edit": "Өңдеу",
+    "search": "Іздеу",
+    "back": "Артқа",
+    "next": "Келесі",
+    "previous": "Алдыңғы",
+    "close": "Жабу",
+    "open": "Ашу",
+    "yes": "Иә",
+    "no": "Жоқ"
+  },
+  "navigation": {
+    "home": "Басты бет",
+    "search": "Іздеу",
+    "favorites": "Таңдаулы",
+    "history": "Тарих",
+    "friends": "Достар",
+    "zone": "Аймақ",
+    "settings": "Параметрлер"
+  },
+  "player": {
+    "play": "Ойнату",
+    "pause": "Үзіліс",
+    "fullscreen": "Толық экран",
+    "exitFullscreen": "Толық экраннан шығу",
+    "volume": "Дыбыс деңгейі",
+    "mute": "Дыбысты өшіру",
+    "unmute": "Дыбысты қосу",
+    "quality": "Сапа",
+    "speed": "Жылдамдық",
+    "subtitle": "Субтитрлер",
+    "download": "Жүктеу"
+  },
+  "setup": {
+    "title": "Параметрлер",
+    "general": "Жалпы параметрлер",
+    "autoPlay": "Автоматты ойнату",
+    "reconnect": "Қайта қосылу әрекеттері",
+    "definition": "Әдепкі сапа",
+    "searchMode": "Іздеу режимі",
+    "language": "Тіл",
+    "paths": "Жол параметрлері",
+    "videoSavePath": "Бейне сақтау жолы",
+    "imageSavePath": "Сурет сақтау жолы",
+    "aria2": "Aria2 параметрлері",
+    "aria2Rpc": "RPC мекенжайы",
+    "aria2Token": "Құпия токен",
+    "aria2Download": "Жүктеу каталогы",
+    "aria2Switch": "Aria2-ні қосу"
+  }
+}

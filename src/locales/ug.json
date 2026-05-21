@@ -1,0 +1,59 @@
+{
+  "common": {
+    "loading": "يۈكلەنىۋاتىدۇ...",
+    "error": "خاتالىق",
+    "success": "مۇۋەپپەقىيەت",
+    "cancel": "بىكار قىلىش",
+    "confirm": "جەزملەش",
+    "save": "ساقلاش",
+    "delete": "ئۆچۈرۈش",
+    "edit": "تەھرىرلەش",
+    "search": "ئىزدەش",
+    "back": "قايتىش",
+    "next": "كېيىنكى",
+    "previous": "ئالدىنقى",
+    "close": "تاقاش",
+    "open": "ئېچىش",
+    "yes": "ھەئە",
+    "no": "ياق"
+  },
+  "navigation": {
+    "home": "باش بەت",
+    "search": "ئىزدەش",
+    "favorites": "يىغقۇچ",
+    "history": "تارىخ",
+    "friends": "دوستلار",
+    "zone": "رايون",
+    "settings": "تەڭشەك"
+  },
+  "player": {
+    "play": "قويۇش",
+    "pause": "ۋاقىتلىق توختاش",
+    "fullscreen": "پۈتۈن ئېكران",
+    "exitFullscreen": "پۈتۈن ئېكراندىن چېكىنىش",
+    "volume": "ئاۋاز مىقدارى",
+    "mute": "ئاۋازسىز",
+    "unmute": "ئاۋازلىق",
+    "quality": "سۈپەت",
+    "speed": "سۈرئەت",
+    "subtitle": "سۈبتىتر",
+    "download": "چۈشۈرۈش"
+  },
+  "setup": {
+    "title": "تەڭشەك",
+    "general": "ئومۇمىي تەڭشەك",
+    "autoPlay": "ئاپتوماتىك قويۇش",
+    "reconnect": "قايتا ئۇلاش قېتىم سانى",
+    "definition": "كۆڭۈلدىكى سۈپەت",
+    "searchMode": "ئىزدەش ھالىتى",
+    "language": "تىل",
+    "paths": "يول تەڭشىكى",
+    "videoSavePath": "سىنبەلگە ساقلاش يولى",
+    "imageSavePath": "رەسىم ساقلاش يولى",
+    "aria2": "Aria2 تەڭشىكى",
+    "aria2Rpc": "RPC ئادرېسى",
+    "aria2Token": "مەخپىي بەلگە",
+    "aria2Download": "چۈشۈرۈش مۇندەرىجىسى",
+    "aria2Switch": "Aria2 نى قوزغات"
+  }
+}

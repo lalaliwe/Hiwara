@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useRouter, useRoute } from 'vue-router';
 import { ref, onActivated } from 'vue';
+import { useI18n } from 'vue-i18n';
 import { setStatusBarTextStyle } from '../plugins/navbarStyle'
 import VideoHistory from '../component/history/video.vue'
 import ImageHistory from '../component/history/image.vue'
@@ -11,6 +12,7 @@ defineOptions({
 
 const router = useRouter();
 const route = useRoute();
+const { t } = useI18n();
 
 // 应用页面设置的函数
 const applyPageSettings = () => {
@@ -51,16 +53,19 @@ onActivated(() => {
           <font-awesome-icon icon="fa-solid fa-angle-left" />
         </div>
         <div class="label">
-          历史记录
+          {{ t('navigation.history') }}
+          <!-- 历史记录 -->
         </div>
       </div>
       <div class="tabs">
         <v-tabs v-model="tab" color="#00796B" align-tabs="center" density="compact" grow>
           <v-tab value="video">
-            视频
+            {{ t('player.video') }}
+            <!-- 视频 -->
           </v-tab>
           <v-tab value="image">
-            插画
+            {{ t('player.image') }}
+            <!-- 插画 -->
           </v-tab>
         </v-tabs>
         <v-divider></v-divider>

@@ -1,0 +1,59 @@
+{
+  "common": {
+    "loading": "Wird geladen...",
+    "error": "Fehler",
+    "success": "Erfolg",
+    "cancel": "Abbrechen",
+    "confirm": "Bestätigen",
+    "save": "Speichern",
+    "delete": "Löschen",
+    "edit": "Bearbeiten",
+    "search": "Suchen",
+    "back": "Zurück",
+    "next": "Weiter",
+    "previous": "Zurück",
+    "close": "Schließen",
+    "open": "Öffnen",
+    "yes": "Ja",
+    "no": "Nein"
+  },
+  "navigation": {
+    "home": "Startseite",
+    "search": "Suche",
+    "favorites": "Favoriten",
+    "history": "Verlauf",
+    "friends": "Freunde",
+    "zone": "Zone",
+    "settings": "Einstellungen"
+  },
+  "player": {
+    "play": "Abspielen",
+    "pause": "Pause",
+    "fullscreen": "Vollbild",
+    "exitFullscreen": "Vollbild beenden",
+    "volume": "Lautstärke",
+    "mute": "Stummschalten",
+    "unmute": "Stummschaltung aufheben",
+    "quality": "Qualität",
+    "speed": "Geschwindigkeit",
+    "subtitle": "Untertitel",
+    "download": "Herunterladen"
+  },
+  "setup": {
+    "title": "Einstellungen",
+    "general": "Allgemeine Einstellungen",
+    "autoPlay": "Automatische Wiedergabe",
+    "reconnect": "Wiederverbindungsversuche",
+    "definition": "Standardqualität",
+    "searchMode": "Suchmodus",
+    "language": "Sprache",
+    "paths": "Pfadeinstellungen",
+    "videoSavePath": "Video-Speicherpfad",
+    "imageSavePath": "Bild-Speicherpfad",
+    "aria2": "Aria2-Einstellungen",
+    "aria2Rpc": "RPC-URL",
+    "aria2Token": "Geheimtoken",
+    "aria2Download": "Download-Verzeichnis",
+    "aria2Switch": "Aria2 aktivieren"
+  }
+}
