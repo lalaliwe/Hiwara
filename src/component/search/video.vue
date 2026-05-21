@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue';
+import { onActivated, ref, watch } from 'vue';
 import cardButton from '../cardButton.vue';
 import { search } from '../../core/api/video';
 import loadingHuawu from '../loadingHuawu.vue';
 import errorHuawu from '../errorHuawu.vue';
 import { showShortToast } from '../../core/toast';
+import type { VInfiniteScroll } from 'vuetify/components'
 
 const props = defineProps<{
   keyword: string;
@@ -30,6 +31,9 @@ const videoHasFinished = ref(false);
 
 type ListState = 'failed' | 'empty' | 'loading' | 'success';
 const videoState = ref<ListState>('loading');
+
+const listView = ref<InstanceType<typeof VInfiniteScroll>>();
+let scrollTop = 0;
 
 // 加载更多视频数据
 const loadMoreVideoData = async ({ done }: any = { done: () => { } }) => {
@@ -117,6 +121,16 @@ const handleErrorClick = () => {
   videoState.value = 'loading';
   loadMoreVideoData();
 };
+
+// 滚动监听
+function handleScroll(e: Event): void {
+  scrollTop = (e.target as HTMLElement).scrollTop;
+}
+// 回到此页面时恢复滚动位置
+onActivated(() => {
+  if (listView.value)
+    listView.value.$el.scrollTop = scrollTop;
+});
 </script>
 
 <template>
@@ -129,7 +143,8 @@ const handleErrorClick = () => {
   <div v-else-if="videoState === 'empty'" class="loading" @click="handleErrorClick">
     <errorHuawu>暂无视频内容</errorHuawu>
   </div>
-  <v-infinite-scroll v-else color="#00796B" @load="loadMoreVideoData" :disabled="videoHasFinished" class="list-view">
+  <v-infinite-scroll v-else color="#00796B" @load="loadMoreVideoData" :disabled="videoHasFinished" class="list-view"
+    ref="listView" @scroll="handleScroll">
     <div class="grid">
       <template v-for="item in videoResult" :key="item.id">
         <cardButton type="video" :data="{
