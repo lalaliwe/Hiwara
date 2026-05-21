@@ -2,7 +2,7 @@
 import { ref, computed } from 'vue';
 import { getFavoritesImageList } from '../../core/api';
 import { showShortToast } from '../../core/toast';
-import FavoriteItem from './FavoriteItem.vue';
+import MediaItem from '../MediaItem.vue';
 import loadingHuawu from '../loadingHuawu.vue';
 import errorHuawu from '../errorHuawu.vue';
 
@@ -15,7 +15,8 @@ interface ListItem {
   createTime: string;
   longNum: number;
   isR18: boolean;
-  favoriteDate: string; // 收藏日期
+  dateText: string;
+  timestamp?: number;
 }
 
 const imageFavorites = ref<ListItem[]>([]);
@@ -32,7 +33,7 @@ type ListState = 'failed' | 'empty' | 'loading' | 'success';
 const imageState = ref<ListState>('loading');
 
 // 加载更多插画数据
-const loadMoreImageData = async ({ done }: any = { done: () => {} }) => {
+const loadMoreImageData = async ({ done }: any = { done: () => { } }) => {
   if (imageIsLoading.value || imageHasFinished.value) {
     return;
   }
@@ -41,7 +42,7 @@ const loadMoreImageData = async ({ done }: any = { done: () => {} }) => {
 
   try {
     const res = await getFavoritesImageList(imagePage.value);
-    
+
     if (!res.ok) {
       throw new Error(`状态码：${res.status}, 错误信息：${res.statusText}`);
     }
@@ -63,8 +64,8 @@ const loadMoreImageData = async ({ done }: any = { done: () => {} }) => {
           likeNum: item.image.numLikes || 0,
           longNum: item.image.numImages || 0,
           isR18: item.image.rating === 'ecchi' || item.image.rating === 'r18',
-          favoriteDate: item.createdAt.split('T')[0], // 使用 createdAt 作为收藏日期
-          favoriteTime: new Date(item.createdAt).getTime() // 保留完整时间戳用于显示时间
+          dateText: item.createdAt.split('T')[0], // 使用 createdAt 作为收藏日期
+          timestamp: new Date(item.createdAt).getTime() // 保留完整时间戳用于显示时间
         };
       });
 
@@ -129,15 +130,15 @@ const groupedImageFavorites = computed(() => {
 
   // 创建副本进行排序，避免修改原数组
   const sortedItems = [...imageFavorites.value].sort((a, b) =>
-    new Date(b.favoriteDate).getTime() - new Date(a.favoriteDate).getTime()
+    new Date(b.dateText).getTime() - new Date(a.dateText).getTime()
   );
 
   // 按日期分组
   sortedItems.forEach(item => {
-    if (!grouped[item.favoriteDate]) {
-      grouped[item.favoriteDate] = [];
+    if (!grouped[item.dateText]) {
+      grouped[item.dateText] = [];
     }
-    grouped[item.favoriteDate].push(item);
+    grouped[item.dateText].push(item);
   });
 
   return grouped;
@@ -185,24 +186,12 @@ loadImageDataInternal();
   </div>
 
   <!-- 成功加载状态 -->
-  <v-infinite-scroll 
-    v-else
-    ref="imageListView" 
-    color="#00796B" 
-    @load="loadMoreImageData" 
-    :disabled="imageHasFinished"
-    @scroll="handleImageScroll"
-    class="list-view"
-  >
+  <v-infinite-scroll v-else ref="imageListView" color="#00796B" @load="loadMoreImageData" :disabled="imageHasFinished"
+    @scroll="handleImageScroll" class="list-view">
     <div v-for="(groupItems, date) in groupedImageFavorites" :key="date" class="date-group">
       <div class="date-header">{{ date === new Date().toISOString().split('T')[0] ? '今天' : date }}</div>
       <v-list lines="two" class="pa-0">
-        <FavoriteItem 
-          v-for="item in groupItems" 
-          :key="item.id" 
-          :item="item"
-          type="image"
-        />
+        <MediaItem v-for="item in groupItems" :key="item.id" :item="item" type="image" />
       </v-list>
     </div>
 

@@ -2,7 +2,7 @@
 import { ref, computed } from 'vue';
 import { getFavoritesVideoList } from '../../core/api';
 import { showShortToast } from '../../core/toast';
-import FavoriteItem from './FavoriteItem.vue';
+import MediaItem from '../MediaItem.vue';
 import loadingHuawu from '../loadingHuawu.vue';
 import errorHuawu from '../errorHuawu.vue';
 
@@ -15,7 +15,8 @@ interface ListItem {
   createTime: string;
   longNum: number;
   isR18: boolean;
-  favoriteDate: string; // 收藏日期
+  dateText: string;
+  timestamp?: number;
 }
 
 const videoFavorites = ref<ListItem[]>([]);
@@ -63,8 +64,8 @@ const loadMoreVideoData = async ({ done }: any = { done: () => { } }) => {
           likeNum: item.video.numLikes || 0,
           longNum: item.video.file?.duration ?? 0,
           isR18: item.video.rating === 'ecchi' || item.video.rating === 'r18',
-          favoriteDate: item.createdAt.split('T')[0], // 使用 createdAt 作为收藏日期
-          favoriteTime: new Date(item.createdAt).getTime() // 保留完整时间戳用于显示时间
+          dateText: item.createdAt.split('T')[0], // 使用 createdAt 作为收藏日期
+          timestamp: new Date(item.createdAt).getTime() // 保留完整时间戳用于显示时间
         };
       });
 
@@ -129,15 +130,15 @@ const groupedVideoFavorites = computed(() => {
 
   // 创建副本进行排序，避免修改原数组
   const sortedItems = [...videoFavorites.value].sort((a, b) =>
-    new Date(b.favoriteDate).getTime() - new Date(a.favoriteDate).getTime()
+    new Date(b.dateText).getTime() - new Date(a.dateText).getTime()
   );
 
   // 按日期分组
   sortedItems.forEach(item => {
-    if (!grouped[item.favoriteDate]) {
-      grouped[item.favoriteDate] = [];
+    if (!grouped[item.dateText]) {
+      grouped[item.dateText] = [];
     }
-    grouped[item.favoriteDate].push(item);
+    grouped[item.dateText].push(item);
   });
 
   return grouped;
@@ -190,7 +191,7 @@ defineExpose({
     <div v-for="(groupItems, date) in groupedVideoFavorites" :key="date" class="date-group">
       <div class="date-header">{{ date === new Date().toISOString().split('T')[0] ? '今天' : date }}</div>
       <v-list lines="two" class="pa-0">
-        <FavoriteItem v-for="(item, index) in groupItems" :key="index" :item="item" type="video" />
+        <MediaItem v-for="(item, index) in groupItems" :key="index" :item="item" type="video" />
       </v-list>
     </div>
     <!-- 加载失败提示 -->

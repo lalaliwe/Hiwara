@@ -1,43 +1,41 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
-import { getImageIwara } from '../../core/api';
-import notImg from '../../static/img/not-img.jpg';
-import iwaraSVG from '../../assets/svg/iwara.svg';
+import { getImageIwara } from '../core/api';
+import notImg from '../static/img/not-img.jpg';
+import iwaraSVG from '../assets/svg/iwara.svg';
 
 const router = useRouter();
 
 // 定义列表项接口
-interface ListItem {
+interface MediaItem {
   id: string;
   title: string;
   img: string;
   author: string;
   createTime: string;
-  longNum: string;
+  longNum: number;
   isR18: boolean;
-  lastWatchDate: string;
-  accessTime?: number; // 添加可选的原始时间戳字段
+  dateText: string;
+  timestamp?: number;
 }
 
 const props = defineProps<{
-  item: ListItem;
-  type: 'video' | 'image'; // 添加类型区分
+  item: MediaItem;
+  type: 'video' | 'image';
 }>();
-
-console.log('item:', props.item);
 
 // 处理图片源，初始状态如果有图片链接则显示空字符串，等待 API 加载
 const displayImg = ref(props.item.img ? '' : notImg);
 
 // 格式化时长
-const formatDuration = (seconds: string, type: 'video' | 'image'): string => {
+const formatDuration = (seconds: number, type: 'video' | 'image'): string => {
   if (type === 'image') {
     return `${seconds}张`;
   }
 
   // 视频类型：将秒数转换为时间格式
-  const totalSeconds = parseInt(seconds);
+  const totalSeconds = seconds;
   if (isNaN(totalSeconds)) {
     return '0:00';
   }
@@ -85,11 +83,9 @@ onMounted(async () => {
   if (props.item.img) {
     // 使用 API 获取图片，避免直接从网页获取导致的 403 错误
     try {
-      // console.log(`加载${props.type === 'video' ? '视频' : '插画'}历史封面:`, props.item.id);
       displayImg.value = await getImageIwara(props.item.img);
-      // console.log(`${props.type === 'video' ? '视频' : '插画'}历史封面加载成功:`, props.item.id);
     } catch (error) {
-      console.error(`${props.type === 'video' ? '视频' : '插画'}历史封面加载失败:`, props.item.id, error);
+      console.error(`${props.type === 'video' ? '视频' : '插画'}封面加载失败:`, props.item.id, error);
       displayImg.value = notImg;
     }
   }
@@ -126,14 +122,9 @@ onMounted(async () => {
       </div>
       <div class="list-stats">
         <font-awesome-icon icon="fa-regular fa-clock" />
-        {{ item.lastWatchDate }} {{ formatTime(item.accessTime) }}
+        {{ item.dateText }} {{ formatTime(item.timestamp) }}
       </div>
     </div>
-
-    <!-- 右侧：R18标记 -->
-    <template v-slot:append v-if="item.isR18">
-      <v-chip color="red" size="small" label>R18</v-chip>
-    </template>
   </v-list-item>
 </template>
 

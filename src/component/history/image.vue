@@ -3,7 +3,7 @@ import { ref, computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { getImageHistoryList } from '../../core/database';
 import { showShortToast } from '../../core/toast';
-import HistoryItem from './HistoryItem.vue';
+import MediaItem from '../MediaItem.vue';
 import loadingHuawu from '../loadingHuawu.vue';
 import errorHuawu from '../errorHuawu.vue';
 
@@ -14,9 +14,10 @@ interface ListItem {
   img: string;
   author: string;
   createTime: string;
-  longNum: string;
+  longNum: number;
   isR18: boolean;
-  lastWatchDate: string;
+  dateText: string;
+  timestamp?: number;
 }
 
 const { t } = useI18n();
@@ -52,8 +53,16 @@ const loadMoreImageData = async ({ done }: any = { done: () => {} }) => {
         imageState.value = 'success';
       }
 
+      // 转换数据格式
+      const convertedItems = newItems.map(item => ({
+        ...item,
+        longNum: Number(item.longNum), // 将 string 转换为 number
+        dateText: item.lastWatchDate,
+        timestamp: item.accessTime
+      }));
+
       // 追加数据
-      imageHistory.value = [...imageHistory.value, ...newItems];
+      imageHistory.value = [...imageHistory.value, ...convertedItems];
       imagePage.value++;
       
       // console.log('插画历史加载成功，新增', newItems.length, '条');
@@ -116,15 +125,15 @@ const groupedImageHistory = computed(() => {
   
   // 创建副本进行排序，避免修改原数组
   const sortedItems = [...imageHistory.value].sort((a, b) => 
-    new Date(b.lastWatchDate).getTime() - new Date(a.lastWatchDate).getTime()
+    new Date(b.dateText).getTime() - new Date(a.dateText).getTime()
   );
 
   // 按日期分组
   sortedItems.forEach(item => {
-    if (!grouped[item.lastWatchDate]) {
-      grouped[item.lastWatchDate] = [];
+    if (!grouped[item.dateText]) {
+      grouped[item.dateText] = [];
     }
-    grouped[item.lastWatchDate].push(item);
+    grouped[item.dateText].push(item);
   });
 
   return grouped;
@@ -183,7 +192,7 @@ loadImageDataInternal();
       <div class="date-header">{{ date === new Date().toISOString().split('T')[0] ? t('history.image.today') : date }}</div>
       <!-- {{ date === new Date().toISOString().split('T')[0] ? '今天' : date }} -->
       <v-list lines="two" class="pa-0">
-        <HistoryItem 
+        <MediaItem 
           v-for="item in groupItems" 
           :key="item.id" 
           :item="item"

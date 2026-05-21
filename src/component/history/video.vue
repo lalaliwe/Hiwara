@@ -3,7 +3,7 @@ import { ref, computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { getVideoHistoryList } from '../../core/database';
 import { showShortToast } from '../../core/toast';
-import HistoryItem from './HistoryItem.vue';
+import MediaItem from '../MediaItem.vue';
 import loadingHuawu from '../loadingHuawu.vue';
 import errorHuawu from '../errorHuawu.vue';
 
@@ -14,9 +14,10 @@ interface ListItem {
   img: string;
   author: string;
   createTime: string;
-  longNum: string;
+  longNum: number;
   isR18: boolean;
-  lastWatchDate: string;
+  dateText: string;
+  timestamp?: number;
 }
 
 const { t } = useI18n();
@@ -52,8 +53,16 @@ const loadMoreVideoData = async ({ done }: any = { done: () => { } }) => {
         videoState.value = 'success';
       }
 
+      // 转换数据格式
+      const convertedItems = newItems.map(item => ({
+        ...item,
+        longNum: Number(item.longNum), // 将 string 转换为 number
+        dateText: item.lastWatchDate,
+        timestamp: item.accessTime
+      }));
+
       // 追加数据
-      videoHistory.value = [...videoHistory.value, ...newItems];
+      videoHistory.value = [...videoHistory.value, ...convertedItems];
       videoPage.value++;
 
       // console.log('视频历史加载成功，新增', newItems.length, '条');
@@ -116,15 +125,15 @@ const groupedVideoHistory = computed(() => {
 
   // 创建副本进行排序，避免修改原数组
   const sortedItems = [...videoHistory.value].sort((a, b) =>
-    new Date(b.lastWatchDate).getTime() - new Date(a.lastWatchDate).getTime()
+    new Date(b.dateText).getTime() - new Date(a.dateText).getTime()
   );
 
   // 按日期分组
   sortedItems.forEach(item => {
-    if (!grouped[item.lastWatchDate]) {
-      grouped[item.lastWatchDate] = [];
+    if (!grouped[item.dateText]) {
+      grouped[item.dateText] = [];
     }
-    grouped[item.lastWatchDate].push(item);
+    grouped[item.dateText].push(item);
   });
 
   return grouped;
@@ -181,7 +190,7 @@ defineExpose({
       <div class="date-header">{{ date === new Date().toISOString().split('T')[0] ? t('history.video.today') : date }}</div>
       <!-- {{ date === new Date().toISOString().split('T')[0] ? '今天' : date }} -->
       <v-list lines="two" class="pa-0">
-        <HistoryItem v-for="(item, index) in groupItems" :key="index" :item="item" type="video" />
+        <MediaItem v-for="(item, index) in groupItems" :key="index" :item="item" type="video" />
       </v-list>
     </div>
     <!-- 加载失败提示 -->
