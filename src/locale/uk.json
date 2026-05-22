@@ -224,5 +224,41 @@
       "retry": "Натисніть для повторної спроби",
       "reachedBottom": "Досягнуто кінця"
     }
+  },
+  "forum": {
+    "sections": {
+      "announcements": "Оголошення",
+      "announcements_desc": "Важлива інформація",
+      "feedback": "Відгуки",
+      "feedback_desc": "Ідеї, пропозиції та занепокоєння",
+      "general": "Загальне",
+      "general_desc": "Все інше",
+      "guide": "Посібник",
+      "guide_desc": "Корисна інформація або посібники «як зробити»",
+      "help": "Допомога",
+      "help_desc": "Допомога з проблемами сайту",
+      "helpQuestion": "Допомога/Питання",
+      "helpQuestion_desc": "Питання, не пов'язані з сайтом",
+      "request": "Запит",
+      "request_desc": "Допомога в пошуку або створенні",
+      "share": "Поділитися",
+      "share_desc": "Ділитися моделями, анімаціями або іншими аксесуарами"
+    },
+    "replies": "Відповіді",
+    "views": "Перегляди",
+    "author": "Автор",
+    "lastReply": "Остання публікація",
+    "publishedAt": "Опубліковано",
+    "repliedAt": "Відповів",
+    "pinned": "Закріплено",
+    "loadMore": "Завантажити ще",
+    "noMore": "Більше немає",
+    "publish": "Опублікувати",
+    "publishSection": "Вибрати розділ",
+    "publishTitle": "Заголовок",
+    "publishTitlePlaceholder": "Введіть заголовок повідомлення",
+    "publishBody": "Зміст",
+    "publishBodyPlaceholder": "Введіть зміст, підтримується Markdown",
+    "publishSubmit": "Опублікувати повідомлення"
   }
 }

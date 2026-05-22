@@ -224,5 +224,41 @@
       "retry": "Clicca per riprovare",
       "reachedBottom": "Fine raggiunta"
     }
+  },
+  "forum": {
+    "sections": {
+      "announcements": "Annunci",
+      "announcements_desc": "Informazioni importanti",
+      "feedback": "Feedback",
+      "feedback_desc": "Idee, suggerimenti e preoccupazioni",
+      "general": "Generale",
+      "general_desc": "Tutto il resto",
+      "guide": "Guida",
+      "guide_desc": "Informazioni utili o guide \"come fare\"",
+      "help": "Aiuto",
+      "help_desc": "Aiuto con problemi relativi al sito",
+      "helpQuestion": "Aiuto/Domanda",
+      "helpQuestion_desc": "Domande non relative al sito",
+      "request": "Richiesta",
+      "request_desc": "Aiuto per trovare o creare",
+      "share": "Condividi",
+      "share_desc": "Condividi modelli, animazioni o altri accessori"
+    },
+    "replies": "Risposte",
+    "views": "Visualizzazioni",
+    "author": "Autore",
+    "lastReply": "Ultimo post",
+    "publishedAt": "Pubblicato il",
+    "repliedAt": "Risposto il",
+    "pinned": "In evidenza",
+    "loadMore": "Carica altro",
+    "noMore": "Niente altro",
+    "publish": "Pubblica",
+    "publishSection": "Seleziona sezione",
+    "publishTitle": "Titolo",
+    "publishTitlePlaceholder": "Inserisci il titolo del post",
+    "publishBody": "Contenuto",
+    "publishBodyPlaceholder": "Inserisci il contenuto, supporta Markdown",
+    "publishSubmit": "Pubblica post"
   }
 }

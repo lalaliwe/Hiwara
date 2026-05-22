@@ -121,8 +121,8 @@
     "video": {
       "sortTabs": {
         "date": "ថ្មីបំផុត",
-        "trending": "ពេញនិយម",
-        "popularity": "ពេញនិយម",
+        "trending": "កំពុងពេញនិយម",
+        "popularity": "ការពេញនិយម",
         "views": "ចំនួនមើល",
         "likes": "ចំនួនចូលចិត្ត"
       },
@@ -135,8 +135,8 @@
     "image": {
       "sortTabs": {
         "date": "ថ្មីបំផុត",
-        "trending": "ពេញនិយម",
-        "popularity": "ពេញនិយម",
+        "trending": "កំពុងពេញនិយម",
+        "popularity": "ការពេញនិយម",
         "views": "ចំនួនមើល",
         "likes": "ចំនួនចូលចិត្ត"
       },
@@ -224,5 +224,41 @@
       "retry": "ចុចដើម្បីសាកល្បងម្តងទៀត",
       "reachedBottom": "បានដល់បាត"
     }
+  },
+  "forum": {
+    "sections": {
+      "announcements": "សេចក្តីប្រកាស",
+      "announcements_desc": "ព័ត៌មានសំខាន់",
+      "feedback": "មតិកែលម្អ",
+      "feedback_desc": "គំនិត យោបល់ និងកង្វល់",
+      "general": "ទូទៅ",
+      "general_desc": "អ្វីផ្សេងទៀតទាំងអស់",
+      "guide": "ការណែនាំ",
+      "guide_desc": "ព័ត៌មានមានប្រយោជន៍ ឬការណែនាំ \"របៀបធ្វើ\"",
+      "help": "ជំនួយ",
+      "help_desc": "ជំនួយលើបញ្ហាទាក់ទងនឹងគេហទំព័រ",
+      "helpQuestion": "ជំនួយ/សំណួរ",
+      "helpQuestion_desc": "សំណួរមិនទាក់ទងនឹងគេហទំព័រ",
+      "request": "សំណើ",
+      "request_desc": "ជំនួយក្នុងការស្វែងរក ឬបង្កើត",
+      "share": "ចែករំលែក",
+      "share_desc": "ចែករំលែកគំរូ ចលនា ឬគ្រឿងបន្លាស់ផ្សេងទៀត"
+    },
+    "replies": "ការឆ្លើយតប",
+    "views": "ចំនួនមើល",
+    "author": "អ្នកបង្ហោះ",
+    "lastReply": "ការបង្ហោះថ្មី",
+    "publishedAt": "បានបោះពុម្ពនៅ",
+    "repliedAt": "បានឆ្លើយតបនៅ",
+    "pinned": "បានខ្ទាស់",
+    "loadMore": "ផ្ទុកបន្ថែម",
+    "noMore": "គ្មានទៀតទេ",
+    "publish": "បង្ហោះ",
+    "publishSection": "ជ្រើសរើសផ្នែក",
+    "publishTitle": "ចំណងជើង",
+    "publishTitlePlaceholder": "បញ្ចូលចំណងជើង",
+    "publishBody": "ខ្លឹមសារ",
+    "publishBodyPlaceholder": "បញ្ចូលខ្លឹមសារ គាំទ្រ Markdown",
+    "publishSubmit": "ដាក់ស្នើការបង្ហោះ"
   }
 }

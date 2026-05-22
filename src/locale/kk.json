@@ -224,5 +224,41 @@
       "retry": "Қайта әрекет ету үшін басыңыз",
       "reachedBottom": "Соңына жетті"
     }
+  },
+  "forum": {
+    "sections": {
+      "announcements": "Хабарландырулар",
+      "announcements_desc": "Маңызды ақпарат",
+      "feedback": "Пікірлер",
+      "feedback_desc": "Идеялар, ұсыныстар және алаңдаушылықтар",
+      "general": "Жалпы",
+      "general_desc": "Барлық басқа нәрселер",
+      "guide": "Нұсқаулық",
+      "guide_desc": "Пайдалы ақпарат немесе \"қалай істеу\" нұсқаулықтары",
+      "help": "Көмек",
+      "help_desc": "Сайтқа қатысты мәселелерге көмек",
+      "helpQuestion": "Көмек/Сұрақ",
+      "helpQuestion_desc": "Сайтқа қатысы жоқ сұрақтар",
+      "request": "Сұраныс",
+      "request_desc": "Табуға немесе жасауға көмек",
+      "share": "Бөлісу",
+      "share_desc": "Модельдерді, анимацияларды немесе басқа аксессуарларды бөлісу"
+    },
+    "replies": "Жауаптар",
+    "views": "Көрілімдер",
+    "author": "Автор",
+    "lastReply": "Соңғы жарияланым",
+    "publishedAt": "Жарияланды",
+    "repliedAt": "Жауап берілді",
+    "pinned": "Бекітілген",
+    "loadMore": "Тағы жүктеу",
+    "noMore": "Басқа жоқ",
+    "publish": "Жариялау",
+    "publishSection": "Бөлімді таңдау",
+    "publishTitle": "Тақырып",
+    "publishTitlePlaceholder": "Жарияланым тақырыбын енгізіңіз",
+    "publishBody": "Мазмұны",
+    "publishBodyPlaceholder": "Жарияланым мәтінін енгізіңіз, Markdown қолдайды",
+    "publishSubmit": "Жарияланымды жіберу"
   }
 }

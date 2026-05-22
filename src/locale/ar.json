@@ -224,5 +224,41 @@
       "retry": "انقر لإعادة المحاولة",
       "reachedBottom": "تم الوصول إلى النهاية"
     }
+  },
+  "forum": {
+    "sections": {
+      "announcements": "إعلانات",
+      "announcements_desc": "معلومات مهمة",
+      "feedback": "ملاحظات",
+      "feedback_desc": "أفكار واقتراحات ومخاوف",
+      "general": "عام",
+      "general_desc": "كل شيء آخر",
+      "guide": "دليل",
+      "guide_desc": "معلومات مفيدة أو أدلة \"كيفية\"",
+      "help": "مساعدة",
+      "help_desc": "المساعدة في مشكلات الموقع",
+      "helpQuestion": "مساعدة/سؤال",
+      "helpQuestion_desc": "أسئلة غير متعلقة بالموقع",
+      "request": "طلب",
+      "request_desc": "المساعدة في البحث أو الإنشاء",
+      "share": "مشاركة",
+      "share_desc": "مشاركة النماذج والحركات أو الإكسسوارات الأخرى"
+    },
+    "replies": "الردود",
+    "views": "المشاهدات",
+    "author": "الكاتب",
+    "lastReply": "أحدث منشور",
+    "publishedAt": "نُشر في",
+    "repliedAt": "تم الرد في",
+    "pinned": "مثبت",
+    "loadMore": "تحميل المزيد",
+    "noMore": "لا يوجد المزيد",
+    "publish": "نشر",
+    "publishSection": "اختر القسم",
+    "publishTitle": "العنوان",
+    "publishTitlePlaceholder": "أدخل عنوان الموضوع",
+    "publishBody": "المحتوى",
+    "publishBodyPlaceholder": "أدخل محتوى الموضوع، يدعم Markdown",
+    "publishSubmit": "نشر الموضوع"
   }
 }

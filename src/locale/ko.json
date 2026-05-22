@@ -224,5 +224,41 @@
       "retry": "클릭하여 재시도",
       "reachedBottom": "마지막입니다"
     }
+  },
+  "forum": {
+    "sections": {
+      "announcements": "공지",
+      "announcements_desc": "중요 정보",
+      "feedback": "피드백",
+      "feedback_desc": "아이디어, 제안 및 우려사항",
+      "general": "일반",
+      "general_desc": "기타 모든 것",
+      "guide": "가이드",
+      "guide_desc": "유용한 정보 또는 \"방법\" 가이드",
+      "help": "도움말",
+      "help_desc": "사이트 관련 문제 도움",
+      "helpQuestion": "도움말/질문",
+      "helpQuestion_desc": "사이트와 관련 없는 질문",
+      "request": "요청",
+      "request_desc": "찾기 또는 만들기 도움",
+      "share": "공유",
+      "share_desc": "모델, 애니메이션 또는 기타 액세서리 공유"
+    },
+    "replies": "댓글",
+    "views": "조회",
+    "author": "작성자",
+    "lastReply": "최신 게시물",
+    "publishedAt": "게시일",
+    "repliedAt": "답변 시간",
+    "pinned": "고정",
+    "loadMore": "더 불러오기",
+    "noMore": "더 이상 없습니다",
+    "publish": "게시",
+    "publishSection": "섹션 선택",
+    "publishTitle": "제목",
+    "publishTitlePlaceholder": "게시물 제목 입력",
+    "publishBody": "내용",
+    "publishBodyPlaceholder": "게시물 내용 입력, Markdown 지원",
+    "publishSubmit": "게시물 올리기"
   }
 }

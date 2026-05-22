@@ -224,5 +224,41 @@
       "retry": "คลิกเพื่อลองใหม่",
       "reachedBottom": "ถึงด้านล่างแล้ว"
     }
+  },
+  "forum": {
+    "sections": {
+      "announcements": "ประกาศ",
+      "announcements_desc": "ข้อมูลสำคัญ",
+      "feedback": "ข้อเสนอแนะ",
+      "feedback_desc": "ความคิด ข้อเสนอแนะ และข้อกังวล",
+      "general": "ทั่วไป",
+      "general_desc": "สิ่งอื่นๆ ทั้งหมด",
+      "guide": "คำแนะนำ",
+      "guide_desc": "ข้อมูลที่เป็นประโยชน์หรือคำแนะนำ \"วิธีทำ\"",
+      "help": "ช่วยเหลือ",
+      "help_desc": "ช่วยเหลือปัญหาที่เกี่ยวข้องกับเว็บไซต์",
+      "helpQuestion": "ช่วยเหลือ/คำถาม",
+      "helpQuestion_desc": "คำถามที่ไม่เกี่ยวกับเว็บไซต์",
+      "request": "คำขอ",
+      "request_desc": "ช่วยค้นหาหรือสร้าง",
+      "share": "แชร์",
+      "share_desc": "แชร์โมเดล แอนิเมชัน หรืออุปกรณ์เสริมอื่นๆ"
+    },
+    "replies": "คำตอบ",
+    "views": "การดู",
+    "author": "ผู้เขียน",
+    "lastReply": "โพสต์ล่าสุด",
+    "publishedAt": "เผยแพร่เมื่อ",
+    "repliedAt": "ตอบกลับเมื่อ",
+    "pinned": "ปักหมุด",
+    "loadMore": "โหลดเพิ่มเติม",
+    "noMore": "ไม่มีเพิ่มเติม",
+    "publish": "โพสต์",
+    "publishSection": "เลือกหมวด",
+    "publishTitle": "หัวข้อ",
+    "publishTitlePlaceholder": "ป้อนหัวข้อโพสต์",
+    "publishBody": "เนื้อหา",
+    "publishBodyPlaceholder": "ป้อนเนื้อหาโพสต์ รองรับ Markdown",
+    "publishSubmit": "โพสต์"
   }
 }

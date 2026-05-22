@@ -224,5 +224,41 @@
       "retry": "Haz clic para reintentar",
       "reachedBottom": "Fin alcanzado"
     }
+  },
+  "forum": {
+    "sections": {
+      "announcements": "Anuncios",
+      "announcements_desc": "Información importante",
+      "feedback": "Comentarios",
+      "feedback_desc": "Ideas, sugerencias e inquietudes",
+      "general": "General",
+      "general_desc": "Todo lo demás",
+      "guide": "Guía",
+      "guide_desc": "Información útil o guías de \"cómo hacer\"",
+      "help": "Ayuda",
+      "help_desc": "Ayuda con problemas del sitio",
+      "helpQuestion": "Ayuda/Pregunta",
+      "helpQuestion_desc": "Preguntas no relacionadas con el sitio",
+      "request": "Solicitud",
+      "request_desc": "Ayuda para buscar o crear",
+      "share": "Compartir",
+      "share_desc": "Compartir modelos, animaciones u otros accesorios"
+    },
+    "replies": "Respuestas",
+    "views": "Vistas",
+    "author": "Autor",
+    "lastReply": "Última publicación",
+    "publishedAt": "Publicado el",
+    "repliedAt": "Respondido el",
+    "pinned": "Fijado",
+    "loadMore": "Cargar más",
+    "noMore": "No hay más",
+    "publish": "Publicar",
+    "publishSection": "Seleccionar sección",
+    "publishTitle": "Título",
+    "publishTitlePlaceholder": "Ingrese el título del mensaje",
+    "publishBody": "Contenido",
+    "publishBodyPlaceholder": "Ingrese el contenido, compatible con Markdown",
+    "publishSubmit": "Publicar mensaje"
   }
 }

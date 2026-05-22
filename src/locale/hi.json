@@ -224,5 +224,41 @@
       "retry": "पुनः प्रयास करने के लिए क्लिक करें",
       "reachedBottom": "अंत तक पहुंच गए"
     }
+  },
+  "forum": {
+    "sections": {
+      "announcements": "घोषणाएं",
+      "announcements_desc": "महत्वपूर्ण जानकारी",
+      "feedback": "प्रतिक्रिया",
+      "feedback_desc": "विचार, सुझाव और चिंताएं",
+      "general": "सामान्य",
+      "general_desc": "बाकी सब कुछ",
+      "guide": "गाइड",
+      "guide_desc": "उपयोगी जानकारी या \"कैसे करें\" गाइड",
+      "help": "सहायता",
+      "help_desc": "साइट से संबंधित समस्याओं में सहायता",
+      "helpQuestion": "सहायता/प्रश्न",
+      "helpQuestion_desc": "साइट से संबंधित नहीं प्रश्न",
+      "request": "अनुरोध",
+      "request_desc": "खोजने या बनाने में सहायता",
+      "share": "साझा करें",
+      "share_desc": "मॉडल, एनिमेशन या अन्य एक्सेसरीज़ साझा करें"
+    },
+    "replies": "उत्तर",
+    "views": "दृश्य",
+    "author": "लेखक",
+    "lastReply": "नवीनतम पोस्ट",
+    "publishedAt": "प्रकाशित",
+    "repliedAt": "उत्तर दिया गया",
+    "pinned": "पिन किया गया",
+    "loadMore": "और लोड करें",
+    "noMore": "और नहीं",
+    "publish": "पोस्ट करें",
+    "publishSection": "अनुभाग चुनें",
+    "publishTitle": "शीर्षक",
+    "publishTitlePlaceholder": "पोस्ट का शीर्षक दर्ज करें",
+    "publishBody": "सामग्री",
+    "publishBodyPlaceholder": "पोस्ट सामग्री दर्ज करें, Markdown समर्थित",
+    "publishSubmit": "पोस्ट सबमिट करें"
   }
 }

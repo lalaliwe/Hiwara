@@ -198,7 +198,7 @@
         "request": "請求",
         "request_desc": "幫助尋找或創造",
         "share": "分享",
-        "share_desc": "分享模型、動作或其他アクセサリー"
+        "share_desc": "分享模型、動畫或其他配件"
       }
     }
   },
@@ -224,5 +224,41 @@
       "retry": "點擊重試",
       "reachedBottom": "到底了"
     }
+  },
+  "forum": {
+    "sections": {
+      "announcements": "公告",
+      "announcements_desc": "重要資訊",
+      "feedback": "反饋",
+      "feedback_desc": "想法、建議和顧慮",
+      "general": "普通",
+      "general_desc": "其他一切",
+      "guide": "指南",
+      "guide_desc": "有用的資訊或「如何」指南",
+      "help": "幫助",
+      "help_desc": "幫助解決網站相關問題",
+      "helpQuestion": "幫助/問題",
+      "helpQuestion_desc": "與網站無關的問題",
+      "request": "請求",
+      "request_desc": "幫助尋找或創造",
+      "share": "分享",
+      "share_desc": "分享模型、動畫或其他配件"
+    },
+    "replies": "回覆",
+    "views": "瀏覽",
+    "author": "發布者",
+    "lastReply": "最新發布",
+    "publishedAt": "發布於",
+    "repliedAt": "回覆於",
+    "pinned": "置頂",
+    "loadMore": "載入更多",
+    "noMore": "沒有更多了",
+    "publish": "發帖",
+    "publishSection": "選擇版塊",
+    "publishTitle": "標題",
+    "publishTitlePlaceholder": "請輸入帖子標題",
+    "publishBody": "內容",
+    "publishBodyPlaceholder": "請輸入帖子內容，支援 Markdown 語法",
+    "publishSubmit": "發布帖子"
   }
 }

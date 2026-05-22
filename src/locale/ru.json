@@ -224,5 +224,41 @@
       "retry": "Нажмите для повторной попытки",
       "reachedBottom": "Достигнут конец"
     }
+  },
+  "forum": {
+    "sections": {
+      "announcements": "Объявления",
+      "announcements_desc": "Важная информация",
+      "feedback": "Обратная связь",
+      "feedback_desc": "Идеи, предложения и опасения",
+      "general": "Общее",
+      "general_desc": "Всё остальное",
+      "guide": "Руководство",
+      "guide_desc": "Полезная информация или руководства «как сделать»",
+      "help": "Помощь",
+      "help_desc": "Помощь с проблемами сайта",
+      "helpQuestion": "Помощь/Вопрос",
+      "helpQuestion_desc": "Вопросы, не связанные с сайтом",
+      "request": "Запрос",
+      "request_desc": "Помощь в поиске или создании",
+      "share": "Поделиться",
+      "share_desc": "Делиться моделями, анимациями или другими аксессуарами"
+    },
+    "replies": "Ответы",
+    "views": "Просмотры",
+    "author": "Автор",
+    "lastReply": "Последняя публикация",
+    "publishedAt": "Опубликовано",
+    "repliedAt": "Ответил",
+    "pinned": "Закреплено",
+    "loadMore": "Загрузить ещё",
+    "noMore": "Больше нет",
+    "publish": "Опубликовать",
+    "publishSection": "Выбрать раздел",
+    "publishTitle": "Заголовок",
+    "publishTitlePlaceholder": "Введите заголовок сообщения",
+    "publishBody": "Содержание",
+    "publishBodyPlaceholder": "Введите содержание, поддерживается Markdown",
+    "publishSubmit": "Опубликовать сообщение"
   }
 }

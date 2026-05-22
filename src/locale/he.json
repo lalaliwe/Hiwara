@@ -224,5 +224,41 @@
       "retry": "לחץ לניסיון חוזר",
       "reachedBottom": "הגעת לסוף"
     }
+  },
+  "forum": {
+    "sections": {
+      "announcements": "הודעות",
+      "announcements_desc": "מידע חשוב",
+      "feedback": "משוב",
+      "feedback_desc": "רעיונות, הצעות וחששות",
+      "general": "כללי",
+      "general_desc": "כל השאר",
+      "guide": "מדריך",
+      "guide_desc": "מידע שימושי או מדריכי \"איך לעשות\"",
+      "help": "עזרה",
+      "help_desc": "עזרה בבעיות הקשורות לאתר",
+      "helpQuestion": "עזרה/שאלה",
+      "helpQuestion_desc": "שאלות שאינן קשורות לאתר",
+      "request": "בקשה",
+      "request_desc": "עזרה במציאה או יצירה",
+      "share": "שיתוף",
+      "share_desc": "שיתוף דגמים, אנימציות או אביזרים אחרים"
+    },
+    "replies": "תגובות",
+    "views": "צפיות",
+    "author": "מפרסם",
+    "lastReply": "פוסט אחרון",
+    "publishedAt": "פורסם ב",
+    "repliedAt": "הושב ב",
+    "pinned": "נעוץ",
+    "loadMore": "טען עוד",
+    "noMore": "אין יותר",
+    "publish": "פרסם",
+    "publishSection": "בחר קטגוריה",
+    "publishTitle": "כותרת",
+    "publishTitlePlaceholder": "הכנס כותרת",
+    "publishBody": "תוכן",
+    "publishBodyPlaceholder": "הכנס תוכן, תומך Markdown",
+    "publishSubmit": "פרסם הודעה"
   }
 }

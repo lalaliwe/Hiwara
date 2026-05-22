@@ -224,5 +224,41 @@
       "retry": "قايتا سىناش ئۈچۈن چېكىڭ",
       "reachedBottom": "ئاستىغا يەتتى"
     }
+  },
+  "forum": {
+    "sections": {
+      "announcements": "ئۇقتۇرۇش",
+      "announcements_desc": "مۇھىم ئۇچۇر",
+      "feedback": "پىكىر",
+      "feedback_desc": "ئىدىيە، تەكلىپ ۋە ئەندىشىلەر",
+      "general": "ئادەتتىكى",
+      "general_desc": "باشقا ھەممە نەرسە",
+      "guide": "يوللانما",
+      "guide_desc": "پايدىلىق ئۇچۇر ياكى \"قانداق قىلىش\" يوللانمىسى",
+      "help": "ياردەم",
+      "help_desc": "تور بەت مەسىلىلىرىنى ھەل قىلىش",
+      "helpQuestion": "ياردەم/سوئال",
+      "helpQuestion_desc": "تور بەتكە ئالاقىسىز سوئاللار",
+      "request": "تەلەپ",
+      "request_desc": "تېپىش ياكى يارىتىشقا ياردەم",
+      "share": "ھەمبەھىرلەش",
+      "share_desc": "مودېل، ھەرىكەت ياكى باشقا زىبۇ-زىننەتلەرنى ھەمبەھىرلەش"
+    },
+    "replies": "جاۋاب",
+    "views": "كۆرۈش",
+    "author": "يازغۇچى",
+    "lastReply": "ئاخىرقى يازما",
+    "publishedAt": "يوللانغان ۋاقىت",
+    "repliedAt": "جاۋاب قايتۇرغان ۋاقىت",
+    "pinned": "چىڭىتىلغان",
+    "loadMore": "تېخىمۇ كۆپ يۈكلەش",
+    "noMore": "تېخىمۇ يوق",
+    "publish": "يازما",
+    "publishSection": "بۆلەك تاللاش",
+    "publishTitle": "ماۋزۇ",
+    "publishTitlePlaceholder": "يازما ماۋزۇسىنى كىرگۈزۈڭ",
+    "publishBody": "مەزمۇن",
+    "publishBodyPlaceholder": "يازما مەزمۇنىنى كىرگۈزۈڭ، Markdown قوللايدۇ",
+    "publishSubmit": "يازما يوللاش"
   }
 }

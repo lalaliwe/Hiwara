@@ -224,5 +224,41 @@
       "retry": "クリックして再試行",
       "reachedBottom": "一番下まで到達しました"
     }
+  },
+  "forum": {
+    "sections": {
+      "announcements": "お知らせ",
+      "announcements_desc": "重要な情報",
+      "feedback": "フィードバック",
+      "feedback_desc": "アイデア、提案、懸念事項",
+      "general": "一般",
+      "general_desc": "その他すべて",
+      "guide": "ガイド",
+      "guide_desc": "役立つ情報や「方法」ガイド",
+      "help": "ヘルプ",
+      "help_desc": "サイト関連の問題を解決",
+      "helpQuestion": "ヘルプ/質問",
+      "helpQuestion_desc": "サイトに関係ない質問",
+      "request": "リクエスト",
+      "request_desc": "作成や発見の支援",
+      "share": "シェア",
+      "share_desc": "モデル、動作、その他アクセサリーを共有"
+    },
+    "replies": "返信",
+    "views": "閲覧",
+    "author": "投稿者",
+    "lastReply": "最新の投稿",
+    "publishedAt": "投稿日時",
+    "repliedAt": "返信日時",
+    "pinned": "固定",
+    "loadMore": "もっと読み込む",
+    "noMore": "これ以上ありません",
+    "publish": "投稿",
+    "publishSection": "セクションを選択",
+    "publishTitle": "タイトル",
+    "publishTitlePlaceholder": "投稿のタイトルを入力",
+    "publishBody": "内容",
+    "publishBodyPlaceholder": "投稿内容を入力（Markdown対応）",
+    "publishSubmit": "投稿する"
   }
 }

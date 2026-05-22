@@ -174,7 +174,7 @@
     "forum": {
       "posts": "发布",
       "topics": "主题",
-      "repliedAt": "发布于",
+      "repliedAt": "回复于",
       "latestPost": "最新回复",
       "groups": {
         "admin": "站长",
@@ -198,7 +198,7 @@
         "request": "请求",
         "request_desc": "帮助寻找或创造",
         "share": "分享",
-        "share_desc": "分享模型，動作或者其他アクセサリー"
+        "share_desc": "分享模型、动画或其他配件"
       }
     }
   },
@@ -242,7 +242,7 @@
       "request": "请求",
       "request_desc": "帮助寻找或创造",
       "share": "分享",
-      "share_desc": "分享模型，動作或者其他アクセサリー"
+      "share_desc": "分享模型、动画或其他配件"
     },
     "replies": "回复",
     "views": "浏览",

@@ -224,5 +224,41 @@
       "retry": "Klicken zum Wiederholen",
       "reachedBottom": "Ende erreicht"
     }
+  },
+  "forum": {
+    "sections": {
+      "announcements": "Ankündigungen",
+      "announcements_desc": "Wichtige Informationen",
+      "feedback": "Feedback",
+      "feedback_desc": "Ideen, Vorschläge und Bedenken",
+      "general": "Allgemein",
+      "general_desc": "Alles andere",
+      "guide": "Anleitung",
+      "guide_desc": "Nützliche Informationen oder \"How-to\"-Anleitungen",
+      "help": "Hilfe",
+      "help_desc": "Hilfe bei seitenbezogenen Problemen",
+      "helpQuestion": "Hilfe/Frage",
+      "helpQuestion_desc": "Fragen, die nicht mit der Seite zu tun haben",
+      "request": "Anfrage",
+      "request_desc": "Hilfe beim Suchen oder Erstellen",
+      "share": "Teilen",
+      "share_desc": "Modelle, Animationen oder andere Accessoires teilen"
+    },
+    "replies": "Antworten",
+    "views": "Aufrufe",
+    "author": "Autor",
+    "lastReply": "Neuester Beitrag",
+    "publishedAt": "Veröffentlicht am",
+    "repliedAt": "Beantwortet",
+    "pinned": "Angepinnt",
+    "loadMore": "Mehr laden",
+    "noMore": "Keine weiteren",
+    "publish": "Veröffentlichen",
+    "publishSection": "Bereich auswählen",
+    "publishTitle": "Titel",
+    "publishTitlePlaceholder": "Beitragstitel eingeben",
+    "publishBody": "Inhalt",
+    "publishBodyPlaceholder": "Beitragsinhalt eingeben, Markdown wird unterstützt",
+    "publishSubmit": "Beitrag veröffentlichen"
   }
 }
