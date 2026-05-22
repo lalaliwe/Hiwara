@@ -218,7 +218,7 @@ export async function postVideoComment(vid: string, body: string, parentId?: str
     rulesAgreement: true
   };
   if (parentId) {
-    postBody.parent = parentId;
+    postBody.parentId = parentId;
   }
   try {
     const response = await postSendRequestIwara(path, headers, postBody);

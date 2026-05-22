@@ -194,7 +194,7 @@ export async function postImageComment(pid: string, body: string, parentId?: str
   };
   const postBody: Record<string, any> = { body, rulesAgreement: true };
   if (parentId) {
-    postBody.parent = parentId;
+    postBody.parentId = parentId;
   }
   try {
     const response = await postSendRequestIwara(path, headers, postBody);

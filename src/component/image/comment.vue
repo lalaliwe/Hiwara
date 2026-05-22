@@ -107,11 +107,28 @@ async function loadAvatarsForComments(comments: Comment[]) {
 function handleCommentPosted(newComment: any) {
   // 加载新评论的头像
   loadUserAvatar(newComment.user)
-  // 插入到列表顶部
-  commentList.value.unshift(newComment)
-  // 更新状态
-  if (commentState.value === 'empty') {
-    commentState.value = 'success'
+  // 判断是否为回复
+  const parentId = newComment.parent?.id || newComment.parent
+  if (parentId && typeof parentId === 'string') {
+    // 是回复：插入到对应评论的回复列表中
+    if (!repliesMap.value[parentId]) {
+      repliesMap.value[parentId] = []
+    }
+    repliesMap.value[parentId].unshift(newComment)
+    // 更新评论的回复数（在评论列表中查找并递增）
+    const parentComment = commentList.value.find(c => c.id === parentId)
+    if (parentComment) {
+      parentComment.numReplies++
+    }
+    // 自动展开回复
+    repliesExpanded.value[parentId] = true
+  } else {
+    // 是顶层评论：插入到列表顶部
+    commentList.value.unshift(newComment)
+    // 更新状态
+    if (commentState.value === 'empty') {
+      commentState.value = 'success'
+    }
   }
   replyTarget.value = null
 }
@@ -671,6 +688,7 @@ onUnmounted(() => {
         .reply-btn {
           cursor: pointer;
           color: #00796B;
+          margin-left: auto;
         }
       }
 
