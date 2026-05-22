@@ -5,7 +5,7 @@ import { useI18n } from 'vue-i18n';
 import { setStatusBarTextStyle } from '../../plugins/navbarStyle';
 import { createForumThread, getForumHome } from '../../core/api';
 import { showShortToast } from '../../core/toast';
-import ForumSyntaxGuide from '../../component/forum/ForumSyntaxGuide.vue';
+import ForumSyntaxGuide from '../../component/ForumSyntaxGuide.vue';
 
 defineOptions({
   name: 'ForumPublish'

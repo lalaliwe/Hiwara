@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, computed, nextTick, watch } from 'vue';
+import { ref, onMounted, onUnmounted, computed, nextTick, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import {
   Like as iconLike,
@@ -17,6 +17,10 @@ import {
 import { showShortToast } from '../../core/toast';
 
 const router = useRouter();
+
+// 内容容器（用于 ResizeObserver 动态高度重算）
+const infoContentRef = ref<HTMLElement>();
+let contentResizeObserver: ResizeObserver | null = null;
 
 // 插画信息展开状态（内部状态）
 const infoExpand = ref(false);
@@ -95,6 +99,24 @@ onMounted(() => {
 
   // 监听窗口大小改变事件
   window.addEventListener('resize', handleResize);
+
+  // 监听内容容器高度变化（推荐内容等异步加载导致），重新计算
+  if (infoContentRef.value) {
+    contentResizeObserver = new ResizeObserver(() => {
+      calculateHeights();
+    });
+    contentResizeObserver.observe(infoContentRef.value);
+  }
+})
+
+onUnmounted(() => {
+  // 移除窗口大小改变监听器
+  window.removeEventListener('resize', handleResize);
+  // 断开 ResizeObserver
+  if (contentResizeObserver) {
+    contentResizeObserver.disconnect();
+    contentResizeObserver = null;
+  }
 })
 
 // 简化 watch 逻辑，使用 nextTick 确保 DOM 更新后设置样式
@@ -297,6 +319,7 @@ const formatDate = (dateString: string) => {
 
 <template>
   <!-- 第二部分：插画信息区域 -->
+  <div ref="infoContentRef">
   <div class="more" :class="{ expanded: infoExpand }" @click="infoExpand = !infoExpand">
     <font-awesome-icon icon="fa-solid fa-angle-down" />
   </div>
@@ -392,6 +415,7 @@ const formatDate = (dateString: string) => {
       <v-chip class="tag" v-for="tag in tags" :key="tag" size="small">{{ tag }}</v-chip>
     </div>
   </div>
+</div>
 </template>
 
 <style lang="scss" scoped>

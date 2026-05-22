@@ -165,3 +165,22 @@ export async function getImageComments(pid: string, page: number): Promise<any> 
     throw error;
   }
 }
+
+// 发表插画评论
+export async function postImageComment(pid: string, body: string, parentId?: string): Promise<any> {
+  const path = `${API_URL}/image/${pid}/comments`;
+  const headers = {
+    Authorization: `Bearer ${await getAccessToken()}`,
+  };
+  const postBody: Record<string, any> = { body, rulesAgreement: true };
+  if (parentId) {
+    postBody.parent = parentId;
+  }
+  try {
+    const response = await postSendRequestIwara(path, headers, postBody);
+    return response;
+  } catch (error) {
+    console.error('Post image comment failed:', error);
+    throw error;
+  }
+}

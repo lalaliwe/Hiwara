@@ -187,6 +187,28 @@ export async function getVideoComments(vid: string, page: number): Promise<any> 
   }
 }
 
+// 发表视频评论
+export async function postVideoComment(vid: string, body: string, parentId?: string): Promise<any> {
+  const path = `${API_URL}/video/${vid}/comments`;
+  const headers = {
+    Authorization: `Bearer ${await getAccessToken()}`,
+  };
+  const postBody: Record<string, any> = {
+    body: body,
+    rulesAgreement: true
+  };
+  if (parentId) {
+    postBody.parent = parentId;
+  }
+  try {
+    const response = await postSendRequestIwara(path, headers, postBody);
+    return response;
+  } catch (error) {
+    console.error('Post video comment failed:', error);
+    throw error;
+  }
+}
+
 // 搜索
 export async function search(text: string, page: number, type: 'videos' | 'images' | 'users'): Promise<any> {
   const path = `${API_URL}/search`;

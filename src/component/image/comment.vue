@@ -1,12 +1,14 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted, watch } from 'vue';
-import { getImageComments, getImageIwara } from '../../core/api';
+import { getImageComments, getImageIwara, postImageComment } from '../../core/api';
 import errorHuawu from '../errorHuawu.vue';
 import loadingHuawu from '../loadingHuawu.vue';
 import { showShortToast } from '../../core/toast';
 import defaultAvatarImg from '../../static/img/avatar-default.jpg';
 import avatarPlaceholderImg from '../../static/img/avatar-placeholder.png';
 import avatarErrorImg from '../../static/img/avatar-error.png';
+import CommentInput from '../CommentInput.vue';
+import ForumSyntaxGuide from '../ForumSyntaxGuide.vue';
 
 interface CommentUser {
   id: string
@@ -58,6 +60,12 @@ const commentState = ref<CommentState>('loading')
 // 头像 URL 缓存 (userId -> avatarUrl)
 const avatarUrlMap = ref<Record<string, string>>({})
 
+// 回复目标
+const replyTarget = ref<{ id: string; userName: string } | null>(null)
+
+// 语法说明
+const showSyntaxGuide = ref(false)
+
 // 加载单个用户头像
 async function loadUserAvatar(user: CommentUser): Promise<string> {
   const userId = user.id
@@ -93,6 +101,38 @@ async function loadAvatarsForComments(comments: Comment[]) {
   for (const comment of comments) {
     await loadUserAvatar(comment.user)
   }
+}
+
+// 评论发布成功回调
+function handleCommentPosted(newComment: any) {
+  // 加载新评论的头像
+  loadUserAvatar(newComment.user)
+  // 插入到列表顶部
+  commentList.value.unshift(newComment)
+  // 更新状态
+  if (commentState.value === 'empty') {
+    commentState.value = 'success'
+  }
+  replyTarget.value = null
+}
+
+function handleReply(comment: Comment) {
+  replyTarget.value = {
+    id: comment.id,
+    userName: comment.user.name || comment.user.username
+  }
+}
+
+function handleCancelReply() {
+  replyTarget.value = null
+}
+
+function handleOpenSyntax() {
+  showSyntaxGuide.value = true
+}
+
+function handleCloseSyntax() {
+  showSyntaxGuide.value = false
 }
 
 // 初始获取评论列表数据
@@ -201,6 +241,8 @@ watch(() => props.pid, (newVal) => {
     avatarUrlMap.value = {};
     loadMoreFailed.value = false;
     commentState.value = 'loading';
+    replyTarget.value = null;
+    showSyntaxGuide.value = false;
     // 重新初始化加载
     initGetComments();
   }
@@ -316,6 +358,13 @@ onUnmounted(() => {
     </div>
 
     <div class="commentView">
+      <!-- 语法说明覆盖层：填满整个评论视窗 -->
+      <Transition name="syntax">
+        <div v-if="showSyntaxGuide" class="syntax-overlay">
+          <ForumSyntaxGuide @close="handleCloseSyntax" />
+        </div>
+      </Transition>
+
       <div v-if="commentState === 'failed'" class="empty-state" @click="handleErrorClick">
         <errorHuawu>评论加载失败了喵~</errorHuawu>
       </div>
@@ -349,7 +398,7 @@ onUnmounted(() => {
                 <!-- 回复数 + 回复按钮 -->
                 <div class="reply-section">
                   <div v-if="item.numReplies > 0">{{ item.numReplies }}条回复&nbsp;&nbsp;</div>
-                  <div class="reply-btn">
+                  <div class="reply-btn" @click="handleReply(item)">
                     回复
                   </div>
                 </div>
@@ -373,6 +422,16 @@ onUnmounted(() => {
           </div>
         </template>
       </v-infinite-scroll>
+
+      <!-- 评论输入组件 -->
+      <CommentInput
+        :content-id="props.pid"
+        :post-comment="postImageComment"
+        :reply-to="replyTarget"
+        @posted="handleCommentPosted"
+        @cancel-reply="handleCancelReply"
+        @open-syntax="handleOpenSyntax"
+      />
     </div>
   </div>
 </template>
@@ -381,14 +440,14 @@ onUnmounted(() => {
   background-color: #fafafa;
   height: 100vh;
   width: 100vw;
-  overflow-y: auto;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
 .topBar {
-  backdrop-filter: blur(10px);
   position: fixed;
   top: 0;
-  width: 100%;
   z-index: 400;
   padding-top: env(safe-area-inset-top, 0);
   height: calc(env(safe-area-inset-top, 0) + 60px);
@@ -397,6 +456,8 @@ onUnmounted(() => {
   display: flex;
   align-items: center;
   user-select: none;
+  flex-shrink: 0;
+  width: 100%;
 
   .goback {
     padding: 0 16px;
@@ -422,12 +483,12 @@ onUnmounted(() => {
 }
 
 .commentView {
-  height: 100%;
-
-  >div {
-    padding-bottom: env(safe-area-inset-bottom, 0);
-  }
-
+  flex: 1;
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding-top: calc(env(safe-area-inset-top, 0) + 60px);
 }
 
 .listEnd {
@@ -453,7 +514,7 @@ onUnmounted(() => {
 }
 
 .empty-state {
-  height: 100%;
+  flex: 1;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -461,13 +522,8 @@ onUnmounted(() => {
 }
 
 .commentList {
-  height: 100%;
-  overflow-x: hidden;
-  padding: calc(env(safe-area-inset-top, 0) + 60px) 0 env(safe-area-inset-bottom, 0) 0;
-
-  &::-webkit-scrollbar-track {
-    margin: calc(60px + env(safe-area-inset-top, 0)) 0 env(safe-area-inset-bottom, 0) 0;
-  }
+  flex: 1;
+  overflow-y: auto;
 }
 
 .commentItem {
@@ -487,6 +543,7 @@ onUnmounted(() => {
   .elements {
     margin-left: 10px;
     flex: 1;
+    min-width: 0;
 
     .username {
       font-size: 0.8rem;
@@ -495,6 +552,7 @@ onUnmounted(() => {
 
     .content-wrapper {
       margin-top: 5px;
+      min-width: 0;
     }
 
     .content {
@@ -554,6 +612,47 @@ onUnmounted(() => {
         }
       }
     }
+  }
+}
+
+/* 语法说明覆盖层 - 填满整个评论视窗 */
+.syntax-enter-active {
+  transition: transform 0.3s ease;
+}
+
+.syntax-leave-active {
+  transition: transform 0.25s ease;
+}
+
+.syntax-enter-from,
+.syntax-leave-to {
+  transform: translateY(100%);
+}
+
+.syntax-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #fff;
+  z-index: 2000;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+
+  :deep(.syntax-drawer) {
+    position: static;
+    height: 100%;
+    border-radius: 0;
+    z-index: auto;
+    display: flex;
+    flex-direction: column;
+  }
+
+  :deep(.drawer-body) {
+    flex: 1;
+    overflow-y: auto;
   }
 }
 </style>

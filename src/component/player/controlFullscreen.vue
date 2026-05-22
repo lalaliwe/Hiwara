@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { ref, watch, onMounted, onUnmounted, computed } from 'vue'
 import Hammer from 'hammerjs'
-import { exitImmersive } from '../../../plugins/immersive'
-import { lockPortrait } from '../../../plugins/useOrientation'
-import { getNetworkInfo, getBatteryInfo } from '../../../plugins/deviceInfo'
-import customRange from '../customRange.vue'
+import { exitImmersive } from '../../plugins/immersive'
+import { lockPortrait } from '../../plugins/useOrientation'
+import { getNetworkInfo, getBatteryInfo } from '../../plugins/deviceInfo'
+import customRange from './customRange.vue'
 
 // Props - 接收父组件传递的数据
 const props = defineProps<{

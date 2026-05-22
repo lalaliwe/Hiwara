@@ -2,8 +2,8 @@
 import { ref, onMounted, onUnmounted, inject, watch } from 'vue'
 import { lockPortrait, lockLandscape } from '../../plugins/useOrientation'
 import { enterImmersive, exitImmersive } from '../../plugins/immersive'
-import controlFullscreen from './videoPlayer/controlFullscreen.vue';
-import control from './videoPlayer/control.vue';
+import controlFullscreen from './controlFullscreen.vue';
+import control from './control.vue';
 import { getImageIwara } from '../../core/api';
 import { setupStore } from '../../core/store';
 

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, watch, onMounted, onUnmounted } from 'vue'
 import Hammer from 'hammerjs'
-import customRange from '../customRange.vue'
+import customRange from './customRange.vue'
 
 // Props - 接收父组件传递的数据
 const props = defineProps<{

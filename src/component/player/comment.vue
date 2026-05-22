@@ -1,12 +1,14 @@
 <script setup lang="ts">
 import { onActivated, ref, watch } from 'vue'
-import { getVideoComments, getImageIwara } from '../../core/api'
+import { getVideoComments, getImageIwara, postVideoComment } from '../../core/api'
 import errorHuawu from '../errorHuawu.vue'
 import loadingHuawu from '../loadingHuawu.vue'
 import { showShortToast } from '../../core/toast'
 import defaultAvatarImg from '../../static/img/avatar-default.jpg'
 import avatarPlaceholderImg from '../../static/img/avatar-placeholder.png'
 import avatarErrorImg from '../../static/img/avatar-error.png'
+import CommentInput from '../CommentInput.vue'
+import ForumSyntaxGuide from '../ForumSyntaxGuide.vue'
 
 interface CommentUser {
   id: string
@@ -53,6 +55,12 @@ const commentState = ref<CommentState>('loading')
 // 头像 URL 缓存 (userId -> avatarUrl)
 const avatarUrlMap = ref<Record<string, string>>({})
 
+// 回复目标
+const replyTarget = ref<{ id: string; userName: string } | null>(null)
+
+// 语法说明
+const showSyntaxGuide = ref(false)
+
 // 加载单个用户头像
 async function loadUserAvatar(user: CommentUser): Promise<string> {
   const userId = user.id
@@ -88,6 +96,34 @@ async function loadAvatarsForComments(comments: Comment[]) {
   for (const comment of comments) {
     await loadUserAvatar(comment.user)
   }
+}
+
+// 评论发布成功回调
+function handleCommentPosted(newComment: any) {
+  // 加载新评论的头像
+  loadUserAvatar(newComment.user)
+  // 插入到列表顶部
+  commentList.value.unshift(newComment)
+  replyTarget.value = null
+}
+
+function handleReply(comment: Comment) {
+  replyTarget.value = {
+    id: comment.id,
+    userName: comment.user.name || comment.user.username
+  }
+}
+
+function handleCancelReply() {
+  replyTarget.value = null
+}
+
+function handleOpenSyntax() {
+  showSyntaxGuide.value = true
+}
+
+function handleCloseSyntax() {
+  showSyntaxGuide.value = false
 }
 
 // 初始获取评论列表数据
@@ -253,6 +289,13 @@ onActivated(() => {
 
 <template>
   <div class="commentView">
+    <!-- 语法说明覆盖层：填满整个评论视窗 -->
+    <Transition name="syntax">
+      <div v-if="showSyntaxGuide" class="syntax-overlay">
+        <ForumSyntaxGuide @close="handleCloseSyntax" />
+      </div>
+    </Transition>
+
     <div v-if="commentState === 'failed'" class="status-overlay" @click="handleErrorClick">
       <errorHuawu>评论加载失败了喵~</errorHuawu>
     </div>
@@ -283,7 +326,7 @@ onActivated(() => {
               <div class="created-time">{{ formatDate(item.createdAt) }}&nbsp;&nbsp;</div>
               <div class="reply-section">
                 <div v-if="item.numReplies > 0">{{ item.numReplies }}条回复&nbsp;&nbsp;</div>
-                <div class="reply-btn">回复</div>
+                <div class="reply-btn" @click="handleReply(item)">回复</div>
               </div>
               <div class="toggle-btn" v-if="needToggle(item.body)" @click="toggleExpand(item.id)">
                 {{ expandedMap[item.id] ? '收起' : '展开' }}
@@ -304,6 +347,16 @@ onActivated(() => {
         </div>
       </template>
     </v-infinite-scroll>
+
+    <!-- 评论输入组件 -->
+    <CommentInput
+      :content-id="props.vid"
+      :post-comment="postVideoComment"
+      :reply-to="replyTarget"
+      @posted="handleCommentPosted"
+      @cancel-reply="handleCancelReply"
+      @open-syntax="handleOpenSyntax"
+    />
   </div>
 </template>
 
@@ -313,8 +366,8 @@ onActivated(() => {
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  padding-bottom: env(safe-area-inset-bottom, 0);
   box-sizing: border-box;
+  position: relative;
 }
 
 .listEnd {
@@ -350,6 +403,7 @@ onActivated(() => {
 .commentList {
   flex: 1;
   overflow-y: auto;
+  padding-bottom: 8px;
 }
 
 .commentItem {
@@ -439,6 +493,48 @@ onActivated(() => {
         }
       }
     }
+  }
+}
+
+/* 语法说明覆盖层 - 填满整个评论视窗 */
+.syntax-enter-active {
+  transition: transform 0.3s ease;
+}
+
+.syntax-leave-active {
+  transition: transform 0.25s ease;
+}
+
+.syntax-enter-from,
+.syntax-leave-to {
+  transform: translateY(100%);
+}
+
+.syntax-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #fff;
+  z-index: 2000;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+
+  // ForumSyntaxGuide 原本有固定定位和高度限制，在此覆盖
+  :deep(.syntax-drawer) {
+    position: static;
+    height: 100%;
+    border-radius: 0;
+    z-index: auto;
+    display: flex;
+    flex-direction: column;
+  }
+
+  :deep(.drawer-body) {
+    flex: 1;
+    overflow-y: auto;
   }
 }
 </style>

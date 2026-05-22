@@ -22,6 +22,7 @@ export {
   getVideoRecommendByUser,
   getVideoRecommendByOther,
   getVideoComments,
+  postVideoComment,
   search
 } from './video';
 
@@ -35,7 +36,8 @@ export {
   unlikeImage,
   getImageRecommendByUser,
   getImageRecommendByOther,
-  getImageComments
+  getImageComments,
+  postImageComment
 } from './image';
 
 // 用户 API
