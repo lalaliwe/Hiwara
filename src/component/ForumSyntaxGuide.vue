@@ -191,7 +191,7 @@ defineEmits<{
   left: 0;
   width: 100%;
   height: 75%;
-  background-color: #fff;
+  background-color: var(--color-bg-card);
   border-radius: 16px 16px 0 0;
   z-index: 2000;
   display: flex;
@@ -204,23 +204,23 @@ defineEmits<{
   align-items: center;
   justify-content: space-between;
   padding: 16px 20px;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid var(--color-border-light);
   flex-shrink: 0;
 
   .drawer-title {
     font-size: 1.1rem;
     font-weight: 600;
-    color: #333;
+    color: var(--color-text-secondary);
   }
 
   .drawer-close {
     font-size: 1.4rem;
-    color: #999;
+    color: var(--color-text-placeholder-light);
     cursor: pointer;
     padding: 4px;
 
     &:hover {
-      color: #333;
+      color: var(--color-text-secondary);
     }
   }
 }
@@ -238,12 +238,12 @@ defineEmits<{
   .section-title {
     font-size: 1rem;
     font-weight: 600;
-    color: #333;
+    color: var(--color-text-secondary);
     margin-bottom: 12px;
     display: block;
 
     &.link {
-      color: #00796B;
+      color: var(--color-primary);
       text-decoration: none;
 
       .external-icon {
@@ -255,7 +255,7 @@ defineEmits<{
 
   .syntax-hint {
     font-size: 0.75rem;
-    color: #999;
+    color: var(--color-text-placeholder-light);
     font-weight: 400;
     margin-top: 2px;
   }
@@ -265,17 +265,17 @@ defineEmits<{
   display: flex;
   flex-direction: column;
   gap: 2px;
-  background-color: #f5f5f5;
+  background-color: var(--color-bg-section);
   border-radius: 8px;
   overflow: hidden;
 }
 
 .syntax-row {
   display: flex;
-  background-color: #fff;
+  background-color: var(--color-bg-card);
 
   &:not(:last-child) {
-    border-bottom: 1px solid #f0f0f0;
+    border-bottom: 1px solid var(--color-border-lighter);
   }
 }
 
@@ -285,8 +285,8 @@ defineEmits<{
   padding: 10px 12px;
   font-size: 0.85rem;
   font-weight: 500;
-  color: #555;
-  background-color: #fafafa;
+  color: var(--color-text-code);
+  background-color: var(--color-bg-page);
 }
 
 .syntax-desc {
@@ -294,35 +294,35 @@ defineEmits<{
   padding: 10px 12px;
   font-size: 0.82rem;
   line-height: 1.6;
-  color: #444;
+  color: var(--color-text-body);
 
   code {
-    background-color: #f0f0f0;
+    background-color: var(--color-bg-code-inline);
     padding: 1px 5px;
     border-radius: 3px;
     font-size: 0.8rem;
-    color: #d63384;
+    color: var(--color-text-code-inline);
     font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', 'JetBrains Mono', 'Consolas', monospace;
   }
 
   kbd {
     display: inline-block;
-    background-color: #eee;
-    border: 1px solid #ccc;
+    background-color: var(--color-bg-tag);
+    border: 1px solid var(--color-bg-tag-border);
     border-radius: 3px;
     padding: 1px 5px;
     font-size: 0.75rem;
     font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', 'JetBrains Mono', 'Consolas', monospace;
-    color: #555;
+    color: var(--color-text-code);
     margin: 0 1px;
   }
 
   .syntax-preview {
     margin-top: 6px;
     padding: 8px 10px;
-    background-color: #f9f9f9;
+    background-color: var(--color-bg-code-block);
     border-radius: 6px;
-    border: 1px solid #eee;
+    border: 1px solid var(--color-border-light);
 
     p { margin: 4px 0; }
     strong { font-weight: 600; }
@@ -332,14 +332,14 @@ defineEmits<{
     hr {
       margin: 4px 0;
       border: none;
-      border-top: 1px solid #ddd;
+      border-top: 1px solid var(--color-border-code-block);
     }
 
     blockquote {
       margin: 4px 0;
       padding-left: 10px;
-      border-left: 3px solid #00796B;
-      color: #666;
+      border-left: 3px solid var(--color-primary);
+      color: var(--color-text-placeholder);
       blockquote { margin-left: 10px; }
     }
 
@@ -351,7 +351,7 @@ defineEmits<{
 
     h1 { font-size: 1.2rem; font-weight: 600; margin: 4px 0; }
     h2 { font-size: 1rem; font-weight: 600; margin: 4px 0; }
-    a { color: #00796B; text-decoration: none; }
+    a { color: var(--color-primary); text-decoration: none; }
   }
 
   .preview-item {
@@ -360,7 +360,7 @@ defineEmits<{
     gap: 4px;
     margin-right: 12px;
     font-size: 0.8rem;
-    color: #00796B;
+    color: var(--color-primary);
 
     svg { font-size: 0.85rem; }
   }

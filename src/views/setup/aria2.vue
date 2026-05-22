@@ -114,7 +114,7 @@ const updateAria2Download = async (event: Event) => {
 #setupAria2View {
   overflow-y: auto;
   padding: calc(60px + env(safe-area-inset-top, 0)) 0 env(safe-area-inset-bottom, 0) 0;
-  background-color: #fafafa;
+  background-color: var(--color-bg-page);
 
   &::-webkit-scrollbar-track {
     margin: calc(60px + env(safe-area-inset-top, 0)) 0 env(safe-area-inset-bottom, 0) 0;
@@ -129,8 +129,8 @@ const updateAria2Download = async (event: Event) => {
   z-index: 400;
   padding-top: env(safe-area-inset-top, 0);
   height: calc(env(safe-area-inset-top, 0) + 60px);
-  background-color: rgba(0, 121, 107, 0.9);
-  color: #fff;
+  background-color: var(--color-primary-90);
+  color: var(--color-text-on-primary);
   display: flex;
   align-items: center;
   user-select: none;
@@ -159,7 +159,7 @@ const updateAria2Download = async (event: Event) => {
 }
 
 .item1, .item2 {
-  color: #212121;
+  color: var(--color-text-primary);
   font-size: 1rem;
   user-select: none;
   display: flex;
@@ -190,7 +190,7 @@ const updateAria2Download = async (event: Event) => {
 .tips {
   display: flex;
   align-items: center;
-  color: #9E9E9E;
+  color: var(--color-text-hint);
   font-size: 0.8rem;
   margin-top: 8px;
 

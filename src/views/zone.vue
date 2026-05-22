@@ -9,6 +9,7 @@ import VideoList from '../component/zone/video.vue'
 import ImageList from '../component/zone/image.vue'
 import PublishList from '../component/zone/publish.vue'
 import {
+  getMyselfInfo,
   getUserInfo,
   getUserFollowers,
   getUserFans,
@@ -28,7 +29,7 @@ const route = useRoute()
 const router = useRouter()
 
 const isMyself = ref<boolean>(false)
-const username = ref<string>((route.params.username as string) || (muname().value ?? ''))
+const username = ref<string>('')
 const uid = ref<string>('')
 const nickname = ref<string>('')
 const userSignature = ref<string>('')
@@ -301,6 +302,9 @@ onMounted(() => {
     resizeObserver.observe(zoneInfoRef.value);
   }
 
+  // 异步初始化 username 并获取数据
+  initZone()
+
   nextTick(() => {
     // 初始不设置顶栏颜色，等待滚动事件触发
     restoreScrollPosition(tab.value);
@@ -319,8 +323,39 @@ onUnmounted(() => {
   }
 });
 
-// 获取数据
-getData()
+// 异步初始化 username：route params → store → API，然后获取数据
+async function initZone() {
+  // 1. 优先从路由参数获取
+  const routeUsername = route.params.username as string
+  if (routeUsername) {
+    username.value = routeUsername
+    await getData()
+    return
+  }
+
+  // 2. 从 Pinia store 获取
+  const storeUsername = muname().value
+  if (storeUsername) {
+    username.value = storeUsername
+    await getData()
+    return
+  }
+
+  // 3. 从 API 获取当前用户信息
+  try {
+    const res = await getMyselfInfo()
+    if (res.ok && res.data?.user?.username) {
+      username.value = res.data.user.username
+      // 同步更新 store
+      muname().set(res.data.user.username)
+    }
+  } catch (error) {
+    console.error('无法获取用户名:', error)
+  }
+
+  await getData()
+}
+
 async function getData() {
   try {
     if (username.value === '')
@@ -452,7 +487,7 @@ async function getData() {
   height: 100%;
   display: flex;
   flex-direction: column;
-  background-color: #fafafa;
+  background-color: var(--color-bg-page);
 }
 
 .state-container {
@@ -467,7 +502,7 @@ async function getData() {
   flex: 1;
   overflow-y: auto;
   overflow-x: hidden;
-  background-color: #fafafa;
+  background-color: var(--color-bg-page);
   position: relative;
   padding-bottom: env(safe-area-inset-bottom, 0);
 }
@@ -497,20 +532,20 @@ async function getData() {
 }
 
 .top-green {
-  background-color: rgba(0, 121, 107, 0.9);
+  background-color: var(--color-primary-90);
   backdrop-filter: blur(10px);
 }
 
 .zone-info {
   position: relative;
   width: 100%;
-  background-color: #fff;
+  background-color: var(--color-bg-card);
   padding-bottom: 8px;
 
   .zone-bg {
     width: 100%;
     height: 160px;
-    background-color: #BDBDBD;
+    background-color: var(--color-bg-placeholder);
   }
 }
 
@@ -519,11 +554,25 @@ async function getData() {
   position: sticky;
   top: calc(48px + env(safe-area-inset-top, 0));
   z-index: 200;
-  background-color: #fff;
+  background-color: var(--color-bg-card);
 
   .tabs {
-    background-color: #fff;
+    background-color: var(--color-bg-card);
     width: 100%;
+  }
+
+  /* Vuetify tab 文字颜色适配暗色模式 */
+  :deep(.v-tab) {
+    color: var(--color-text-muted);
+
+    &.v-tab--selected {
+      color: var(--color-primary);
+    }
+  }
+
+  /* Vuetify divider 颜色适配暗色模式 */
+  :deep(.v-divider) {
+    border-color: var(--color-border-divider) !important;
   }
 }
 

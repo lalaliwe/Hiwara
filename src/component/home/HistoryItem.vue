@@ -77,7 +77,7 @@ function clickItem() {
     .placeholder {
       width: 100%;
       height: 100%;
-      background-color: #d0d0d0;
+      background-color: var(--color-bg-placeholder);
       display: flex;
       justify-content: center;
       align-items: center;
@@ -94,6 +94,7 @@ function clickItem() {
     width: 100px;
     overflow: hidden;
     text-overflow: ellipsis;
+    color: var(--color-text-primary);
   }
 }
 </style>

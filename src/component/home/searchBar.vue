@@ -52,8 +52,8 @@ function toSearch() {
 }
 
 .top-view {
-  background-color: rgba(0, 121, 107, 0.9);
-  color: #fff;
+  background-color: var(--color-primary-90);
+  color: var(--color-text-on-primary);
   height: calc(60px + env(safe-area-inset-top, 0));
   width: 100%;
   /* 安全区域适配 - 避免状态栏遮挡内容 */
@@ -65,7 +65,7 @@ function toSearch() {
   // padding-bottom: env(safe-area-inset-bottom, 0);
   padding: env(safe-area-inset-top, 0) env(safe-area-inset-right, 0) 0 env(safe-area-inset-left, 0);
   display: flex;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow-top-bar);
 }
 
 .search {
@@ -76,11 +76,11 @@ function toSearch() {
   cursor: pointer;
 
   .input {
-    background-color: #fff;
+    background-color: var(--color-bg-card);
     border-radius: 30px;
     flex: 1;
     height: 32px;
-    color: #616161;
+    color: var(--color-text-muted);
     display: flex;
     justify-content: start;
     align-items: center;

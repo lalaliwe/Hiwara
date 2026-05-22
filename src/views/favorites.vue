@@ -70,7 +70,7 @@ onActivated(() => {
 #favoritesView {
   display: flex;
   flex-direction: column;
-  background-color: #fafafa;
+  background-color: var(--color-bg-page);
 }
 
 .top {
@@ -83,8 +83,8 @@ onActivated(() => {
   .topBar {
     padding-top: env(safe-area-inset-top, 0);
     height: calc(env(safe-area-inset-top, 0) + 60px);
-    background-color: rgba(0, 121, 107, 0.9);
-    color: #fff;
+    background-color: var(--color-primary-90);
+    color: var(--color-text-on-primary);
     display: flex;
     align-items: center;
     user-select: none;
@@ -113,11 +113,19 @@ onActivated(() => {
   }
 
   .tabs {
-    background-color: rgba(255, 255, 255, 0.8);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    background-color: var(--color-white-80);
+    box-shadow: var(--shadow-tab-bar);
 
     .v-tabs--density-compact {
       --v-tabs-height: 40px;
+    }
+
+    :deep(.v-tab) {
+      color: var(--color-text-muted);
+
+      &.v-tab--selected {
+        color: var(--color-primary);
+      }
     }
   }
 }

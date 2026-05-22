@@ -97,8 +97,8 @@ function refresh(tab: TabType) {
 <style lang="scss" scoped>
 .tabs {
   display: flex;
-  background-color: rgba(255, 255, 255, 0.8);
-  box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
+  background-color: var(--color-white-80);
+  box-shadow: var(--shadow-bottom-nav);
   backdrop-filter: blur(10px);
   padding-bottom: env(safe-area-inset-bottom, 0);
 
@@ -113,10 +113,19 @@ function refresh(tab: TabType) {
     justify-content: center;
     height: 60px;
     text-align: center;
+    color: var(--color-text-muted);
+
+    svg {
+      fill: var(--color-text-muted) !important;
+    }
 
     &.active {
-      background-color: rgba(0, 121, 107, 0.2);
-      color: #00796B;
+      background-color: var(--color-primary-20);
+      color: var(--color-primary);
+
+      svg {
+        fill: var(--color-primary) !important;
+      }
     }
   }
 }

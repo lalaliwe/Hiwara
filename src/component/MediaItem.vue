@@ -130,12 +130,13 @@ onMounted(async () => {
 
 <style lang="scss" scoped>
 .list-item {
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid var(--color-border-light);
   padding: 8px 16px;
+  background-color: var(--color-bg-card);
 
   .longNum {
-    background-color: rgba(0, 0, 0, 0.5);
-    color: #fff;
+    background-color: var(--color-bg-overlay);
+    color: var(--color-text-on-image);
     position: absolute;
     right: 4px;
     bottom: 4px;
@@ -147,7 +148,7 @@ onMounted(async () => {
   .placeholder {
     width: 100%;
     height: 100%;
-    background-color: #d0d0d0;
+    background-color: var(--color-bg-placeholder);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -168,11 +169,12 @@ onMounted(async () => {
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
+      color: var(--color-text-primary);
     }
 
     .list-subtitle {
       font-size: 0.8rem;
-      color: #616161;
+      color: var(--color-text-muted);
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -181,7 +183,7 @@ onMounted(async () => {
 
     .list-stats {
       font-size: 0.8rem;
-      color: #616161;
+      color: var(--color-text-muted);
       margin-top: 4px;
       white-space: nowrap;
       overflow: hidden;

@@ -164,7 +164,7 @@ TBD
 * ✅ 设置 | Settings
 * ⬜ 桌面端适配 | Desktop adaptation
 * ⬜ 平板电脑适配 | Tablet adaptation
-* ⬜ 暗黑模式 | Dark mode
+* ✅ 暗黑模式 | Dark mode
 * ⬜ 离线缓存及下载 | Offline caching and downloading
 * ✅ 论坛浏览 | Forum browsing
 * ✅ 论坛发帖 | Forum posting

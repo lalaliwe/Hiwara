@@ -93,7 +93,7 @@ function formatDate(dateStr: string): string {
 <style lang="scss" scoped>
 .item {
   padding: 10px 12px;
-  border-bottom: 1px solid #e0e0e0;
+  border-bottom: 1px solid var(--color-border);
   position: relative;
 
   .author {
@@ -125,6 +125,7 @@ function formatDate(dateStr: string): string {
         font-size: 0.9rem;
         cursor: pointer;
         user-select: none;
+        color: var(--color-text-primary);
       }
     }
   }
@@ -133,7 +134,8 @@ function formatDate(dateStr: string): string {
     font-size: 1.1rem;
     font-weight: 500;
     padding: 10px 0;
-    border-bottom: 1px dashed #a0a0a0;
+    border-bottom: 1px dashed var(--color-border-dashed);
+    color: var(--color-text-primary);
   }
 
   .text {
@@ -141,6 +143,7 @@ function formatDate(dateStr: string): string {
     font-size: 0.9rem;
     white-space: pre-wrap;
     word-break: break-word;
+    color: var(--color-text-body);
   }
 
   .info {
@@ -152,11 +155,12 @@ function formatDate(dateStr: string): string {
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
+      color: var(--color-text-muted);
     }
   }
 
   .gray {
-    color: #616161;
+    color: var(--color-text-muted);
   }
 
   .num {
@@ -164,7 +168,7 @@ function formatDate(dateStr: string): string {
     right: 12px;
     top: 12px;
     font-size: 0.8rem;
-    color: #616161;
+    color: var(--color-text-muted);
   }
 }
 </style>

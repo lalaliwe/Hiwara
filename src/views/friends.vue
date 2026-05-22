@@ -1,11 +1,13 @@
 <script setup lang="ts">
-import { onActivated, ref, watch } from 'vue'
+import { onActivated, onMounted, ref, watch } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { setStatusBarTextStyle } from '../plugins/navbarStyle'
 import { uid as muid } from '../core/store';
+import { getMyselfInfo } from '../core/api';
 import following from '../component/friends/following.vue'
 import fans from '../component/friends/fans.vue'
 import friend from '../component/friends/friend.vue'
+import loadingHuawu from '../component/loadingHuawu.vue'
 
 defineOptions({
   name: 'Friends'
@@ -21,24 +23,73 @@ applyPageSettings()
 const router = useRouter()
 const route = useRoute()
 
-const uid = ref<string>((route.params.uid as string) || (muid().value ?? ''))
+const uid = ref<string>('')
+const isUidReady = ref(false)
+
+// 异步初始化 uid：route params → store → API
+async function initUid() {
+  // 1. 优先从路由参数获取
+  const routeUid = route.params.uid as string
+  if (routeUid) {
+    uid.value = routeUid
+    isUidReady.value = true
+    return
+  }
+
+  // 2. 从 Pinia store 获取
+  const storeUid = muid().value
+  if (storeUid) {
+    uid.value = storeUid
+    isUidReady.value = true
+    return
+  }
+
+  // 3. 从 API 获取当前用户信息
+  try {
+    const res = await getMyselfInfo()
+    if (res.ok && res.data?.user?.id) {
+      uid.value = res.data.user.id
+      // 同步更新 store，避免后续重复请求
+      muid().set(res.data.user.id)
+    } else {
+      console.error('获取用户信息失败，无法解析 uid')
+    }
+  } catch (error) {
+    console.error('无法获取用户信息:', error)
+  }
+
+  isUidReady.value = true
+}
 
 // 判定是否是用户自己的好友列表
 const isMyself = ref<boolean>(false)
-if (uid.value === muid().value) {
-  isMyself.value = true
-}
 
 const tab = ref<'follow' | 'fans' | 'friend'>()
 tab.value = route.query.type as 'follow' | 'fans' | 'friend'
 
-// 如果不是自己的好友列表，默认切换到'follow'标签
-if (!isMyself.value && tab.value === 'friend') {
-  tab.value = 'follow'
-}
+// 等待 uid 初始化完成后计算 isMyself 并修正 tab
+watch(isUidReady, (ready) => {
+  if (ready) {
+    isMyself.value = uid.value === muid().value
+    // 如果不是自己的好友列表，默认切换到'follow'标签
+    if (!isMyself.value && tab.value === 'friend') {
+      tab.value = 'follow'
+    }
+  }
+})
 
-console.log('uid:', uid.value)
-console.log('isMyself:', isMyself.value)
+// 在组件挂载时初始化 uid
+onMounted(() => {
+  initUid()
+})
+
+// 当 uid 准备好后输出日志
+watch(uid, (newUid) => {
+  if (newUid) {
+    console.log('uid:', newUid)
+    console.log('isMyself:', isMyself.value)
+  }
+})
 
 interface ListItem {
   uid: string,
@@ -119,7 +170,11 @@ onActivated(() => {
         <v-divider></v-divider>
       </div>
     </div>
-    <v-tabs-window v-model="tab" class="tabs-window">
+    <!-- uid 未就绪时显示加载状态，避免子组件因空 uid 发起 API 请求 -->
+    <div v-if="!isUidReady" class="loading-init">
+      <loadingHuawu>数据加载中</loadingHuawu>
+    </div>
+    <v-tabs-window v-else v-model="tab" class="tabs-window">
       <v-tabs-window-item value="follow">
         <following ref="followListRef" :uid="uid" />
       </v-tabs-window-item>
@@ -137,7 +192,7 @@ onActivated(() => {
 #friendsView {
   display: flex;
   flex-direction: column;
-  background-color: #fafafa;
+  background-color: var(--color-bg-page);
 }
 
 .top {
@@ -150,8 +205,8 @@ onActivated(() => {
   .topBar {
     padding-top: env(safe-area-inset-top, 0);
     height: calc(env(safe-area-inset-top, 0) + 60px);
-    background-color: rgba(0, 121, 107, 0.9);
-    color: #fff;
+    background-color: var(--color-primary-90);
+    color: var(--color-text-on-primary);
     display: flex;
     align-items: center;
     user-select: none;
@@ -180,11 +235,24 @@ onActivated(() => {
   }
 
   .tabs {
-    background-color: rgba(255, 255, 255, 0.8);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    background-color: var(--color-white-80);
+    box-shadow: var(--shadow-tab-bar);
 
     .v-tabs--density-compact {
       --v-tabs-height: 40px;
+    }
+
+    :deep(.v-tab) {
+      color: var(--color-text-muted);
+
+      &.v-tab--selected {
+        color: var(--color-primary);
+      }
+    }
+
+    /* Vuetify divider 颜色适配暗色模式 */
+    :deep(.v-divider) {
+      border-color: var(--color-border-divider) !important;
     }
   }
 }
@@ -197,5 +265,14 @@ onActivated(() => {
   :deep(.v-window-item) {
     height: 100%;
   }
+}
+
+.loading-init {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
 }
 </style>

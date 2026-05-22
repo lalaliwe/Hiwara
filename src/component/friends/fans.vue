@@ -35,6 +35,10 @@ let scrollPosition = 0 // 记录滚动位置
 
 async function getList(): Promise<any> {
   try {
+    // 防御性检查：uid 为空时直接报错，避免发送无效请求
+    if (!props.uid) {
+      throw new Error('用户 ID 为空，无法获取粉丝列表')
+    }
     // console.log('获取粉丝列表，uid:', props.uid, 'page:', page)
     const res = await getUserFans(props.uid, page)
 
@@ -187,7 +191,7 @@ defineExpose({
   display: flex;
   align-items: center;
   padding: 12px 16px;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid var(--color-border-light);
   gap: 12px;
 
   .list-avatar {
@@ -203,7 +207,7 @@ defineExpose({
       display: flex;
       align-items: center;
       justify-content: center;
-      background-color: #f5f5f5;
+      background-color: var(--color-bg-avatar);
 
       .img {
         width: 60%;
@@ -220,6 +224,7 @@ defineExpose({
     .list-title {
       font-weight: 500;
       font-size: 1rem;
+      color: var(--color-text-primary);
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -236,18 +241,18 @@ defineExpose({
 }
 
 .listEnd {
-  color: #757575;
+  color: var(--color-text-muted-light);
   padding: 4px 0;
 }
 
 .load-more-failed {
   text-align: center;
   padding: 10px 0;
-  color: #757575;
+  color: var(--color-text-muted-light);
   font-size: 0.9rem;
 
   .retry-btn {
-    color: #00796B;
+    color: var(--color-primary);
     cursor: pointer;
 
     &:hover {

@@ -235,9 +235,9 @@ defineExpose({
   .date-group {
     .date-header {
       padding: 12px 16px 8px;
-      background-color: #f0f0f0;
+      background-color: var(--color-bg-section-alt);
       font-size: 0.8rem;
-      color: #666;
+      color: var(--color-text-placeholder);
       font-weight: 500;
     }
   }
@@ -252,18 +252,18 @@ defineExpose({
 }
 
 .listEnd {
-  color: #757575;
+  color: var(--color-text-muted-light);
   padding: 4px 0;
 }
 
 .load-more-failed {
   text-align: center;
   padding: 10px 0;
-  color: #757575;
+  color: var(--color-text-muted-light);
   font-size: 0.9rem;
 
   .retry-btn {
-    color: #00796B;
+    color: var(--color-retry-btn);
     cursor: pointer;
 
     &:hover {

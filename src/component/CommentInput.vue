@@ -92,7 +92,7 @@ function handleSyntaxClick() {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.4);
+  background-color: var(--color-bg-overlay-light);
   z-index: 999;
 }
 
@@ -112,8 +112,8 @@ function handleSyntaxClick() {
 .comment-input-area {
   position: relative;
   z-index: 1000;
-  background-color: #fff;
-  box-shadow: 0 -2px 6px rgba(0, 0, 0, 0.1);
+  background-color: var(--color-bg-card);
+  box-shadow: var(--shadow-bottom-bar);
   padding: 12px 12px calc(12px + env(safe-area-inset-bottom, 0)) 12px;
 
   &.expanded {
@@ -126,15 +126,15 @@ function handleSyntaxClick() {
     justify-content: space-between;
     padding: 4px 0 8px 0;
     font-size: 0.85rem;
-    color: #00796B;
+    color: var(--color-primary);
 
     .cancel-reply-btn {
       cursor: pointer;
       font-size: 1.1rem;
-      color: #757575;
+      color: var(--color-text-muted-light);
 
       &:hover {
-        color: #333;
+        color: var(--color-text-secondary);
       }
     }
   }
@@ -143,19 +143,34 @@ function handleSyntaxClick() {
     margin-top: 10px;
 
     .btn {
-      color: #757575;
+      color: var(--color-text-muted-light);
       cursor: pointer;
       user-select: none;
     }
 
     .syntax-btn {
       &:hover {
-        color: #00796B;
+        color: var(--color-primary);
       }
     }
 
     .send-btn {
       float: right;
+    }
+  }
+}
+
+:deep(.v-textarea) {
+  .v-field {
+    background-color: var(--color-bg-section);
+    border-radius: 8px;
+
+    .v-label {
+      color: var(--color-text-placeholder) !important;
+    }
+
+    input, textarea {
+      color: var(--color-text-primary) !important;
     }
   }
 }

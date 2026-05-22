@@ -480,18 +480,18 @@ onActivated(() => {
 }
 
 .listEnd {
-  color: #757575;
+  color: var(--color-text-muted-light);
   padding: 4px 0;
 }
 
 .load-more-failed {
   text-align: center;
   padding: 10px 0;
-  color: #757575;
+  color: var(--color-text-muted-light);
   font-size: 0.9rem;
 
   .retry-btn {
-    color: #00796B;
+    color: var(--color-retry-btn);
     cursor: pointer;
 
     &:hover {
@@ -518,14 +518,14 @@ onActivated(() => {
 .commentItem {
   display: flex;
   padding: 10px;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid var(--color-border-light);
 
   .avatar {
     flex-shrink: 0;
 
     :deep(.v-img) {
       border-radius: 50%;
-      background-color: #eee;
+      background-color: var(--color-bg-avatar);
     }
   }
 
@@ -536,7 +536,7 @@ onActivated(() => {
 
     .username {
       font-size: 0.8rem;
-      color: #616161;
+      color: var(--color-text-muted);
     }
 
     .content-wrapper {
@@ -564,7 +564,7 @@ onActivated(() => {
           right: 0;
           bottom: 0;
           padding-left: 5px;
-          background: #fff;
+          background: var(--color-bg-card);
         }
       }
     }
@@ -578,36 +578,36 @@ onActivated(() => {
       font-size: 0.8rem;
 
       .created-time {
-        color: #616161;
+        color: var(--color-text-muted);
       }
 
       .reply-section {
         display: flex;
         align-items: center;
-        color: #616161;
+        color: var(--color-text-muted);
 
         .reply-count {
           cursor: pointer;
-          color: #616161;
+          color: var(--color-text-muted);
 
           &.active {
-            color: #00796B;
+            color: var(--color-primary);
           }
 
           &:hover {
-            color: #00796B;
+            color: var(--color-primary);
           }
         }
 
         .reply-btn {
           cursor: pointer;
-          color: #00796B;
+          color: var(--color-primary);
           margin-left: auto;
         }
       }
 
       .toggle-btn {
-        color: #00796B;
+        color: var(--color-primary);
         cursor: pointer;
         flex-shrink: 0;
 
@@ -622,8 +622,8 @@ onActivated(() => {
 /* 回复列表容器 - 位于两个评论项之间 */
 .replies-wrapper {
   padding: 8px 10px 8px 36px;
-  background: #f9f9f9;
-  border-bottom: 1px solid #eee;
+  background: var(--color-bg-code-block);
+  border-bottom: 1px solid var(--color-border-light);
 }
 
 .replies-loading {
@@ -632,7 +632,7 @@ onActivated(() => {
   justify-content: center;
   gap: 8px;
   padding: 12px 0;
-  color: #757575;
+  color: var(--color-text-muted-light);
   font-size: 0.85rem;
 }
 
@@ -640,8 +640,8 @@ onActivated(() => {
 .spinner {
   width: 18px;
   height: 18px;
-  border: 2px solid #e0e0e0;
-  border-top-color: #00796B;
+  border: 2px solid var(--color-border);
+  border-top-color: var(--color-primary);
   border-radius: 50%;
   animation: spin 0.7s linear infinite;
 }
@@ -656,7 +656,7 @@ onActivated(() => {
 .replyItem {
   display: flex;
   padding: 8px 0;
-  border-bottom: 1px solid #f0f0f0;
+  border-bottom: 1px solid var(--color-border-lighter);
 
   &:last-child {
     border-bottom: none;
@@ -667,7 +667,7 @@ onActivated(() => {
 
     :deep(.v-img) {
       border-radius: 50%;
-      background-color: #eee;
+      background-color: var(--color-bg-avatar);
     }
   }
 
@@ -678,7 +678,7 @@ onActivated(() => {
 
     .reply-username {
       font-size: 0.8rem;
-      color: #616161;
+      color: var(--color-text-muted);
     }
 
     .reply-content {
@@ -693,7 +693,7 @@ onActivated(() => {
     .reply-created-time {
       margin-top: 2px;
       font-size: 0.75rem;
-      color: #616161;
+      color: var(--color-text-muted);
     }
   }
 }
@@ -718,7 +718,7 @@ onActivated(() => {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: #fff;
+  background-color: var(--color-bg-card);
   z-index: 2000;
   display: flex;
   flex-direction: column;

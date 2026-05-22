@@ -307,7 +307,7 @@ onMounted(() => {
 #forumPublishView {
   display: flex;
   flex-direction: column;
-  background-color: #fafafa;
+  background-color: var(--color-bg-page);
   height: 100%;
 }
 
@@ -321,8 +321,8 @@ onMounted(() => {
   .topBar {
     padding-top: env(safe-area-inset-top, 0);
     height: calc(env(safe-area-inset-top, 0) + 60px);
-    background-color: rgba(0, 121, 107, 0.9);
-    color: #fff;
+    background-color: var(--color-primary-90);
+    color: var(--color-text-on-primary);
     display: flex;
     align-items: center;
     user-select: none;
@@ -397,26 +397,26 @@ onMounted(() => {
   left: 0;
   width: 100%;
   max-height: 60vh;
-  background-color: #fff;
+  background-color: var(--color-bg-card);
   border-radius: 16px 16px 0 0;
   z-index: 2000;
   display: flex;
   flex-direction: column;
-  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.15);
+  box-shadow: var(--shadow-modal);
 
   .picker-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 16px 20px;
-    border-bottom: 1px solid #e0e0e0;
+    border-bottom: 1px solid var(--color-border);
     font-size: 1.1rem;
     font-weight: 500;
-    color: #333;
+    color: var(--color-text-secondary);
 
     svg {
       font-size: 1.4rem;
-      color: #757575;
+      color: var(--color-text-muted-light);
       cursor: pointer;
       padding: 4px;
 
@@ -435,14 +435,14 @@ onMounted(() => {
   .picker-loading {
     text-align: center;
     padding: 24px;
-    color: #757575;
+    color: var(--color-text-muted-light);
   }
 
   .picker-group-title {
     padding: 10px 20px 6px 20px;
     font-size: 0.85rem;
     font-weight: 600;
-    color: #00796B;
+    color: var(--color-primary);
     text-transform: uppercase;
     letter-spacing: 0.5px;
   }
@@ -452,17 +452,17 @@ onMounted(() => {
     cursor: pointer;
     user-select: none;
     font-size: 0.95rem;
-    color: #333;
+    color: var(--color-text-secondary);
     transition: background-color 0.15s;
 
     &:active {
-      background-color: #e0f2f1;
+      background-color: var(--color-primary-light);
     }
 
     &.active {
-      color: #00796B;
+      color: var(--color-primary);
       font-weight: 500;
-      background-color: #e0f2f1;
+      background-color: var(--color-primary-light);
     }
   }
 }
@@ -482,7 +482,7 @@ onMounted(() => {
     display: block;
     font-size: 0.95rem;
     font-weight: 500;
-    color: #333;
+    color: var(--color-text-secondary);
     margin-bottom: 8px;
   }
 
@@ -491,30 +491,30 @@ onMounted(() => {
     align-items: center;
     justify-content: space-between;
     padding: 10px 12px;
-    background-color: #fff;
-    border: 1px solid rgba(0, 0, 0, 0.23);
+    background-color: var(--color-bg-card);
+    border: 1px solid var(--color-border-input);
     border-radius: 8px;
     cursor: pointer;
     user-select: none;
     font-size: 0.95rem;
-    color: #333;
+    color: var(--color-text-secondary);
     transition: border-color 0.2s;
 
     &:hover {
-      border-color: #00796B;
+      border-color: var(--color-primary);
     }
 
     &:active {
-      border-color: #00796B;
+      border-color: var(--color-primary);
     }
 
     .placeholder {
-      color: #999;
+      color: var(--color-text-placeholder-light);
     }
 
     svg {
       font-size: 0.85rem;
-      color: #757575;
+      color: var(--color-text-muted-light);
     }
   }
 }
@@ -532,10 +532,10 @@ onMounted(() => {
 
   .syntax-btn {
     font-size: 1.4rem;
-    color: #757575;
+    color: var(--color-text-muted-light);
 
     &:hover {
-      color: #00796B;
+      color: var(--color-primary);
     }
   }
 

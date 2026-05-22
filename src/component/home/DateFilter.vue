@@ -202,7 +202,7 @@ defineExpose({
     margin: 0;
     font-size: 1.2rem;
     font-weight: 500;
-    color: #333;
+    color: var(--color-text-secondary);
   }
 }
 
@@ -218,14 +218,26 @@ defineExpose({
     
     .selector-label {
       font-size: 0.9rem;
-      color: #666;
+      color: var(--color-text-placeholder);
       font-weight: 500;
     }
     
     .year-select,
     .month-select {
       :deep(.v-field) {
-        background-color: #f5f5f5;
+        background-color: var(--color-bg-section);
+      }
+
+      :deep(.v-label) {
+        color: var(--color-text-placeholder) !important;
+      }
+
+      :deep(.v-select__selection) {
+        color: var(--color-text-primary) !important;
+      }
+
+      :deep(.v-field__input) {
+        color: var(--color-text-primary) !important;
       }
     }
   }
@@ -238,7 +250,7 @@ defineExpose({
   
   .reset-btn {
     :deep(.v-btn__content) {
-      color: #000 !important;
+      color: var(--color-text-muted) !important;
     }
   }
 }

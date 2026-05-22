@@ -107,7 +107,7 @@ function formatDate(dateStr: string): string {
 <style lang="scss" scoped>
 .item {
   padding: 10px 12px;
-  border-bottom: 1px solid #e0e0e0;
+  border-bottom: 1px solid var(--color-border);
   position: relative;
   cursor: pointer;
 
@@ -124,6 +124,7 @@ function formatDate(dateStr: string): string {
     overflow: hidden;
     word-break: break-all;
     line-height: 1.4;
+    color: var(--color-text-primary);
   }
 
   .info1 {
@@ -132,6 +133,7 @@ function formatDate(dateStr: string): string {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    color: var(--color-text-muted);
   }
 
   .info2 {
@@ -139,10 +141,16 @@ function formatDate(dateStr: string): string {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 4px 12px;
+    color: var(--color-text-muted);
 
     .info2-item {
       overflow: hidden;
       min-width: 0;
+      color: var(--color-text-muted);
+
+      > span:first-child {
+        color: var(--color-text-secondary);
+      }
 
       .gray {
         max-width: calc(100% - 5em);
@@ -151,17 +159,18 @@ function formatDate(dateStr: string): string {
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
+        color: var(--color-text-muted-light);
       }
     }
   }
 
   .gray {
-    color: #616161;
+    color: var(--color-text-muted);
   }
 
   .sticky-icon,
   .lock-icon {
-    color: #616161;
+    color: var(--color-text-muted);
     margin-right: 2px;
   }
 }

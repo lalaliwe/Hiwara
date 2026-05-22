@@ -290,7 +290,7 @@ fetchForumData(0);
 #forumView {
   display: flex;
   flex-direction: column;
-  background-color: #fafafa;
+  background-color: var(--color-bg-page);
   height: 100%;
 }
 
@@ -310,7 +310,7 @@ fetchForumData(0);
 }
 
 .list-end {
-  color: #757575;
+  color: var(--color-text-muted-light);
   padding: 4px 0;
   text-align: center;
   font-size: 0.9rem;
@@ -319,11 +319,11 @@ fetchForumData(0);
 .load-more-failed {
   text-align: center;
   padding: 10px 0;
-  color: #757575;
+  color: var(--color-text-muted-light);
   font-size: 0.9rem;
 
   .retry-btn {
-    color: #00796B;
+    color: var(--color-retry-btn);
     cursor: pointer;
 
     &:hover {

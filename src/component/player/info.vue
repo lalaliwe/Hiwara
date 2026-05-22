@@ -558,11 +558,12 @@ function toZone() {
       font-size: 0.9rem;
       cursor: pointer;
       user-select: none;
+      color: var(--color-text-primary);
     }
 
     .userdata {
       font-size: 0.7rem;
-      color: #616161;
+      color: var(--color-text-muted);
     }
   }
 
@@ -581,7 +582,7 @@ function toZone() {
   left: -8px;
   text-align: right;
   font-size: 0.7rem;
-  color: #616161;
+  color: var(--color-text-muted);
 
   // 旋转过渡动画
   :deep(svg) {
@@ -604,6 +605,7 @@ function toZone() {
   font-size: 1.1rem;
   transition: height 0.3s ease-in-out;
   cursor: pointer;
+  color: var(--color-text-primary);
 }
 
 .title {
@@ -613,13 +615,13 @@ function toZone() {
 .infomsg {
   padding: 0 10px;
   font-size: 0.8rem;
-  color: #616161;
+  color: var(--color-text-muted);
   cursor: pointer;
 }
 
 @mixin synopsis-base {
   padding: 0 10px;
-  color: #616161;
+  color: var(--color-text-muted);
   font-size: 0.8rem;
   overflow: hidden;
   transition: height 0.3s ease-in-out;
@@ -633,7 +635,7 @@ function toZone() {
 
     .tag {
       margin: 2px 2px 2px 0;
-      color: #000;
+      color: var(--color-text-primary);
       user-select: none;
       cursor: pointer;
     }
@@ -673,7 +675,7 @@ function toZone() {
 
   div {
     text-align: center;
-    color: #616161;
+    color: var(--color-text-muted);
     font-size: 0.8rem;
     width: 55px;
     cursor: pointer;
@@ -687,7 +689,7 @@ function toZone() {
   .label {
     font-size: 0.8rem;
     padding: 0 10px;
-    color: #616161;
+    color: var(--color-text-muted);
   }
 
   .lists {

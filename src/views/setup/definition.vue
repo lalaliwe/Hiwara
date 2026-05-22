@@ -59,7 +59,7 @@ const setDefinition = async (def: string) => {
 #setupDefinitionView {
   overflow-y: auto;
   padding: calc(60px + env(safe-area-inset-top, 0)) 0 env(safe-area-inset-bottom, 0) 0;
-  background-color: #fafafa;
+  background-color: var(--color-bg-page);
 
   &::-webkit-scrollbar-track {
     margin: calc(60px + env(safe-area-inset-top, 0)) 0 env(safe-area-inset-bottom, 0) 0;
@@ -74,8 +74,8 @@ const setDefinition = async (def: string) => {
   z-index: 400;
   padding-top: env(safe-area-inset-top, 0);
   height: calc(env(safe-area-inset-top, 0) + 60px);
-  background-color: rgba(0, 121, 107, 0.9);
-  color: #fff;
+  background-color: var(--color-primary-90);
+  color: var(--color-text-on-primary);
   display: flex;
   align-items: center;
   user-select: none;
@@ -104,8 +104,8 @@ const setDefinition = async (def: string) => {
 }
 
 .item {
-  border-bottom: solid 1px #BDBDBD;
-  color: #212121;
+  border-bottom: solid 1px var(--color-border-setting);
+  color: var(--color-text-primary);
   font-size: 1rem;
   cursor: pointer;
   user-select: none;
@@ -124,7 +124,7 @@ const setDefinition = async (def: string) => {
   }
 
   .value {
-    color: #9E9E9E;
+    color: var(--color-text-hint);
     display: flex;
     align-items: center;
     justify-self: start;

@@ -114,7 +114,7 @@ provide('refreshToken', refreshToken)
 
 <style lang="scss" scoped>
 #homeView {
-  background-color: #fafafa;
+  background-color: var(--color-bg-page);
   display: flex;
   flex-direction: column;
 }

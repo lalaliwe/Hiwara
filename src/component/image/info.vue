@@ -426,7 +426,7 @@ const formatDate = (dateString: string) => {
   left: -8px;
   text-align: right;
   font-size: 0.7rem;
-  color: #616161;
+  color: var(--color-text-muted);
 
   // 旋转过渡动画
   :deep(svg) {
@@ -448,12 +448,13 @@ const formatDate = (dateString: string) => {
   font-size: 1.1rem;
   transition: height 0.3s ease-in-out;
   cursor: pointer;
+  color: var(--color-text-primary);
 }
 
 .infomsg {
   padding: 10px 10px 0 10px;
   font-size: 0.8rem;
-  color: #616161;
+  color: var(--color-text-muted);
 }
 
 .author {
@@ -489,7 +490,7 @@ const formatDate = (dateString: string) => {
 
     .userdata {
       font-size: 0.7rem;
-      color: #616161;
+      color: var(--color-text-muted);
     }
   }
 
@@ -507,7 +508,7 @@ const formatDate = (dateString: string) => {
 
 .synopsis {
   padding: 0 10px;
-  color: #616161;
+  color: var(--color-text-muted);
   font-size: 0.8rem;
   overflow: hidden;
   transition: height 0.3s ease-in-out;
@@ -528,7 +529,7 @@ const formatDate = (dateString: string) => {
 
   div {
     text-align: center;
-    color: #616161;
+    color: var(--color-text-muted);
     font-size: 0.8rem;
     width: 55px;
     cursor: pointer;
@@ -543,7 +544,7 @@ const formatDate = (dateString: string) => {
 
   .tag {
     margin: 2px 2px 2px 0;
-    color: #000;
+    color: var(--color-text-primary);
     user-select: none;
     cursor: pointer;
   }

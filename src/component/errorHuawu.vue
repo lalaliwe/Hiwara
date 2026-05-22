@@ -48,7 +48,7 @@ img {
 
 .error-text {
   font-family: 'AaXinRui85-2';
-  color: #00796B;
+  color: var(--color-primary);
   margin-top: 16px;
 }
 </style>

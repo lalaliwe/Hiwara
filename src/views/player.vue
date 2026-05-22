@@ -423,7 +423,7 @@ const followTrigger = (val: boolean) => {
 #playerView {
   display: flex;
   flex-direction: column;
-  background-color: #fff;
+  background-color: var(--color-bg-page);
 }
 
 .topBar {
@@ -454,8 +454,15 @@ const followTrigger = (val: boolean) => {
 }
 
 .tabs {
-  .v-tab {
+  background-color: var(--color-bg-card);
+
+  :deep(.v-tab) {
     min-width: 0 !important;
+    color: var(--color-text-muted);
+
+    &.v-tab--selected {
+      color: var(--color-primary);
+    }
   }
 
   .tabs-bar {
@@ -470,7 +477,7 @@ const followTrigger = (val: boolean) => {
       display: flex;
       align-items: center;
       padding: 0 10px;
-      color: #616161;
+      color: var(--color-text-muted);
       font-size: 0.9rem;
 
       span {

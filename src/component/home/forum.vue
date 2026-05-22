@@ -293,12 +293,12 @@ onActivated(() => {
   z-index: 400;
   padding: env(safe-area-inset-top, 0) 16px 0 16px;
   height: calc(60px + env(safe-area-inset-top, 0));
-  background-color: rgba(0, 121, 107, 0.9);
-  color: #fff;
+  background-color: var(--color-primary-90);
+  color: var(--color-text-on-primary);
   display: flex;
   align-items: center;
   user-select: none;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow-top-bar);
 
   .label {
     font-size: 1.2rem;
@@ -311,7 +311,7 @@ onActivated(() => {
     align-items: center;
     gap: 6px;
     padding: 6px 12px;
-    background-color: rgba(255, 255, 255, 0.2);
+    background-color: var(--color-white-20);
     border-radius: 20px;
     cursor: pointer;
     user-select: none;
@@ -319,7 +319,7 @@ onActivated(() => {
     white-space: nowrap;
 
     &:active {
-      background-color: rgba(255, 255, 255, 0.35);
+      background-color: var(--color-white-35);
     }
 
     svg {
@@ -332,6 +332,7 @@ onActivated(() => {
   height: 100%;
   padding: calc(60px + env(safe-area-inset-top, 0)) 0 calc(60px + env(safe-area-inset-bottom, 0)) 0;
   overflow-y: auto;
+  color: var(--color-text-body);
 
   &::-webkit-scrollbar-track {
     margin: calc(60px + env(safe-area-inset-top, 0)) 0 calc(60px + env(safe-area-inset-bottom, 0) + 4px) 0;
@@ -350,8 +351,8 @@ onActivated(() => {
   padding: 6px 10px;
   font-size: 1.2rem;
   font-weight: 500;
-  background-color: rgba(0, 121, 107, 0.6);
-  color: #fff;
+  background-color: var(--color-primary-60);
+  color: var(--color-text-on-primary);
 }
 
 .btn {
@@ -366,7 +367,7 @@ onActivated(() => {
       .bar {
         width: 4px;
         height: 100%;
-        background: #00796B;
+        background: var(--color-primary);
         border-radius: 4px;
       }
     }
@@ -378,11 +379,12 @@ onActivated(() => {
       .label1 {
         font-size: 1.2rem;
         font-weight: 500;
+        color: var(--color-text-primary);
       }
 
       .label2 {
         font-size: 0.9rem;
-        color: #616161;
+        color: var(--color-text-muted);
       }
     }
 
@@ -393,18 +395,20 @@ onActivated(() => {
       justify-content: start;
       padding: 0 12px;
       width: 120px;
+      color: var(--color-text-muted);
     }
   }
 
   .new-title {
     font-size: 0.9rem;
     padding: 0 10px;
+    color: var(--color-text-secondary);
   }
 
   .new-content {
     font-size: 0.9rem;
     margin: 10px;
-    color: #616161;
+    color: var(--color-text-muted);
     display: -webkit-box;
     -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
@@ -416,12 +420,13 @@ onActivated(() => {
   .user {
     font-size: 0.9rem;
     padding: 0 10px 10px 10px;
-    border-bottom: 1px solid #e0e0e0;
+    border-bottom: 1px solid var(--color-border);
     text-align: right;
+    color: var(--color-text-muted);
   }
 
   .gray {
-    color: #616161;
+    color: var(--color-text-muted);
   }
 }
 </style>

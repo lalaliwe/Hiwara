@@ -202,7 +202,7 @@ onActivated(() => {
 #offlineCacheView {
   display: flex;
   flex-direction: column;
-  background-color: #fafafa;
+  background-color: var(--color-bg-page);
   height: 100%;
 }
 
@@ -216,8 +216,8 @@ onActivated(() => {
   .topBar {
     padding-top: env(safe-area-inset-top, 0);
     height: calc(env(safe-area-inset-top, 0) + 60px);
-    background-color: rgba(0, 121, 107, 0.9);
-    color: #fff;
+    background-color: var(--color-primary-90);
+    color: var(--color-text-on-primary);
     display: flex;
     align-items: center;
     user-select: none;

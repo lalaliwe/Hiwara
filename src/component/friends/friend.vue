@@ -37,6 +37,10 @@ let scrollPosition = 0 // 记录滚动位置
 
 async function getList(): Promise<any> {
   try {
+    // 防御性检查：uid 为空时直接报错，避免发送无效请求
+    if (!props.uid) {
+      throw new Error('用户 ID 为空，无法获取好友列表')
+    }
     // console.log('获取好友列表，uid:', props.uid, 'page:', page)
     const res = await getFriendsList(props.uid, page)
 
@@ -187,18 +191,18 @@ defineExpose({
 }
 
 .listEnd {
-  color: #757575;
+  color: var(--color-text-muted-light);
   padding: 4px 0;
 }
 
 .load-more-failed {
   text-align: center;
   padding: 10px 0;
-  color: #757575;
+  color: var(--color-text-muted-light);
   font-size: 0.9rem;
 
   .retry-btn {
-    color: #00796B;
+    color: var(--color-primary);
     cursor: pointer;
 
     &:hover {

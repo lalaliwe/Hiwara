@@ -183,7 +183,7 @@ async function login() {
 }
 
 .language {
-  color: #757575;
+  color: var(--color-text-muted-light);
   padding: 12px;
   cursor: pointer;
   user-select: none;
@@ -198,7 +198,7 @@ async function login() {
   position: absolute;
   bottom: env(safe-area-inset-bottom, 0);
   width: 100%;
-  color: #757575;
+  color: var(--color-text-muted-light);
   font-size: 0.7rem;
   text-align: center;
   padding: 10px;

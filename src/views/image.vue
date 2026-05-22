@@ -273,7 +273,7 @@ const handleFollow = (isFollowed: boolean) => {
   height: 100%;
   display: flex;
   flex-direction: column;
-  background-color: #fafafa;
+  background-color: var(--color-bg-page);
 }
 
 .top {
@@ -282,7 +282,7 @@ const handleFollow = (isFollowed: boolean) => {
   z-index: 400;
   height: calc(48px + env(safe-area-inset-top, 0));
   padding-top: env(safe-area-inset-top, 0);
-  color: #fff;
+  color: var(--color-text-on-image);
   filter: drop-shadow(1px 1px 1px rgba(0, 0, 0, 0.5));
   // background-color: #00796B;
   width: 100%;
@@ -302,7 +302,7 @@ const handleFollow = (isFollowed: boolean) => {
 }
 
 .top-green {
-  background-color: rgba(0, 121, 107, 0.9);
+  background-color: var(--color-primary-90);
   backdrop-filter: blur(10px);
 }
 
@@ -317,7 +317,7 @@ const handleFollow = (isFollowed: boolean) => {
   flex: 1;
   overflow-y: auto;
   overflow-x: hidden;
-  background-color: #fff;
+  background-color: var(--color-bg-card);
   position: relative;
   padding-bottom: env(safe-area-inset-bottom, 0);
 }

@@ -150,7 +150,7 @@ function toZone() {
   display: flex;
   align-items: center;
   padding: 12px 16px;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid var(--color-border-light);
   gap: 12px;
 
   .list-avatar {
@@ -165,7 +165,7 @@ function toZone() {
     .placeholder {
       width: 100%;
       height: 100%;
-      background-color: #d0d0d0;
+      background-color: var(--color-bg-placeholder);
       display: flex;
       justify-content: center;
       align-items: center;
@@ -197,6 +197,7 @@ function toZone() {
     .list-title {
       font-weight: 500;
       font-size: 1rem;
+      color: var(--color-text-primary);
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;

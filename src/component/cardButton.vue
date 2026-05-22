@@ -284,8 +284,8 @@ async function clickCard() {
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  background-color: #fff;
-  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+  background-color: var(--color-bg-card);
+  box-shadow: var(--shadow-card);
   border-radius: 4px;
   cursor: pointer;
   user-select: none;
@@ -302,7 +302,7 @@ async function clickCard() {
   overflow: hidden;
   width: 100%;
   height: 100%;
-  background-color: #d0d0d0;
+  background-color: var(--color-bg-placeholder);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -327,12 +327,12 @@ async function clickCard() {
 
     span {
       display: inline-block;
-      background: #ff3c00b0;
-      text-shadow: 0 0 2px rgba(0, 0, 0, 0.25);
+      background: var(--color-badge);
+      text-shadow: var(--shadow-badge-text);
       font-size: 0.6rem;
       font-weight: 500;
       padding: 1px 4px;
-      color: #fff;
+      color: var(--color-text-on-dark);
       font-family: sans-serif;
     }
   }
@@ -349,11 +349,11 @@ async function clickCard() {
     span {
       display: inline-block;
       font-size: 0.7rem;
-      color: #fff;
-      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+      color: var(--color-text-on-image);
+      text-shadow: var(--shadow-image-text);
 
       svg {
-        filter: drop-shadow(1px 1px 1px rgba(0, 0, 0, 0.4));
+        filter: var(--shadow-icon);
       }
     }
   }
@@ -370,8 +370,8 @@ async function clickCard() {
     span {
       display: inline-block;
       font-size: 0.7rem;
-      color: #fff;
-      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+      color: var(--color-text-on-image);
+      text-shadow: var(--shadow-image-text);
     }
   }
 }
@@ -385,6 +385,7 @@ async function clickCard() {
   display: flex;
   align-items: center;
   justify-self: start;
+  color: var(--color-text-primary);
 
   div {
     text-overflow: ellipsis;
@@ -407,7 +408,7 @@ async function clickCard() {
     grid-template-columns: repeat(2, 50%);
 
     div {
-      color: #616161;
+      color: var(--color-text-muted);
       font-size: 0.8rem;
       text-overflow: ellipsis;
       white-space: nowrap;

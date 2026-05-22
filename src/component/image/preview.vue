@@ -136,8 +136,8 @@ function fullScreen(num: number = 0) {
   position: relative;
 
   .expand-btn {
-    color: #fff;
-    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
+    color: var(--color-text-on-image);
+    text-shadow: var(--shadow-image-text);
     display: inline-block;
     position: absolute;
     right: 0;
@@ -153,7 +153,7 @@ function fullScreen(num: number = 0) {
   overflow: hidden;
   width: 100%;
   height: 100%;
-  background-color: #d0d0d0;
+  background-color: var(--color-bg-placeholder);
   display: flex;
   justify-content: center;
   align-items: center;

@@ -314,13 +314,13 @@ function handleWheelScroll(event: WheelEvent) {
 
 .top {
   padding-top: env(safe-area-inset-top, 0);
-  background-color: rgba(0, 121, 107, 0.9);
+  background-color: var(--color-primary-90);
   backdrop-filter: blur(10px);
-  color: #fff;
+  color: var(--color-text-on-primary);
   position: absolute;
   width: 100%;
   top: 0;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow-tab-bar);
   z-index: 400;
 
   .topBtns {
@@ -351,7 +351,7 @@ function handleWheelScroll(event: WheelEvent) {
         width: 64px;
         height: 64px;
         border-radius: 50%;
-        border: #fff 2px solid;
+        border: var(--color-white) 2px solid;
       }
     }
 
@@ -405,7 +405,7 @@ function handleWheelScroll(event: WheelEvent) {
     .fill {
       flex: 1;
       text-align: center;
-      border-right: 1px solid rgba(255, 255, 255, 0.8);
+      border-right: 1px solid var(--color-white-80);
       height: 55px;
       display: flex;
       align-items: center;
@@ -446,10 +446,11 @@ function handleWheelScroll(event: WheelEvent) {
 
   .card {
     margin: 10px;
-    box-shadow: 1px 1px 6px rgba(0, 0, 0, 0.15);
+    box-shadow: var(--shadow-card-item);
     border-radius: 4px;
     overflow: hidden;
     padding: 6px 0;
+    background-color: var(--color-bg-card);
 
     .label {
       display: flex;
@@ -458,7 +459,7 @@ function handleWheelScroll(event: WheelEvent) {
 
       .left {
         padding: 4px 12px;
-        color: #212121;
+        color: var(--color-text-primary);
         cursor: pointer;
         user-select: none;
         font-weight: 500;
@@ -467,7 +468,7 @@ function handleWheelScroll(event: WheelEvent) {
 
       .right {
         padding: 4px 12px;
-        color: #757575;
+        color: var(--color-text-muted-light);
         cursor: pointer;
         user-select: none;
         font-size: 0.8rem;
@@ -483,7 +484,7 @@ function handleWheelScroll(event: WheelEvent) {
 
       .empty-text {
         font-size: 0.9rem;
-        color: #757575;
+        color: var(--color-text-muted-light);
         padding: 20px 0;
         text-align: center;
         flex: 1;
@@ -491,7 +492,7 @@ function handleWheelScroll(event: WheelEvent) {
 
       .all-btn {
         font-size: 0.9rem;
-        color: #616161;
+        color: var(--color-text-muted);
         width: 80px;
         display: flex;
         align-items: center;
@@ -511,7 +512,7 @@ function handleWheelScroll(event: WheelEvent) {
 
       .btn {
         text-align: center;
-        color: #424242;
+        color: var(--color-text-secondary-alt);
         padding: 10px 0;
         user-select: none;
         cursor: pointer;
@@ -530,7 +531,7 @@ function handleWheelScroll(event: WheelEvent) {
 
   .about {
     width: 100%;
-    color: #757575;
+    color: var(--color-text-muted-light);
     font-size: 0.7rem;
     text-align: center;
     padding: 0 10px 10px 10px;

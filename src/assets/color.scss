@@ -1,0 +1,346 @@
+// ============================================================
+// 项目颜色统一入口
+// SCSS 变量 + CSS 自定义属性（亮色/暗色）+ 系统暗色模式
+// 使用方式：
+//   SCSS 变量：@use '@/assets/color' as *;
+//   CSS 变量：直接在样式中用 var(--color-bg-page)
+// 暗色切换：系统自动跟随 / 手动加 <html class="dark-theme">
+// ============================================================
+
+// ============================================================
+// Part 1: SCSS 变量（亮色主题默认值）
+// ============================================================
+
+// ---- 主题色 ----
+$color-primary: #00796B;              // 主色调（青绿色）- 顶栏、按钮、链接、激活态
+$color-primary-light: #e0f2f1;        // 主色浅色变体 - 激活/悬停背景
+$color-primary-90: rgba(0, 121, 107, 0.9);  // 主色 90% - 顶栏背景
+$color-primary-60: rgba(0, 121, 107, 0.6);  // 主色 60% - Tab 激活指示条
+$color-primary-30: rgba(0, 121, 107, 0.3);  // 主色 30% - 抽屉激活项
+$color-primary-20: rgba(0, 121, 107, 0.2);  // 主色 20% - 导航激活背景
+$color-primary-solid: rgba(0, 121, 107, 1); // 主色实色 - WebView 顶栏
+
+// ---- 中性色（灰阶）----
+$color-white: #fff;                   // 白色 - 卡片背景、深色背景上文字
+$color-white-80: rgba(255, 255, 255, 0.8);  // 白色 80% - Tab 栏毛玻璃背景
+$color-white-40: rgba(255, 255, 255, 0.4);  // 白色 40% - 进度条填充
+$color-white-35: rgba(255, 255, 255, 0.35); // 白色 35% - 按钮激活态
+$color-white-20: rgba(255, 255, 255, 0.2);  // 白色 20% - 按钮背景、进度轨
+$color-white-10: rgba(255, 255, 255, 0.1);  // 白色 10% - 悬停态
+
+$color-black: #000;                   // 黑色 - 播放器背景
+$color-black-50: rgba(0, 0, 0, 0.5); // 黑色 50% - 遮罩层、阴影
+$color-black-40: rgba(0, 0, 0, 0.4); // 黑色 40% - 播放器覆盖层、渐变
+$color-black-30: rgba(0, 0, 0, 0.3); // 黑色 30% - 滚动条悬停
+$color-black-25: rgba(0, 0, 0, 0.25); // 黑色 25% - 阴影
+$color-black-23: rgba(0, 0, 0, 0.23); // 黑色 23% - 输入框边框
+$color-black-20: rgba(0, 0, 0, 0.2); // 黑色 20% - 滚动条、阴影
+$color-black-15: rgba(0, 0, 0, 0.15); // 黑色 15% - 阴影
+$color-black-10: rgba(0, 0, 0, 0.1); // 黑色 10% - 细微阴影
+$color-black-05: rgba(0, 0, 0, 0.05); // 黑色 5% - 点击反馈
+
+// ---- 背景色 ----
+$color-bg-page: #fafafa;              // 页面背景 - 最浅灰
+$color-bg-section: #f5f5f5;           // 区块背景 - 浅灰
+$color-bg-card: #fff;                 // 卡片/面板背景 - 白色
+$color-bg-code-block: #f9f9f9;        // 代码块背景
+$color-bg-code-inline: #f0f0f0;       // 行内代码背景
+$color-bg-section-alt: #f0f0f0;       // 区块标题背景
+$color-bg-avatar: #eee;               // 头像占位背景
+$color-bg-placeholder: #d0d0d0;       // 图片/占位背景
+$color-bg-tag: #eee;                  // 标签/标记背景
+$color-bg-tag-border: #ccc;           // 标签边框
+$color-bg-modal: #fff;                // 弹窗背景
+$color-bg-overlay: rgba(0, 0, 0, 0.5); // 遮罩层背景
+$color-bg-overlay-light: rgba(0, 0, 0, 0.4); // 轻遮罩层（评论输入、播放器）
+$color-bg-fans-item: #f5f5f5;         // 粉丝列表项背景
+$color-bg-tab-bar: #fff;              // Tab 栏背景
+
+// ---- 文字色 ----
+$color-text-primary: #212121;         // 主要文字（标题、设置项标签）
+$color-text-secondary: #333;          // 次级文字（标题、正文）
+$color-text-secondary-alt: #424242;   // 次级文字变体（我的页面）
+$color-text-body-alt: #414141;        // 正文文字变体（关于页面）
+$color-text-body: #444;               // 正文文字
+$color-text-muted: #616161;           // 弱化文字（元信息、辅助文字）
+$color-text-muted-light: #757575;     // 更弱文字（列表底部、提示）
+$color-text-muted-lighter: #959595;   // 最弱文字（大小/时长等次要信息）
+$color-text-placeholder: #666;        // 占位文字
+$color-text-placeholder-light: #999;  // 轻占位文字
+$color-text-hint: #9E9E9E;            // 提示文字（设置页 value）
+$color-text-code: #555;               // 代码文字
+$color-text-on-primary: #fff;         // 主色背景上的文字（顶栏、按钮）
+$color-text-on-dark: #fff;            // 深色背景上的文字
+$color-text-on-image: #fff;           // 图片上的文字
+$color-text-code-inline: #d63384;     // 行内代码颜色（粉色）
+$color-text-highlight: #00796B;       // 高亮/链接文字
+
+// ---- 边框色 ----
+$color-border: #e0e0e0;              // 列表项分隔线
+$color-border-light: #eee;            // 轻分隔线
+$color-border-lighter: #f0f0f0;       // 更轻分隔线
+$color-border-input: rgba(0, 0, 0, 0.23); // 输入框边框
+$color-border-setting: #BDBDBD;       // 设置页面分隔线
+$color-border-code-block: #ddd;       // 代码块分割线
+$color-border-dashed: #a0a0a0;        // 虚线边框（论坛）
+$color-border-divider: #e0e0e0;       // 分割线
+
+// ---- 功能色 ----
+$color-link: #00796B;                 // 链接色
+$color-blue: #2196F3;                 // 蓝色（@提及、可点击）
+$color-pink: #ff62cd;                 // 粉色（Premium 图标）
+$color-gold: #dda82b;                 // 金色（货币图标）
+$color-badge: #ff3c00b0;              // 徽章/角标（红橙）
+$color-charging: #FFFF00;             // 充电指示色（黄色）
+$color-like-active: #FF3D00;          // 点赞激活色（红橙）
+$color-battery-charging: #00E676;     // 电池充电色（绿色）
+$color-loading-text: #999;            // 加载文字色
+$color-error-text: #757575;           // 错误提示文字色
+$color-retry-btn: #00796B;            // 重试按钮色
+
+// ---- 渐变 ----
+$gradient-player-overlay: linear-gradient(
+  to bottom,
+  rgba(0, 0, 0, 0.4),
+  transparent 20%,
+  transparent 80%,
+  rgba(0, 0, 0, 0.4)
+);                                    // 播放器控制栏渐变覆盖层
+
+// ---- 阴影 ----
+$shadow-card: 2px 2px 4px rgba(0, 0, 0, 0.1);     // 卡片阴影
+$shadow-bottom-bar: 0 -2px 6px rgba(0, 0, 0, 0.1); // 底部栏阴影
+$shadow-top-bar: 0 2px 6px rgba(0, 0, 0, 0.1);     // 顶部栏阴影
+$shadow-tab-bar: 0 2px 4px rgba(0, 0, 0, 0.1);     // Tab 栏阴影
+$shadow-bottom-nav: 0 -2px 4px rgba(0, 0, 0, 0.1);  // 底部导航阴影
+$shadow-avatar: 2px 2px 4px rgba(0, 0, 0, 0.2);    // 头像阴影
+$shadow-thumb: 0 2px 4px rgba(0, 0, 0, 0.3);       // 滑块阴影
+$shadow-modal: 0 -4px 20px rgba(0, 0, 0, 0.15);    // 弹窗阴影
+$shadow-card-item: 1px 1px 6px rgba(0, 0, 0, 0.15); // 卡片项阴影
+$shadow-image-text: 1px 1px 1px rgba(0, 0, 0, 0.5); // 图片上文字阴影
+$shadow-image-text-strong: drop-shadow(1px 1px 2px rgba(0, 0, 0, 0.8)); // 图片导航按钮阴影
+$shadow-icon: drop-shadow(1px 1px 1px rgba(0, 0, 0, 0.4)); // 图标阴影
+$shadow-toast: 0 4px 12px rgba(0, 0, 0, 0.25);     // Toast 通知阴影
+$shadow-avatar-circle: 4px 4px 12px rgba(0, 0, 0, 0.2); // 圆形头像/图片阴影
+$shadow-badge-text: 0 0 2px rgba(0, 0, 0, 0.25);   // 徽章文字阴影
+
+// ---- 滚动条色 ----
+$color-scrollbar-thumb: rgba(0, 0, 0, 0.2);         // 滚动条滑块
+$color-scrollbar-thumb-hover: rgba(0, 0, 0, 0.3);   // 滚动条滑块悬停
+$color-scrollbar-track: transparent;                // 滚动条轨道
+
+
+// ============================================================
+// Part 2: CSS 自定义属性 - 亮色主题 (默认)
+// ============================================================
+:root {
+  --color-primary: #{$color-primary};
+  --color-primary-light: #{$color-primary-light};
+  --color-primary-90: #{$color-primary-90};
+  --color-primary-60: #{$color-primary-60};
+  --color-primary-30: #{$color-primary-30};
+  --color-primary-20: #{$color-primary-20};
+  --color-primary-solid: #{$color-primary-solid};
+
+  --color-white: #{$color-white};
+  --color-white-80: #{$color-white-80};
+  --color-white-40: #{$color-white-40};
+  --color-white-35: #{$color-white-35};
+  --color-white-20: #{$color-white-20};
+  --color-white-10: #{$color-white-10};
+
+  --color-black: #{$color-black};
+  --color-black-50: #{$color-black-50};
+  --color-black-40: #{$color-black-40};
+  --color-black-30: #{$color-black-30};
+  --color-black-25: #{$color-black-25};
+  --color-black-23: #{$color-black-23};
+  --color-black-20: #{$color-black-20};
+  --color-black-15: #{$color-black-15};
+  --color-black-10: #{$color-black-10};
+  --color-black-05: #{$color-black-05};
+
+  --color-bg-page: #{$color-bg-page};
+  --color-bg-section: #{$color-bg-section};
+  --color-bg-card: #{$color-bg-card};
+  --color-bg-code-block: #{$color-bg-code-block};
+  --color-bg-code-inline: #{$color-bg-code-inline};
+  --color-bg-section-alt: #{$color-bg-section-alt};
+  --color-bg-avatar: #{$color-bg-avatar};
+  --color-bg-placeholder: #{$color-bg-placeholder};
+  --color-bg-tag: #{$color-bg-tag};
+  --color-bg-tag-border: #{$color-bg-tag-border};
+  --color-bg-modal: #{$color-bg-modal};
+  --color-bg-overlay: #{$color-bg-overlay};
+  --color-bg-overlay-light: #{$color-bg-overlay-light};
+  --color-bg-fans-item: #{$color-bg-fans-item};
+  --color-bg-tab-bar: #{$color-bg-tab-bar};
+
+  --color-text-primary: #{$color-text-primary};
+  --color-text-secondary: #{$color-text-secondary};
+  --color-text-secondary-alt: #{$color-text-secondary-alt};
+  --color-text-body-alt: #{$color-text-body-alt};
+  --color-text-body: #{$color-text-body};
+  --color-text-muted: #{$color-text-muted};
+  --color-text-muted-light: #{$color-text-muted-light};
+  --color-text-muted-lighter: #{$color-text-muted-lighter};
+  --color-text-placeholder: #{$color-text-placeholder};
+  --color-text-placeholder-light: #{$color-text-placeholder-light};
+  --color-text-hint: #{$color-text-hint};
+  --color-text-code: #{$color-text-code};
+  --color-text-on-primary: #{$color-text-on-primary};
+  --color-text-on-dark: #{$color-text-on-dark};
+  --color-text-on-image: #{$color-text-on-image};
+  --color-text-code-inline: #{$color-text-code-inline};
+  --color-text-highlight: #{$color-text-highlight};
+
+  --color-border: #{$color-border};
+  --color-border-light: #{$color-border-light};
+  --color-border-lighter: #{$color-border-lighter};
+  --color-border-input: #{$color-border-input};
+  --color-border-setting: #{$color-border-setting};
+  --color-border-code-block: #{$color-border-code-block};
+  --color-border-dashed: #{$color-border-dashed};
+  --color-border-divider: #{$color-border-divider};
+
+  --color-link: #{$color-link};
+  --color-blue: #{$color-blue};
+  --color-pink: #{$color-pink};
+  --color-gold: #{$color-gold};
+  --color-badge: #{$color-badge};
+  --color-charging: #{$color-charging};
+  --color-like-active: #{$color-like-active};
+  --color-battery-charging: #{$color-battery-charging};
+  --color-loading-text: #{$color-loading-text};
+  --color-error-text: #{$color-error-text};
+  --color-retry-btn: #{$color-retry-btn};
+
+  --shadow-card: #{$shadow-card};
+  --shadow-bottom-bar: #{$shadow-bottom-bar};
+  --shadow-top-bar: #{$shadow-top-bar};
+  --shadow-tab-bar: #{$shadow-tab-bar};
+  --shadow-bottom-nav: #{$shadow-bottom-nav};
+  --shadow-avatar: #{$shadow-avatar};
+  --shadow-thumb: #{$shadow-thumb};
+  --shadow-modal: #{$shadow-modal};
+  --shadow-card-item: #{$shadow-card-item};
+  --shadow-image-text: #{$shadow-image-text};
+  --shadow-image-text-strong: #{$shadow-image-text-strong};
+  --shadow-icon: #{$shadow-icon};
+  --shadow-toast: #{$shadow-toast};
+  --shadow-avatar-circle: #{$shadow-avatar-circle};
+  --shadow-badge-text: #{$shadow-badge-text};
+
+  --color-scrollbar-thumb: #{$color-scrollbar-thumb};
+  --color-scrollbar-thumb-hover: #{$color-scrollbar-thumb-hover};
+  --color-scrollbar-track: #{$color-scrollbar-track};
+}
+
+
+// ============================================================
+// Part 3: CSS 自定义属性 - 暗色主题
+// ============================================================
+
+// 暗色主题（手动添加 .dark-theme 类）
+.dark-theme {
+  --color-primary: #{$color-primary};
+  --color-primary-light: #1A3A38;
+  --color-primary-90: #{$color-primary-90};
+  --color-primary-60: #{$color-primary-60};
+  --color-primary-30: #{$color-primary-30};
+  --color-primary-20: #{$color-primary-20};
+  --color-primary-solid: #{$color-primary-solid};
+
+  --color-white: #FFFFFF;
+  --color-white-80: rgba(30, 30, 30, 0.85);
+  --color-white-40: rgba(30, 30, 30, 0.4);
+  --color-white-35: rgba(30, 30, 30, 0.35);
+  --color-white-20: rgba(30, 30, 30, 0.2);
+  --color-white-10: rgba(30, 30, 30, 0.1);
+
+  --color-black: #000000;
+  --color-black-50: rgba(0, 0, 0, 0.5);
+  --color-black-40: rgba(0, 0, 0, 0.4);
+  --color-black-30: rgba(0, 0, 0, 0.3);
+  --color-black-25: rgba(0, 0, 0, 0.25);
+  --color-black-23: rgba(0, 0, 0, 0.23);
+  --color-black-20: rgba(0, 0, 0, 0.2);
+  --color-black-15: rgba(0, 0, 0, 0.15);
+  --color-black-10: rgba(0, 0, 0, 0.1);
+  --color-black-05: rgba(0, 0, 0, 0.05);
+
+  --color-bg-page: #121212;
+  --color-bg-section: #1E1E1E;
+  --color-bg-card: #1E1E1E;
+  --color-bg-code-block: #1A1A1A;
+  --color-bg-code-inline: #2D2D2D;
+  --color-bg-section-alt: #2A2A2A;
+  --color-bg-avatar: #333333;
+  --color-bg-placeholder: #333333;
+  --color-bg-tag: #2A2A2A;
+  --color-bg-tag-border: #444444;
+  --color-bg-modal: #1E1E1E;
+  --color-bg-overlay: rgba(0, 0, 0, 0.7);
+  --color-bg-overlay-light: rgba(0, 0, 0, 0.5);
+  --color-bg-fans-item: #1E1E1E;
+  --color-bg-tab-bar: #1A1A1A;
+
+  --color-text-primary: #EEEEEE;
+  --color-text-secondary: #CCCCCC;
+  --color-text-secondary-alt: #BBBBBB;
+  --color-text-body-alt: #B0B0B0;
+  --color-text-body: #AAAAAA;
+  --color-text-muted: #888888;
+  --color-text-muted-light: #757575;
+  --color-text-muted-lighter: #666666;
+  --color-text-placeholder: #666666;
+  --color-text-placeholder-light: #555555;
+  --color-text-hint: #666666;
+  --color-text-code: #AAAAAA;
+  --color-text-on-primary: #{$color-text-on-primary};
+  --color-text-on-dark: #FFFFFF;
+  --color-text-on-image: #FFFFFF;
+  --color-text-code-inline: #F48FB1;
+  --color-text-highlight: #{$color-text-highlight};
+
+  --color-border: #333333;
+  --color-border-light: #2A2A2A;
+  --color-border-lighter: #262626;
+  --color-border-input: rgba(255, 255, 255, 0.15);
+  --color-border-setting: #404040;
+  --color-border-code-block: #333333;
+  --color-border-dashed: #555555;
+  --color-border-divider: #333333;
+
+  --color-link: #{$color-link};
+  --color-blue: #64B5F6;
+  --color-pink: #FF80AB;
+  --color-gold: #FFD54F;
+  --color-badge: rgba(255, 61, 0, 0.9);
+  --color-charging: #FFEA00;
+  --color-like-active: #FF5252;
+  --color-battery-charging: #69F0AE;
+  --color-loading-text: #888888;
+  --color-error-text: #CF6679;
+  --color-retry-btn: #{$color-retry-btn};
+
+  --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.4);
+  --shadow-bottom-bar: 0 -2px 8px rgba(0, 0, 0, 0.4);
+  --shadow-top-bar: 0 2px 8px rgba(0, 0, 0, 0.4);
+  --shadow-tab-bar: 0 2px 6px rgba(0, 0, 0, 0.4);
+  --shadow-bottom-nav: 0 -2px 6px rgba(0, 0, 0, 0.4);
+  --shadow-avatar: 0 2px 6px rgba(0, 0, 0, 0.5);
+  --shadow-thumb: 0 2px 6px rgba(0, 0, 0, 0.5);
+  --shadow-modal: 0 -4px 24px rgba(0, 0, 0, 0.6);
+  --shadow-card-item: 0 2px 8px rgba(0, 0, 0, 0.4);
+  --shadow-image-text: 0 1px 3px rgba(0, 0, 0, 0.8);
+  --shadow-image-text-strong: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.9));
+  --shadow-icon: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.6));
+  --shadow-toast: 0 4px 16px rgba(0, 0, 0, 0.5);
+  --shadow-avatar-circle: 0 4px 16px rgba(0, 0, 0, 0.5);
+  --shadow-badge-text: 0 0 3px rgba(0, 0, 0, 0.6);
+
+  --color-scrollbar-thumb: rgba(255, 255, 255, 0.2);
+  --color-scrollbar-thumb-hover: rgba(255, 255, 255, 0.3);
+  --color-scrollbar-track: transparent;
+}

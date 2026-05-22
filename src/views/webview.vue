@@ -303,7 +303,7 @@ onUnmounted(async () => {
   width: 100%;
   height: 100vh;
   position: relative;
-  background-color: #fafafa;
+  background-color: var(--color-bg-page);
 }
 
 .topBar {
@@ -314,8 +314,8 @@ onUnmounted(async () => {
   z-index: 400;
   padding-top: env(safe-area-inset-top, 0);
   height: calc(env(safe-area-inset-top, 0) + 60px);
-  background-color: rgba(0, 121, 107, 1);
-  color: #fff;
+  background-color: var(--color-primary-solid);
+  color: var(--color-text-on-primary);
   display: flex;
   align-items: center;
   user-select: none;
@@ -360,12 +360,12 @@ onUnmounted(async () => {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #fafafa;
+  background-color: var(--color-bg-page);
   z-index: 100;
 }
 
 .loading-text {
-  color: #999;
+  color: var(--color-text-placeholder-light);
   font-size: 14px;
 }
 </style>

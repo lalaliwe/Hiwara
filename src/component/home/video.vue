@@ -314,8 +314,8 @@ function handleDateConfirm(dateParam: string | undefined) {
   backdrop-filter: blur(10px);
 
   .tabs {
-    background-color: rgba(255, 255, 255, 0.8);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    background-color: var(--color-white-80);
+    box-shadow: var(--shadow-tab-bar);
 
     .tabs-elements {
       display: flex;
@@ -330,6 +330,7 @@ function handleDateConfirm(dateParam: string | undefined) {
         justify-content: center;
         align-items: center;
         cursor: pointer;
+        color: var(--color-text-muted);
         
         &:active {
           opacity: 0.6;
@@ -341,8 +342,13 @@ function handleDateConfirm(dateParam: string | undefined) {
       --v-tabs-height: 40px;
     }
 
-    .v-tab {
+    :deep(.v-tab) {
       min-width: 0 !important;
+      color: var(--color-text-muted);
+
+      &.v-tab--selected {
+        color: var(--color-primary);
+      }
     }
   }
 }
@@ -396,18 +402,18 @@ function handleDateConfirm(dateParam: string | undefined) {
 }
 
 .listEnd {
-  color: #757575;
+  color: var(--color-text-muted-light);
   padding: 4px 0;
 }
 
 .load-more-failed {
   text-align: center;
   padding: 10px 0;
-  color: #757575;
+  color: var(--color-text-muted-light);
   font-size: 0.9rem;
 
   .retry-btn {
-    color: #00796B;
+    color: var(--color-retry-btn);
     cursor: pointer;
 
     &:hover {

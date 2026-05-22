@@ -99,7 +99,7 @@ onDeactivated(() => {
 #searchView {
   display: flex;
   flex-direction: column;
-  background-color: #fff;
+  background-color: var(--color-bg-card);
   height: 100vh;
 }
 

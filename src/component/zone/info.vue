@@ -291,7 +291,7 @@ function editProfile() {
       .fill {
         flex: 1;
         text-align: center;
-        border-right: 1px solid #BDBDBD;
+        border-right: 1px solid var(--color-border-setting);
         display: flex;
         align-items: center;
         justify-content: center;
@@ -304,11 +304,12 @@ function editProfile() {
 
           .num {
             font-size: 1rem;
+            color: var(--color-text-primary);
           }
 
           .label {
             font-size: 0.8rem;
-            color: #616161;
+            color: var(--color-text-muted);
           }
         }
       }
@@ -334,11 +335,12 @@ function editProfile() {
       padding-right: 28px;
       transition: height 0.3s ease-in-out;
       overflow: hidden;
+      color: var(--color-text-primary);
     }
 
     .detail {
       font-size: 0.8rem;
-      color: #2196F3;
+      color: var(--color-blue);
       position: absolute;
       top: 12px;
       right: 16px;
@@ -349,7 +351,7 @@ function editProfile() {
 
   .username {
     font-size: 0.8rem;
-    color: #616161;
+    color: var(--color-text-muted);
     padding: 0 16px;
     transition: height 0.3s ease-in-out;
     overflow: hidden;
@@ -358,7 +360,7 @@ function editProfile() {
   .userSignature {
     font-size: 0.8rem;
     padding: 0 16px;
-    color: #616161;
+    color: var(--color-text-muted);
     transition: height 0.3s ease-in-out;
     overflow: hidden;
   }
@@ -375,7 +377,7 @@ function editProfile() {
 
     .usernameHeigth {
       font-size: 0.8rem;
-      color: #616161;
+      color: var(--color-text-muted);
       padding: 0 16px 6px 16px;
     }
 

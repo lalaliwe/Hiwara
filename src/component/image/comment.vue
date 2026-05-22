@@ -526,7 +526,7 @@ onUnmounted(() => {
 </template>
 <style lang="scss" scoped>
 .comment-container {
-  background-color: #fafafa;
+  background-color: var(--color-bg-page);
   height: 100vh;
   width: 100vw;
   overflow: hidden;
@@ -540,8 +540,8 @@ onUnmounted(() => {
   z-index: 400;
   padding-top: env(safe-area-inset-top, 0);
   height: calc(env(safe-area-inset-top, 0) + 60px);
-  background-color: rgba(0, 121, 107, 0.9);
-  color: #fff;
+  background-color: var(--color-primary-90);
+  color: var(--color-text-on-primary);
   display: flex;
   align-items: center;
   user-select: none;
@@ -557,7 +557,6 @@ onUnmounted(() => {
 
     svg {
       font-size: 1.5rem;
-      color: white;
     }
 
     &:active {
@@ -581,18 +580,18 @@ onUnmounted(() => {
 }
 
 .listEnd {
-  color: #757575;
+  color: var(--color-text-muted-light);
   padding: 4px 0;
 }
 
 .load-more-failed {
   text-align: center;
   padding: 10px 0;
-  color: #757575;
+  color: var(--color-text-muted-light);
   font-size: 0.9rem;
 
   .retry-btn {
-    color: #00796B;
+    color: var(--color-retry-btn);
     cursor: pointer;
 
     &:hover {
@@ -618,14 +617,14 @@ onUnmounted(() => {
 .commentItem {
   display: flex;
   padding: 10px;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid var(--color-border-light);
 
   .avatar {
     flex-shrink: 0;
 
     :deep(.v-img) {
       border-radius: 50%;
-      background-color: #eee;
+      background-color: var(--color-bg-avatar);
     }
   }
 
@@ -636,7 +635,7 @@ onUnmounted(() => {
 
     .username {
       font-size: 0.8rem;
-      color: #616161;
+      color: var(--color-text-muted);
     }
 
     .content-wrapper {
@@ -663,7 +662,7 @@ onUnmounted(() => {
           right: 0;
           bottom: 0;
           padding-left: 5px;
-          background: #fff;
+          background: var(--color-bg-card);
         }
       }
     }
@@ -677,23 +676,23 @@ onUnmounted(() => {
       font-size: 0.8rem;
 
       .created-time {
-        color: #616161;
+        color: var(--color-text-muted);
       }
 
       .reply-section {
         display: flex;
         align-items: center;
-        color: #616161;
+        color: var(--color-text-muted);
 
         .reply-btn {
           cursor: pointer;
-          color: #00796B;
+          color: var(--color-primary);
           margin-left: auto;
         }
       }
 
       .toggle-btn {
-        color: #00796B;
+        color: var(--color-primary);
         cursor: pointer;
         flex-shrink: 0;
 
@@ -708,8 +707,8 @@ onUnmounted(() => {
 /* 回复列表展开/收起 */
 .replies-wrapper {
   padding: 8px 10px 8px 40px;
-  background: #f9f9f9;
-  border-bottom: 1px solid #eee;
+  background: var(--color-bg-code-block);
+  border-bottom: 1px solid var(--color-border-light);
 }
 
 .replies-loading {
@@ -718,7 +717,7 @@ onUnmounted(() => {
   justify-content: center;
   gap: 8px;
   padding: 12px 0;
-  color: #757575;
+  color: var(--color-text-muted-light);
   font-size: 0.85rem;
 }
 
@@ -726,8 +725,8 @@ onUnmounted(() => {
 .spinner {
   width: 18px;
   height: 18px;
-  border: 2px solid #e0e0e0;
-  border-top-color: #00796B;
+  border: 2px solid var(--color-border);
+  border-top-color: var(--color-primary);
   border-radius: 50%;
   animation: spin 0.7s linear infinite;
 }
@@ -742,7 +741,7 @@ onUnmounted(() => {
 .replyItem {
   display: flex;
   padding: 8px 0;
-  border-bottom: 1px solid #f0f0f0;
+  border-bottom: 1px solid var(--color-border-lighter);
 
   &:last-child {
     border-bottom: none;
@@ -753,7 +752,7 @@ onUnmounted(() => {
 
     :deep(.v-img) {
       border-radius: 50%;
-      background-color: #eee;
+      background-color: var(--color-bg-avatar);
     }
   }
 
@@ -764,7 +763,7 @@ onUnmounted(() => {
 
     .reply-username {
       font-size: 0.8rem;
-      color: #616161;
+      color: var(--color-text-muted);
     }
 
     .reply-content {
@@ -778,7 +777,7 @@ onUnmounted(() => {
     .reply-created-time {
       margin-top: 2px;
       font-size: 0.8rem;
-      color: #616161;
+      color: var(--color-text-muted);
     }
   }
 }
@@ -786,7 +785,7 @@ onUnmounted(() => {
 /* 可点击的回复计数 */
 .reply-count {
   cursor: pointer;
-  color: #00796B;
+  color: var(--color-primary);
 
   &:hover {
     opacity: 0.8;
@@ -813,7 +812,7 @@ onUnmounted(() => {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: #fff;
+  background-color: var(--color-bg-card);
   z-index: 2000;
   display: flex;
   flex-direction: column;

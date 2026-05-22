@@ -383,11 +383,19 @@ async function getSubscribeImageList(): Promise<any> {
   backdrop-filter: blur(10px);
 
   .tabs {
-    background-color: rgba(255, 255, 255, 0.8);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    background-color: var(--color-white-80);
+    box-shadow: var(--shadow-tab-bar);
 
     .v-tabs--density-compact {
       --v-tabs-height: 40px;
+    }
+
+    :deep(.v-tab) {
+      color: var(--color-text-muted);
+
+      &.v-tab--selected {
+        color: var(--color-primary);
+      }
     }
   }
 }
@@ -442,18 +450,18 @@ async function getSubscribeImageList(): Promise<any> {
 }
 
 .listEnd {
-  color: #757575;
+  color: var(--color-text-muted-light);
   padding: 4px 0;
 }
 
 .load-more-failed {
   text-align: center;
   padding: 10px 0;
-  color: #757575;
+  color: var(--color-text-muted-light);
   font-size: 0.9rem;
 
   .retry-btn {
-    color: #00796B;
+    color: var(--color-retry-btn);
     cursor: pointer;
 
     &:hover {
