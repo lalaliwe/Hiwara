@@ -4,6 +4,8 @@ import player from '../views/player.vue';
 import image from '../views/image.vue';
 import search from '../views/search.vue';
 import zone from '../views/zone.vue';
+import forum from '../views/forum.vue';
+import forumPost from '../views/forum/post.vue';
 import friends from '../views/friends.vue';
 import history from '../views/history.vue';
 import setup from '../views/setup.vue';
@@ -104,6 +106,18 @@ const routes: Array<RouteRecordRaw & { meta?: RouteMeta }> = [
     name: 'Zone',
     component: zone,
     meta: { transition: 'stack', componentName: 'Zone' },
+  },
+  {
+    path: '/forum',
+    name: 'Forum',
+    component: forum,
+    meta: { transition: 'stack', componentName: 'Forum' },
+  },
+  {
+    path: '/forum/post',
+    name: 'ForumPost',
+    component: forumPost,
+    meta: { transition: 'stack', componentName: 'ForumPost' },
   },
   {
     path: '/friends/:uid?',

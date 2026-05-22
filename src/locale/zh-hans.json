@@ -224,5 +224,34 @@
       "retry": "点击重试",
       "reachedBottom": "到底了"
     }
+  },
+  "forum": {
+    "sections": {
+      "announcements": "公告",
+      "announcements_desc": "重要信息",
+      "feedback": "反馈",
+      "feedback_desc": "想法、建议和顾虑",
+      "general": "普通",
+      "general_desc": "其他一切",
+      "guide": "指南",
+      "guide_desc": "有用的信息或者 \"如何\" 指南",
+      "help": "帮助",
+      "help_desc": "帮助解决网站相关问题",
+      "helpQuestion": "帮助/问题",
+      "helpQuestion_desc": "与网站无关的问题",
+      "request": "请求",
+      "request_desc": "帮助寻找或创造",
+      "share": "分享",
+      "share_desc": "分享模型，動作或者其他アクセサリー"
+    },
+    "replies": "回复",
+    "views": "浏览",
+    "author": "发布者",
+    "lastReply": "最新回复",
+    "publishedAt": "发布于",
+    "repliedAt": "回复于",
+    "pinned": "置顶",
+    "loadMore": "加载更多",
+    "noMore": "没有更多了"
   }
 }

@@ -224,5 +224,34 @@
       "retry": "Click to retry",
       "reachedBottom": "Reached bottom"
     }
+  },
+  "forum": {
+    "sections": {
+      "announcements": "Announcements",
+      "announcements_desc": "Important information",
+      "feedback": "Feedback",
+      "feedback_desc": "Ideas, suggestions and concerns",
+      "general": "General",
+      "general_desc": "Everything else",
+      "guide": "Guide",
+      "guide_desc": "Useful information or \"how-to\" guides",
+      "help": "Help",
+      "help_desc": "Help with site-related issues",
+      "helpQuestion": "Help/Question",
+      "helpQuestion_desc": "Questions not related to the site",
+      "request": "Request",
+      "request_desc": "Help find or create",
+      "share": "Share",
+      "share_desc": "Share models, animations or other accessories"
+    },
+    "replies": "Replies",
+    "views": "Views",
+    "author": "Author",
+    "lastReply": "Last Reply",
+    "publishedAt": "Published",
+    "repliedAt": "Replied",
+    "pinned": "Pinned",
+    "loadMore": "Load More",
+    "noMore": "No more"
   }
 }

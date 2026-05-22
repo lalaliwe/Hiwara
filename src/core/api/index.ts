@@ -51,5 +51,8 @@ export {
 
 // 论坛 API
 export {
-  getForumHome
+  getForumHome,
+  getForumCategoryList,
+  getForumPostDetail,
+  getForumPostReplies
 } from './forum';

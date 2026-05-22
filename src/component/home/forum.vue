@@ -3,10 +3,13 @@ import { ref, onMounted } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { getForumHome } from '../../core/api/forum';
 import { showShortToast } from '../../core/toast';
+import { useRouter } from 'vue-router'
 import loadingHuawu from '../loadingHuawu.vue';
 import errorHuawu from '../errorHuawu.vue';
+import { onActivated } from 'vue';
 
 const { t } = useI18n();
+const router = useRouter();
 
 interface LastPostUser {
   id: string;
@@ -168,6 +171,28 @@ function handleErrorClick() {
 onMounted(() => {
   fetchForumData();
 });
+
+// 打开论坛页
+function openForumPage(sectionId: string) {
+  router.push({
+    path: '/forum',
+    query: { sectionId }
+  });
+}
+
+// 滚动处理
+const forumView = ref<HTMLElement>();
+let scrollTop = 0;
+
+function handleScroll(e: Event): void {
+  scrollTop = (e.target as HTMLElement).scrollTop;
+  console.log(scrollTop);
+}
+
+onActivated(() => {
+  if (forumView.value)
+    forumView.value.scrollTop = scrollTop;
+})
 </script>
 
 <template>
@@ -177,7 +202,7 @@ onMounted(() => {
         {{ t('home.navigation.forum') }}
       </div>
     </div>
-    <div class="content">
+    <div class="content" ref="forumView" @scroll="handleScroll">
       <div v-if="forumState === 'failed'" class="loading" @click="handleErrorClick">
         <errorHuawu>{{ t('home.video.loadFailed') }}{{ t('home.navigation.forum') }}</errorHuawu>
       </div>
@@ -193,7 +218,7 @@ onMounted(() => {
             {{ t(group.groupNameKey) }}
           </div>
           <div v-for="section in group.sections" :key="section.id" class="btn">
-            <div class="block">
+            <div class="block" @click="openForumPage(section.id)">
               <div class="left">
                 <div class="bar"></div>
               </div>
@@ -223,7 +248,7 @@ onMounted(() => {
                 <span>{{ t('home.forum.repliedAt') }}</span>
                 &nbsp;
                 <span class="gray">{{ formatDate(section.lastThread.lastPost?.createdAt || section.lastThread.createdAt)
-                  }}</span>
+                }}</span>
               </div>
             </template>
             <template v-else>
@@ -299,6 +324,8 @@ onMounted(() => {
 .btn {
   .block {
     display: flex;
+    cursor: pointer;
+    user-select: none;
 
     .left {
       padding: 10px;

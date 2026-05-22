@@ -15,6 +15,9 @@ import {
 import { getVideoHistoryList } from '../../core/database'
 import { showShortToast } from '../../core/toast';
 import HistoryItem from './HistoryItem.vue';
+import defaultAvatarImg from '../../static/img/avatar-default.jpg';
+import avatarPlaceholderImg from '../../static/img/avatar-placeholder.png';
+import avatarErrorImg from '../../static/img/avatar-error.png';
 
 const { t } = useI18n();
 const router = useRouter()
@@ -22,6 +25,7 @@ const router = useRouter()
 const nickname = ref<string>('');
 const username = ref<string>('');
 const avatar = ref<string>('');
+const avatarUrl = ref<string>(''); // 经过 getImageIwara 处理后的可显示 URL
 const followNum = ref<number>(0);
 const fansNum = ref<number>(0);
 const historyList = ref<any[]>([]);
@@ -76,7 +80,8 @@ async function getUserInfo() {
     const uid = userInfoRes.data.user.id;
     await Promise.allSettled([
       getFollowersNum(uid),
-      getFansNum(uid)
+      getFansNum(uid),
+      loadAvatar()
     ])
   } catch (err) {
     console.error(err);
@@ -100,6 +105,23 @@ async function getUserInfo() {
       fansNum.value = res.data.count;
     } catch (err) {
       console.error(err);
+    }
+  }
+}
+
+// 加载头像
+async function loadAvatar() {
+  if (!avatar.value || avatar.value.trim() === '') {
+    // avatar 为空，使用默认头像
+    avatarUrl.value = defaultAvatarImg;
+  } else {
+    try {
+      // avatar 不为空，通过 API 获取
+      avatarUrl.value = await getImageIwara(avatar.value);
+    } catch (error) {
+      console.error('Failed to load avatar:', error);
+      // 加载失败时使用错误头像
+      avatarUrl.value = avatarErrorImg;
     }
   }
 }
@@ -136,7 +158,11 @@ function handleWheelScroll(event: WheelEvent) {
       </div>
       <div class="user" @click="routerGoTo(`/zone`)">
         <div class="avatar">
-          <v-img class="img" cover src="https://cdn.vuetifyjs.com/images/parallax/material.jpg"></v-img>
+          <v-img class="img" cover :src="avatarUrl">
+            <template v-slot:placeholder>
+              <v-img height="100%" :src="avatarPlaceholderImg" cover></v-img>
+            </template>
+          </v-img>
         </div>
         <div class="info">
           <div class="nickname">{{ nickname }}</div>

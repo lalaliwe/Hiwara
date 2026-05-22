@@ -166,7 +166,7 @@ TBD
 * ⬜ 平板电脑适配 | Tablet adaptation
 * ⬜ 暗黑模式 | Dark mode
 * ⬜ 离线缓存及下载 | Offline caching and downloading
-* ⬜ 论坛浏览 | Forum browsing
+* ✅ 论坛浏览 | Forum browsing
 * ⬜ 论坛发布 | Forum posting
 * ⬜ 多语言支持 | Multi-language support
 * ⬜ Aria2支持 | Aria2 support
