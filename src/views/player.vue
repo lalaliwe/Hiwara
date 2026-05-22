@@ -348,15 +348,21 @@ const followTrigger = (val: boolean) => {
     <videoPlayer class="video-player" :poster="poster" :src="currentVideoSrc" :title="title" :server="currentServer"
       :video-files="videoFile" :current-definition-index="videoSelect" @refresh-server="refreshVideoFile"
       @definition-change="selectDefinition" />
-    <div class="loading" v-if="videoInfoState === 'loading'">
+
+    <!-- 加载中 -->
+    <div class="status-view" v-if="videoInfoState === 'loading'">
       <loadingHuawu>数据加载中</loadingHuawu>
     </div>
-    <div class="loading" v-if="videoInfoState === 'failed'">
+
+    <!-- 加载失败 -->
+    <div class="status-view" v-else-if="videoInfoState === 'failed'">
       <errorHuawu>数据加载失败了喵~</errorHuawu>
     </div>
-    <div class="video-info" v-if="videoInfoState === 'success'">
+
+    <!-- 加载成功：视频信息 + Swiper 内容 -->
+    <div class="video-info" v-else>
       <div class="tabs">
-        <div class="tabs-elements">
+        <div class="tabs-bar">
           <v-tabs class="left" v-model="tab" color="#00796B" density="comfortable">
             <v-tab value="info">简介</v-tab>
             <v-tab value="comment">评论</v-tab>
@@ -372,13 +378,12 @@ const followTrigger = (val: boolean) => {
         </div>
         <v-divider></v-divider>
       </div>
+
       <div class="tabs-content">
-        <!-- 替换为 Swiper -->
         <swiper class="tabs-window" :slides-per-view="1" :space-between="0" @swiper="onSwiper"
           @slide-change="onSlideChange">
           <swiper-slide>
-            <!-- 修改：只有当非加载状态时才渲染 infoView，确保数据已准备就绪 -->
-            <infoView v-if="videoInfoState === 'success'" :title="title" :synopsis="synopsis" :playNum="playNum"
+            <infoView :title="title" :synopsis="synopsis" :playNum="playNum"
               :likeNum="likeNum" :createdAt="createdAt" :isLike="isLike" :tags="tags" :authorname="authorname"
               :username="username" :avatar="avatar" :fansNum="fansNum" :videoNum="videoNum" :isFollow="isFollow"
               :vid="id as string" :uid="uid" :download="currentDownloadUrl" :slug="slug" @like="likeTrigger"
@@ -389,28 +394,29 @@ const followTrigger = (val: boolean) => {
           </swiper-slide>
         </swiper>
       </div>
+
+      <!-- 清晰度选择对话框 -->
+      <v-dialog v-model="showDefinitionDialog" max-width="400">
+        <v-card>
+          <v-card-title class="text-center">
+            选择清晰度
+          </v-card-title>
+          <v-divider></v-divider>
+          <v-list>
+            <v-list-item v-for="(file, index) in sortedVideoFiles" :key="file.id"
+              @click="selectDefinition(getOriginalIndex(file))" :active="getOriginalIndex(file) === videoSelect">
+              <template v-slot:prepend>
+                <v-icon icon="fa-solid fa-film"></v-icon>
+              </template>
+              <v-list-item-title>{{ definitionTextFormat(file.name) }}</v-list-item-title>
+              <template v-slot:append v-if="getOriginalIndex(file) === videoSelect">
+                <v-icon color="primary" icon="fa-solid fa-check"></v-icon>
+              </template>
+            </v-list-item>
+          </v-list>
+        </v-card>
+      </v-dialog>
     </div>
-    <!-- 清晰度选择对话框 -->
-    <v-dialog v-model="showDefinitionDialog" max-width="400">
-      <v-card>
-        <v-card-title class="text-center">
-          选择清晰度
-        </v-card-title>
-        <v-divider></v-divider>
-        <v-list>
-          <v-list-item v-for="(file, index) in sortedVideoFiles" :key="file.id"
-            @click="selectDefinition(getOriginalIndex(file))" :active="getOriginalIndex(file) === videoSelect">
-            <template v-slot:prepend>
-              <v-icon icon="fa-solid fa-film"></v-icon>
-            </template>
-            <v-list-item-title>{{ definitionTextFormat(file.name) }}</v-list-item-title>
-            <template v-slot:append v-if="getOriginalIndex(file) === videoSelect">
-              <v-icon color="primary" icon="fa-solid fa-check"></v-icon>
-            </template>
-          </v-list-item>
-        </v-list>
-      </v-card>
-    </v-dialog>
   </div>
 </template>
 <style lang="scss" scoped>
@@ -431,7 +437,8 @@ const followTrigger = (val: boolean) => {
   aspect-ratio: 16 / 9;
 }
 
-.loading {
+/* 加载/失败 状态容器 */
+.status-view {
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -451,7 +458,7 @@ const followTrigger = (val: boolean) => {
     min-width: 0 !important;
   }
 
-  .tabs-elements {
+  .tabs-bar {
     display: flex;
 
     .left {
@@ -460,8 +467,9 @@ const followTrigger = (val: boolean) => {
     }
 
     .right {
+      display: flex;
+      align-items: center;
       padding: 0 10px;
-
       color: #616161;
       font-size: 0.9rem;
 
@@ -470,7 +478,6 @@ const followTrigger = (val: boolean) => {
         align-items: center;
         user-select: none;
         justify-content: center;
-        height: 100%;
         cursor: pointer;
       }
 
@@ -492,12 +499,10 @@ const followTrigger = (val: boolean) => {
   .tabs-window {
     height: 100%;
 
-    // 让 Swiper 内部结构继承 100% 高度
     :deep(.swiper-wrapper) {
       height: 100%;
     }
 
-    // 替代原 .v-window-item 的功能：高度100% + 内部滚动
     :deep(.swiper-slide) {
       height: 100%;
     }

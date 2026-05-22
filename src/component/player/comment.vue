@@ -253,13 +253,13 @@ onActivated(() => {
 
 <template>
   <div class="commentView">
-    <div v-if="commentState === 'failed'" class="empty-state" @click="handleErrorClick">
+    <div v-if="commentState === 'failed'" class="status-overlay" @click="handleErrorClick">
       <errorHuawu>评论加载失败了喵~</errorHuawu>
     </div>
-    <div v-else-if="commentState === 'empty'" class="empty-state" @click="handleErrorClick">
+    <div v-else-if="commentState === 'empty'" class="status-overlay" @click="handleErrorClick">
       <errorHuawu>当前还没有评论</errorHuawu>
     </div>
-    <div v-else-if="commentState === 'loading'" class="empty-state">
+    <div v-else-if="commentState === 'loading'" class="status-overlay">
       <loadingHuawu>评论加载中</loadingHuawu>
     </div>
     <v-infinite-scroll class="commentList" v-else color="#00796B" @load="handleScrollToEnd" :disabled="commentMore" @scroll="handleScroll"
@@ -273,24 +273,18 @@ onActivated(() => {
             </template>
           </v-img>
         </div>
-        <div class="elements">
+        <div class="comment-body">
           <div class="username">{{ item.user.name || item.user.username }}</div>
           <div class="content-wrapper">
             <div class="content" :class="{ fold: needToggle(item.body) && !expandedMap[item.id] }">
               {{ item.body }}
             </div>
-            <!-- 底部操作栏：始终显示 -->
             <div class="action-bar">
-              <!-- 发布时间 -->
               <div class="created-time">{{ formatDate(item.createdAt) }}&nbsp;&nbsp;</div>
-              <!-- 回复数 + 回复按钮 -->
               <div class="reply-section">
                 <div v-if="item.numReplies > 0">{{ item.numReplies }}条回复&nbsp;&nbsp;</div>
-                <div class="reply-btn">
-                  回复
-                </div>
+                <div class="reply-btn">回复</div>
               </div>
-              <!-- 展开/收起按钮 (仅长文本显示) -->
               <div class="toggle-btn" v-if="needToggle(item.body)" @click="toggleExpand(item.id)">
                 {{ expandedMap[item.id] ? '收起' : '展开' }}
               </div>
@@ -316,10 +310,11 @@ onActivated(() => {
 <style lang="scss" scoped>
 .commentView {
   height: 100%;
-
-  >div {
-    padding-bottom: env(safe-area-inset-bottom, 0);
-  }
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  padding-bottom: env(safe-area-inset-bottom, 0);
+  box-sizing: border-box;
 }
 
 .listEnd {
@@ -344,16 +339,17 @@ onActivated(() => {
   }
 }
 
-.empty-state {
-  height: 100%;
+.status-overlay {
+  flex: 1;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
 }
 
-.commentList{
-  height: 100%;
+.commentList {
+  flex: 1;
+  overflow-y: auto;
 }
 
 .commentItem {
@@ -370,9 +366,10 @@ onActivated(() => {
     }
   }
 
-  .elements {
+  .comment-body {
     margin-left: 10px;
     flex: 1;
+    min-width: 0;
 
     .username {
       font-size: 0.8rem;
@@ -381,12 +378,15 @@ onActivated(() => {
 
     .content-wrapper {
       margin-top: 5px;
+      min-width: 0;
     }
 
     .content {
       font-size: 0.9rem;
       line-height: 1.5em;
       text-align: justify;
+      overflow-wrap: break-word;
+      word-break: break-word;
 
       &.fold {
         display: -webkit-box;

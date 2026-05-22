@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, nextTick, watch, onUnmounted, onActivated } from 'vue';
+import { ref, onMounted, nextTick, watch, onUnmounted, onActivated, computed } from 'vue';
 import {
   Like as iconLike,
   ShareOne as iconShareOne,
@@ -143,12 +143,22 @@ const recommendVideoList = ref<ListItem[]>([]); // 推荐视频
 // 当前滚动条位置
 let scrollTop = 0;
 const infoViewRef = ref<HTMLElement>();
+const infoViewContentRef = ref<HTMLElement>(); // 内层内容容器
+let contentResizeObserver: ResizeObserver | null = null; // ResizeObserver 实例
 
 // 加载状态
 const isLoadingAuthorVideos = ref(false);
 const isLoadingRecommendVideos = ref(false);
 const isFollowing = ref(false); // 关注操作进行中状态
 const isLiking = ref(false); // 点赞操作进行中状态
+
+// 关注按钮状态合并计算
+const followBtn = computed(() => {
+  if (props.isFollow && props.isMyFans) return { text: '已互粉', variant: 'outlined' as const, icon: 'fa-solid fa-bars' };
+  if (props.isFollow) return { text: '已关注', variant: 'outlined' as const, icon: 'fa-solid fa-bars' };
+  if (props.isMyFans) return { text: '回关', variant: 'flat' as const, icon: 'fa-solid fa-plus' };
+  return { text: '关注', variant: 'flat' as const, icon: 'fa-solid fa-plus' };
+});
 
 // 加载作者其他视频
 async function loadAuthorOtherVideos() {
@@ -237,10 +247,23 @@ onMounted(() => {
 
   // 监听窗口大小改变事件
   window.addEventListener('resize', handleResize);
+
+  // 监听内层内容容器高度变化（推荐视频等异步加载导致），重新计算
+  if (infoViewContentRef.value) {
+    contentResizeObserver = new ResizeObserver(() => {
+      calculateHeights();
+    });
+    contentResizeObserver.observe(infoViewContentRef.value);
+  }
 })
 onUnmounted(() => {
   // 移除窗口大小改变监听器
   window.removeEventListener('resize', handleResize);
+  // 断开 ResizeObserver
+  if (contentResizeObserver) {
+    contentResizeObserver.disconnect();
+    contentResizeObserver = null;
+  }
 })
 // 简化 watch 逻辑，使用 nextTick 确保 DOM 更新后设置样式
 watch(expand, async (val) => {
@@ -385,7 +408,7 @@ function toZone() {
 </script>
 <template>
   <div class="infoView" @scroll="handleSroll" ref="infoViewRef">
-    <div>
+    <div ref="infoViewContentRef">
       <div class="author" @click="toZone">
         <div class="avatar">
           <!-- <img :src="avatarUrl" alt=""> -->
@@ -400,30 +423,10 @@ function toZone() {
           <!-- <div class="userdata">{{ fansNum }}粉丝 {{ videoNum }}视频</div> -->
         </div>
         <div class="follow">
-          <span v-if="!isFollow && !isMyFans">
-            <v-btn size="small" variant="flat" color="#00796B" @click="clickFollow" :loading="isFollowing">
-              <font-awesome-icon icon="fa-solid fa-plus" />
-              关注
-            </v-btn>
-          </span>
-          <span v-else-if="isFollow && !isMyFans">
-            <v-btn size="small" variant="outlined" color="#00796B" @click="clickFollow" :loading="isFollowing">
-              <font-awesome-icon icon="fa-solid fa-bars" />
-              已关注
-            </v-btn>
-          </span>
-          <span v-else-if="isFollow && isMyFans">
-            <v-btn size="small" variant="outlined" color="#00796B" @click="clickFollow" :loading="isFollowing">
-              <font-awesome-icon icon="fa-solid fa-bars" />
-              已互粉
-            </v-btn>
-          </span>
-          <span v-else-if="!isFollow && isMyFans">
-            <v-btn size="small" variant="flat" color="#00796B" @click="clickFollow" :loading="isFollowing">
-              <font-awesome-icon icon="fa-solid fa-plus" />
-              回关
-            </v-btn>
-          </span>
+          <v-btn size="small" :variant="followBtn.variant" color="#00796B" @click="clickFollow" :loading="isFollowing">
+            <font-awesome-icon :icon="followBtn.icon" />
+            {{ followBtn.text }}
+          </v-btn>
         </div>
       </div>
       <div class="more" :class="{ expanded: expand }">
@@ -593,7 +596,7 @@ function toZone() {
   }
 }
 
-.title {
+@mixin title-base {
   margin: 5px 0;
   padding: 0 15px 0 10px;
   text-overflow: ellipsis;
@@ -603,6 +606,10 @@ function toZone() {
   cursor: pointer;
 }
 
+.title {
+  @include title-base;
+}
+
 .infomsg {
   padding: 0 10px;
   font-size: 0.8rem;
@@ -610,7 +617,7 @@ function toZone() {
   cursor: pointer;
 }
 
-.synopsis {
+@mixin synopsis-base {
   padding: 0 10px;
   color: #616161;
   font-size: 0.8rem;
@@ -633,21 +640,25 @@ function toZone() {
   }
 }
 
+.synopsis {
+  @include synopsis-base;
+}
+
 .calculateHeight {
   overflow: hidden;
   height: 0;
 
   .titleCollapseHeight {
-    @extend .title;
+    @include title-base;
     white-space: nowrap;
   }
 
   .titleExpandHeight {
-    @extend .title;
+    @include title-base;
   }
 
   .synopsisHeight {
-    @extend .synopsis;
+    @include synopsis-base;
   }
 }
 
