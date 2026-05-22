@@ -166,6 +166,26 @@ export async function getImageComments(pid: string, page: number): Promise<any> 
   }
 }
 
+// 获取插画评论回复
+export async function getImageCommentReplies(pid: string, commentId: string, page: number = 0, limit: number = 32): Promise<any> {
+  const path = `${API_URL}/image/${pid}/comments`;
+  const headers = {
+    Authorization: `Bearer ${await getAccessToken()}`,
+  };
+  const query = {
+    parent: commentId,
+    page: page,
+    limit: limit
+  };
+  try {
+    const response = await getSendRequestIwara(path, headers, query);
+    return response;
+  } catch (error) {
+    console.error('Get image comment replies failed:', error);
+    throw error;
+  }
+}
+
 // 发表插画评论
 export async function postImageComment(pid: string, body: string, parentId?: string): Promise<any> {
   const path = `${API_URL}/image/${pid}/comments`;

@@ -187,6 +187,26 @@ export async function getVideoComments(vid: string, page: number): Promise<any> 
   }
 }
 
+// 获取视频评论的回复（使用 parent 参数过滤）
+export async function getVideoCommentReplies(vid: string, commentId: string, page: number = 0, limit: number = 32): Promise<any> {
+  const path = `${API_URL}/video/${vid}/comments`;
+  const headers = {
+    Authorization: `Bearer ${await getAccessToken()}`,
+  };
+  const query = {
+    parent: commentId,
+    page: page,
+    limit: limit
+  };
+  try {
+    const response = await getSendRequestIwara(path, headers, query);
+    return response;
+  } catch (error) {
+    console.error('Get video comment replies failed:', error);
+    throw error;
+  }
+}
+
 // 发表视频评论
 export async function postVideoComment(vid: string, body: string, parentId?: string): Promise<any> {
   const path = `${API_URL}/video/${vid}/comments`;

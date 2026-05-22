@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted, watch } from 'vue';
-import { getImageComments, getImageIwara, postImageComment } from '../../core/api';
+import { ref, nextTick, onMounted, onUnmounted, watch } from 'vue';
+import { getImageComments, getImageCommentReplies, getImageIwara, postImageComment } from '../../core/api';
 import errorHuawu from '../errorHuawu.vue';
 import loadingHuawu from '../loadingHuawu.vue';
 import { showShortToast } from '../../core/toast';
@@ -250,6 +250,50 @@ watch(() => props.pid, (newVal) => {
 
 const expandedMap = ref<Record<string, boolean>>({})
 
+// 回复展开相关
+const repliesMap = ref<Record<string, Comment[]>>({})
+const repliesLoading = ref<Record<string, boolean>>({})
+const repliesExpanded = ref<Record<string, boolean>>({})
+
+async function toggleReplies(comment: Comment) {
+  const id = comment.id
+  if (repliesExpanded.value[id]) {
+    repliesExpanded.value[id] = false
+    return
+  }
+  if (repliesMap.value[id] && repliesMap.value[id].length > 0) {
+    repliesExpanded.value[id] = true
+    return
+  }
+  repliesLoading.value[id] = true
+  try {
+    const res = await getImageCommentReplies(props.pid, id, 0, 50)
+    if (res.ok && res.data.results) {
+      const replies = res.data.results.map((item: any) => ({
+        id: item.id,
+        approved: item.approved,
+        body: item.body,
+        numReplies: item.numReplies || 0,
+        parent: item.parent,
+        createdAt: item.createdAt,
+        updatedAt: item.updatedAt,
+        user: item.user,
+        imageId: item.imageId
+      }))
+      repliesMap.value[id] = replies
+      await loadAvatarsForComments(replies)
+      repliesExpanded.value[id] = true
+    } else {
+      showShortToast('获取回复失败')
+    }
+  } catch (error) {
+    console.error('获取评论回复失败:', error)
+    showShortToast('获取回复失败')
+  } finally {
+    repliesLoading.value[id] = false
+  }
+}
+
 const needToggle = (content: string) => {
   return content.length > 180
 }
@@ -376,40 +420,68 @@ onUnmounted(() => {
       </div>
       <v-infinite-scroll class="commentList" v-else color="#00796B" @load="handleScrollToEnd" :disabled="commentMore"
         @scroll="handleScroll" ref="commentListRef">
-        <div class="commentItem" v-for="item in commentList" :key="item.id">
-          <div class="avatar">
-            <v-img :src="avatarUrlMap[item.user.id] || avatarPlaceholderImg" cover height="40px" width="40px"
-              style="border-radius: 50%;">
-              <template v-slot:placeholder>
-                <v-img height="100%" width="100%" :src="avatarPlaceholderImg" cover style="border-radius: 50%;"></v-img>
-              </template>
-            </v-img>
-          </div>
-          <div class="elements">
-            <div class="username">{{ item.user.name || item.user.username }}</div>
-            <div class="content-wrapper">
-              <div class="content" :class="{ fold: needToggle(item.body) && !expandedMap[item.id] }">
-                {{ item.body }}
-              </div>
-              <!-- 底部操作栏：始终显示 -->
-              <div class="action-bar">
-                <!-- 发布时间 -->
-                <div class="created-time">{{ formatDate(item.createdAt) }}&nbsp;&nbsp;</div>
-                <!-- 回复数 + 回复按钮 -->
-                <div class="reply-section">
-                  <div v-if="item.numReplies > 0">{{ item.numReplies }}条回复&nbsp;&nbsp;</div>
-                  <div class="reply-btn" @click="handleReply(item)">
-                    回复
-                  </div>
+        <template v-for="item in commentList" :key="item.id">
+          <div class="commentItem">
+            <div class="avatar">
+              <v-img :src="avatarUrlMap[item.user.id] || avatarPlaceholderImg" cover height="40px" width="40px"
+                style="border-radius: 50%;">
+                <template v-slot:placeholder>
+                  <v-img height="100%" width="100%" :src="avatarPlaceholderImg" cover style="border-radius: 50%;"></v-img>
+                </template>
+              </v-img>
+            </div>
+            <div class="elements">
+              <div class="username">{{ item.user.name || item.user.username }}</div>
+              <div class="content-wrapper">
+                <div class="content" :class="{ fold: needToggle(item.body) && !expandedMap[item.id] }">
+                  {{ item.body }}
                 </div>
-                <!-- 展开/收起按钮 (仅长文本显示) -->
-                <div class="toggle-btn" v-if="needToggle(item.body)" @click="toggleExpand(item.id)">
-                  {{ expandedMap[item.id] ? '收起' : '展开' }}
+                <!-- 底部操作栏：始终显示 -->
+                <div class="action-bar">
+                  <!-- 发布时间 -->
+                  <div class="created-time">{{ formatDate(item.createdAt) }}&nbsp;&nbsp;</div>
+                  <!-- 回复数 + 回复按钮 -->
+                  <div class="reply-section">
+                    <div v-if="item.numReplies > 0" class="reply-count" @click="toggleReplies(item)">{{ item.numReplies }}条回复&nbsp;&nbsp;</div>
+                    <div class="reply-btn" @click="handleReply(item)">
+                      回复
+                    </div>
+                  </div>
+                  <!-- 展开/收起按钮 (仅长文本显示) -->
+                  <div class="toggle-btn" v-if="needToggle(item.body)" @click="toggleExpand(item.id)">
+                    {{ expandedMap[item.id] ? '收起' : '展开' }}
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
+          <!-- 回复列表：显示在当前评论和下一项之间 -->
+          <div v-if="repliesExpanded[item.id] || repliesLoading[item.id]" class="replies-wrapper">
+            <!-- 加载中：简单转圈 -->
+            <div v-if="repliesLoading[item.id]" class="replies-loading">
+              <div class="spinner"></div>
+              <span>加载回复中...</span>
+            </div>
+            <!-- 回复列表 -->
+            <template v-else>
+              <div class="replyItem" v-for="reply in (repliesMap[item.id] || [])" :key="reply.id">
+                <div class="reply-avatar">
+                  <v-img :src="avatarUrlMap[reply.user.id] || avatarPlaceholderImg" cover height="40px" width="40px"
+                    style="border-radius: 50%;">
+                    <template v-slot:placeholder>
+                      <v-img height="100%" width="100%" :src="avatarPlaceholderImg" cover style="border-radius: 50%;"></v-img>
+                    </template>
+                  </v-img>
+                </div>
+                <div class="reply-body">
+                  <div class="reply-username">{{ reply.user.name || reply.user.username }}</div>
+                  <div class="reply-content">{{ reply.body }}</div>
+                  <div class="reply-created-time">{{ formatDate(reply.createdAt) }}</div>
+                </div>
+              </div>
+            </template>
+          </div>
+        </template>
         <template v-slot:error="{ props }">
           <div class="load-more-failed">
             <span>加载失败，</span>
@@ -612,6 +684,94 @@ onUnmounted(() => {
         }
       }
     }
+  }
+}
+
+/* 回复列表展开/收起 */
+.replies-wrapper {
+  padding: 8px 10px 8px 40px;
+  background: #f9f9f9;
+  border-bottom: 1px solid #eee;
+}
+
+.replies-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 0;
+  color: #757575;
+  font-size: 0.85rem;
+}
+
+/* 简易转圈动画 */
+.spinner {
+  width: 18px;
+  height: 18px;
+  border: 2px solid #e0e0e0;
+  border-top-color: #00796B;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* 单个回复项 */
+.replyItem {
+  display: flex;
+  padding: 8px 0;
+  border-bottom: 1px solid #f0f0f0;
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  .reply-avatar {
+    flex-shrink: 0;
+
+    :deep(.v-img) {
+      border-radius: 50%;
+      background-color: #eee;
+    }
+  }
+
+  .reply-body {
+    margin-left: 10px;
+    flex: 1;
+    min-width: 0;
+
+    .reply-username {
+      font-size: 0.8rem;
+      color: #616161;
+    }
+
+    .reply-content {
+      margin-top: 5px;
+      font-size: 0.9rem;
+      line-height: 1.5em;
+      text-align: justify;
+      overflow-wrap: anywhere;
+    }
+
+    .reply-created-time {
+      margin-top: 2px;
+      font-size: 0.8rem;
+      color: #616161;
+    }
+  }
+}
+
+/* 可点击的回复计数 */
+.reply-count {
+  cursor: pointer;
+  color: #00796B;
+
+  &:hover {
+    opacity: 0.8;
   }
 }
 

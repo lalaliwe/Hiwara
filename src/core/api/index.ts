@@ -22,6 +22,7 @@ export {
   getVideoRecommendByUser,
   getVideoRecommendByOther,
   getVideoComments,
+  getVideoCommentReplies,
   postVideoComment,
   search
 } from './video';
@@ -37,6 +38,7 @@ export {
   getImageRecommendByUser,
   getImageRecommendByOther,
   getImageComments,
+  getImageCommentReplies,
   postImageComment
 } from './image';
 
