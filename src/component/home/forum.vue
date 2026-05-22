@@ -180,6 +180,13 @@ function openForumPage(sectionId: string) {
   });
 }
 
+// 跳转到发帖页
+function goToPublish() {
+  router.push({
+    path: '/forum/publish'
+  });
+}
+
 // 滚动处理
 const forumView = ref<HTMLElement>();
 let scrollTop = 0;
@@ -200,6 +207,10 @@ onActivated(() => {
     <div class="topBar">
       <div class="label">
         {{ t('home.navigation.forum') }}
+      </div>
+      <div class="publishBtn" @click="goToPublish">
+        <font-awesome-icon icon="fa-solid fa-pen-to-square" />
+        <span>{{ t('forum.publish') }}</span>
       </div>
     </div>
     <div class="content" ref="forumView" @scroll="handleScroll">
@@ -292,6 +303,28 @@ onActivated(() => {
   .label {
     font-size: 1.2rem;
     font-weight: bold;
+  }
+
+  .publishBtn {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 20px;
+    cursor: pointer;
+    user-select: none;
+    font-size: 0.9rem;
+    white-space: nowrap;
+
+    &:active {
+      background-color: rgba(255, 255, 255, 0.35);
+    }
+
+    svg {
+      font-size: 1rem;
+    }
   }
 }
 

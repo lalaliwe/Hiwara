@@ -69,3 +69,43 @@ export async function getForumPostReplies(sectionId: string, id: string, page: n
     throw error;
   }
 }
+
+// 回复评论
+export async function replyForumPost(id: string, content: string): Promise<any> {
+  const path = `${API_URL}/forum/${id}/reply`;
+  const headers = {
+    Authorization: `Bearer ${await getAccessToken()}`,
+  };
+  const body = {
+    body: content,
+    rulesAgreement: true
+  };
+  try {
+    const response = await postSendRequestIwara(path, headers, body);
+    return response;
+  } catch (error) {
+    console.error('Reply forum post failed:', error);
+    throw error;
+  }
+}
+
+// 创建论坛帖子（发帖）
+export async function createForumThread(section: string, title: string, body: string): Promise<any> {
+  const path = `${API_URL}/forum/${section}`;
+  const headers = {
+    Authorization: `Bearer ${await getAccessToken()}`,
+  };
+  const bodyData = {
+    section: section,
+    title: title,
+    body: body,
+    rulesAgreement: true
+  };
+  try {
+    const response = await postSendRequestIwara(path, headers, bodyData);
+    return response;
+  } catch (error) {
+    console.error('Create forum thread failed:', error);
+    throw error;
+  }
+}

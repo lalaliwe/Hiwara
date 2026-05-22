@@ -54,5 +54,7 @@ export {
   getForumHome,
   getForumCategoryList,
   getForumPostDetail,
-  getForumPostReplies
+  getForumPostReplies,
+  replyForumPost,
+  createForumThread
 } from './forum';

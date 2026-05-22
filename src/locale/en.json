@@ -252,6 +252,13 @@
     "repliedAt": "Replied",
     "pinned": "Pinned",
     "loadMore": "Load More",
-    "noMore": "No more"
+    "noMore": "No more",
+    "publish": "Publish",
+    "publishSection": "Select Section",
+    "publishTitle": "Title",
+    "publishTitlePlaceholder": "Enter post title",
+    "publishBody": "Content",
+    "publishBodyPlaceholder": "Enter post content, Markdown syntax supported",
+    "publishSubmit": "Submit Post"
   }
 }

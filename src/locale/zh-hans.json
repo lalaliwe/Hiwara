@@ -175,7 +175,7 @@
       "posts": "发布",
       "topics": "主题",
       "repliedAt": "发布于",
-      "latestPost": "最新发布",
+      "latestPost": "最新回复",
       "groups": {
         "admin": "站长",
         "moderator": "版主",
@@ -252,6 +252,13 @@
     "repliedAt": "回复于",
     "pinned": "置顶",
     "loadMore": "加载更多",
-    "noMore": "没有更多了"
+    "noMore": "没有更多了",
+    "publish": "发帖",
+    "publishSection": "选择版块",
+    "publishTitle": "标题",
+    "publishTitlePlaceholder": "请输入帖子标题",
+    "publishBody": "内容",
+    "publishBodyPlaceholder": "请输入帖子内容，支持 Markdown 语法",
+    "publishSubmit": "发布帖子"
   }
 }
