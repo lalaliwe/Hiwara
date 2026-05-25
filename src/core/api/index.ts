@@ -62,3 +62,6 @@ export {
   replyForumPost,
   createForumThread
 } from './forum';
+
+// Aria2 API
+export { addAria2Download, buildAria2Filename, sanitizeFilename } from './aria2';

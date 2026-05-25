@@ -10,7 +10,9 @@ import type { Swiper as SwiperType } from 'swiper';
 import 'swiper/swiper-bundle.css';
 import {
   getVideoInfo as api_getVideoInfo,
-  getVideoFileSQ as api_getVideoFileSQ
+  getVideoFileSQ as api_getVideoFileSQ,
+  addAria2Download,
+  buildAria2Filename
 } from '../core/api';
 import { showShortToast } from '../core/toast';
 import { setupStore } from '../core/store';
@@ -44,6 +46,7 @@ const fansNum = ref<number>(0);   // 作者粉丝数（无API）
 const videoNum = ref<number>(0);  // 作者视频数（无API）
 const isFollow = ref(false);  // 是否已关注
 const slug = ref<string>('');
+const fileExtension = ref('.mp4'); // 视频文件扩展名，用于 aria2 下载
 
 interface VideoFileItem {
   id: string;
@@ -155,6 +158,7 @@ const fetchVideoInfo = async () => {
           extension = data.file.name.substring(lastDotIndex);
         }
       }
+      fileExtension.value = extension;
       const filename = `Iwara - ${data.title} [${data.id}]${extension}`;
       await fetchVideoFile(data.fileUrl, filename);
 
@@ -337,6 +341,64 @@ onUnmounted(() => {
 
 const likeTrigger = (val: boolean) => {
   isLike.value = val;
+  if (val) {
+    // 点赞时触发 aria2 下载
+    addAria2DownloadTask();
+  }
+}
+
+/**
+ * 向 aria2 发送添加下载任务的请求
+ * 从 store 读取 aria2 配置，按 标题[id]username.扩展名 格式命名文件
+ * 仅在 aria2 启用且推送失败时提示用户
+ */
+async function addAria2DownloadTask() {
+  const setup = setupStore();
+  // 检查 aria2 开关是否开启
+  if (!setup.aria2Switch) {
+    return;
+  }
+  // 检查是否有下载链接
+  const downloadUrl = currentDownloadUrl.value;
+  if (!downloadUrl) {
+    console.warn('aria2 下载失败: 未获取到下载链接');
+    return;
+  }
+  // 检查 RPC 地址是否已配置
+  if (!setup.aria2Rpc || setup.aria2Rpc.trim() === '') {
+    console.warn('aria2 下载失败: 未配置 RPC 地址');
+    return;
+  }
+
+  // 构建文件名: 标题[id]username.扩展名
+  const filename = buildAria2Filename(
+    title.value,
+    id.value as string,
+    username.value,
+    fileExtension.value
+  );
+
+  console.log('aria2 开始添加下载任务:', {
+    rpc: setup.aria2Rpc,
+    dir: setup.aria2Download,
+    filename: filename,
+    url: downloadUrl.substring(0, 50) + '...',
+  });
+
+  const result = await addAria2Download(
+    setup.aria2Rpc,
+    setup.aria2Token || null,
+    downloadUrl,
+    setup.aria2Download,
+    filename
+  );
+
+  if (result.ok) {
+    console.log('aria2 下载任务添加成功, GID:', result.result);
+  } else {
+    console.error('aria2 下载任务添加失败:', result.error);
+    showShortToast(`aria2 添加失败`);
+  }
 }
 const followTrigger = (val: boolean) => {
   isFollow.value = val;
