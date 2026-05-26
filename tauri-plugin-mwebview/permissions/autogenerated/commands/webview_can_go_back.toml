@@ -1,0 +1,13 @@
+# Automatically generated - DO NOT EDIT!
+
+"$schema" = "../../schemas/schema.json"
+
+[[permission]]
+identifier = "allow-webview-can-go-back"
+description = "Enables the webview_can_go_back command without any pre-configured scope."
+commands.allow = ["webview_can_go_back"]
+
+[[permission]]
+identifier = "deny-webview-can-go-back"
+description = "Denies the webview_can_go_back command without any pre-configured scope."
+commands.deny = ["webview_can_go_back"]

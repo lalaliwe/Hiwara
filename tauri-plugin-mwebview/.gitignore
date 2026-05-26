@@ -1,0 +1,14 @@
+node_modules/
+dist-js/
+target/
+android/.gradle/
+android/build/
+android/local.properties
+ios/.build/
+ios/build/
+*.xcworkspace
+*.pbxuser
+*.mode1v3
+*.mode2v3
+.xcshareddata/
+xcuserdata/

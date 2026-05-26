@@ -1,0 +1,13 @@
+# Automatically generated - DO NOT EDIT!
+
+"$schema" = "../../schemas/schema.json"
+
+[[permission]]
+identifier = "allow-inject-init-script"
+description = "Enables the inject_init_script command without any pre-configured scope."
+commands.allow = ["inject_init_script"]
+
+[[permission]]
+identifier = "deny-inject-init-script"
+description = "Denies the inject_init_script command without any pre-configured scope."
+commands.deny = ["inject_init_script"]

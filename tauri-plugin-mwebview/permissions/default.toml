@@ -1,0 +1,12 @@
+[default]
+description = "Default permissions for the mobile webview plugin"
+permissions = [
+    "allow-ping",
+    "allow-create-webview",
+    "allow-update-webview-bounds",
+    "allow-destroy-webview",
+    "allow-inject-script",
+    "allow-inject-init-script",
+    "allow-webview-go-back",
+    "allow-webview-can-go-back",
+]
