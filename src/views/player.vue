@@ -532,13 +532,12 @@ const followTrigger = (val: boolean) => {
 
     .left {
       flex: 1;
-      padding: 0 14px;
+      padding: 0 16px;
     }
 
     .right {
       display: flex;
-      align-items: center;
-      padding: 0 10px;
+      padding: 0 14px;
       color: var(--color-text-muted);
       font-size: 0.9rem;
 
@@ -551,11 +550,11 @@ const followTrigger = (val: boolean) => {
       }
 
       span:nth-child(1) {
-        padding: 0 4px;
+        padding: 0 6px;
       }
 
       span:nth-child(2) {
-        width: 68px;
+        padding: 0 6px;
       }
     }
   }

@@ -339,7 +339,7 @@ const handleGestureEvent = (event: { type: string; value?: number; isEnd?: boole
         if (videoRef.value.duration) {
           const newTime = (event.value / 100) * videoRef.value.duration
           videoRef.value.currentTime = newTime
-          showGestureMessageTemporary(`${formatTime(newTime)}`)
+          showGestureMessageTemporary(`${formatTime(newTime)} / ${totalTime.value}`)
         }
       }
       break
