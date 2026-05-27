@@ -403,13 +403,16 @@ async function addAria2DownloadTask() {
 const followTrigger = (val: boolean) => {
   isFollow.value = val;
 }
+
 </script>
 <template>
   <div id="playerView">
     <div class="topBar"></div>
-    <videoPlayer class="video-player" :poster="poster" :src="currentVideoSrc" :title="title" :server="currentServer"
-      :video-files="videoFile" :current-definition-index="videoSelect" @refresh-server="refreshVideoFile"
-      @definition-change="selectDefinition" />
+    <div class="video-player-wrapper">
+      <videoPlayer class="video-player" :poster="poster" :src="currentVideoSrc" :title="title"
+        :server="currentServer" :video-files="videoFile" :current-definition-index="videoSelect"
+        @refresh-server="refreshVideoFile" @definition-change="selectDefinition" />
+    </div>
 
     <!-- 加载中 -->
     <div class="status-view" v-if="videoInfoState === 'loading'">
@@ -494,9 +497,15 @@ const followTrigger = (val: boolean) => {
   background-color: #000;
 }
 
+.video-player-wrapper {
+  position: relative;
+  width: 100%;
+}
+
 .video-player {
   width: 100%;
   aspect-ratio: 16 / 9;
+  display: block;
 }
 
 /* 加载/失败 状态容器 */

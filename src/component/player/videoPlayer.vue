@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted, inject, watch } from 'vue'
+import { ref, onMounted, onUnmounted, inject, watch, nextTick } from 'vue'
 import { lockPortrait, lockLandscape } from '../../plugins/useOrientation'
 import { enterImmersive, exitImmersive } from '../../plugins/immersive'
 import controlFullscreen from './controlFullscreen.vue';
@@ -24,6 +24,7 @@ const props = defineProps<{
 const emit = defineEmits<{
   (e: 'refreshServer'): void // 刷新服务器列表
   (e: 'definition-change', index: number): void // 切换清晰度
+  (e: 'ended'): void // 视频播放结束
 }>()
 
 const localPosterUrl = ref<string>(''); // 本地存储的poster URL
@@ -51,6 +52,13 @@ watch(() => props.poster, async (newPoster) => {
 watch(() => props.src, (newSrc) => {
   if (newSrc) {
     videoSrc.value = newSrc;
+    videoEnded.value = false; // 切换源时重置结束状态
+    // src 动态变更后尝试自动播放（不能用 HTML autoplay 属性，因为初始化时已被空 src 消耗）
+    if (setup.autoPlay) {
+      nextTick(() => {
+        autoPlayVideo();
+      });
+    }
   }
 }, { immediate: true });
 
@@ -65,6 +73,7 @@ const totalTime = ref<string>('00:00'); // 总时长
 const isLoading = ref(false); // 缓冲加载状态
 const isState = ref<'failed' | 'empty' | 'loading' | 'success'>('empty'); // 视频加载状态
 const metadataLoaded = ref(false); // 是否已经播放过（用于控制自动隐藏）
+const videoEnded = ref(false); // 视频是否播放完成
 
 // 手势操作消息显示
 const gestureMessage = ref<string>('')
@@ -134,6 +143,24 @@ const togglePlay = () => {
     videoRef.value.play();
   }
   isPlaying.value = !isPlaying.value;
+};
+
+// 自动播放视频（先静音启动，成功后再取消静音）
+const autoPlayVideo = async () => {
+  if (!videoRef.value || !setup.autoPlay) return;
+
+  // 先静音，满足 WebView 自动播放策略
+  videoRef.value.muted = true;
+
+  try {
+    await videoRef.value.play();
+    // 自动播放成功 → 取消静音，用户听到声音
+    videoRef.value.muted = false;
+    console.log('✅ 自动播放成功（有声）');
+  } catch (err) {
+    // 自动播放被 WebView 阻止，保持静音或等待用户交互
+    console.log('❌ 自动播放被阻止:', err instanceof Error ? err.message : err);
+  }
 };
 
 // 进度条变化（拖动过程中）
@@ -242,10 +269,17 @@ onMounted(async () => {
     // 视频播放
     videoRef.value.addEventListener('play', () => {
       isPlaying.value = true;
+      videoEnded.value = false;
     });
     // 视频暂停
     videoRef.value.addEventListener('pause', () => {
       isPlaying.value = false;
+    });
+    // 视频播放结束
+    videoRef.value.addEventListener('ended', () => {
+      isPlaying.value = false;
+      videoEnded.value = true;
+      emit('ended');
     });
     // 播放进度更新
     videoRef.value.addEventListener('timeupdate', updateTime);
@@ -258,6 +292,8 @@ onMounted(async () => {
     // 首帧加载完成
     videoRef.value.addEventListener('loadeddata', () => {
       console.log('视频数据加载完成');
+      // 兜底：如果 src watcher 中因视频未加载而 play() 失败，这里重试
+      autoPlayVideo();
     });
     // 监听缓冲事件
     // 数据不足，进入缓冲状态
@@ -295,6 +331,7 @@ onUnmounted(() => {
     videoRef.value.removeEventListener('waiting', () => { });
     videoRef.value.removeEventListener('playing', () => { });
     videoRef.value.removeEventListener('canplaythrough', () => { });
+    videoRef.value.removeEventListener('ended', () => { });
   }
   // 清理 poster URL
   if (localPosterUrl.value) {
@@ -355,15 +392,26 @@ const handleGestureEvent = (event: { type: string; value?: number; isEnd?: boole
       break
   }
 }
+
+// 重新播放视频
+const replay = () => {
+  if (!videoRef.value) return;
+  videoEnded.value = false;
+  videoRef.value.currentTime = 0;
+  videoRef.value.play();
+  isPlaying.value = true;
+};
+
+defineExpose({ replay });
 </script>
 
 <template>
   <div class="video-player" ref="videoPlayerRef">
-    <video ref="videoRef" :src="videoSrc" :autoplay="setup.autoPlay"
+    <video ref="videoRef" :src="videoSrc" :autoplay="setup.autoPlay" playsinline
       :poster="setup.autoPlay ? '../../static/img/transparent.png' : (localPosterUrl || '../../static/img/transparent.png')"
       @click="togglePlay"></video>
-    <!-- 视频黑屏遮罩（仅在未播放时显示） -->
-    <div v-if="false" class="black-overlay"></div>
+    <!-- 视频暗色遮罩（播放完成时显示） -->
+    <div v-if="videoEnded" class="black-overlay"></div>
     <!-- 仅在缓冲时显示加载指示器，且没有手势消息时显示 -->
     <div v-if="isLoading && !gestureMessage" class="msg-view">
       <v-progress-circular color="#00796B" bg-color="#ffffff66" :size="70" :width="7"
@@ -379,11 +427,12 @@ const handleGestureEvent = (event: { type: string; value?: number; isEnd?: boole
       :title="props.title" :server="props.server" :video-files="props.videoFiles"
       :current-definition-index="props.currentDefinitionIndex" @exit="handleExitFullscreen" @toggle-play="togglePlay"
       @progress-change="onProgressChange" @progress-change-end="onProgressChangeEnd" @gesture="handleGestureEvent"
-      @refresh-server="handleRefreshServer" @definition-change="handleDefinitionChange" />
+      @refresh-server="handleRefreshServer" @definition-change="handleDefinitionChange" @replay="replay"
+      :video-ended="videoEnded" />
     <control v-else :is-playing="isPlaying" :progress="progress" :buffered="buffered" :current-time="currentTime"
       :total-time="totalTime" :metadataLoaded="metadataLoaded" @toggle-play="togglePlay" @progress-change="onProgressChange"
       @progress-change-end="onProgressChangeEnd" @enter-fullscreen="enterFullscreen" @go-back="goBack" @go-home="goHome"
-      @gesture="handleGestureEvent" />
+      @gesture="handleGestureEvent" @replay="replay" :video-ended="videoEnded" />
   </div>
 </template>
 
@@ -404,7 +453,7 @@ const handleGestureEvent = (event: { type: string; value?: number; isEnd?: boole
     height: 100%;
     width: 100%;
     position: absolute;
-    background-color: #000;
+    background-color: rgba(0, 0, 0, 0.5);
     top: 0;
     left: 0;
     z-index: 10;

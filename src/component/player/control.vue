@@ -11,6 +11,7 @@ const props = defineProps<{
   currentTime: string
   totalTime: string
   metadataLoaded?: boolean // 是否已经播放过
+  videoEnded?: boolean // 视频是否播放完成
 }>()
 
 // Emits - 向父组件事件
@@ -22,6 +23,7 @@ const emit = defineEmits<{
   (e: 'goBack'): void
   (e: 'goHome'): void
   (e: 'gesture', event: { type: string; value?: number; isEnd?: boolean }): void
+  (e: 'replay'): void
 }>()
 
 // 本地进度状态，用于UI实时更新
@@ -41,6 +43,8 @@ let hideTimer: number | null = null
 // 点击计数和定时器（用于区分单击/双击）
 let clickTimer: number | null = null
 let clickCount = 0
+// 双击后重置 clickCount 的定时器，防止后续单击被阻塞
+let doubleTapResetTimer: number | null = null
 const pointerType = ref<'mouse' | 'touch' | 'pen'>('mouse')
 
 // Hammer.js 实例
@@ -72,6 +76,11 @@ const resetHideTimer = () => {
     return
   }
 
+  // 播放完成后常显控件，不自动隐藏
+  if (props.videoEnded) {
+    return
+  }
+
   hideTimer = window.setTimeout(() => {
     // 鼠标和触摸设备都自动隐藏
     // console.log('[control.vue] 5秒后自动隐藏控制栏')
@@ -95,6 +104,16 @@ watch(() => props.metadataLoaded, (newVal) => {
   }
 })
 
+// 监听 videoEnded：播放完成后常显控件，重播后恢复自动隐藏
+watch(() => props.videoEnded, (ended) => {
+  if (ended) {
+    showControl.value = true
+    clearHideTimer()
+  } else {
+    resetHideTimer()
+  }
+})
+
 // 组件挂载时启动自动隐藏
 onMounted(() => {
   resetHideTimer()
@@ -107,6 +126,10 @@ onUnmounted(() => {
   if (clickTimer !== null) {
     clearTimeout(clickTimer)
     clickTimer = null
+  }
+  if (doubleTapResetTimer !== null) {
+    clearTimeout(doubleTapResetTimer)
+    doubleTapResetTimer = null
   }
   destroyHammer()
 })
@@ -143,7 +166,7 @@ const destroyHammer = () => {
 const setupHammerGestures = (mc: InstanceType<typeof Hammer>) => {
   // 启用所有需要的手势
   mc.get('pan').set({ direction: Hammer.DIRECTION_ALL })
-  mc.get('tap').set({ taps: 2 }) // 双击
+  mc.get('tap').set({ taps: 2, posThreshold: 80 }) // 双击，放宽位置容差避免移动端手指晃动导致识别失败
 
   // 记录起始位置和状态
   let startX = 0
@@ -261,12 +284,23 @@ const setupHammerGestures = (mc: InstanceType<typeof Hammer>) => {
       resetHideTimer()
     }
 
-    // 重置单击计时器，避免触发单击逻辑
+    // 阻止后续 DOM click 触发新的单击定时器
+    // Hammer 处理原始 touch 事件比 DOM click 快，
+    // 必须将 clickCount 设为 >=2，否则后续 DOM click 会将它从 0 加回 1 重新启动定时器
     if (clickTimer) {
       clearTimeout(clickTimer)
       clickTimer = null
-      clickCount = 0
     }
+    clickCount = 2
+    // 延迟重置 clickCount，使后续单击恢复正常
+    // 等待第 2 个 DOM click 过去（~300ms）后清除阻塞状态
+    if (doubleTapResetTimer !== null) {
+      clearTimeout(doubleTapResetTimer)
+    }
+    doubleTapResetTimer = window.setTimeout(() => {
+      clickCount = 0
+      doubleTapResetTimer = null
+    }, 350)
   })
 }
 
@@ -311,9 +345,8 @@ const handleMiddleClick = () => {
       // 鼠标双击：全屏
       emit('enterFullscreen')
     } else if (pointerType.value === 'touch') {
-      // 触摸双击：暂停/播放（已被 Hammer 的双击接管，这里不会执行）
-      emit('togglePlay')
-      resetHideTimer()
+      // 触摸双击：由 Hammer.js 的 doubletap 全权处理，此处不再重复触发
+      // 仅需确认单击定时器已被清除（防止单击逻辑执行）
     }
 
     clickCount = 0
@@ -384,7 +417,13 @@ const handleEnterFullscreen = () => {
       </div>
     </div>
     <!-- 中间区域 -->
-    <div class="middle" @pointerdown="handlePointerDown" @click="handleMiddleClick"></div>
+    <div class="middle" :class="{ 'middle-disabled': videoEnded }" @pointerdown="handlePointerDown"
+      @click="handleMiddleClick"></div>
+    <!-- 重新播放按钮（播放完成时显示，在控制栏内部） -->
+    <div v-if="videoEnded" class="replay-button" @click="emit('replay')">
+      <font-awesome-icon icon="fa-solid fa-rotate-right" />
+      <span>重新播放</span>
+    </div>
     <!-- 底部控制栏 - 只有在视频已经播放过后才显示 -->
     <div class="bottom" v-if="metadataLoaded">
       <div>
@@ -425,6 +464,8 @@ const handleEnterFullscreen = () => {
   background: linear-gradient(to bottom, rgba(0, 0, 0, 0.4), transparent 20%, transparent 80%, rgba(0, 0, 0, 0.4));
 
   .top {
+    position: relative;
+    z-index: 5;
     display: flex;
 
     >div:nth-child(2) {
@@ -436,9 +477,15 @@ const handleEnterFullscreen = () => {
     flex: 1;
     cursor: pointer;
     touch-action: none; // 阻止默认触摸行为，让 Hammer.js 接管
+
+    &.middle-disabled {
+      pointer-events: none;
+    }
   }
 
   .bottom {
+    position: relative;
+    z-index: 5;
     display: flex;
 
     .progress {
@@ -469,6 +516,33 @@ const handleEnterFullscreen = () => {
     cursor: pointer;
     user-select: none;
   }
+}
+
+.replay-button {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: #fff;
+  cursor: pointer;
+  user-select: none;
+  z-index: 3;
+  background: none;
+  border: none;
+  padding: 12px 16px;
+}
+
+.replay-button svg {
+  font-size: 1.4rem;
+}
+
+.replay-button span {
+  font-size: 0.9rem;
 }
 
 .touch {
