@@ -8,11 +8,15 @@ import {
   CopyLink as iconCopyLink,
   Comments as iconComments
 } from '@icon-park/vue-next';
+import defaultAvatarImg from '../../static/img/avatar-default.jpg';
+import avatarPlaceholderImg from '../../static/img/avatar-placeholder.png';
+import avatarErrorImg from '../../static/img/avatar-error.png';
 import {
   likeImage,
   unlikeImage,
   followUser,
   unfollowUser,
+  getImageIwara,
 } from '../../core/api';
 import { showShortToast } from '../../core/toast';
 
@@ -56,6 +60,7 @@ interface ImageInfoProps {
   uid: string;
   fansNum: number;
   imageNum: number;
+  avatar: string;
   isFollow: boolean;
   isMyFans?: boolean;  // 是否是粉丝（互粉状态）
   isLike: boolean;
@@ -155,6 +160,31 @@ const isLike = ref(false);
 // 操作状态
 const isFollowing = ref(false); // 关注操作进行中状态
 const isLiking = ref(false); // 点赞操作进行中状态
+
+// 头像 URL（响应式）
+const avatarUrl = ref<string>('');
+
+// 加载头像
+async function loadAvatar() {
+  if (!props.avatar || props.avatar.trim() === '') {
+    // avatar 为空，使用默认头像
+    avatarUrl.value = defaultAvatarImg;
+  } else {
+    try {
+      // avatar 不为空，通过 API 获取
+      avatarUrl.value = await getImageIwara(props.avatar);
+    } catch (error) {
+      console.error('Failed to load avatar:', error);
+      // 加载失败时使用默认头像
+      avatarUrl.value = avatarErrorImg;
+    }
+  }
+}
+
+// 监听 avatar prop 变化，立即执行
+watch(() => props.avatar, () => {
+  loadAvatar();
+}, { immediate: true });
 
 // 复制下载链接到剪贴板
 async function copyDownloadLink() {
@@ -320,102 +350,106 @@ const formatDate = (dateString: string) => {
 <template>
   <!-- 第二部分：插画信息区域 -->
   <div ref="infoContentRef">
-  <div class="more" :class="{ expanded: infoExpand }" @click="infoExpand = !infoExpand">
-    <font-awesome-icon icon="fa-solid fa-angle-down" />
-  </div>
-  <div class="title" ref="titleRef" @click="infoExpand = !infoExpand">
-    {{ title }}
-  </div>
-  <div class="infomsg">
-    <font-awesome-icon icon="fa-regular fa-eye" /> {{ viewCount }}
-    &nbsp;
-    <font-awesome-icon icon="fa-regular fa-clock" /> {{ formatDate(createdAt) }}
-    <br>
-    <span>插画ID {{ pid }}</span>
-    &nbsp;
-    <span v-if="resolution !== ''">分辨率 {{ resolution }}</span>
-  </div>
-  <div class="author" @click="toZone">
-    <div class="avatar">
-      <img src="../../static/img/avatar-default.jpg" alt="">
+    <div class="more" :class="{ expanded: infoExpand }" @click="infoExpand = !infoExpand">
+      <font-awesome-icon icon="fa-solid fa-angle-down" />
     </div>
-    <div class="userinfo">
-      <div class="authorname">{{ authorname }}</div>
-      <div class="userdata" v-if="false">{{ fansNum }}粉丝 {{ imageNum }}插画</div>
+    <div class="title" ref="titleRef" @click="infoExpand = !infoExpand">
+      {{ title }}
     </div>
-    <div class="follow">
-      <span v-if="!isFollow && !isMyFans">
-        <v-btn size="small" variant="flat" color="#00796B" @click="clickFollow" :loading="isFollowing">
-          <font-awesome-icon icon="fa-solid fa-plus" />
-          关注
-        </v-btn>
-      </span>
-      <span v-else-if="isFollow && !isMyFans">
-        <v-btn size="small" variant="outlined" color="#00796B" @click="clickFollow" :loading="isFollowing">
-          <font-awesome-icon icon="fa-solid fa-bars" />
-          已关注
-        </v-btn>
-      </span>
-      <span v-else-if="isFollow && isMyFans">
-        <v-btn size="small" variant="outlined" color="#00796B" @click="clickFollow" :loading="isFollowing">
-          <font-awesome-icon icon="fa-solid fa-bars" />
-          已互粉
-        </v-btn>
-      </span>
-      <span v-else-if="!isFollow && isMyFans">
-        <v-btn size="small" variant="flat" color="#00796B" @click="clickFollow" :loading="isFollowing">
-          <font-awesome-icon icon="fa-solid fa-plus" />
-          回关
-        </v-btn>
-      </span>
-    </div>
-  </div>
-  <div class="synopsis" :style="{ height: infoExpand ? `${heights.synopsis}px` : 0 }">
-    <div class="text">
-      {{ synopsis }}
-    </div>
-  </div>
-  <div class="operation">
-    <div @click="clickLike">
-      <iconLike v-if="isLike" theme="filled" size="22" fill="#FF3D00" />
-      <iconLike v-else theme="outline" size="22" fill="#212121" />
+    <div class="infomsg">
+      <font-awesome-icon icon="fa-regular fa-eye" /> {{ viewCount }}
+      &nbsp;
+      <font-awesome-icon icon="fa-regular fa-clock" /> {{ formatDate(createdAt) }}
       <br>
-      <span v-if="isLike">已点赞</span>
-      <span v-else>点赞</span>
+      <span>插画ID {{ pid }}</span>
+      &nbsp;
+      <span v-if="resolution !== ''">分辨率 {{ resolution }}</span>
     </div>
-    <div @click="shareImage">
-      <iconShareOne theme="two-tone" size="22" :fill="['#424242', '#00796B']" /><br>分享
+    <div class="author">
+      <div class="avatar" @click="toZone">
+        <v-img :src="avatarUrl" cover>
+          <template v-slot:placeholder>
+            <v-img height="100%" :src="avatarPlaceholderImg" cover></v-img>
+          </template>
+        </v-img>
+      </div>
+      <div class="userinfo" @click="toZone">
+        <div class="authorname">{{ authorname }}</div>
+        <div class="userdata" v-if="false">{{ fansNum }}粉丝 {{ imageNum }}插画</div>
+      </div>
+      <div class="follow">
+        <span v-if="!isFollow && !isMyFans">
+          <v-btn size="small" variant="flat" color="#00796B" @click="clickFollow" :loading="isFollowing">
+            <font-awesome-icon icon="fa-solid fa-plus" />
+            关注
+          </v-btn>
+        </span>
+        <span v-else-if="isFollow && !isMyFans">
+          <v-btn size="small" variant="outlined" color="#00796B" @click="clickFollow" :loading="isFollowing">
+            <font-awesome-icon icon="fa-solid fa-bars" />
+            已关注
+          </v-btn>
+        </span>
+        <span v-else-if="isFollow && isMyFans">
+          <v-btn size="small" variant="outlined" color="#00796B" @click="clickFollow" :loading="isFollowing">
+            <font-awesome-icon icon="fa-solid fa-bars" />
+            已互粉
+          </v-btn>
+        </span>
+        <span v-else-if="!isFollow && isMyFans">
+          <v-btn size="small" variant="flat" color="#00796B" @click="clickFollow" :loading="isFollowing">
+            <font-awesome-icon icon="fa-solid fa-plus" />
+            回关
+          </v-btn>
+        </span>
+      </div>
     </div>
-    <div @click="emit('commentTrigger')">
-      <iconComments theme="multi-color" size="22" :fill="['#484848', '#00796B', '#FFFFFF', '#00796B']" /><br>评论
-    </div>
-    <div @click="copyDownloadLink">
-      <iconCopyLink theme="multi-color" size="22" :fill="['#424242', '#00796B', '#FFF', '#00796B']" /><br>链接
-    </div>
-  </div>
-  <div class="tags" ref="tagsContainerRef" :style="{ height: tagsContainerHeight }">
-    <v-chip class="tag" v-for="tag in tags" :key="tag" size="small">{{ tag }}</v-chip>
-  </div>
-  <div class="calculateHeight">
-    <div class="titleCollapseHeight" ref="titleCollapseHeightRef">
-      {{ title }}
-    </div>
-    <div class="titleExpandHeight" ref="titleExpandHeightRef">
-      {{ title }}
-    </div>
-    <div class="synopsisHeight" ref="synopsisHeightRef">
+    <div class="synopsis" :style="{ height: infoExpand ? `${heights.synopsis}px` : 0 }">
       <div class="text">
         {{ synopsis }}
       </div>
     </div>
-    <div class="tagsCollapseHeight" ref="tagsCollapseHeightRef">
-      <v-chip class="tag" size="small">{{ tags[0] }}</v-chip>
+    <div class="operation">
+      <div @click="clickLike">
+        <iconLike v-if="isLike" theme="filled" size="22" fill="#FF3D00" />
+        <iconLike v-else theme="outline" size="22" fill="#212121" />
+        <br>
+        <span v-if="isLike">已点赞</span>
+        <span v-else>点赞</span>
+      </div>
+      <div @click="shareImage">
+        <iconShareOne theme="two-tone" size="22" :fill="['#424242', '#00796B']" /><br>分享
+      </div>
+      <div @click="emit('commentTrigger')">
+        <iconComments theme="multi-color" size="22" :fill="['#484848', '#00796B', '#FFFFFF', '#00796B']" /><br>评论
+      </div>
+      <div @click="copyDownloadLink">
+        <iconCopyLink theme="multi-color" size="22" :fill="['#424242', '#00796B', '#FFF', '#00796B']" /><br>链接
+      </div>
     </div>
-    <div class="tagsExpandHeight" ref="tagsExpandHeightRef">
+    <div class="tags" ref="tagsContainerRef" :style="{ height: tagsContainerHeight }">
       <v-chip class="tag" v-for="tag in tags" :key="tag" size="small">{{ tag }}</v-chip>
     </div>
+    <div class="calculateHeight">
+      <div class="titleCollapseHeight" ref="titleCollapseHeightRef">
+        {{ title }}
+      </div>
+      <div class="titleExpandHeight" ref="titleExpandHeightRef">
+        {{ title }}
+      </div>
+      <div class="synopsisHeight" ref="synopsisHeightRef">
+        <div class="text">
+          {{ synopsis }}
+        </div>
+      </div>
+      <div class="tagsCollapseHeight" ref="tagsCollapseHeightRef">
+        <v-chip class="tag" size="small">{{ tags[0] }}</v-chip>
+      </div>
+      <div class="tagsExpandHeight" ref="tagsExpandHeightRef">
+        <v-chip class="tag" v-for="tag in tags" :key="tag" size="small">{{ tag }}</v-chip>
+      </div>
+    </div>
   </div>
-</div>
 </template>
 
 <style lang="scss" scoped>

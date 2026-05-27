@@ -409,8 +409,8 @@ function toZone() {
 <template>
   <div class="infoView" @scroll="handleSroll" ref="infoViewRef">
     <div ref="infoViewContentRef">
-      <div class="author" @click="toZone">
-        <div class="avatar">
+      <div class="author">
+        <div class="avatar" @click="toZone">
           <!-- <img :src="avatarUrl" alt=""> -->
           <v-img :src="avatarUrl" cover>
             <template v-slot:placeholder>
@@ -418,7 +418,7 @@ function toZone() {
             </template>
           </v-img>
         </div>
-        <div class="userinfo">
+        <div class="userinfo" @click="toZone">
           <div class="authorname">{{ authorname }}</div>
           <!-- <div class="userdata">{{ fansNum }}粉丝 {{ videoNum }}视频</div> -->
         </div>
