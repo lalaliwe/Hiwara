@@ -1,9 +1,12 @@
 <script setup lang="ts">
 import { useRouter, useRoute } from 'vue-router';
 import { ref, onActivated } from 'vue';
+import { useI18n } from 'vue-i18n';
 import { setStatusBarTextStyle } from '../plugins/navbarStyle'
 import VideoFavorites from '../component/favorites/video.vue'
 import ImageFavorites from '../component/favorites/image.vue'
+
+const { t } = useI18n();
 
 defineOptions({
   name: 'Favorites'
@@ -40,16 +43,16 @@ onActivated(() => {
           <font-awesome-icon icon="fa-solid fa-angle-left" />
         </div>
         <div class="label">
-          我的收藏
+          {{ t('favorites.title') }}
         </div>
       </div>
       <div class="tabs">
         <v-tabs v-model="tab" color="#00796B" align-tabs="center" density="compact" grow>
           <v-tab value="video">
-            视频
+            {{ t('favorites.videoTab') }}
           </v-tab>
           <v-tab value="image">
-            插画
+            {{ t('favorites.imageTab') }}
           </v-tab>
         </v-tabs>
         <v-divider></v-divider>
@@ -126,6 +129,10 @@ onActivated(() => {
       &.v-tab--selected {
         color: var(--color-primary);
       }
+    }
+
+    :deep(.v-divider) {
+      border-color: var(--color-border-divider) !important;
     }
   }
 }

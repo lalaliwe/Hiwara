@@ -1,5 +1,27 @@
 {
-  "common": {},
+  "common": {
+    "followed": "ติดตามแล้ว",
+    "unfollowed": "ยกเลิกติดตามแล้ว",
+    "followFailed": "ติดตามไม่สำเร็จ",
+    "unfollowFailed": "ยกเลิกติดตามไม่สำเร็จ",
+    "liked": "ถูกใจแล้ว",
+    "unliked": "ยกเลิกถูกใจแล้ว",
+    "likeFailed": "ถูกใจไม่สำเร็จ",
+    "unlikeFailed": "ยกเลิกถูกใจไม่สำเร็จ",
+    "fetchCommentsFailed": "โหลดความคิดเห็นไม่สำเร็จ",
+    "fetchRepliesFailed": "โหลดคำตอบไม่สำเร็จ",
+    "linkCopied": "คัดลอกลิงก์ไปยังคลิปบอร์ดแล้ว",
+    "copyLinkFailed": "คัดลอกลิงก์ไม่สำเร็จ",
+    "shareSuccess": "แชร์สำเร็จ",
+    "shareFailed": "แชร์ไม่สำเร็จ โปรดลองอีกครั้ง",
+    "shareNotSupported": "อุปกรณ์นี้ไม่รองรับฟังก์ชันการแชร์",
+    "fetchDownloadFailed": "รับลิงก์ดาวน์โหลดไม่สำเร็จ",
+    "downloadLinkCopied": "คัดลอกลิงก์ดาวน์โหลดไปยังคลิปบอร์ดแล้ว",
+    "fetchRecommendFailed": "โหลดคำแนะนำไม่สำเร็จ",
+    "fetchVideoListFailed": "โหลดรายการวิดีโอไม่สำเร็จ",
+    "fetchImageListFailed": "โหลดรายการรูปภาพไม่สำเร็จ",
+    "fetchUserInfoFailed": "รับข้อมูลผู้ใช้ไม่สำเร็จ"
+  },
   "setup": {
     "title": "การตั้งค่า",
     "autoPlay": "เล่นอัตโนมัติ",
@@ -24,12 +46,12 @@
       "deviceType": "ประเภทอุปกรณ์",
       "mobile": "มือถือ",
       "desktop": "เดสก์ท็อป",
-      "osName": "ชื่อ OS",
-      "osVersion": "เวอร์ชัน OS",
+      "osName": "ชื่อระบบปฏิบัติการ",
+      "osVersion": "เวอร์ชันระบบปฏิบัติการ",
       "webview": "WebView",
       "webviewVersion": "เวอร์ชัน WebView",
       "checkUpdate": "ตรวจสอบอัปเดต",
-      "openSourceLicense": "ใบอนุญาตโอเพนซอร์ส",
+      "openSourceLicense": "สัญญาอนุญาตโอเพนซอร์ส",
       "unknown": "ไม่ทราบ",
       "loading": "กำลังโหลดข้อมูล"
     },
@@ -37,23 +59,23 @@
       "title": "การตั้งค่า Aria2",
       "enableAria2": "เปิดใช้งาน Aria2",
       "rpcAddress": "ที่อยู่ RPC Aria2",
-      "rpcPlaceholder": "ที่อยู่ RPC เช่น http://127.0.0.1:6800/jsonrpc",
+      "rpcPlaceholder": "ที่อยู่ RPC ตัวอย่าง: http://127.0.0.1:6800/jsonrpc",
       "token": "Aria2 TOKEN",
       "tokenPlaceholder": "ป้อน TOKEN",
       "downloadDir": "ไดเรกทอรีดาวน์โหลด Aria2",
-      "downloadDirPlaceholder": "ไดเรกทอรีดาวน์โหลด เช่น ~/Downloads/Iwara",
-      "tip": "เคล็ดลับ: ไดเรกทอรีดาวน์โหลดควรเป็นไดเรกทอรีของเซิร์ฟเวอร์ Aria2 ไม่ใช่ไดเรกทอรีท้องถิ่น"
+      "downloadDirPlaceholder": "ไดเรกทอรีดาวน์โหลด ตัวอย่าง: ~/Downloads/Iwara",
+      "tip": "คำแนะนำ: ไดเรกทอรีดาวน์โหลดควรเป็นไดเรกทอรีเซิร์ฟเวอร์ Aria2 ไม่ใช่ไดเรกทอรีในเครื่อง"
     },
     "definitionPage": {
       "title": "คุณภาพเริ่มต้น"
     },
     "downloadPage": {
       "title": "การตั้งค่าดาวน์โหลด",
-      "videoSavePath": "เส้นทางบันทึกวิดีโอ",
-      "imageSavePath": "เส้นทางบันทึกรูปภาพ",
+      "videoSavePath": "ที่อยู่บันทึกวิดีโอ",
+      "imageSavePath": "ที่อยู่บันทึกรูปภาพ",
       "notSet": "ไม่ได้ตั้งค่า",
-      "selectVideoPath": "เลือกเส้นทางบันทึกวิดีโอ",
-      "selectImagePath": "เลือกเส้นทางบันทึกรูปภาพ"
+      "selectVideoPath": "เลือกที่อยู่บันทึกวิดีโอ",
+      "selectImagePath": "เลือกที่อยู่บันทึกรูปภาพ"
     },
     "languagePage": {
       "title": "ภาษา (Language)",
@@ -88,7 +110,7 @@
     "navigation": {
       "video": "วิดีโอ",
       "image": "ภาพประกอบ",
-      "subscribe": "ติดตาม",
+      "subscribe": "การติดตาม",
       "forum": "ฟอรัม",
       "my": "หน้าของฉัน"
     },
@@ -121,42 +143,45 @@
     "video": {
       "sortTabs": {
         "date": "ล่าสุด",
-        "trending": "มาแรง",
-        "popularity": "ยอดนิยม",
-        "views": "ยอดวิว",
-        "likes": "ยอดไลก์"
+        "trending": "กำลังมาแรง",
+        "popularity": "ความนิยม",
+        "views": "ยอดดู",
+        "likes": "ยอดถูกใจ"
       },
       "loading": "กำลังโหลด...",
       "noRecords": "ไม่มีบันทึกวิดีโอ",
-      "loadFailed": "โหลดล้มเหลว, ",
-      "retry": "คลิกเพื่อลองใหม่",
-      "reachedBottom": "ถึงด้านล่างแล้ว"
+      "loadFailed": "โหลดไม่สำเร็จ ",
+      "retry": "คลิกเพื่อลองอีกครั้ง",
+      "reachedBottom": "ถึงจุดสิ้นสุดแล้ว"
     },
     "image": {
       "sortTabs": {
         "date": "ล่าสุด",
-        "trending": "มาแรง",
-        "popularity": "ยอดนิยม",
-        "views": "ยอดวิว",
-        "likes": "ยอดไลก์"
+        "trending": "กำลังมาแรง",
+        "popularity": "ความนิยม",
+        "views": "ยอดดู",
+        "likes": "ยอดถูกใจ"
       },
       "loading": "กำลังโหลด...",
-      "noRecords": "ไม่มีบันทึกภาพประกอบ",
-      "loadFailed": "โหลดล้มเหลว, ",
-      "retry": "คลิกเพื่อลองใหม่",
-      "reachedBottom": "ถึงด้านล่างแล้ว"
+      "noRecords": "ไม่มีบันทึกรูปภาพ",
+      "loadFailed": "โหลดไม่สำเร็จ ",
+      "retry": "คลิกเพื่อลองอีกครั้ง",
+      "reachedBottom": "ถึงจุดสิ้นสุดแล้ว"
     },
     "toast": {
-      "pressAgainToExit": "กดอีกครั้งเพื่อออกจากแอป"
+      "pressAgainToExit": "กดอีกครั้งเพื่อออกจากแอป",
+      "getUserInfoFailed": "รับข้อมูลผู้ใช้ไม่สำเร็จ",
+      "getHistoryFailed": "รับประวัติไม่สำเร็จ"
     },
     "my": {
       "space": "พื้นที่",
       "followers": "กำลังติดตาม",
-      "fans": "แฟนคลับ",
+      "fans": "แฟน",
       "history": "ประวัติ",
+      "noHistory": "ไม่มีประวัติ",
       "viewAllHistory": "ดูทั้งหมด",
       "videoFavorites": "วิดีโอที่ชื่นชอบ",
-      "imageFavorites": "ภาพประกอบที่ชื่นชอบ",
+      "imageFavorites": "รูปภาพที่ชื่นชอบ",
       "playlist": "เพลย์ลิสต์",
       "offlineCache": "แคชออฟไลน์",
       "notifications": "การแจ้งเตือน",
@@ -164,23 +189,23 @@
       "messages": "ข้อความ",
       "settings": "การตั้งค่า",
       "iwaraServices": "บริการ Iwara",
-      "premium": "พรีเมียม",
+      "premium": "สมาชิกระดับพรีเมียม",
       "wura": "Wura",
       "faq": "คำถามที่พบบ่อย",
-      "links": "ลิงก์",
-      "aboutText": "แอปพลิเคชันนี้เป็นไปตามใบอนุญาตโอเพนซอร์ส MPL-2.0 กรุณาอย่าใช้เพื่อวัตถุประสงค์ทางการค้า",
+      "links": "ลิงก์ที่เกี่ยวข้อง",
+      "aboutText": "แอปนี้ปฏิบัติตามสัญญาอนุญาตโอเพนซอร์ส MPL-2.0 โปรดอย่าใช้เพื่อวัตถุประสงค์ทางการค้า",
       "noRecords": "ไม่มีบันทึก {type}"
     },
     "forum": {
       "posts": "โพสต์",
       "topics": "หัวข้อ",
-      "repliedAt": "ตอบกลับเมื่อ",
+      "repliedAt": "ตอบเมื่อ",
       "latestPost": "โพสต์ล่าสุด",
       "groups": {
         "admin": "ผู้ดูแลระบบ",
-        "moderator": "ผู้ดูแล",
-        "japanese": "ญี่ปุ่น",
-        "chinese": "จีน"
+        "moderator": "ผู้ควบคุม",
+        "japanese": "ภาษาญี่ปุ่น",
+        "chinese": "ภาษาจีน"
       },
       "sections": {
         "announcement": "ประกาศ",
@@ -190,15 +215,15 @@
         "help": "ช่วยเหลือ",
         "help_desc": "ช่วยเหลือปัญหาที่เกี่ยวข้องกับเว็บไซต์",
         "general": "ทั่วไป",
-        "general_desc": "สิ่งอื่นๆ ทั้งหมด",
+        "general_desc": "ทุกอย่างอื่น ๆ",
         "guide": "คำแนะนำ",
-        "guide_desc": "ข้อมูลที่เป็นประโยชน์หรือคำแนะนำ \"วิธีทำ\"",
+        "guide_desc": "ข้อมูลที่เป็นประโยชน์หรือคำแนะนำวิธีการ",
         "helpQuestion": "ช่วยเหลือ/คำถาม",
         "helpQuestion_desc": "คำถามที่ไม่เกี่ยวกับเว็บไซต์",
         "request": "คำขอ",
         "request_desc": "ช่วยค้นหาหรือสร้าง",
         "share": "แชร์",
-        "share_desc": "แชร์โมเดล แอนิเมชัน หรืออุปกรณ์เสริมอื่นๆ"
+        "share_desc": "แชร์โมเดล แอนิเมชัน หรืออุปกรณ์เสริมอื่น ๆ"
       }
     }
   },
@@ -210,20 +235,93 @@
       "error": "ข้อผิดพลาด",
       "noRecords": "ไม่มีประวัติวิดีโอ",
       "today": "วันนี้",
-      "loadFailed": "โหลดล้มเหลว, ",
-      "retry": "คลิกเพื่อลองใหม่",
-      "reachedBottom": "ถึงด้านล่างแล้ว"
+      "loadFailed": "โหลดไม่สำเร็จ ",
+      "retry": "คลิกเพื่อลองอีกครั้ง",
+      "reachedBottom": "ถึงจุดสิ้นสุดแล้ว"
     },
     "image": {
-      "tab": "ภาพประกอบ",
+      "tab": "รูปภาพ",
       "loading": "กำลังโหลด...",
       "error": "ข้อผิดพลาด",
-      "noRecords": "ไม่มีประวัติภาพประกอบ",
+      "noRecords": "ไม่มีประวัติรูปภาพ",
       "today": "วันนี้",
-      "loadFailed": "โหลดล้มเหลว, ",
-      "retry": "คลิกเพื่อลองใหม่",
-      "reachedBottom": "ถึงด้านล่างแล้ว"
+      "loadFailed": "โหลดไม่สำเร็จ ",
+      "retry": "คลิกเพื่อลองอีกครั้ง",
+      "reachedBottom": "ถึงจุดสิ้นสุดแล้ว"
     }
+  },
+  "login": {
+    "title": "เข้าสู่ระบบบัญชี Iwara ของคุณ",
+    "usernameLabel": "ป้อนชื่อผู้ใช้",
+    "passwordLabel": "ป้อนรหัสผ่าน",
+    "loginBtn": "เข้าสู่ระบบ",
+    "loggingIn": "กำลังเข้าสู่ระบบ",
+    "languageBtn": "Language/语言",
+    "aboutText": "แอปนี้ปฏิบัติตามสัญญาอนุญาตโอเพนซอร์ส MPL-2.0 โปรดอย่าใช้เพื่อวัตถุประสงค์ทางการค้า",
+    "usernameRequired": "กรุณาป้อนชื่อผู้ใช้",
+    "passwordRequired": "กรุณาป้อนรหัสผ่าน",
+    "bothRequired": "กรุณาป้อนชื่อผู้ใช้และรหัสผ่าน",
+    "success": "เข้าสู่ระบบสำเร็จ",
+    "invalidResponse": "เข้าสู่ระบบล้มเหลว: การตอบสนองของเซิร์ฟเวอร์ไม่ถูกต้อง",
+    "wrongCredentials": "ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง",
+    "tooManyRequests": "พยายามเข้าสู่ระบบมากเกินไป โปรดลองอีกครั้งภายหลัง",
+    "failed": "เข้าสู่ระบบล้มเหลว: {status}",
+    "networkError": "คำขอเข้าสู่ระบบล้มเหลว โปรดตรวจสอบการเชื่อมต่อเครือข่าย"
+  },
+  "player": {
+    "loading": "กำลังโหลดข้อมูล",
+    "failed": "โหลดข้อมูลไม่สำเร็จ~",
+    "infoTab": "ข้อมูล",
+    "commentTab": "ความคิดเห็น",
+    "selectDefinition": "เลือกคุณภาพ",
+    "original": "ต้นฉบับ",
+    "switchingServer": "กำลังเปลี่ยนเซิร์ฟเวอร์",
+    "refreshFailed": "รีเฟรชรายการเซิร์ฟเวอร์ไม่สำเร็จ",
+    "aria2Failed": "เพิ่ม aria2 ไม่สำเร็จ",
+    "fetchInfoFailed": "รับข้อมูลวิดีโอไม่สำเร็จ",
+    "fetchFileFailed": "รับไฟล์วิดีโอไม่สำเร็จ",
+    "switchedTo": "เปลี่ยนเป็น {definition} แล้ว"
+  },
+  "imageView": {
+    "loading": "กำลังโหลดข้อมูล",
+    "failed": "โหลดข้อมูลไม่สำเร็จ~",
+    "fetchInfoFailed": "รับข้อมูลรูปภาพไม่สำเร็จ"
+  },
+  "favorites": {
+    "title": "รายการโปรดของฉัน",
+    "videoTab": "วิดีโอ",
+    "imageTab": "รูปภาพ"
+  },
+  "friends": {
+    "title": "{type}",
+    "followTab": "กำลังติดตาม",
+    "fansTab": "แฟน",
+    "friendTab": "เพื่อน",
+    "loading": "กำลังโหลดข้อมูล"
+  },
+  "offlineCache": {
+    "title": "แคชออฟไลน์",
+    "today": "วันนี้",
+    "cacheComplete": "แคชเสร็จสมบูรณ์",
+    "views": "การเล่น",
+    "likes": "ถูกใจ"
+  },
+  "search": {
+    "placeholder": "ป้อนคำค้นหา",
+    "submit": "ค้นหา",
+    "videoTab": "วิดีโอ",
+    "imageTab": "รูปภาพ",
+    "userTab": "ผู้ใช้",
+    "loadingVideoFailed": "โหลดผลการค้นหาวิดีโอไม่สำเร็จ",
+    "loadingImageFailed": "โหลดผลการค้นหารูปภาพไม่สำเร็จ",
+    "loadingUserFailed": "โหลดผลการค้นหาผู้ใช้ไม่สำเร็จ",
+    "historyLabel": "ประวัติการค้นหา",
+    "recommendLabel": "การค้นพบ"
+  },
+  "zone": {
+    "videoTab": "วิดีโอ",
+    "imageTab": "รูปภาพ",
+    "publishTab": "เผยแพร่"
   },
   "forum": {
     "sections": {
@@ -232,9 +330,9 @@
       "feedback": "ข้อเสนอแนะ",
       "feedback_desc": "ความคิด ข้อเสนอแนะ และข้อกังวล",
       "general": "ทั่วไป",
-      "general_desc": "สิ่งอื่นๆ ทั้งหมด",
+      "general_desc": "ทุกอย่างอื่น ๆ",
       "guide": "คำแนะนำ",
-      "guide_desc": "ข้อมูลที่เป็นประโยชน์หรือคำแนะนำ \"วิธีทำ\"",
+      "guide_desc": "ข้อมูลที่เป็นประโยชน์หรือคำแนะนำวิธีการ",
       "help": "ช่วยเหลือ",
       "help_desc": "ช่วยเหลือปัญหาที่เกี่ยวข้องกับเว็บไซต์",
       "helpQuestion": "ช่วยเหลือ/คำถาม",
@@ -242,14 +340,14 @@
       "request": "คำขอ",
       "request_desc": "ช่วยค้นหาหรือสร้าง",
       "share": "แชร์",
-      "share_desc": "แชร์โมเดล แอนิเมชัน หรืออุปกรณ์เสริมอื่นๆ"
+      "share_desc": "แชร์โมเดล แอนิเมชัน หรืออุปกรณ์เสริมอื่น ๆ"
     },
     "replies": "คำตอบ",
     "views": "การดู",
-    "author": "ผู้เขียน",
+    "author": "ผู้โพสต์",
     "lastReply": "โพสต์ล่าสุด",
     "publishedAt": "เผยแพร่เมื่อ",
-    "repliedAt": "ตอบกลับเมื่อ",
+    "repliedAt": "ตอบเมื่อ",
     "pinned": "ปักหมุด",
     "loadMore": "โหลดเพิ่มเติม",
     "noMore": "ไม่มีเพิ่มเติม",
@@ -259,6 +357,6 @@
     "publishTitlePlaceholder": "ป้อนหัวข้อโพสต์",
     "publishBody": "เนื้อหา",
     "publishBodyPlaceholder": "ป้อนเนื้อหาโพสต์ รองรับ Markdown",
-    "publishSubmit": "โพสต์"
+    "publishSubmit": "ส่งโพสต์"
   }
 }

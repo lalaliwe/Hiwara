@@ -1,5 +1,27 @@
 {
-  "common": {},
+  "common": {
+    "followed": "Подписан",
+    "unfollowed": "Отписан",
+    "followFailed": "Не удалось подписаться",
+    "unfollowFailed": "Не удалось отписаться",
+    "liked": "Понравилось",
+    "unliked": "Лайк убран",
+    "likeFailed": "Не удалось поставить лайк",
+    "unlikeFailed": "Не удалось убрать лайк",
+    "fetchCommentsFailed": "Не удалось загрузить комментарии",
+    "fetchRepliesFailed": "Не удалось загрузить ответы",
+    "linkCopied": "Ссылка скопирована в буфер обмена",
+    "copyLinkFailed": "Не удалось скопировать ссылку",
+    "shareSuccess": "Успешно поделились",
+    "shareFailed": "Не удалось поделиться, попробуйте снова",
+    "shareNotSupported": "Ваше устройство не поддерживает функцию отправки",
+    "fetchDownloadFailed": "Не удалось получить ссылку для скачивания",
+    "downloadLinkCopied": "Ссылка для скачивания скопирована в буфер обмена",
+    "fetchRecommendFailed": "Не удалось загрузить рекомендации",
+    "fetchVideoListFailed": "Не удалось загрузить список видео",
+    "fetchImageListFailed": "Не удалось загрузить список изображений",
+    "fetchUserInfoFailed": "Не удалось получить информацию о пользователе"
+  },
   "setup": {
     "title": "Настройки",
     "autoPlay": "Автовоспроизведение",
@@ -8,7 +30,7 @@
     "downloadSettings": "Настройки загрузки",
     "aria2Settings": "Настройки Aria2",
     "language": "Язык (Language)",
-    "about": "О программе",
+    "about": "О приложении",
     "logout": "Выйти",
     "enabled": "Включено",
     "disabled": "Отключено",
@@ -16,14 +38,14 @@
     "tagSearch": "Поиск по тегам",
     "original": "Оригинал",
     "aboutPage": {
-      "title": "О программе",
+      "title": "О приложении",
       "version": "Версия",
       "versionType": "Тип версии",
       "beta": "Бета",
       "buildTime": "Время сборки",
       "deviceType": "Тип устройства",
       "mobile": "Мобильный",
-      "desktop": "Настольный",
+      "desktop": "Десктоп",
       "osName": "Имя ОС",
       "osVersion": "Версия ОС",
       "webview": "WebView",
@@ -36,12 +58,12 @@
     "aria2Page": {
       "title": "Настройки Aria2",
       "enableAria2": "Включить Aria2",
-      "rpcAddress": "RPC-адрес Aria2",
-      "rpcPlaceholder": "RPC-адрес например: http://127.0.0.1:6800/jsonrpc",
+      "rpcAddress": "Aria2 RPC адрес",
+      "rpcPlaceholder": "RPC адрес пример: http://127.0.0.1:6800/jsonrpc",
       "token": "Aria2 TOKEN",
       "tokenPlaceholder": "Введите TOKEN",
-      "downloadDir": "Каталог загрузки Aria2",
-      "downloadDirPlaceholder": "Каталог загрузки например: ~/Downloads/Iwara",
+      "downloadDir": "Aria2 каталог загрузки",
+      "downloadDirPlaceholder": "Каталог загрузки пример: ~/Downloads/Iwara",
       "tip": "Подсказка: Каталог загрузки должен быть каталогом сервера Aria2, а не локальным каталогом."
     },
     "definitionPage": {
@@ -51,13 +73,13 @@
       "title": "Настройки загрузки",
       "videoSavePath": "Путь сохранения видео",
       "imageSavePath": "Путь сохранения изображений",
-      "notSet": "Не задано",
-      "selectVideoPath": "Выбрать путь для видео",
-      "selectImagePath": "Выбрать путь для изображений"
+      "notSet": "Не установлено",
+      "selectVideoPath": "Выберите путь сохранения видео",
+      "selectImagePath": "Выберите путь сохранения изображений"
     },
     "languagePage": {
       "title": "Язык (Language)",
-      "followSystem": "Как в системе",
+      "followSystem": "Следовать системе",
       "english": "Английский",
       "simplifiedChinese": "Упрощенный китайский",
       "traditionalChinese": "Традиционный китайский",
@@ -96,11 +118,11 @@
       "placeholder": "Поиск"
     },
     "dateFilter": {
-      "selectTime": "Выбрать время",
+      "selectTime": "Выберите время",
       "year": "Год",
       "monthLabel": "Месяц",
       "allYears": "Все годы",
-      "fullYear": "Весь год",
+      "fullYear": "Полный год",
       "months": {
         "1": "Январь",
         "2": "Февраль",
@@ -121,44 +143,47 @@
     "video": {
       "sortTabs": {
         "date": "Новые",
-        "trending": "Тренды",
+        "trending": "В тренде",
         "popularity": "Популярные",
         "views": "Просмотры",
         "likes": "Лайки"
       },
       "loading": "Загрузка...",
       "noRecords": "Нет записей видео",
-      "loadFailed": "Ошибка загрузки, ",
+      "loadFailed": "Не удалось загрузить, ",
       "retry": "Нажмите для повторной попытки",
       "reachedBottom": "Достигнут конец"
     },
     "image": {
       "sortTabs": {
         "date": "Новые",
-        "trending": "Тренды",
+        "trending": "В тренде",
         "popularity": "Популярные",
         "views": "Просмотры",
         "likes": "Лайки"
       },
       "loading": "Загрузка...",
-      "noRecords": "Нет записей иллюстраций",
-      "loadFailed": "Ошибка загрузки, ",
+      "noRecords": "Нет записей изображений",
+      "loadFailed": "Не удалось загрузить, ",
       "retry": "Нажмите для повторной попытки",
       "reachedBottom": "Достигнут конец"
     },
     "toast": {
-      "pressAgainToExit": "Нажмите еще раз для выхода из приложения"
+      "pressAgainToExit": "Нажмите еще раз для выхода из приложения",
+      "getUserInfoFailed": "Не удалось получить информацию о пользователе",
+      "getHistoryFailed": "Не удалось получить историю"
     },
     "my": {
       "space": "Пространство",
       "followers": "Подписки",
-      "fans": "Фанаты",
+      "fans": "Подписчики",
       "history": "История",
+      "noHistory": "Нет истории",
       "viewAllHistory": "Посмотреть все",
       "videoFavorites": "Избранные видео",
-      "imageFavorites": "Избранные иллюстрации",
+      "imageFavorites": "Избранные изображения",
       "playlist": "Плейлист",
-      "offlineCache": "Офлайн кэш",
+      "offlineCache": "Офлайн-кеш",
       "notifications": "Уведомления",
       "friends": "Друзья",
       "messages": "Сообщения",
@@ -168,13 +193,13 @@
       "wura": "Wura",
       "faq": "Часто задаваемые вопросы",
       "links": "Ссылки",
-      "aboutText": "Это приложение следует лицензии MPL-2.0 с открытым исходным кодом. Пожалуйста, не используйте его в коммерческих целях.",
+      "aboutText": "Это приложение следует лицензии с открытым исходным кодом MPL-2.0. Пожалуйста, не используйте его в коммерческих целях.",
       "noRecords": "Нет записей {type}"
     },
     "forum": {
       "posts": "Публикации",
       "topics": "Темы",
-      "repliedAt": "Ответил в",
+      "repliedAt": "Ответил",
       "latestPost": "Последняя публикация",
       "groups": {
         "admin": "Администратор",
@@ -183,22 +208,22 @@
         "chinese": "Китайский"
       },
       "sections": {
-        "announcement": "Объявления",
+        "announcement": "Объявление",
         "announcement_desc": "Важная информация",
         "feedback": "Обратная связь",
-        "feedback_desc": "Идеи, предложения и опасения",
+        "feedback_desc": "Идеи, предложения и проблемы",
         "help": "Помощь",
         "help_desc": "Помощь с проблемами сайта",
         "general": "Общее",
         "general_desc": "Всё остальное",
         "guide": "Руководство",
-        "guide_desc": "Полезная информация или руководства «как сделать»",
+        "guide_desc": "Полезная информация или руководства",
         "helpQuestion": "Помощь/Вопрос",
         "helpQuestion_desc": "Вопросы, не связанные с сайтом",
         "request": "Запрос",
         "request_desc": "Помощь в поиске или создании",
         "share": "Поделиться",
-        "share_desc": "Делиться моделями, анимациями или другими аксессуарами"
+        "share_desc": "Поделиться моделями, анимациями или другими аксессуарами"
       }
     }
   },
@@ -210,31 +235,104 @@
       "error": "Ошибка",
       "noRecords": "Нет истории видео",
       "today": "Сегодня",
-      "loadFailed": "Ошибка загрузки, ",
+      "loadFailed": "Не удалось загрузить, ",
       "retry": "Нажмите для повторной попытки",
       "reachedBottom": "Достигнут конец"
     },
     "image": {
-      "tab": "Иллюстрации",
+      "tab": "Изображения",
       "loading": "Загрузка...",
       "error": "Ошибка",
-      "noRecords": "Нет истории иллюстраций",
+      "noRecords": "Нет истории изображений",
       "today": "Сегодня",
-      "loadFailed": "Ошибка загрузки, ",
+      "loadFailed": "Не удалось загрузить, ",
       "retry": "Нажмите для повторной попытки",
       "reachedBottom": "Достигнут конец"
     }
+  },
+  "login": {
+    "title": "Войдите в свою учетную запись Iwara",
+    "usernameLabel": "Введите имя пользователя",
+    "passwordLabel": "Введите пароль",
+    "loginBtn": "Войти",
+    "loggingIn": "Вход в систему",
+    "languageBtn": "Language/语言",
+    "aboutText": "Это приложение следует лицензии с открытым исходным кодом MPL-2.0. Пожалуйста, не используйте его в коммерческих целях.",
+    "usernameRequired": "Имя пользователя обязательно",
+    "passwordRequired": "Пароль обязателен",
+    "bothRequired": "Имя пользователя и пароль обязательны",
+    "success": "Вход выполнен успешно",
+    "invalidResponse": "Ошибка входа: недействительный ответ сервера",
+    "wrongCredentials": "Неверное имя пользователя или пароль",
+    "tooManyRequests": "Слишком много попыток входа. Пожалуйста, попробуйте позже",
+    "failed": "Ошибка входа: {status}",
+    "networkError": "Ошибка запроса входа. Проверьте сетевое подключение"
+  },
+  "player": {
+    "loading": "Загрузка данных",
+    "failed": "Не удалось загрузить данные~",
+    "infoTab": "Информация",
+    "commentTab": "Комментарии",
+    "selectDefinition": "Выберите качество",
+    "original": "Оригинал",
+    "switchingServer": "Переключение сервера",
+    "refreshFailed": "Не удалось обновить список серверов",
+    "aria2Failed": "Не удалось добавить aria2",
+    "fetchInfoFailed": "Не удалось получить информацию о видео",
+    "fetchFileFailed": "Не удалось получить файл видео",
+    "switchedTo": "Переключено на {definition}"
+  },
+  "imageView": {
+    "loading": "Загрузка данных",
+    "failed": "Не удалось загрузить данные~",
+    "fetchInfoFailed": "Не удалось получить информацию об изображении"
+  },
+  "favorites": {
+    "title": "Мои избранные",
+    "videoTab": "Видео",
+    "imageTab": "Изображения"
+  },
+  "friends": {
+    "title": "{type}",
+    "followTab": "Подписки",
+    "fansTab": "Подписчики",
+    "friendTab": "Друзья",
+    "loading": "Загрузка данных"
+  },
+  "offlineCache": {
+    "title": "Офлайн-кеш",
+    "today": "Сегодня",
+    "cacheComplete": "Кеш завершен",
+    "views": "Просмотры",
+    "likes": "Лайки"
+  },
+  "search": {
+    "placeholder": "Введите ключевые слова",
+    "submit": "Поиск",
+    "videoTab": "Видео",
+    "imageTab": "Изображения",
+    "userTab": "Пользователь",
+    "loadingVideoFailed": "Не удалось загрузить результаты поиска видео",
+    "loadingImageFailed": "Не удалось загрузить результаты поиска изображений",
+    "loadingUserFailed": "Не удалось загрузить результаты поиска пользователей",
+    "historyLabel": "История поиска",
+    "recommendLabel": "Рекомендации"
+  },
+  "zone": {
+    "videoTab": "Видео",
+    "imageTab": "Изображения",
+    "publishTab": "Опубликовать"
   },
   "forum": {
     "sections": {
       "announcements": "Объявления",
       "announcements_desc": "Важная информация",
       "feedback": "Обратная связь",
-      "feedback_desc": "Идеи, предложения и опасения",
+      "feedback_desc": "Идеи, предложения и проблемы",
       "general": "Общее",
       "general_desc": "Всё остальное",
       "guide": "Руководство",
-      "guide_desc": "Полезная информация или руководства «как сделать»",
+      "guide_desc": "Полезная информация или руководства",
       "help": "Помощь",
       "help_desc": "Помощь с проблемами сайта",
       "helpQuestion": "Помощь/Вопрос",
@@ -242,23 +340,23 @@
       "request": "Запрос",
       "request_desc": "Помощь в поиске или создании",
       "share": "Поделиться",
-      "share_desc": "Делиться моделями, анимациями или другими аксессуарами"
+      "share_desc": "Поделиться моделями, анимациями или другими аксессуарами"
     },
     "replies": "Ответы",
     "views": "Просмотры",
     "author": "Автор",
-    "lastReply": "Последняя публикация",
+    "lastReply": "Последний ответ",
     "publishedAt": "Опубликовано",
     "repliedAt": "Ответил",
     "pinned": "Закреплено",
     "loadMore": "Загрузить ещё",
     "noMore": "Больше нет",
     "publish": "Опубликовать",
-    "publishSection": "Выбрать раздел",
-    "publishTitle": "Заголовок",
-    "publishTitlePlaceholder": "Введите заголовок сообщения",
+    "publishSection": "Выберите раздел",
+    "publishTitle": "Название",
+    "publishTitlePlaceholder": "Введите заголовок",
     "publishBody": "Содержание",
     "publishBodyPlaceholder": "Введите содержание, поддерживается Markdown",
-    "publishSubmit": "Опубликовать сообщение"
+    "publishSubmit": "Опубликовать"
   }
 }

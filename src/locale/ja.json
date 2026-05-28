@@ -1,5 +1,27 @@
 {
-  "common": {},
+  "common": {
+    "followed": "フォローしました",
+    "unfollowed": "フォロー解除しました",
+    "followFailed": "フォローに失敗しました",
+    "unfollowFailed": "フォロー解除に失敗しました",
+    "liked": "いいねしました",
+    "unliked": "いいねを解除しました",
+    "likeFailed": "いいねに失敗しました",
+    "unlikeFailed": "いいね解除に失敗しました",
+    "fetchCommentsFailed": "コメントの取得に失敗しました",
+    "fetchRepliesFailed": "返信の取得に失敗しました",
+    "linkCopied": "リンクをクリップボードにコピーしました",
+    "copyLinkFailed": "リンクのコピーに失敗しました",
+    "shareSuccess": "共有に成功しました",
+    "shareFailed": "共有に失敗しました。もう一度お試しください",
+    "shareNotSupported": "お使いのデバイスは共有機能に対応していません",
+    "fetchDownloadFailed": "ダウンロードリンクの取得に失敗しました",
+    "downloadLinkCopied": "ダウンロードリンクをクリップボードにコピーしました",
+    "fetchRecommendFailed": "おすすめの取得に失敗しました",
+    "fetchVideoListFailed": "動画リストの取得に失敗しました",
+    "fetchImageListFailed": "画像リストの取得に失敗しました",
+    "fetchUserInfoFailed": "ユーザー情報の取得に失敗しました"
+  },
   "setup": {
     "title": "設定",
     "autoPlay": "自動再生",
@@ -147,13 +169,16 @@
       "reachedBottom": "一番下まで到達しました"
     },
     "toast": {
-      "pressAgainToExit": "もう一度戻るボタンを押すとアプリを終了します"
+      "pressAgainToExit": "もう一度戻るボタンを押すとアプリを終了します",
+      "getUserInfoFailed": "ユーザー情報の取得に失敗しました",
+      "getHistoryFailed": "履歴の取得に失敗しました"
     },
     "my": {
       "space": "スペース",
       "followers": "フォロー",
       "fans": "ファン",
       "history": "履歴",
+      "noHistory": "履歴がありません",
       "viewAllHistory": "すべて表示",
       "videoFavorites": "動画お気に入り",
       "imageFavorites": "イラストお気に入り",
@@ -224,6 +249,79 @@
       "retry": "クリックして再試行",
       "reachedBottom": "一番下まで到達しました"
     }
+  },
+  "login": {
+    "title": "Iwaraアカウントにログイン",
+    "usernameLabel": "ユーザー名を入力",
+    "passwordLabel": "パスワードを入力",
+    "loginBtn": "ログイン",
+    "loggingIn": "ログイン中",
+    "languageBtn": "Language/语言",
+    "aboutText": "本アプリはMPL-2.0オープンソースライセンスに従います。商業目的での使用はご遠慮ください。",
+    "usernameRequired": "ユーザー名は必須です",
+    "passwordRequired": "パスワードは必須です",
+    "bothRequired": "ユーザー名とパスワードは必須です",
+    "success": "ログイン成功",
+    "invalidResponse": "ログイン失敗：サーバーの応答が無効です",
+    "wrongCredentials": "ユーザー名またはパスワードが間違っています",
+    "tooManyRequests": "ログイン試行回数が多すぎます。しばらくしてからお試しください",
+    "failed": "ログイン失敗：{status}",
+    "networkError": "ログインリクエストに失敗しました。ネットワーク接続を確認してください"
+  },
+  "player": {
+    "loading": "データ読み込み中",
+    "failed": "データの読み込みに失敗しました〜",
+    "infoTab": "概要",
+    "commentTab": "コメント",
+    "selectDefinition": "画質を選択",
+    "original": "原画",
+    "switchingServer": "サーバーを切り替え中",
+    "refreshFailed": "サーバーリストの更新に失敗しました",
+    "aria2Failed": "Aria2追加に失敗しました",
+    "fetchInfoFailed": "動画情報の取得に失敗しました",
+    "fetchFileFailed": "動画ファイルの取得に失敗しました",
+    "switchedTo": "{definition}に切り替えました"
+  },
+  "imageView": {
+    "loading": "データを読み込み中",
+    "failed": "データの読み込みに失敗しました〜",
+    "fetchInfoFailed": "画像情報の取得に失敗しました"
+  },
+  "favorites": {
+    "title": "マイお気に入り",
+    "videoTab": "動画",
+    "imageTab": "画像"
+  },
+  "friends": {
+    "title": "{type}",
+    "followTab": "フォロー",
+    "fansTab": "ファン",
+    "friendTab": "フレンド",
+    "loading": "データ読み込み中"
+  },
+  "offlineCache": {
+    "title": "オフラインキャッシュ",
+    "today": "今日",
+    "cacheComplete": "キャッシュ完了",
+    "views": "再生",
+    "likes": "いいね"
+  },
+  "search": {
+    "placeholder": "検索キーワードを入力",
+    "submit": "検索",
+    "videoTab": "動画",
+    "imageTab": "画像",
+    "userTab": "ユーザー",
+    "loadingVideoFailed": "動画検索結果の読み込みに失敗しました",
+    "loadingImageFailed": "画像検索結果の読み込みに失敗しました",
+    "loadingUserFailed": "ユーザー検索結果の読み込みに失敗しました",
+    "historyLabel": "検索履歴",
+    "recommendLabel": "おすすめ検索"
+  },
+  "zone": {
+    "videoTab": "動画",
+    "imageTab": "画像",
+    "publishTab": "公開"
   },
   "forum": {
     "sections": {

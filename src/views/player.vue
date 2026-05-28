@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted, onActivated, watch, provide, onDeactivated } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
+import { useI18n } from 'vue-i18n';
 import videoPlayer from '../component/player/videoPlayer.vue';
 import infoView from '../component/player/info.vue';
 import commentView from '../component/player/comment.vue';
@@ -19,6 +20,8 @@ import { setupStore } from '../core/store';
 import { insertVideoHistory } from '../core/database';
 import loadingHuawu from '../component/loadingHuawu.vue';
 import errorHuawu from '../component/errorHuawu.vue';
+
+const { t } = useI18n();
 
 // 设置组件名称，确保与路由name一致
 defineOptions({
@@ -184,12 +187,12 @@ const fetchVideoInfo = async () => {
       }
     } else {
       console.error(`状态码：${res.status}`, `错误信息：${res.statusText}`);
-      showShortToast('获取视频信息失败');
+      showShortToast(t('player.fetchInfoFailed'));
       videoInfoState.value = 'failed';
     }
   } catch (error) {
     console.error(error);
-    showShortToast('获取视频信息失败');
+    showShortToast(t('player.fetchInfoFailed'));
     videoInfoState.value = 'failed';
   }
 };
@@ -235,7 +238,7 @@ async function fetchVideoFile(url: string, filename: string) {
       // console.log(videoFile.value[videoSelect.value])
     }
   } catch (error) {
-    showShortToast('获取视频文件失败');
+    showShortToast(t('player.fetchFileFailed'));
     console.error('获取视频文件失败：', error);
   }
 }
@@ -251,7 +254,7 @@ function definitionTextFormat(text: string): string {
   }
   // 如果输入是Source，返回原画
   if (text === 'Source') {
-    return '原画';
+    return t('player.original');
   }
   // 其他情况返回原文本
   return text;
@@ -272,7 +275,7 @@ const selectDefinition = async (index: number) => {
   const setup = setupStore();
   await setup.updateSetting('definition', videoFile.value[index].name);
 
-  showShortToast(`已切换到 ${definitionTextFormat(videoFile.value[index].name)}`);
+  showShortToast(t('player.switchedTo', { definition: definitionTextFormat(videoFile.value[index].name) }));
 };
 
 // 过滤并排序视频文件列表
@@ -305,7 +308,7 @@ const getOriginalIndex = (file: VideoFileItem) => {
 
 // 刷新视频文件列表
 const refreshVideoFile = async () => {
-  showShortToast('正在切换服务器');
+  showShortToast(t('player.switchingServer'));
   try {
     const res = await api_getVideoInfo(id.value as string);
     if (res.ok && res.data?.fileUrl) {
@@ -321,7 +324,7 @@ const refreshVideoFile = async () => {
     }
   } catch (error) {
     console.error('刷新服务器列表失败:', error);
-    showShortToast('刷新服务器列表失败');
+    showShortToast(t('player.refreshFailed'));
   }
 };
 
@@ -397,7 +400,7 @@ async function addAria2DownloadTask() {
     console.log('aria2 下载任务添加成功, GID:', result.result);
   } else {
     console.error('aria2 下载任务添加失败:', result.error);
-    showShortToast(`aria2 添加失败`);
+    showShortToast(t('player.aria2Failed'));
   }
 }
 const followTrigger = (val: boolean) => {
@@ -416,12 +419,12 @@ const followTrigger = (val: boolean) => {
 
     <!-- 加载中 -->
     <div class="status-view" v-if="videoInfoState === 'loading'">
-      <loadingHuawu>数据加载中</loadingHuawu>
+      <loadingHuawu>{{ t('player.loading') }}</loadingHuawu>
     </div>
 
     <!-- 加载失败 -->
     <div class="status-view" v-else-if="videoInfoState === 'failed'">
-      <errorHuawu>数据加载失败了喵~</errorHuawu>
+      <errorHuawu>{{ t('player.failed') }}</errorHuawu>
     </div>
 
     <!-- 加载成功：视频信息 + Swiper 内容 -->
@@ -429,8 +432,8 @@ const followTrigger = (val: boolean) => {
       <div class="tabs">
         <div class="tabs-bar">
           <v-tabs class="left" v-model="tab" color="#00796B" density="comfortable">
-            <v-tab value="info">简介</v-tab>
-            <v-tab value="comment">评论</v-tab>
+            <v-tab value="info">{{ t('player.infoTab') }}</v-tab>
+            <v-tab value="comment">{{ t('player.commentTab') }}</v-tab>
           </v-tabs>
           <div class="right" v-if="videoFile.length > 0">
             <span v-ripple @click="refreshVideoFile">
@@ -464,7 +467,7 @@ const followTrigger = (val: boolean) => {
       <v-dialog v-model="showDefinitionDialog" max-width="400">
         <v-card>
           <v-card-title class="text-center">
-            选择清晰度
+            {{ t('player.selectDefinition') }}
           </v-card-title>
           <v-divider></v-divider>
           <v-list>
@@ -526,6 +529,7 @@ const followTrigger = (val: boolean) => {
 
 .tabs {
   background-color: var(--color-bg-card);
+  box-shadow: var(--shadow-tab-bar);
 
   :deep(.v-tab) {
     min-width: 0 !important;
@@ -534,6 +538,10 @@ const followTrigger = (val: boolean) => {
     &.v-tab--selected {
       color: var(--color-primary);
     }
+  }
+
+  :deep(.v-divider) {
+    border-color: var(--color-border-divider) !important;
   }
 
   .tabs-bar {

@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import { ref, computed, nextTick, onMounted, onUnmounted } from 'vue';
+import { useI18n } from 'vue-i18n';
 import { getSearchHistoryList } from '../../core/database';
+
+const { t } = useI18n();
 
 const emit = defineEmits<{
   search: [keyword: string];
@@ -123,7 +126,7 @@ function handleTagClick(keyword: string) {
   <div class="content">
     <div class="tagsContainer">
       <div class="label" @click="toggleHistoryExpand" v-if="searchHistory.length > 0">
-        搜索历史
+        {{ t('search.historyLabel') }}
         <font-awesome-icon icon="fa-solid fa-angle-down" :class="{ expanded: historyExpand }" />
       </div>
       <div class="tags" :style="{ height: historyContainerHeight }">
@@ -132,7 +135,7 @@ function handleTagClick(keyword: string) {
         </v-chip>
       </div>
       <div class="label" @click="toggleRecommendExpand" v-if="searchRecommend.length > 0">
-        搜索发现
+        {{ t('search.recommendLabel') }}
         <font-awesome-icon icon="fa-solid fa-angle-down" :class="{ expanded: recommendExpand }" />
       </div>
       <div class="tags" :style="{ height: recommendContainerHeight }">
@@ -168,6 +171,7 @@ function handleTagClick(keyword: string) {
 .content {
   flex: 1;
   overflow: auto !important;
+  background-color: var(--color-bg-page);
 
   .tagsContainer {
     padding: calc(60px + 6px + env(safe-area-inset-top, 0)) 10px 12px 10px;
@@ -175,6 +179,7 @@ function handleTagClick(keyword: string) {
     .label {
       padding: 8px 0;
       font-size: 0.9rem;
+      color: var(--color-text-primary);
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -185,7 +190,7 @@ function handleTagClick(keyword: string) {
       :deep(svg) {
         transition: transform 0.3s ease-in-out;
         font-size: 0.8rem;
-        color: #616161;
+        color: var(--color-text-muted);
       }
 
       // 展开状态 - 箭头旋转 180 度向上

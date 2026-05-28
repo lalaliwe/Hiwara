@@ -228,8 +228,8 @@ onActivated(() => {
           <div class="hr">
             {{ t(group.groupNameKey) }}
           </div>
-          <div v-for="section in group.sections" :key="section.id" class="btn">
-            <div class="block" @click="openForumPage(section.id)">
+          <div v-for="section in group.sections" :key="section.id" class="btn" @click="openForumPage(section.id)">
+            <div class="block">
               <div class="left">
                 <div class="bar"></div>
               </div>

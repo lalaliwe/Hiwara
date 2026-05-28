@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
+import { useI18n } from 'vue-i18n';
 import { showShortToast } from '../core/toast';
 import {
   login as api_login,
@@ -13,6 +14,7 @@ import {
 } from '../core/database'; // 导入数据库登录函数
 import { isLogin, uid, uname } from '../core/store';
 
+const { t } = useI18n();
 const router = useRouter();
 
 // 定义响应式数据
@@ -23,8 +25,8 @@ const passwordError = ref<string | null>(null);
 const loading = ref(false); // 新增：控制加载状态
 
 // 验证规则
-const usernameRule = computed(() => [(v: string) => !!v || '用户名不得为空']);
-const passwordRule = computed(() => [(v: string) => !!v || '密码不得为空']);
+const usernameRule = computed(() => [(v: string) => !!v || t('login.usernameRequired')]);
+const passwordRule = computed(() => [(v: string) => !!v || t('login.passwordRequired')]);
 
 // 如果已经登录，直接跳转首页
 if (isLogin().value) {
@@ -60,17 +62,17 @@ async function login() {
 
   if (usernameEmpty && passwordEmpty) {
     // 两个都为空
-    usernameError.value = '用户名不得为空';
-    passwordError.value = '密码不得为空';
-    showShortToast('用户名和密码不得为空');
+    usernameError.value = t('login.usernameRequired');
+    passwordError.value = t('login.passwordRequired');
+    showShortToast(t('login.bothRequired'));
   } else if (usernameEmpty) {
     // 用户名为空
-    usernameError.value = '用户名不得为空';
-    showShortToast('用户名不得为空');
+    usernameError.value = t('login.usernameRequired');
+    showShortToast(t('login.usernameRequired'));
   } else if (passwordEmpty) {
     // 密码为空
-    passwordError.value = '密码不得为空';
-    showShortToast('密码不得为空');
+    passwordError.value = t('login.passwordRequired');
+    showShortToast(t('login.passwordRequired'));
   } else {
     // 都不为空，执行登录逻辑
     loading.value = true; // 开始加载
@@ -99,25 +101,25 @@ async function login() {
             console.error('Failed to update user info:', err);
           });
           isLogin().set(true);
-          showShortToast('登录成功');
+          showShortToast(t('login.success'));
           // 跳转到首页
           router.push('/');
         } else {
-          showShortToast('登录失败：服务器响应无效');
+          showShortToast(t('login.invalidResponse'));
         }
       } else if (result.status === 400) {
         // 用户名或密码错误
-        showShortToast('用户名或密码错误');
+        showShortToast(t('login.wrongCredentials'));
       } else if (result.status === 429) {
         // 登录过于频繁
-        showShortToast('登录过于频繁，请稍后再试');
+        showShortToast(t('login.tooManyRequests'));
       } else {
         // 其他错误状态码
-        showShortToast(`登录失败：${result.status}`);
+        showShortToast(t('login.failed', { status: result.status }));
       }
     } catch (error) {
       console.error('Login error:', error);
-      showShortToast('登录请求失败，请检查网络连接');
+      showShortToast(t('login.networkError'));
     } finally {
       loading.value = false; // 结束加载
     }
@@ -128,29 +130,29 @@ async function login() {
   <div id="loginView">
     <div class="language">
       <font-awesome-icon icon="fa-solid fa-language" />
-      Language/语言
+      {{ t('login.languageBtn') }}
     </div>
     <div class="form">
-      <div class="title">登录到你的Iwara账号</div>
+      <div class="title">{{ t('login.title') }}</div>
       <div class="input">
-        <v-text-field v-model="username" label="请输入用户名" color="#00796B"
+        <v-text-field v-model="username" :label="t('login.usernameLabel')" color="#00796B"
           :error-messages="usernameError ? [usernameError] : []"
-          @blur="usernameError = !username.trim() ? '用户名不得为空' : null"></v-text-field>
+          @blur="usernameError = !username.trim() ? t('login.usernameRequired') : null"></v-text-field>
       </div>
       <div class="input">
-        <v-text-field v-model="password" label="请输入密码" type="password" color="#00796B"
+        <v-text-field v-model="password" :label="t('login.passwordLabel')" type="password" color="#00796B"
           :error-messages="passwordError ? [passwordError] : []"
-          @blur="passwordError = !password.trim() ? '密码不得为空' : null"></v-text-field>
+          @blur="passwordError = !password.trim() ? t('login.passwordRequired') : null"></v-text-field>
       </div>
       <div class="submit">
         <v-btn class="btn" @click="login" color="#00796B" size="large" :loading="loading" :disabled="loading">{{ loading
-          ? '登录中' : '登录' }}</v-btn>
+          ? t('login.loggingIn') : t('login.loginBtn') }}</v-btn>
       </div>
     </div>
     <div class="about">
       <span class="logo">Hiwara</span>
       <br>
-      本应用遵循MPL-2.0开源协议，请勿用于任何商业用途。
+      {{ t('login.aboutText') }}
       <br>
       ©2023-2026 Hiwara Team
     </div>
@@ -160,6 +162,7 @@ async function login() {
 #loginView {
   flex: 1;
   position: relative;
+  background-color: var(--color-bg-page);
 }
 
 .form {
@@ -169,10 +172,24 @@ async function login() {
   .title {
     font-size: 1.4rem;
     padding: 22px 0;
+    color: var(--color-text-primary);
   }
 
   .input {
     padding-bottom: 6px;
+
+    /* Vuetify 输入框暗黑模式适配 */
+    :deep(.v-field) {
+      background-color: var(--color-bg-card);
+    }
+
+    :deep(.v-label) {
+      color: var(--color-text-placeholder) !important;
+    }
+
+    :deep(input) {
+      color: var(--color-text-primary) !important;
+    }
   }
 
   .submit {

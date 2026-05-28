@@ -1,11 +1,14 @@
 <script setup lang="ts">
 import { ref } from 'vue';
+import { useI18n } from 'vue-i18n';
 import cardButton from '../cardButton.vue';
 import {
   getImageRecommendByUser as api_getImageRecommendByUser,
   getImageRecommendByOther as api_getImageRecommendByOther
 } from '../../core/api';
 import { showShortToast } from '../../core/toast';
+
+const { t } = useI18n();
 
 const props = defineProps(['pid', 'uid']);
 
@@ -49,7 +52,7 @@ async function getImageRecommendByUser() {
     }
   } catch (error) {
     console.error('该用户其他插画推荐获取失败：', error);
-    showShortToast('插画推荐获取失败');
+    showShortToast(t('common.fetchRecommendFailed'));
     throw error;
   }
 }
@@ -77,7 +80,7 @@ async function getImageRecommendByOther() {
     }
   } catch (error) {
     console.error('更多插画推荐获取失败：', error);
-    showShortToast('插画推荐获取失败');
+    showShortToast(t('common.fetchRecommendFailed'));
     throw error;
   }
 }

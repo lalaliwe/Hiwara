@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted, watch, nextTick, onActivated } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import { Swiper, SwiperSlide } from 'swiper/vue';
 import type { Swiper as SwiperType } from 'swiper';
 import 'swiper/swiper-bundle.css';
@@ -16,10 +17,13 @@ import {
   getImageIwara
 } from '../core/api'
 import { showShortToast } from '../core/toast';
+import { setStatusBarTextStyle } from '../plugins/navbarStyle'
 import { uid as muid, uname as muname } from '../core/store';
 import kivotos from '../static/img/kivotos.png'
 import loadingHuawu from '../component/loadingHuawu.vue';
 import errorHuawu from '../component/errorHuawu.vue';
+
+const { t } = useI18n();
 
 defineOptions({
   name: 'Zone'
@@ -148,11 +152,10 @@ function handleGlobalScroll() {
   if (!container) return;
 
   // 保存当前滚动位置
-  saveCurrentScrollPosition();
 
-  // 使用 RAF 优化性能
+  // --- 节流处理 ---
   if (!ticking) {
-    requestAnimationFrame(() => {
+    window.requestAnimationFrame(() => {
       updateTopBarColor();
       ticking = false;
     });
@@ -160,143 +163,105 @@ function handleGlobalScroll() {
   }
 }
 
-// 更新顶部导航栏颜色（基于 zone-bg 是否滚出视口）
+// 更新顶栏颜色
 function updateTopBarColor() {
   const container = zoneContainerRef.value;
-  if (!container) return;
-
-  const zoneBg = container.querySelector('.zone-bg') as HTMLElement;
   const topElement = document.querySelector('.top') as HTMLElement;
+  if (!container || !topElement) return;
 
-  if (!zoneBg || !topElement) return;
+  // 判断 zone-bg 是否已经滚出视口
+  const zoneBg = container.querySelector('.zone-bg') as HTMLElement;
+  if (!zoneBg) return;
 
   // 获取 zone-bg 底部相对于视口的位置
   const zoneBgRect = zoneBg.getBoundingClientRect();
   const zoneBgBottom = zoneBgRect.bottom;
 
-  // top 元素的高度（包括 padding 和 safe-area-inset-top）
+  // top 元素的高度（包括 padding 和 safe-area-inset）
   const topHeight = topElement.offsetHeight;
 
-  // 当 zone-bg 的底部滚到 top 元素下方时，改变背景色
+  // 当 zone-bg 底部在视口中的位置 < top 元素的高度时，说明 zone-bg 已经滚到 top 下方
   isTopGreen.value = zoneBgBottom < topHeight;
 }
 
-// 调整滚动位置以适应内容高度变化（如 UserInfo 展开/折叠）
-function clampScrollPosition() {
-  const container = zoneContainerRef.value;
-  if (!container) return;
-  const maxScrollTop = container.scrollHeight - container.clientHeight;
-  if (container.scrollTop > maxScrollTop) {
-    container.scrollTop = Math.max(0, maxScrollTop);
-  }
-  saveCurrentScrollPosition();
-}
-
-// 处理窗口大小改变
-function handleResize() {
-  updateTopBarColor();
-  clampScrollPosition();
-  restoreScrollPosition(tab.value);
-}
-
-// Swiper 实例
+// --- Swiper 联动逻辑 ---
 const swiperInstance = ref<SwiperType | null>(null);
 
-// 监听 tab 变化，控制 Swiper 切换（滚动恢复由过渡完成事件处理）
-watch(tab, (newVal) => {
-  if (swiperInstance.value) {
-    let targetIndex: number;
-    switch (newVal) {
-      case 'video':
-        targetIndex = 0;
-        break;
-      case 'image':
-        targetIndex = 1;
-        break;
-      case 'publish':
-        targetIndex = 2;
-        break;
-      default:
-        targetIndex = 0;
-    }
-    if (swiperInstance.value.activeIndex !== targetIndex) {
-      isManualTabChange = true;
-      swiperInstance.value.slideTo(targetIndex);
-    }
-  }
-});
-
-// Swiper 实例初始化
 const onSwiper = (swiper: SwiperType) => {
   swiperInstance.value = swiper;
 };
 
-// 监听 Swiper 滑动中，反控 tab 变化并保存滚动位置
-const onSlideChange = (swiper: SwiperType) => {
-  let newTab: 'video' | 'image' | 'publish';
-  switch (swiper.activeIndex) {
-    case 0:
-      newTab = 'video';
-      break;
-    case 1:
-      newTab = 'image';
-      break;
-    case 2:
-      newTab = 'publish';
-      break;
-    default:
-      newTab = 'video';
+// 监听 tab 变化，控制 Swiper 切换
+watch(tab, (newVal) => {
+  if (swiperInstance.value) {
+    const targetIndex = newVal === 'video' ? 0 : newVal === 'image' ? 1 : 2;
+    if (swiperInstance.value.activeIndex !== targetIndex) {
+      saveCurrentScrollPosition();
+      swiperInstance.value.slideTo(targetIndex);
+      isManualTabChange = false;
+    }
   }
+});
 
-  if (newTab !== tab.value) {
-    // 保存当前滚动位置
+// 监听 Swiper 滑动，反控 tab 变化
+const onSlideChange = (swiper: SwiperType) => {
+  const activeIndex = swiper.activeIndex;
+  const newTab = activeIndex === 0 ? 'video' : activeIndex === 1 ? 'image' : 'publish';
+  if (tab.value !== newTab) {
+    isManualTabChange = true;
     saveCurrentScrollPosition();
     tab.value = newTab;
   }
 };
 
-// 监听 Swiper 切换过渡结束（高度已稳定），恢复滚动位置
+// Swiper 过渡动画完成后恢复滚动位置
 const onSlideChangeTransitionEnd = (swiper: SwiperType) => {
-  // 确保 tab 状态一致
-  let newTab: 'video' | 'image' | 'publish';
-  switch (swiper.activeIndex) {
-    case 0: newTab = 'video'; break;
-    case 1: newTab = 'image'; break;
-    case 2: newTab = 'publish'; break;
-    default: newTab = 'video';
-  }
-  if (newTab !== tab.value) {
-    tab.value = newTab;
-  }
-
-  // 等待一帧确保高度彻底稳定
-  requestAnimationFrame(() => {
-    restoreScrollPosition(tab.value);
-    updateTopBarColor();
-    isManualTabChange = false;
-  });
+  const activeIndex = swiper.activeIndex;
+  const targetTab = activeIndex === 0 ? 'video' : activeIndex === 1 ? 'image' : 'publish';
+  restoreScrollPosition(targetTab);
+  isManualTabChange = false;
 };
+// --- End Swiper 联动逻辑 ---
 
-// 组件激活时恢复tab状态
+// 更新 tab-bar 的位置（只在初始化和页面激活时调用）
+function updateTabBar() {
+  // 直接恢复当前 tab 的滚动位置，不需要额外的更新
+  // 因为在 Swiper 初始化时已经设置了正确的滚动位置
+}
+
 onActivated(() => {
-  // 在下一个tick恢复滚动位置
-  nextTick(() => {
-    restoreScrollPosition(tab.value);
+  // 进入页面时，重新应用页面设置
+  applyPageSettings()
+  updateTabBar()
+})
+
+function applyPageSettings() {
+  setStatusBarTextStyle('dark')
+}
+
+// 监听窗口 resize 事件
+function handleResize() {
+  if (zoneInfoRef.value) {
     updateTopBarColor();
-  });
-});
+  }
+}
 
 onMounted(() => {
-  const container = zoneContainerRef.value;
-  if (container) {
-    container.addEventListener('scroll', handleGlobalScroll, { passive: true });
-  }
+  // 设置状态栏黑色文字
+  applyPageSettings()
 
+  const container = zoneContainerRef.value;
+  if (!container) return;
+
+  // 监听全局滚动
+  container.addEventListener('scroll', handleGlobalScroll);
+
+  // 监听窗口 resize
   window.addEventListener('resize', handleResize);
 
-  if (zoneInfoRef.value && window.ResizeObserver) {
+  // 创建 ResizeObserver 监听 zone-info 高度变化（主要是头像加载后的变化）
+  if (zoneInfoRef.value) {
     resizeObserver = new ResizeObserver(() => {
-      // 内容高度变化时，重新调整滚动位置并刷新顶栏颜色
       updateTopBarColor();
     });
     resizeObserver.observe(zoneInfoRef.value);
@@ -375,23 +340,15 @@ async function getData() {
     // 获取关注状态
     isMyFollow.value = res.data.user.following || false;
 
-    // 设置 zone-bg 背景
+    // 设置默认背景（立即生效，不等待 header 加载）
     const defaultBgStyle = `background-image: url('${kivotos}'); background-size: cover; background-position: center; background-repeat: no-repeat;`;
+    zoneBgStyle.value = defaultBgStyle;
 
+    // 后台异步加载 header 背景图，不阻塞主流程
     if (res.data.header) {
-      try {
-        const headerUrl = `https://i.iwara.tv/image/profileHeader/${res.data.header.id}/${res.data.header.name}`;
-        const bgImageUrl = await getImageIwara(headerUrl);
-        zoneBgStyle.value = `background-image: url('${bgImageUrl}'); background-size: cover; background-position: center; background-repeat: no-repeat;`;
-      } catch (error) {
-        console.error('获取header背景失败:', error);
-        // 失败时使用默认背景
-        zoneBgStyle.value = defaultBgStyle;
-      }
-    } else {
-      // 没有 header 时使用默认背景
-      zoneBgStyle.value = defaultBgStyle;
+      loadHeaderBackground(res.data.header);
     }
+
     await Promise.allSettled([
       getFollowersNum(uid.value),
       getFansNum(uid.value)
@@ -400,8 +357,20 @@ async function getData() {
     });
   } catch (error) {
     console.error(error);
-    showShortToast('获取用户信息失败');
+    showShortToast(t('common.fetchUserInfoFailed'));
     state.value = 'error';
+  }
+
+  // 后台异步加载 header 背景图
+  async function loadHeaderBackground(header: any) {
+    try {
+      const headerUrl = `https://i.iwara.tv/image/profileHeader/${header.id}/${header.name}`;
+      const bgImageUrl = await getImageIwara(headerUrl);
+      zoneBgStyle.value = `background-image: url('${bgImageUrl}'); background-size: cover; background-position: center; background-repeat: no-repeat;`;
+    } catch (error) {
+      console.error('获取header背景失败:', error);
+      // 失败时继续保持默认背景
+    }
   }
   async function getFollowersNum(uid: string) {
     try {
@@ -438,10 +407,10 @@ async function getData() {
     </div>
 
     <div v-if="state === 'loading'" class="state-container">
-      <loadingHuawu>正在加载数据</loadingHuawu>
+      <loadingHuawu>{{ t('imageView.loading') }}</loadingHuawu>
     </div>
     <div v-else-if="state === 'error'" class="state-container">
-      <errorHuawu>数据加载失败了喵~</errorHuawu>
+      <errorHuawu>{{ t('imageView.failed') }}</errorHuawu>
     </div>
     <div v-else-if="state === 'success'" class="zone-container" ref="zoneContainerRef" @scroll="handleGlobalScroll">
 
@@ -456,9 +425,9 @@ async function getData() {
       <div class="tabs-sticky">
         <div class="tabs">
           <v-tabs v-model="tab" color="#00796B">
-            <v-tab value="video">视频</v-tab>
-            <v-tab value="image">插画</v-tab>
-            <v-tab value="publish" v-if="false">发布</v-tab>
+            <v-tab value="video">{{ t('zone.videoTab') }}</v-tab>
+            <v-tab value="image">{{ t('zone.imageTab') }}</v-tab>
+            <v-tab value="publish" v-if="false">{{ t('zone.publishTab') }}</v-tab>
           </v-tabs>
           <v-divider></v-divider>
         </div>

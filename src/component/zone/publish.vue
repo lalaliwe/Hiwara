@@ -11,7 +11,7 @@ defineOptions({
 </script>
 
 <style lang="scss" scoped>
-.list-content {
-  // padding-bottom: 20px;
-}
+/* .list-content {
+  padding-bottom: 20px;
+} */
 </style>

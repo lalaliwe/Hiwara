@@ -1,8 +1,11 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted, watch, nextTick } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 import { getImageIwara, followUser, unfollowUser } from '../../core/api'
 import { showShortToast } from '../../core/toast'
+
+const { t } = useI18n();
 import defaultAvatarImg from '../../static/img/avatar-default.jpg';
 import avatarPlaceholderImg from '../../static/img/avatar-placeholder.png';
 import avatarErrorImg from '../../static/img/avatar-error.png';
@@ -141,10 +144,10 @@ async function handleFollow(follow: boolean) {
       const res = await followUser(props.uid);
       if (res.ok && res.status === 201) {
         console.log('关注成功');
-        showShortToast('已关注');
+        showShortToast(t('common.followed'));
       } else {
         console.log('关注失败');
-        showShortToast('关注失败');
+        showShortToast(t('common.followFailed'));
         emit('follow', false);
       }
     } else {
@@ -153,16 +156,16 @@ async function handleFollow(follow: boolean) {
       const res = await unfollowUser(props.uid);
       if (res.ok && res.status === 204) {
         console.log('取消关注成功');
-        showShortToast('已取消关注');
+        showShortToast(t('common.unfollowed'));
       } else {
         console.log('取消关注失败');
-        showShortToast('取消关注失败');
+        showShortToast(t('common.unfollowFailed'));
         emit('follow', true);
       }
     }
   } catch (error) {
     console.error('关注请求失败:', error);
-    showShortToast(follow ? '关注失败' : '取消关注失败');
+    showShortToast(follow ? t('common.followFailed') : t('common.unfollowFailed'));
     emit('follow', !follow);
   } finally {
     isFollowing.value = false;

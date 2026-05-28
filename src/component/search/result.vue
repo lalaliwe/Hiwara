@@ -1,11 +1,14 @@
 <script setup lang="ts">
 import { ref, watch, onMounted } from 'vue';
+import { useI18n } from 'vue-i18n';
 import { Swiper, SwiperSlide } from 'swiper/vue';
 import type { Swiper as SwiperType } from 'swiper';
 import 'swiper/swiper-bundle.css';
 import SearchVideo from './video.vue';
 import SearchImage from './image.vue';
 import SearchUsers from './users.vue';
+
+const { t } = useI18n();
 
 const props = defineProps<{
   keyword: string;
@@ -61,9 +64,9 @@ onMounted(() => {
   <div class="content">
     <div class="tabs">
       <v-tabs v-model="tab" color="#00796B" align-tabs="center" density="compact" grow>
-        <v-tab value="video">视频</v-tab>
-        <v-tab value="image">插画</v-tab>
-        <v-tab value="user">用户</v-tab>
+        <v-tab value="video">{{ t('search.videoTab') }}</v-tab>
+        <v-tab value="image">{{ t('search.imageTab') }}</v-tab>
+        <v-tab value="user">{{ t('search.userTab') }}</v-tab>
       </v-tabs>
       <v-divider></v-divider>
     </div>
@@ -95,12 +98,24 @@ onMounted(() => {
   top: calc(60px + env(safe-area-inset-top, 0));
   z-index: 400;
   width: 100%;
-  background-color: rgba(255, 255, 255, 0.8);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  background-color: var(--color-white-80);
+  box-shadow: var(--shadow-tab-bar);
   backdrop-filter: blur(10px);
 
   .v-tabs--density-compact {
     --v-tabs-height: 36px;
+  }
+
+  :deep(.v-tab) {
+    color: var(--color-text-muted);
+
+    &.v-tab--selected {
+      color: var(--color-primary);
+    }
+  }
+
+  :deep(.v-divider) {
+    border-color: var(--color-border-divider) !important;
   }
 }
 

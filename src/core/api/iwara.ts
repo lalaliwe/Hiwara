@@ -176,34 +176,44 @@ export async function deleteSendRequestIwara(url: string, headers?: any) {
   }
 }
 
-// 获取图片(iwara) 
-export async function getImageIwara(url: string): Promise<string> {
-  // console.log('getImageIwara', url);
+// 带超时的图片请求(iwara)
+export async function getImageIwara(url: string, timeout: number = 15000): Promise<string> {
   try {
-    // 构建请求头
-    const headers: Record<string, string> = {
-      'Accept': 'image/webp,image/apng,image/*,*/*;q=0.8',
-      'Referer': 'https://www.iwara.tv/',
-      'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
-    };
-    // 使用我们创建的自定义网络请求命令获取二进制数据，模拟浏览器请求
-    const response: any = await invoke('send_https_request_binary', {
-      params: {
-        url,
-        method: 'GET',
-        headers
-      }
+    // 构建一个超时 Promise
+    const timeoutPromise = new Promise<never>((_, reject) => {
+      setTimeout(() => reject(new Error(`图片请求超时(${timeout}ms): ${url}`)), timeout);
     });
-    // 检查响应状态
-    if (response.status < 200 || response.status >= 300) {
-      throw new Error(`Request failed with status ${response.status}`);
-    }
-    // 将响应的二进制数据转换为 Blob
-    // response.data 现在是一个数字数组，代表字节
-    const uint8Array = new Uint8Array(response.data);
-    const blob = new Blob([uint8Array], { type: response.headers['Content-Type'] || 'image/jpeg' });
-    // 创建对象 URL 并返回
-    return URL.createObjectURL(blob);
+
+    // 实际的图片请求
+    const fetchImagePromise = (async (): Promise<string> => {
+      // 构建请求头
+      const headers: Record<string, string> = {
+        'Accept': 'image/webp,image/apng,image/*,*/*;q=0.8',
+        'Referer': 'https://www.iwara.tv/',
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+      };
+      // 使用我们创建的自定义网络请求命令获取二进制数据，模拟浏览器请求
+      const response: any = await invoke('send_https_request_binary', {
+        params: {
+          url,
+          method: 'GET',
+          headers
+        }
+      });
+      // 检查响应状态
+      if (response.status < 200 || response.status >= 300) {
+        throw new Error(`Request failed with status ${response.status}`);
+      }
+      // 将响应的二进制数据转换为 Blob
+      // response.data 现在是一个数字数组，代表字节
+      const uint8Array = new Uint8Array(response.data);
+      const blob = new Blob([uint8Array], { type: response.headers['Content-Type'] || 'image/jpeg' });
+      // 创建对象 URL 并返回
+      return URL.createObjectURL(blob);
+    })();
+
+    // 通过 Promise.race 实现超时控制
+    return await Promise.race([fetchImagePromise, timeoutPromise]);
   } catch (error) {
     console.error('GET image failed:', error);
     throw error;

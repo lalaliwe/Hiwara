@@ -1,9 +1,12 @@
 <script setup lang="ts">
 import { onActivated, ref, watch, nextTick } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { getVideoComments, getVideoCommentReplies, getImageIwara, postVideoComment } from '../../core/api'
 import errorHuawu from '../errorHuawu.vue'
 import loadingHuawu from '../loadingHuawu.vue'
 import { showShortToast } from '../../core/toast'
+
+const { t } = useI18n();
 import defaultAvatarImg from '../../static/img/avatar-default.jpg'
 import avatarPlaceholderImg from '../../static/img/avatar-placeholder.png'
 import avatarErrorImg from '../../static/img/avatar-error.png'
@@ -234,7 +237,7 @@ async function getCommentList(): Promise<any> {
     throw new Error(`状态码：${res.status}, 错误信息：${res.statusText}`);
   } catch (error) {
     console.error(`获取评论列表失败:`, error);
-    showShortToast('获取评论列表失败');
+    showShortToast(t('common.fetchCommentsFailed'));
     throw error;
   }
 }
@@ -309,11 +312,11 @@ async function toggleReplies(comment: Comment) {
       await loadAvatarsForComments(replies)
       repliesExpanded.value[id] = true
     } else {
-      showShortToast('获取回复失败')
+      showShortToast(t('common.fetchRepliesFailed'))
     }
   } catch (error) {
     console.error('获取评论回复失败:', error)
-    showShortToast('获取回复失败')
+    showShortToast(t('common.fetchRepliesFailed'))
   } finally {
     repliesLoading.value[id] = false
   }
@@ -555,6 +558,7 @@ onActivated(() => {
         display: -webkit-box;
         -webkit-box-orient: vertical;
         -webkit-line-clamp: 6;
+        line-clamp: 6;
         overflow: hidden;
         position: relative;
 

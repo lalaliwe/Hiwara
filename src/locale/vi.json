@@ -1,5 +1,27 @@
 {
-  "common": {},
+  "common": {
+    "followed": "Đã theo dõi",
+    "unfollowed": "Đã hủy theo dõi",
+    "followFailed": "Theo dõi thất bại",
+    "unfollowFailed": "Hủy theo dõi thất bại",
+    "liked": "Đã thích",
+    "unliked": "Đã bỏ thích",
+    "likeFailed": "Thích thất bại",
+    "unlikeFailed": "Bỏ thích thất bại",
+    "fetchCommentsFailed": "Tải danh sách bình luận thất bại",
+    "fetchRepliesFailed": "Tải phản hồi thất bại",
+    "linkCopied": "Đã sao chép liên kết vào bộ nhớ tạm",
+    "copyLinkFailed": "Sao chép liên kết thất bại",
+    "shareSuccess": "Chia sẻ thành công",
+    "shareFailed": "Chia sẻ thất bại, vui lòng thử lại",
+    "shareNotSupported": "Thiết bị hiện tại không hỗ trợ tính năng chia sẻ",
+    "fetchDownloadFailed": "Lấy liên kết tải xuống thất bại",
+    "downloadLinkCopied": "Liên kết tải xuống đã được sao chép vào bộ nhớ tạm",
+    "fetchRecommendFailed": "Tải đề xuất thất bại",
+    "fetchVideoListFailed": "Tải danh sách video thất bại",
+    "fetchImageListFailed": "Tải danh sách hình ảnh thất bại",
+    "fetchUserInfoFailed": "Lấy thông tin người dùng thất bại"
+  },
   "setup": {
     "title": "Cài đặt",
     "autoPlay": "Tự động phát",
@@ -24,8 +46,8 @@
       "deviceType": "Loại thiết bị",
       "mobile": "Di động",
       "desktop": "Máy tính",
-      "osName": "Tên OS",
-      "osVersion": "Phiên bản OS",
+      "osName": "Tên hệ điều hành",
+      "osVersion": "Phiên bản hệ điều hành",
       "webview": "WebView",
       "webviewVersion": "Phiên bản WebView",
       "checkUpdate": "Kiểm tra cập nhật",
@@ -50,10 +72,10 @@
     "downloadPage": {
       "title": "Cài đặt tải xuống",
       "videoSavePath": "Đường dẫn lưu video",
-      "imageSavePath": "Đường dẫn lưu ảnh",
+      "imageSavePath": "Đường dẫn lưu hình ảnh",
       "notSet": "Chưa đặt",
       "selectVideoPath": "Chọn đường dẫn lưu video",
-      "selectImagePath": "Chọn đường dẫn lưu ảnh"
+      "selectImagePath": "Chọn đường dẫn lưu hình ảnh"
     },
     "languagePage": {
       "title": "Ngôn ngữ (Language)",
@@ -78,7 +100,7 @@
       "hebrew": "Tiếng Do Thái",
       "tibetan": "Tiếng Tây Tạng",
       "uyghur": "Tiếng Duy Ngô Nhĩ",
-      "kazakh": "Tiếng Kazakh"
+      "kazakh": "Tiếng Kazakhstan"
     },
     "searchModePage": {
       "title": "Chế độ tìm kiếm mặc định"
@@ -87,7 +109,7 @@
   "home": {
     "navigation": {
       "video": "Video",
-      "image": "Hình minh họa",
+      "image": "Minh họa",
       "subscribe": "Đăng ký",
       "forum": "Diễn đàn",
       "my": "Trang của tôi"
@@ -141,22 +163,25 @@
         "likes": "Lượt thích"
       },
       "loading": "Đang tải...",
-      "noRecords": "Không có bản ghi hình minh họa",
+      "noRecords": "Không có bản ghi hình ảnh",
       "loadFailed": "Tải thất bại, ",
       "retry": "Nhấp để thử lại",
       "reachedBottom": "Đã đến cuối"
     },
     "toast": {
-      "pressAgainToExit": "Nhấn lần nữa để thoát ứng dụng"
+      "pressAgainToExit": "Nhấn lại để thoát ứng dụng",
+      "getUserInfoFailed": "Lấy thông tin người dùng thất bại",
+      "getHistoryFailed": "Lấy lịch sử thất bại"
     },
     "my": {
       "space": "Không gian",
       "followers": "Đang theo dõi",
       "fans": "Người hâm mộ",
       "history": "Lịch sử",
+      "noHistory": "Không có lịch sử",
       "viewAllHistory": "Xem tất cả",
       "videoFavorites": "Video yêu thích",
-      "imageFavorites": "Hình minh họa yêu thích",
+      "imageFavorites": "Hình ảnh yêu thích",
       "playlist": "Danh sách phát",
       "offlineCache": "Bộ nhớ đệm ngoại tuyến",
       "notifications": "Thông báo",
@@ -164,17 +189,17 @@
       "messages": "Tin nhắn",
       "settings": "Cài đặt",
       "iwaraServices": "Dịch vụ Iwara",
-      "premium": "Premium",
+      "premium": "Thành viên cao cấp",
       "wura": "Wura",
       "faq": "Câu hỏi thường gặp",
       "links": "Liên kết",
-      "aboutText": "Ứng dụng này tuân theo giấy phép nguồn mở MPL-2.0. Vui lòng không sử dụng cho mục đích thương mại.",
+      "aboutText": "Ứng dụng này tuân theo giấy phép mã nguồn mở MPL-2.0. Vui lòng không sử dụng cho mục đích thương mại.",
       "noRecords": "Không có bản ghi {type}"
     },
     "forum": {
       "posts": "Bài đăng",
       "topics": "Chủ đề",
-      "repliedAt": "Trả lời lúc",
+      "repliedAt": "Đã trả lời lúc",
       "latestPost": "Bài đăng mới nhất",
       "groups": {
         "admin": "Quản trị viên",
@@ -192,11 +217,11 @@
         "general": "Chung",
         "general_desc": "Mọi thứ khác",
         "guide": "Hướng dẫn",
-        "guide_desc": "Thông tin hữu ích hoặc hướng dẫn \"cách làm\"",
+        "guide_desc": "Thông tin hữu ích hoặc hướng dẫn cách làm",
         "helpQuestion": "Trợ giúp/Câu hỏi",
         "helpQuestion_desc": "Câu hỏi không liên quan đến trang web",
         "request": "Yêu cầu",
-        "request_desc": "Trợ giúp tìm kiếm hoặc sáng tạo",
+        "request_desc": "Trợ giúp tìm kiếm hoặc tạo ra",
         "share": "Chia sẻ",
         "share_desc": "Chia sẻ mô hình, hoạt ảnh hoặc phụ kiện khác"
       }
@@ -215,15 +240,88 @@
       "reachedBottom": "Đã đến cuối"
     },
     "image": {
-      "tab": "Hình minh họa",
+      "tab": "Hình ảnh",
       "loading": "Đang tải...",
       "error": "Lỗi",
-      "noRecords": "Không có lịch sử hình minh họa",
+      "noRecords": "Không có lịch sử hình ảnh",
       "today": "Hôm nay",
       "loadFailed": "Tải thất bại, ",
       "retry": "Nhấp để thử lại",
       "reachedBottom": "Đã đến cuối"
     }
+  },
+  "login": {
+    "title": "Đăng nhập vào tài khoản Iwara của bạn",
+    "usernameLabel": "Nhập tên người dùng",
+    "passwordLabel": "Nhập mật khẩu",
+    "loginBtn": "Đăng nhập",
+    "loggingIn": "Đang đăng nhập",
+    "languageBtn": "Language/语言",
+    "aboutText": "Ứng dụng này tuân theo giấy phép mã nguồn mở MPL-2.0. Vui lòng không sử dụng cho mục đích thương mại.",
+    "usernameRequired": "Tên người dùng không được để trống",
+    "passwordRequired": "Mật khẩu không được để trống",
+    "bothRequired": "Tên người dùng và mật khẩu không được để trống",
+    "success": "Đăng nhập thành công",
+    "invalidResponse": "Đăng nhập thất bại: Phản hồi máy chủ không hợp lệ",
+    "wrongCredentials": "Tên người dùng hoặc mật khẩu sai",
+    "tooManyRequests": "Đăng nhập quá thường xuyên, vui lòng thử lại sau",
+    "failed": "Đăng nhập thất bại: {status}",
+    "networkError": "Yêu cầu đăng nhập thất bại, vui lòng kiểm tra kết nối mạng"
+  },
+  "player": {
+    "loading": "Đang tải dữ liệu",
+    "failed": "Tải dữ liệu thất bại~",
+    "infoTab": "Giới thiệu",
+    "commentTab": "Bình luận",
+    "selectDefinition": "Chọn chất lượng",
+    "original": "Gốc",
+    "switchingServer": "Đang chuyển đổi máy chủ",
+    "refreshFailed": "Làm mới danh sách máy chủ thất bại",
+    "aria2Failed": "Thêm aria2 thất bại",
+    "fetchInfoFailed": "Lấy thông tin video thất bại",
+    "fetchFileFailed": "Lấy tệp video thất bại",
+    "switchedTo": "Đã chuyển sang {definition}"
+  },
+  "imageView": {
+    "loading": "Đang tải dữ liệu",
+    "failed": "Tải dữ liệu thất bại~",
+    "fetchInfoFailed": "Lấy thông tin hình ảnh thất bại"
+  },
+  "favorites": {
+    "title": "Yêu thích của tôi",
+    "videoTab": "Video",
+    "imageTab": "Hình ảnh"
+  },
+  "friends": {
+    "title": "{type}",
+    "followTab": "Đang theo dõi",
+    "fansTab": "Người hâm mộ",
+    "friendTab": "Bạn bè",
+    "loading": "Đang tải dữ liệu"
+  },
+  "offlineCache": {
+    "title": "Bộ nhớ đệm ngoại tuyến",
+    "today": "Hôm nay",
+    "cacheComplete": "Đã hoàn thành bộ nhớ đệm",
+    "views": "Phát",
+    "likes": "Thích"
+  },
+  "search": {
+    "placeholder": "Nhập từ khóa tìm kiếm",
+    "submit": "Tìm kiếm",
+    "videoTab": "Video",
+    "imageTab": "Hình ảnh",
+    "userTab": "Người dùng",
+    "loadingVideoFailed": "Tải kết quả tìm kiếm video thất bại",
+    "loadingImageFailed": "Tải kết quả tìm kiếm hình ảnh thất bại",
+    "loadingUserFailed": "Tải kết quả tìm kiếm người dùng thất bại",
+    "historyLabel": "Lịch sử tìm kiếm",
+    "recommendLabel": "Khám phá"
+  },
+  "zone": {
+    "videoTab": "Video",
+    "imageTab": "Hình ảnh",
+    "publishTab": "Xuất bản"
   },
   "forum": {
     "sections": {
@@ -234,31 +332,31 @@
       "general": "Chung",
       "general_desc": "Mọi thứ khác",
       "guide": "Hướng dẫn",
-      "guide_desc": "Thông tin hữu ích hoặc hướng dẫn \"cách làm\"",
+      "guide_desc": "Thông tin hữu ích hoặc hướng dẫn cách làm",
       "help": "Trợ giúp",
       "help_desc": "Trợ giúp các vấn đề liên quan đến trang web",
       "helpQuestion": "Trợ giúp/Câu hỏi",
       "helpQuestion_desc": "Câu hỏi không liên quan đến trang web",
       "request": "Yêu cầu",
-      "request_desc": "Trợ giúp tìm kiếm hoặc sáng tạo",
+      "request_desc": "Trợ giúp tìm kiếm hoặc tạo ra",
       "share": "Chia sẻ",
       "share_desc": "Chia sẻ mô hình, hoạt ảnh hoặc phụ kiện khác"
     },
     "replies": "Trả lời",
     "views": "Lượt xem",
-    "author": "Tác giả",
-    "lastReply": "Bài đăng mới nhất",
+    "author": "Người đăng",
+    "lastReply": "Trả lời mới nhất",
     "publishedAt": "Đã đăng lúc",
-    "repliedAt": "Đã trả lời",
-    "pinned": "Ghim",
+    "repliedAt": "Đã trả lời lúc",
+    "pinned": "Đã ghim",
     "loadMore": "Tải thêm",
     "noMore": "Không còn nữa",
     "publish": "Đăng bài",
     "publishSection": "Chọn mục",
     "publishTitle": "Tiêu đề",
-    "publishTitlePlaceholder": "Nhập tiêu đề bài viết",
+    "publishTitlePlaceholder": "Nhập tiêu đề bài đăng",
     "publishBody": "Nội dung",
-    "publishBodyPlaceholder": "Nhập nội dung bài viết, hỗ trợ Markdown",
-    "publishSubmit": "Đăng bài viết"
+    "publishBodyPlaceholder": "Nhập nội dung bài đăng, hỗ trợ Markdown",
+    "publishSubmit": "Đăng bài"
   }
 }

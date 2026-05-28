@@ -1,13 +1,132 @@
 @use "./scrollbar.scss";
 @use "./color.scss";
 
-/* Vuetify 浮层/抽屉暗色背景适配 */
+/* =============================================================
+   Vuetify 组件全局暗黑模式适配
+   所有 CSS 变量由 color.scss 中的 :root / .dark-theme / @media 控制
+   ============================================================= */
+
+/* ---- 浮层/抽屉 ---- */
 .v-overlay__content {
   background-color: var(--color-bg-card);
 }
 
 .v-bottom-sheet .v-sheet {
   background-color: var(--color-bg-card);
+}
+
+/* ---- v-card (弹窗、卡片) ---- */
+.v-card {
+  background-color: var(--color-bg-card) !important;
+  color: var(--color-text-primary) !important;
+}
+
+/* ---- v-dialog 遮罩 ---- */
+.v-overlay--active > .v-overlay__scrim {
+  background: var(--color-bg-overlay) !important;
+}
+
+/* ---- v-list / v-list-item ---- */
+.v-list {
+  background-color: var(--color-bg-card) !important;
+  color: var(--color-text-primary) !important;
+}
+
+.v-list-item {
+  color: var(--color-text-primary) !important;
+}
+
+.v-list-item-title {
+  color: var(--color-text-primary) !important;
+}
+
+.v-list-item-subtitle {
+  color: var(--color-text-muted) !important;
+}
+
+/* ---- v-chip ---- */
+.v-chip {
+  background-color: var(--color-bg-tag) !important;
+  border-color: var(--color-bg-tag-border) !important;
+  color: var(--color-text-secondary) !important;
+}
+
+/* ---- v-text-field / v-textarea (Outlined 变体) ---- */
+.v-field {
+  background-color: var(--color-bg-card) !important;
+  color: var(--color-text-primary) !important;
+}
+
+.v-field .v-field__outline {
+  color: var(--color-border-input) !important;
+}
+
+.v-field .v-label {
+  color: var(--color-text-placeholder) !important;
+}
+
+.v-field input,
+.v-field textarea {
+  color: var(--color-text-primary) !important;
+}
+
+.v-field input::placeholder,
+.v-field textarea::placeholder {
+  color: var(--color-text-placeholder-light) !important;
+}
+
+.v-field--focused .v-label {
+  color: var(--color-primary) !important;
+}
+
+/* ---- v-select ---- */
+.v-select .v-field {
+  background-color: var(--color-bg-card) !important;
+}
+
+/* ---- v-switch ---- */
+.v-switch .v-label {
+  color: var(--color-text-primary) !important;
+}
+
+/* ---- v-btn (flat/tonal 变体) ---- */
+.v-btn--variant-flat,
+.v-btn--variant-tonal {
+  color: var(--color-text-on-primary) !important;
+}
+
+.v-btn--variant-outlined {
+  border-color: var(--color-primary) !important;
+}
+
+/* ---- v-progress-circular ---- */
+.v-progress-circular {
+  color: var(--color-primary) !important;
+}
+
+/* ---- v-progress-linear ---- */
+.v-progress-linear {
+  color: var(--color-primary) !important;
+}
+
+/* ---- v-divider ---- */
+.v-divider {
+  border-color: var(--color-border-divider) !important;
+}
+
+/* ---- v-snackbar ---- */
+.v-snackbar__wrapper {
+  color: var(--color-text-on-primary) !important;
+}
+
+/* ---- v-infinite-scroll ---- */
+.v-infinite-scroll__side {
+  color: var(--color-text-muted) !important;
+}
+
+/* ---- v-tabs-window ---- */
+.v-window__container {
+  background-color: transparent !important;
 }
 
 /* 跟随系统暗色模式 - 使用 CSS 媒体查询 */
@@ -42,7 +161,7 @@
     --color-text-secondary-alt: #BBBBBB;
     --color-text-body-alt: #B0B0B0;
     --color-text-body: #AAAAAA;
-    --color-text-muted: #888888;
+    --color-text-muted: #B0B0B0;
     --color-text-muted-light: #757575;
     --color-text-muted-lighter: #666666;
     --color-text-placeholder: #666666;

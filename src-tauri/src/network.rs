@@ -35,7 +35,11 @@ pub struct BinaryHttpResponse {
 
 #[tauri::command]
 pub async fn send_https_request(params: RequestParams) -> Result<HttpResponse, String> {
-    let client = reqwest::Client::new();
+    let client = reqwest::Client::builder()
+        .timeout(std::time::Duration::from_secs(30))
+        .connect_timeout(std::time::Duration::from_secs(15))
+        .build()
+        .map_err(|e| format!("Failed to build HTTP client: {}", e))?;
 
     // 默认使用GET方法
     let method = if params.method.is_empty() {
@@ -157,7 +161,11 @@ fn decode_response_body(
 pub async fn send_https_request_binary(
     params: RequestParams,
 ) -> Result<BinaryHttpResponse, String> {
-    let client = reqwest::Client::new();
+    let client = reqwest::Client::builder()
+        .timeout(std::time::Duration::from_secs(30))
+        .connect_timeout(std::time::Duration::from_secs(15))
+        .build()
+        .map_err(|e| format!("Failed to build HTTP client: {}", e))?;
 
     // 默认使用GET方法
     let method = if params.method.is_empty() {

@@ -1,5 +1,27 @@
 {
-  "common": {},
+  "common": {
+    "followed": "Підписався",
+    "unfollowed": "Відписався",
+    "followFailed": "Не вдалося підписатися",
+    "unfollowFailed": "Не вдалося відписатися",
+    "liked": "Сподобалось",
+    "unliked": "Лайк прибрано",
+    "likeFailed": "Не вдалося поставити лайк",
+    "unlikeFailed": "Не вдалося прибрати лайк",
+    "fetchCommentsFailed": "Не вдалося завантажити коментарі",
+    "fetchRepliesFailed": "Не вдалося завантажити відповіді",
+    "linkCopied": "Посилання скопійовано в буфер обміну",
+    "copyLinkFailed": "Не вдалося скопіювати посилання",
+    "shareSuccess": "Успішно поширено",
+    "shareFailed": "Не вдалося поширити, спробуйте ще раз",
+    "shareNotSupported": "Цей пристрій не підтримує функцію поширення",
+    "fetchDownloadFailed": "Не вдалося отримати посилання для завантаження",
+    "downloadLinkCopied": "Посилання для завантаження скопійовано в буфер обміну",
+    "fetchRecommendFailed": "Не вдалося завантажити рекомендації",
+    "fetchVideoListFailed": "Не вдалося завантажити список відео",
+    "fetchImageListFailed": "Не вдалося завантажити список зображень",
+    "fetchUserInfoFailed": "Не вдалося отримати інформацію про користувача"
+  },
   "setup": {
     "title": "Налаштування",
     "autoPlay": "Автовідтворення",
@@ -8,7 +30,7 @@
     "downloadSettings": "Налаштування завантаження",
     "aria2Settings": "Налаштування Aria2",
     "language": "Мова (Language)",
-    "about": "Про програму",
+    "about": "Про додаток",
     "logout": "Вийти",
     "enabled": "Увімкнено",
     "disabled": "Вимкнено",
@@ -16,14 +38,14 @@
     "tagSearch": "Пошук за тегами",
     "original": "Оригінал",
     "aboutPage": {
-      "title": "Про програму",
+      "title": "Про додаток",
       "version": "Версія",
       "versionType": "Тип версії",
       "beta": "Бета",
       "buildTime": "Час збірки",
       "deviceType": "Тип пристрою",
       "mobile": "Мобільний",
-      "desktop": "Настільний",
+      "desktop": "Стаціонарний",
       "osName": "Назва ОС",
       "osVersion": "Версія ОС",
       "webview": "WebView",
@@ -36,12 +58,12 @@
     "aria2Page": {
       "title": "Налаштування Aria2",
       "enableAria2": "Увімкнути Aria2",
-      "rpcAddress": "RPC-адреса Aria2",
-      "rpcPlaceholder": "RPC-адреса наприклад: http://127.0.0.1:6800/jsonrpc",
+      "rpcAddress": "Aria2 RPC адреса",
+      "rpcPlaceholder": "RPC адреса приклад: http://127.0.0.1:6800/jsonrpc",
       "token": "Aria2 TOKEN",
       "tokenPlaceholder": "Введіть TOKEN",
-      "downloadDir": "Каталог завантаження Aria2",
-      "downloadDirPlaceholder": "Каталог завантаження наприклад: ~/Downloads/Iwara",
+      "downloadDir": "Aria2 каталог завантаження",
+      "downloadDirPlaceholder": "Каталог завантаження приклад: ~/Downloads/Iwara",
       "tip": "Підказка: Каталог завантаження повинен бути каталогом сервера Aria2, а не локальним каталогом."
     },
     "definitionPage": {
@@ -52,12 +74,12 @@
       "videoSavePath": "Шлях збереження відео",
       "imageSavePath": "Шлях збереження зображень",
       "notSet": "Не встановлено",
-      "selectVideoPath": "Вибрати шлях для відео",
-      "selectImagePath": "Вибрати шлях для зображень"
+      "selectVideoPath": "Виберіть шлях збереження відео",
+      "selectImagePath": "Виберіть шлях збереження зображень"
     },
     "languagePage": {
       "title": "Мова (Language)",
-      "followSystem": "Як у системі",
+      "followSystem": "Слідувати системі",
       "english": "Англійська",
       "simplifiedChinese": "Спрощена китайська",
       "traditionalChinese": "Традиційна китайська",
@@ -96,11 +118,11 @@
       "placeholder": "Пошук"
     },
     "dateFilter": {
-      "selectTime": "Вибрати час",
+      "selectTime": "Виберіть час",
       "year": "Рік",
       "monthLabel": "Місяць",
-      "allYears": "Усі роки",
-      "fullYear": "Весь рік",
+      "allYears": "Всі роки",
+      "fullYear": "Повний рік",
       "months": {
         "1": "Січень",
         "2": "Лютий",
@@ -120,45 +142,48 @@
     },
     "video": {
       "sortTabs": {
-        "date": "Нові",
-        "trending": "Трендові",
-        "popularity": "Популярні",
+        "date": "Найновіші",
+        "trending": "У тренді",
+        "popularity": "Популярність",
         "views": "Перегляди",
-        "likes": "Вподобання"
+        "likes": "Лайки"
       },
       "loading": "Завантаження...",
       "noRecords": "Немає записів відео",
-      "loadFailed": "Помилка завантаження, ",
+      "loadFailed": "Не вдалося завантажити, ",
       "retry": "Натисніть для повторної спроби",
       "reachedBottom": "Досягнуто кінця"
     },
     "image": {
       "sortTabs": {
-        "date": "Нові",
-        "trending": "Трендові",
-        "popularity": "Популярні",
+        "date": "Найновіші",
+        "trending": "У тренді",
+        "popularity": "Популярність",
         "views": "Перегляди",
-        "likes": "Вподобання"
+        "likes": "Лайки"
       },
       "loading": "Завантаження...",
-      "noRecords": "Немає записів ілюстрацій",
-      "loadFailed": "Помилка завантаження, ",
+      "noRecords": "Немає записів зображень",
+      "loadFailed": "Не вдалося завантажити, ",
       "retry": "Натисніть для повторної спроби",
       "reachedBottom": "Досягнуто кінця"
     },
     "toast": {
-      "pressAgainToExit": "Натисніть ще раз для виходу з додатку"
+      "pressAgainToExit": "Натисніть ще раз для виходу з додатку",
+      "getUserInfoFailed": "Не вдалося отримати інформацію про користувача",
+      "getHistoryFailed": "Не вдалося отримати історію"
     },
     "my": {
       "space": "Простір",
       "followers": "Підписки",
       "fans": "Фанати",
       "history": "Історія",
+      "noHistory": "Немає історії",
       "viewAllHistory": "Переглянути все",
-      "videoFavorites": "Обрані відео",
-      "imageFavorites": "Обрані ілюстрації",
+      "videoFavorites": "Відео в обраному",
+      "imageFavorites": "Зображення в обраному",
       "playlist": "Плейлист",
-      "offlineCache": "Офлайн кеш",
+      "offlineCache": "Офлайн-кеш",
       "notifications": "Сповіщення",
       "friends": "Друзі",
       "messages": "Повідомлення",
@@ -168,13 +193,13 @@
       "wura": "Wura",
       "faq": "Часті запитання",
       "links": "Посилання",
-      "aboutText": "Цей додаток дотримується ліцензії MPL-2.0 з відкритим кодом. Будь ласка, не використовуйте його для комерційних цілей.",
+      "aboutText": "Цей додаток слідує ліцензії з відкритим кодом MPL-2.0. Будь ласка, не використовуйте його в комерційних цілях.",
       "noRecords": "Немає записів {type}"
     },
     "forum": {
       "posts": "Публікації",
       "topics": "Теми",
-      "repliedAt": "Відповів о",
+      "repliedAt": "Відповів",
       "latestPost": "Остання публікація",
       "groups": {
         "admin": "Адміністратор",
@@ -185,20 +210,20 @@
       "sections": {
         "announcement": "Оголошення",
         "announcement_desc": "Важлива інформація",
-        "feedback": "Відгуки",
-        "feedback_desc": "Ідеї, пропозиції та занепокоєння",
+        "feedback": "Зворотній зв'язок",
+        "feedback_desc": "Ідеї, пропозиції та проблеми",
         "help": "Допомога",
         "help_desc": "Допомога з проблемами сайту",
         "general": "Загальне",
         "general_desc": "Все інше",
         "guide": "Посібник",
-        "guide_desc": "Корисна інформація або посібники «як зробити»",
+        "guide_desc": "Корисна інформація або інструкції",
         "helpQuestion": "Допомога/Питання",
         "helpQuestion_desc": "Питання, не пов'язані з сайтом",
         "request": "Запит",
         "request_desc": "Допомога в пошуку або створенні",
-        "share": "Поділитися",
-        "share_desc": "Ділитися моделями, анімаціями або іншими аксесуарами"
+        "share": "Поширити",
+        "share_desc": "Поширити моделі, анімації або інші аксесуари"
       }
     }
   },
@@ -210,55 +235,128 @@
       "error": "Помилка",
       "noRecords": "Немає історії відео",
       "today": "Сьогодні",
-      "loadFailed": "Помилка завантаження, ",
+      "loadFailed": "Не вдалося завантажити, ",
       "retry": "Натисніть для повторної спроби",
       "reachedBottom": "Досягнуто кінця"
     },
     "image": {
-      "tab": "Ілюстрації",
+      "tab": "Зображення",
       "loading": "Завантаження...",
       "error": "Помилка",
-      "noRecords": "Немає історії ілюстрацій",
+      "noRecords": "Немає історії зображень",
       "today": "Сьогодні",
-      "loadFailed": "Помилка завантаження, ",
+      "loadFailed": "Не вдалося завантажити, ",
       "retry": "Натисніть для повторної спроби",
       "reachedBottom": "Досягнуто кінця"
     }
+  },
+  "login": {
+    "title": "Увійдіть у свій обліковий запис Iwara",
+    "usernameLabel": "Введіть ім'я користувача",
+    "passwordLabel": "Введіть пароль",
+    "loginBtn": "Увійти",
+    "loggingIn": "Вхід у систему",
+    "languageBtn": "Language/语言",
+    "aboutText": "Цей додаток слідує ліцензії з відкритим кодом MPL-2.0. Будь ласка, не використовуйте його в комерційних цілях.",
+    "usernameRequired": "Ім'я користувача обов'язкове",
+    "passwordRequired": "Пароль обов'язковий",
+    "bothRequired": "Ім'я користувача та пароль обов'язкові",
+    "success": "Вхід успішний",
+    "invalidResponse": "Помилка входу: недійсна відповідь сервера",
+    "wrongCredentials": "Невірне ім'я користувача або пароль",
+    "tooManyRequests": "Забагато спроб входу. Будь ласка, спробуйте пізніше",
+    "failed": "Помилка входу: {status}",
+    "networkError": "Помилка запиту входу. Перевірте мережеве підключення"
+  },
+  "player": {
+    "loading": "Завантаження даних",
+    "failed": "Не вдалося завантажити дані~",
+    "infoTab": "Інформація",
+    "commentTab": "Коментарі",
+    "selectDefinition": "Виберіть якість",
+    "original": "Оригінал",
+    "switchingServer": "Переключення сервера",
+    "refreshFailed": "Не вдалося оновити список серверів",
+    "aria2Failed": "Не вдалося додати aria2",
+    "fetchInfoFailed": "Не вдалося отримати інформацію про відео",
+    "fetchFileFailed": "Не вдалося отримати файл відео",
+    "switchedTo": "Переключено на {definition}"
+  },
+  "imageView": {
+    "loading": "Завантаження даних",
+    "failed": "Не вдалося завантажити дані~",
+    "fetchInfoFailed": "Не вдалося отримати інформацію про зображення"
+  },
+  "favorites": {
+    "title": "Моє обране",
+    "videoTab": "Відео",
+    "imageTab": "Зображення"
+  },
+  "friends": {
+    "title": "{type}",
+    "followTab": "Підписки",
+    "fansTab": "Фанати",
+    "friendTab": "Друзі",
+    "loading": "Завантаження даних"
+  },
+  "offlineCache": {
+    "title": "Офлайн-кеш",
+    "today": "Сьогодні",
+    "cacheComplete": "Кеш завершено",
+    "views": "Перегляди",
+    "likes": "Лайки"
+  },
+  "search": {
+    "placeholder": "Введіть ключові слова",
+    "submit": "Пошук",
+    "videoTab": "Відео",
+    "imageTab": "Зображення",
+    "userTab": "Користувач",
+    "loadingVideoFailed": "Не вдалося завантажити результати пошуку відео",
+    "loadingImageFailed": "Не вдалося завантажити результати пошуку зображень",
+    "loadingUserFailed": "Не вдалося завантажити результати пошуку користувачів",
+    "historyLabel": "Історія пошуку",
+    "recommendLabel": "Рекомендації"
+  },
+  "zone": {
+    "videoTab": "Відео",
+    "imageTab": "Зображення",
+    "publishTab": "Опублікувати"
   },
   "forum": {
     "sections": {
       "announcements": "Оголошення",
       "announcements_desc": "Важлива інформація",
-      "feedback": "Відгуки",
-      "feedback_desc": "Ідеї, пропозиції та занепокоєння",
+      "feedback": "Зворотній зв'язок",
+      "feedback_desc": "Ідеї, пропозиції та проблеми",
       "general": "Загальне",
       "general_desc": "Все інше",
       "guide": "Посібник",
-      "guide_desc": "Корисна інформація або посібники «як зробити»",
+      "guide_desc": "Корисна інформація або інструкції",
       "help": "Допомога",
       "help_desc": "Допомога з проблемами сайту",
       "helpQuestion": "Допомога/Питання",
       "helpQuestion_desc": "Питання, не пов'язані з сайтом",
       "request": "Запит",
       "request_desc": "Допомога в пошуку або створенні",
-      "share": "Поділитися",
-      "share_desc": "Ділитися моделями, анімаціями або іншими аксесуарами"
+      "share": "Поширити",
+      "share_desc": "Поширити моделі, анімації або інші аксесуари"
     },
     "replies": "Відповіді",
     "views": "Перегляди",
     "author": "Автор",
-    "lastReply": "Остання публікація",
+    "lastReply": "Остання відповідь",
     "publishedAt": "Опубліковано",
     "repliedAt": "Відповів",
     "pinned": "Закріплено",
     "loadMore": "Завантажити ще",
     "noMore": "Більше немає",
     "publish": "Опублікувати",
-    "publishSection": "Вибрати розділ",
+    "publishSection": "Виберіть розділ",
     "publishTitle": "Заголовок",
-    "publishTitlePlaceholder": "Введіть заголовок повідомлення",
+    "publishTitlePlaceholder": "Введіть заголовок",
     "publishBody": "Зміст",
-    "publishBodyPlaceholder": "Введіть зміст, підтримується Markdown",
-    "publishSubmit": "Опублікувати повідомлення"
+    "publishBodyPlaceholder": "Введіть вміст, підтримується Markdown",
+    "publishSubmit": "Опублікувати"
   }
 }

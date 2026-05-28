@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue';
+import { useI18n } from 'vue-i18n';
 import { insertSearchHistory } from '../../core/database';
+
+const { t } = useI18n();
 
 const props = defineProps<{
   keyword?: string;
@@ -64,32 +67,24 @@ const handleKeydown = (e: KeyboardEvent) => {
         type="text" 
         v-model="searchText"
         @keydown="handleKeydown"
-        placeholder="输入搜索关键词"
+        :placeholder="t('search.placeholder')"
       >
       <span class="icon">
         <font-awesome-icon icon="fa-solid fa-magnifying-glass" />
       </span>
     </div>
     <div class="submit-btn" @click="handleSearch">
-      搜索
+      {{ t('search.submit') }}
     </div>
   </div>
 </template>
 
 <style lang="scss" scoped>
 .top-view {
-  // background-color: #00796B;
-  background-color: rgba(0, 121, 107, 0.9);
+  background-color: var(--color-primary-90);
   backdrop-filter: blur(10px);
   height: calc(60px + env(safe-area-inset-top, 0));
   width: 100%;
-  /* 安全区域适配 - 避免状态栏遮挡内容 */
-  /* 标准方案：使用CSS环境变量 */
-  // padding-top: env(safe-area-inset-top, 0);
-  /* 回退方案：对于不支持env的设备，使用固定值 */
-  // padding-top: max(env(safe-area-inset-top, 0), 24px);
-  /* 确保内容不会被底部导航栏遮挡（如果有的话） */
-  // padding-bottom: env(safe-area-inset-bottom, 0);
   padding: env(safe-area-inset-top, 0) env(safe-area-inset-right, 0) 0 env(safe-area-inset-left, 0);
   display: flex;
 }
@@ -97,7 +92,7 @@ const handleKeydown = (e: KeyboardEvent) => {
 .goback {
   width: 45px;
   height: 60px;
-  color: #fff;
+  color: var(--color-text-on-primary);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -112,11 +107,10 @@ const handleKeydown = (e: KeyboardEvent) => {
   align-items: center;
   user-select: none;
   cursor: pointer;
-  // padding-right: 10px;
   position: relative;
 
   input {
-    background-color: #fff;
+    background-color: var(--color-bg-card);
     border-radius: 30px;
     flex: 1;
     height: 32px;
@@ -126,6 +120,11 @@ const handleKeydown = (e: KeyboardEvent) => {
     line-height: 32px;
     border: none;
     width: 100%;
+    color: var(--color-text-primary);
+
+    &::placeholder {
+      color: var(--color-text-placeholder);
+    }
   }
 
   .icon {
@@ -133,7 +132,7 @@ const handleKeydown = (e: KeyboardEvent) => {
     left: 10px;
     top: 50%;
     transform: translateY(-50%);
-    color: #666;
+    color: var(--color-text-muted);
     font-size: 14px;
     pointer-events: none;
   }
@@ -141,7 +140,7 @@ const handleKeydown = (e: KeyboardEvent) => {
 
 .submit-btn {
   height: 60px;
-  color: #fff;
+  color: var(--color-text-on-primary);
   display: flex;
   align-items: center;
   justify-content: center;

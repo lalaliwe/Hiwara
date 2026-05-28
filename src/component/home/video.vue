@@ -350,6 +350,10 @@ function handleDateConfirm(dateParam: string | undefined) {
         color: var(--color-primary);
       }
     }
+
+    :deep(.v-divider) {
+      border-color: var(--color-border-divider) !important;
+    }
   }
 }
 

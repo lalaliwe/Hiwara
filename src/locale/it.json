@@ -1,5 +1,27 @@
 {
-  "common": {},
+  "common": {
+    "followed": "Seguito",
+    "unfollowed": "Non seguo più",
+    "followFailed": "Segui fallito",
+    "unfollowFailed": "Smetti di seguire fallito",
+    "liked": "Messo Mi piace",
+    "unliked": "Rimosso Mi piace",
+    "likeFailed": "Mi piace fallito",
+    "unlikeFailed": "Rimozione Mi piace fallita",
+    "fetchCommentsFailed": "Caricamento commenti fallito",
+    "fetchRepliesFailed": "Caricamento risposte fallito",
+    "linkCopied": "Link copiato negli appunti",
+    "copyLinkFailed": "Copia link fallita",
+    "shareSuccess": "Condiviso con successo",
+    "shareFailed": "Condivisione fallita, riprova",
+    "shareNotSupported": "Questo dispositivo non supporta la condivisione",
+    "fetchDownloadFailed": "Recupero link download fallito",
+    "downloadLinkCopied": "Link di download copiato negli appunti",
+    "fetchRecommendFailed": "Caricamento raccomandazioni fallito",
+    "fetchVideoListFailed": "Caricamento lista video fallito",
+    "fetchImageListFailed": "Caricamento lista immagini fallito",
+    "fetchUserInfoFailed": "Recupero informazioni utente fallito"
+  },
   "setup": {
     "title": "Impostazioni",
     "autoPlay": "Riproduzione automatica",
@@ -10,8 +32,8 @@
     "language": "Lingua (Language)",
     "about": "Informazioni",
     "logout": "Esci",
-    "enabled": "Attivato",
-    "disabled": "Disattivato",
+    "enabled": "Abilitato",
+    "disabled": "Disabilitato",
     "keywordSearch": "Ricerca per parola chiave",
     "tagSearch": "Ricerca per tag",
     "original": "Originale",
@@ -20,7 +42,7 @@
       "version": "Versione",
       "versionType": "Tipo di versione",
       "beta": "Beta",
-      "buildTime": "Data di build",
+      "buildTime": "Tempo di compilazione",
       "deviceType": "Tipo di dispositivo",
       "mobile": "Mobile",
       "desktop": "Desktop",
@@ -52,8 +74,8 @@
       "videoSavePath": "Percorso salvataggio video",
       "imageSavePath": "Percorso salvataggio immagini",
       "notSet": "Non impostato",
-      "selectVideoPath": "Seleziona percorso video",
-      "selectImagePath": "Seleziona percorso immagini"
+      "selectVideoPath": "Seleziona percorso salvataggio video",
+      "selectImagePath": "Seleziona percorso salvataggio immagini"
     },
     "languagePage": {
       "title": "Lingua (Language)",
@@ -88,9 +110,9 @@
     "navigation": {
       "video": "Video",
       "image": "Illustrazioni",
-      "subscribe": "Iscrizioni",
+      "subscribe": "Abbonamenti",
       "forum": "Forum",
-      "my": "Il mio profilo"
+      "my": "La mia pagina"
     },
     "searchBar": {
       "placeholder": "Cerca"
@@ -100,7 +122,7 @@
       "year": "Anno",
       "monthLabel": "Mese",
       "allYears": "Tutti gli anni",
-      "fullYear": "Intero anno",
+      "fullYear": "Anno intero",
       "months": {
         "1": "Gennaio",
         "2": "Febbraio",
@@ -121,13 +143,13 @@
     "video": {
       "sortTabs": {
         "date": "Più recenti",
-        "trending": "Di tendenza",
-        "popularity": "Popolari",
+        "trending": "Tendenza",
+        "popularity": "Popolarità",
         "views": "Visualizzazioni",
         "likes": "Mi piace"
       },
       "loading": "Caricamento...",
-      "noRecords": "Nessun record video",
+      "noRecords": "Nessun video trovato",
       "loadFailed": "Caricamento fallito, ",
       "retry": "Clicca per riprovare",
       "reachedBottom": "Fine raggiunta"
@@ -135,28 +157,31 @@
     "image": {
       "sortTabs": {
         "date": "Più recenti",
-        "trending": "Di tendenza",
-        "popularity": "Popolari",
+        "trending": "Tendenza",
+        "popularity": "Popolarità",
         "views": "Visualizzazioni",
         "likes": "Mi piace"
       },
       "loading": "Caricamento...",
-      "noRecords": "Nessun record illustrazioni",
+      "noRecords": "Nessuna immagine trovata",
       "loadFailed": "Caricamento fallito, ",
       "retry": "Clicca per riprovare",
       "reachedBottom": "Fine raggiunta"
     },
     "toast": {
-      "pressAgainToExit": "Premi di nuovo per uscire dall'app"
+      "pressAgainToExit": "Premi di nuovo per uscire dall'app",
+      "getUserInfoFailed": "Recupero informazioni utente fallito",
+      "getHistoryFailed": "Recupero cronologia fallito"
     },
     "my": {
       "space": "Spazio",
       "followers": "Seguiti",
       "fans": "Fan",
       "history": "Cronologia",
+      "noHistory": "Nessuna cronologia",
       "viewAllHistory": "Vedi tutto",
       "videoFavorites": "Video preferiti",
-      "imageFavorites": "Illustrazioni preferite",
+      "imageFavorites": "Immagini preferite",
       "playlist": "Playlist",
       "offlineCache": "Cache offline",
       "notifications": "Notifiche",
@@ -164,11 +189,11 @@
       "messages": "Messaggi",
       "settings": "Impostazioni",
       "iwaraServices": "Servizi Iwara",
-      "premium": "Premium",
+      "premium": "Membro Premium",
       "wura": "Wura",
-      "faq": "FAQ",
-      "links": "Link",
-      "aboutText": "Questa applicazione segue la licenza open source MPL-2.0. Si prega di non utilizzarla per scopi commerciali.",
+      "faq": "Domande frequenti",
+      "links": "Link correlati",
+      "aboutText": "Questa app segue la licenza open source MPL-2.0. Non utilizzarla per scopi commerciali.",
       "noRecords": "Nessun record {type}"
     },
     "forum": {
@@ -177,22 +202,22 @@
       "repliedAt": "Risposto il",
       "latestPost": "Ultimo post",
       "groups": {
-        "admin": "Admin",
+        "admin": "Amministratore",
         "moderator": "Moderatore",
         "japanese": "Giapponese",
         "chinese": "Cinese"
       },
       "sections": {
-        "announcement": "Annunci",
+        "announcement": "Annuncio",
         "announcement_desc": "Informazioni importanti",
         "feedback": "Feedback",
         "feedback_desc": "Idee, suggerimenti e preoccupazioni",
         "help": "Aiuto",
-        "help_desc": "Aiuto con problemi relativi al sito",
+        "help_desc": "Aiuto con problemi del sito",
         "general": "Generale",
         "general_desc": "Tutto il resto",
         "guide": "Guida",
-        "guide_desc": "Informazioni utili o guide \"come fare\"",
+        "guide_desc": "Informazioni utili o guide pratiche",
         "helpQuestion": "Aiuto/Domanda",
         "helpQuestion_desc": "Domande non relative al sito",
         "request": "Richiesta",
@@ -215,15 +240,88 @@
       "reachedBottom": "Fine raggiunta"
     },
     "image": {
-      "tab": "Illustrazioni",
+      "tab": "Immagine",
       "loading": "Caricamento...",
       "error": "Errore",
-      "noRecords": "Nessuna cronologia illustrazioni",
+      "noRecords": "Nessuna cronologia immagini",
       "today": "Oggi",
       "loadFailed": "Caricamento fallito, ",
       "retry": "Clicca per riprovare",
       "reachedBottom": "Fine raggiunta"
     }
+  },
+  "login": {
+    "title": "Accedi al tuo account Iwara",
+    "usernameLabel": "Inserisci nome utente",
+    "passwordLabel": "Inserisci password",
+    "loginBtn": "Accedi",
+    "loggingIn": "Accesso in corso",
+    "languageBtn": "Language/语言",
+    "aboutText": "Questa app segue la licenza open source MPL-2.0. Non utilizzarla per scopi commerciali.",
+    "usernameRequired": "Il nome utente è obbligatorio",
+    "passwordRequired": "La password è obbligatoria",
+    "bothRequired": "Nome utente e password sono obbligatori",
+    "success": "Accesso riuscito",
+    "invalidResponse": "Accesso fallito: risposta del server non valida",
+    "wrongCredentials": "Nome utente o password errati",
+    "tooManyRequests": "Troppi tentativi di accesso. Riprova più tardi",
+    "failed": "Accesso fallito: {status}",
+    "networkError": "Richiesta di accesso fallita. Controlla la connessione di rete"
+  },
+  "player": {
+    "loading": "Caricamento dati",
+    "failed": "Caricamento dati fallito~",
+    "infoTab": "Informazioni",
+    "commentTab": "Commenti",
+    "selectDefinition": "Seleziona qualità",
+    "original": "Originale",
+    "switchingServer": "Cambio server in corso",
+    "refreshFailed": "Aggiornamento lista server fallito",
+    "aria2Failed": "Aggiunta aria2 fallita",
+    "fetchInfoFailed": "Recupero informazioni video fallito",
+    "fetchFileFailed": "Recupero file video fallito",
+    "switchedTo": "Passato a {definition}"
+  },
+  "imageView": {
+    "loading": "Caricamento dati",
+    "failed": "Caricamento dati fallito~",
+    "fetchInfoFailed": "Recupero informazioni immagine fallito"
+  },
+  "favorites": {
+    "title": "I miei preferiti",
+    "videoTab": "Video",
+    "imageTab": "Immagine"
+  },
+  "friends": {
+    "title": "{type}",
+    "followTab": "Seguiti",
+    "fansTab": "Fan",
+    "friendTab": "Amici",
+    "loading": "Caricamento dati"
+  },
+  "offlineCache": {
+    "title": "Cache offline",
+    "today": "Oggi",
+    "cacheComplete": "Cache completata",
+    "views": "Riproduzioni",
+    "likes": "Mi piace"
+  },
+  "search": {
+    "placeholder": "Inserisci parole chiave",
+    "submit": "Cerca",
+    "videoTab": "Video",
+    "imageTab": "Immagine",
+    "userTab": "Utente",
+    "loadingVideoFailed": "Caricamento risultati ricerca video fallito",
+    "loadingImageFailed": "Caricamento risultati ricerca immagini fallito",
+    "loadingUserFailed": "Caricamento risultati ricerca utenti fallito",
+    "historyLabel": "Cronologia ricerche",
+    "recommendLabel": "Scopri"
+  },
+  "zone": {
+    "videoTab": "Video",
+    "imageTab": "Immagine",
+    "publishTab": "Pubblica"
   },
   "forum": {
     "sections": {
@@ -234,9 +332,9 @@
       "general": "Generale",
       "general_desc": "Tutto il resto",
       "guide": "Guida",
-      "guide_desc": "Informazioni utili o guide \"come fare\"",
+      "guide_desc": "Informazioni utili o guide pratiche",
       "help": "Aiuto",
-      "help_desc": "Aiuto con problemi relativi al sito",
+      "help_desc": "Aiuto con problemi del sito",
       "helpQuestion": "Aiuto/Domanda",
       "helpQuestion_desc": "Domande non relative al sito",
       "request": "Richiesta",
@@ -247,7 +345,7 @@
     "replies": "Risposte",
     "views": "Visualizzazioni",
     "author": "Autore",
-    "lastReply": "Ultimo post",
+    "lastReply": "Ultima risposta",
     "publishedAt": "Pubblicato il",
     "repliedAt": "Risposto il",
     "pinned": "In evidenza",
@@ -259,6 +357,6 @@
     "publishTitlePlaceholder": "Inserisci il titolo del post",
     "publishBody": "Contenuto",
     "publishBodyPlaceholder": "Inserisci il contenuto, supporta Markdown",
-    "publishSubmit": "Pubblica post"
+    "publishSubmit": "Invia post"
   }
 }

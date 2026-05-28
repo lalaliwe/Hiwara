@@ -202,7 +202,7 @@ function handleWheelScroll(event: WheelEvent) {
             <div class="all-btn" @click="routerGoTo('/history')">{{ t('home.my.viewAllHistory') }}</div>
           </template>
           <template v-else>
-            <div class="empty-text">{{ t('home.my.noRecords', { type: t('home.my.history') }) }}</div>
+            <div class="empty-text">{{ t('home.my.noHistory') }}</div>
           </template>
         </div>
       </div>

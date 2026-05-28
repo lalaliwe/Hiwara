@@ -1,5 +1,27 @@
 {
-  "common": {},
+  "common": {
+    "followed": "Gefolgt",
+    "unfollowed": "Nicht mehr gefolgt",
+    "followFailed": "Folgen fehlgeschlagen",
+    "unfollowFailed": "Entfolgen fehlgeschlagen",
+    "liked": "Gefällt mir",
+    "unliked": "Gefällt mir nicht mehr",
+    "likeFailed": "Gefällt mir fehlgeschlagen",
+    "unlikeFailed": "Gefällt mir entfernen fehlgeschlagen",
+    "fetchCommentsFailed": "Kommentare konnten nicht geladen werden",
+    "fetchRepliesFailed": "Antworten konnten nicht geladen werden",
+    "linkCopied": "Link in die Zwischenablage kopiert",
+    "copyLinkFailed": "Link kopieren fehlgeschlagen",
+    "shareSuccess": "Erfolgreich geteilt",
+    "shareFailed": "Teilen fehlgeschlagen, bitte erneut versuchen",
+    "shareNotSupported": "Dieses Gerät unterstützt die Teilen-Funktion nicht",
+    "fetchDownloadFailed": "Download-Link konnte nicht abgerufen werden",
+    "downloadLinkCopied": "Download-Link in die Zwischenablage kopiert",
+    "fetchRecommendFailed": "Empfehlungen konnten nicht geladen werden",
+    "fetchVideoListFailed": "Videoliste konnte nicht geladen werden",
+    "fetchImageListFailed": "Bildliste konnte nicht geladen werden",
+    "fetchUserInfoFailed": "Benutzerinformationen konnten nicht abgerufen werden"
+  },
   "setup": {
     "title": "Einstellungen",
     "autoPlay": "Automatische Wiedergabe",
@@ -24,14 +46,14 @@
       "deviceType": "Gerätetyp",
       "mobile": "Mobil",
       "desktop": "Desktop",
-      "osName": "OS-Name",
-      "osVersion": "OS-Version",
+      "osName": "BS-Name",
+      "osVersion": "BS-Version",
       "webview": "WebView",
       "webviewVersion": "WebView-Version",
       "checkUpdate": "Nach Updates suchen",
       "openSourceLicense": "Open-Source-Lizenz",
       "unknown": "Unbekannt",
-      "loading": "Daten laden"
+      "loading": "Daten werden geladen"
     },
     "aria2Page": {
       "title": "Aria2-Einstellungen",
@@ -90,13 +112,13 @@
       "image": "Illustrationen",
       "subscribe": "Abonnements",
       "forum": "Forum",
-      "my": "Mein Profil"
+      "my": "Meine Seite"
     },
     "searchBar": {
       "placeholder": "Suchen"
     },
     "dateFilter": {
-      "selectTime": "Zeitraum auswählen",
+      "selectTime": "Zeit auswählen",
       "year": "Jahr",
       "monthLabel": "Monat",
       "allYears": "Alle Jahre",
@@ -121,13 +143,13 @@
     "video": {
       "sortTabs": {
         "date": "Neueste",
-        "trending": "Trends",
-        "popularity": "Beliebt",
+        "trending": "Trending",
+        "popularity": "Beliebtheit",
         "views": "Aufrufe",
-        "likes": "Likes"
+        "likes": "Gefällt mir"
       },
-      "loading": "Wird geladen...",
-      "noRecords": "Keine Video-Aufzeichnungen",
+      "loading": "Laden...",
+      "noRecords": "Keine Videoaufzeichnungen",
       "loadFailed": "Laden fehlgeschlagen, ",
       "retry": "Klicken zum Wiederholen",
       "reachedBottom": "Ende erreicht"
@@ -135,28 +157,31 @@
     "image": {
       "sortTabs": {
         "date": "Neueste",
-        "trending": "Trends",
-        "popularity": "Beliebt",
+        "trending": "Trending",
+        "popularity": "Beliebtheit",
         "views": "Aufrufe",
-        "likes": "Likes"
+        "likes": "Gefällt mir"
       },
-      "loading": "Wird geladen...",
-      "noRecords": "Keine Illustrations-Aufzeichnungen",
+      "loading": "Laden...",
+      "noRecords": "Keine Bildaufzeichnungen",
       "loadFailed": "Laden fehlgeschlagen, ",
       "retry": "Klicken zum Wiederholen",
       "reachedBottom": "Ende erreicht"
     },
     "toast": {
-      "pressAgainToExit": "Erneut drücken, um die App zu verlassen"
+      "pressAgainToExit": "Drücken Sie erneut, um die App zu verlassen",
+      "getUserInfoFailed": "Benutzerinfo konnte nicht abgerufen werden",
+      "getHistoryFailed": "Verlauf konnte nicht abgerufen werden"
     },
     "my": {
       "space": "Bereich",
       "followers": "Folge ich",
       "fans": "Fans",
       "history": "Verlauf",
+      "noHistory": "Kein Verlauf",
       "viewAllHistory": "Alle anzeigen",
       "videoFavorites": "Video-Favoriten",
-      "imageFavorites": "Illustrations-Favoriten",
+      "imageFavorites": "Bild-Favoriten",
       "playlist": "Wiedergabeliste",
       "offlineCache": "Offline-Cache",
       "notifications": "Benachrichtigungen",
@@ -164,11 +189,11 @@
       "messages": "Nachrichten",
       "settings": "Einstellungen",
       "iwaraServices": "Iwara-Dienste",
-      "premium": "Premium",
+      "premium": "Premium-Mitglied",
       "wura": "Wura",
-      "faq": "FAQ",
+      "faq": "Häufige Fragen",
       "links": "Links",
-      "aboutText": "Diese Anwendung folgt der MPL-2.0 Open-Source-Lizenz. Bitte verwenden Sie sie nicht für kommerzielle Zwecke.",
+      "aboutText": "Diese App folgt der MPL-2.0 Open-Source-Lizenz. Bitte nicht für kommerzielle Zwecke nutzen.",
       "noRecords": "Keine {type}-Aufzeichnungen"
     },
     "forum": {
@@ -183,22 +208,22 @@
         "chinese": "Chinesisch"
       },
       "sections": {
-        "announcement": "Ankündigungen",
+        "announcement": "Ankündigung",
         "announcement_desc": "Wichtige Informationen",
         "feedback": "Feedback",
         "feedback_desc": "Ideen, Vorschläge und Bedenken",
         "help": "Hilfe",
-        "help_desc": "Hilfe bei seitenbezogenen Problemen",
+        "help_desc": "Hilfe bei Seitenproblemen",
         "general": "Allgemein",
         "general_desc": "Alles andere",
-        "guide": "Anleitung",
-        "guide_desc": "Nützliche Informationen oder \"How-to\"-Anleitungen",
+        "guide": "Leitfaden",
+        "guide_desc": "Nützliche Informationen oder Anleitungen",
         "helpQuestion": "Hilfe/Frage",
-        "helpQuestion_desc": "Fragen, die nicht mit der Seite zu tun haben",
+        "helpQuestion_desc": "Fragen, die nichts mit der Seite zu tun haben",
         "request": "Anfrage",
-        "request_desc": "Hilfe beim Suchen oder Erstellen",
+        "request_desc": "Hilfe bei der Suche oder Erstellung",
         "share": "Teilen",
-        "share_desc": "Modelle, Animationen oder andere Accessoires teilen"
+        "share_desc": "Modelle, Animationen oder anderes Zubehör teilen"
       }
     }
   },
@@ -206,7 +231,7 @@
     "title": "Verlauf",
     "video": {
       "tab": "Video",
-      "loading": "Wird geladen...",
+      "loading": "Laden...",
       "error": "Fehler",
       "noRecords": "Kein Video-Verlauf",
       "today": "Heute",
@@ -215,15 +240,88 @@
       "reachedBottom": "Ende erreicht"
     },
     "image": {
-      "tab": "Illustrationen",
-      "loading": "Wird geladen...",
+      "tab": "Bild",
+      "loading": "Laden...",
       "error": "Fehler",
-      "noRecords": "Kein Illustrations-Verlauf",
+      "noRecords": "Kein Bild-Verlauf",
       "today": "Heute",
       "loadFailed": "Laden fehlgeschlagen, ",
       "retry": "Klicken zum Wiederholen",
       "reachedBottom": "Ende erreicht"
     }
+  },
+  "login": {
+    "title": "Bei Ihrem Iwara-Konto anmelden",
+    "usernameLabel": "Benutzername eingeben",
+    "passwordLabel": "Passwort eingeben",
+    "loginBtn": "Anmelden",
+    "loggingIn": "Anmeldung läuft",
+    "languageBtn": "Language/语言",
+    "aboutText": "Diese App folgt der MPL-2.0 Open-Source-Lizenz. Bitte nicht für kommerzielle Zwecke nutzen.",
+    "usernameRequired": "Benutzername ist erforderlich",
+    "passwordRequired": "Passwort ist erforderlich",
+    "bothRequired": "Benutzername und Passwort sind erforderlich",
+    "success": "Anmeldung erfolgreich",
+    "invalidResponse": "Anmeldung fehlgeschlagen: Ungültige Serverantwort",
+    "wrongCredentials": "Benutzername oder Passwort falsch",
+    "tooManyRequests": "Zu viele Anmeldeversuche. Bitte später erneut versuchen",
+    "failed": "Anmeldung fehlgeschlagen: {status}",
+    "networkError": "Anmeldeanforderung fehlgeschlagen. Netzwerkverbindung prüfen"
+  },
+  "player": {
+    "loading": "Daten werden geladen",
+    "failed": "Daten konnten nicht geladen werden~",
+    "infoTab": "Informationen",
+    "commentTab": "Kommentare",
+    "selectDefinition": "Qualität auswählen",
+    "original": "Original",
+    "switchingServer": "Server wird gewechselt",
+    "refreshFailed": "Serverliste konnte nicht aktualisiert werden",
+    "aria2Failed": "Aria2 hinzufügen fehlgeschlagen",
+    "fetchInfoFailed": "Videoinformationen konnten nicht abgerufen werden",
+    "fetchFileFailed": "Videodatei konnte nicht abgerufen werden",
+    "switchedTo": "Zu {definition} gewechselt"
+  },
+  "imageView": {
+    "loading": "Lade Daten",
+    "failed": "Daten konnten nicht geladen werden~",
+    "fetchInfoFailed": "Bildinformationen konnten nicht abgerufen werden"
+  },
+  "favorites": {
+    "title": "Meine Favoriten",
+    "videoTab": "Video",
+    "imageTab": "Bild"
+  },
+  "friends": {
+    "title": "{type}",
+    "followTab": "Folge ich",
+    "fansTab": "Fans",
+    "friendTab": "Freunde",
+    "loading": "Daten werden geladen"
+  },
+  "offlineCache": {
+    "title": "Offline-Cache",
+    "today": "Heute",
+    "cacheComplete": "Cache abgeschlossen",
+    "views": "Wiedergabe",
+    "likes": "Gefällt mir"
+  },
+  "search": {
+    "placeholder": "Suchbegriff eingeben",
+    "submit": "Suchen",
+    "videoTab": "Video",
+    "imageTab": "Bild",
+    "userTab": "Benutzer",
+    "loadingVideoFailed": "Videosuchergebnisse konnten nicht geladen werden",
+    "loadingImageFailed": "Bildsuchergebnisse konnten nicht geladen werden",
+    "loadingUserFailed": "Benutzersuchergebnisse konnten nicht geladen werden",
+    "historyLabel": "Suchverlauf",
+    "recommendLabel": "Entdecken"
+  },
+  "zone": {
+    "videoTab": "Video",
+    "imageTab": "Bild",
+    "publishTab": "Veröffentlichen"
   },
   "forum": {
     "sections": {
@@ -233,32 +331,32 @@
       "feedback_desc": "Ideen, Vorschläge und Bedenken",
       "general": "Allgemein",
       "general_desc": "Alles andere",
-      "guide": "Anleitung",
-      "guide_desc": "Nützliche Informationen oder \"How-to\"-Anleitungen",
+      "guide": "Leitfaden",
+      "guide_desc": "Nützliche Informationen oder Anleitungen",
       "help": "Hilfe",
-      "help_desc": "Hilfe bei seitenbezogenen Problemen",
+      "help_desc": "Hilfe bei Seitenproblemen",
       "helpQuestion": "Hilfe/Frage",
-      "helpQuestion_desc": "Fragen, die nicht mit der Seite zu tun haben",
+      "helpQuestion_desc": "Fragen, die nichts mit der Seite zu tun haben",
       "request": "Anfrage",
-      "request_desc": "Hilfe beim Suchen oder Erstellen",
+      "request_desc": "Hilfe bei der Suche oder Erstellung",
       "share": "Teilen",
-      "share_desc": "Modelle, Animationen oder andere Accessoires teilen"
+      "share_desc": "Modelle, Animationen oder anderes Zubehör teilen"
     },
     "replies": "Antworten",
     "views": "Aufrufe",
     "author": "Autor",
-    "lastReply": "Neuester Beitrag",
+    "lastReply": "Letzte Antwort",
     "publishedAt": "Veröffentlicht am",
-    "repliedAt": "Beantwortet",
+    "repliedAt": "Geantwortet am",
     "pinned": "Angepinnt",
     "loadMore": "Mehr laden",
-    "noMore": "Keine weiteren",
-    "publish": "Veröffentlichen",
+    "noMore": "Nichts mehr",
+    "publish": "Beitrag erstellen",
     "publishSection": "Bereich auswählen",
     "publishTitle": "Titel",
     "publishTitlePlaceholder": "Beitragstitel eingeben",
     "publishBody": "Inhalt",
-    "publishBodyPlaceholder": "Beitragsinhalt eingeben, Markdown wird unterstützt",
+    "publishBodyPlaceholder": "Beitragsinhalt eingeben, Markdown unterstützt",
     "publishSubmit": "Beitrag veröffentlichen"
   }
 }

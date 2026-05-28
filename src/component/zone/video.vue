@@ -1,10 +1,13 @@
 <script setup lang="ts">
 import cardButton from '../../component/cardButton.vue';
 import { ref, watch } from 'vue';
+import { useI18n } from 'vue-i18n';
 import { getVideoList as api_getVideoList } from '../../core/api';
 import loadingHuawu from '../loadingHuawu.vue';
 import errorHuawu from '../errorHuawu.vue';
 import { showShortToast } from '../../core/toast';
+
+const { t } = useI18n();
 
 defineOptions({
   name: 'VideoList'
@@ -107,7 +110,7 @@ async function getVideoList(): Promise<any> {
     }
   } catch (error) {
     console.error(`获取视频列表失败:`, error);
-    showShortToast('获取视频列表失败');
+    showShortToast(t('common.fetchVideoListFailed'));
     throw error;
   }
 }
@@ -157,8 +160,6 @@ async function getVideoList(): Promise<any> {
 </template>
 
 <style lang="scss" scoped>
-.list-content {}
-
 .list-view {
   height: 100%;
   overflow-y: auto;

@@ -74,7 +74,7 @@ const getLanguageLabel = (lang: string) => {
       </div>
     </div>
     <!-- 内容区域 -->
-    <div class="item" style="border-top: solid 1px #BDBDBD;">
+    <div class="item" style="border-top: solid 1px var(--color-border-setting);">
       <div class="label">{{ t('setup.autoPlay') }}</div>
       <div class="value">
         <v-switch

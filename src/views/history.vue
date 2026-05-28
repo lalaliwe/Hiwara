@@ -132,6 +132,10 @@ onActivated(() => {
         color: var(--color-primary);
       }
     }
+
+    :deep(.v-divider) {
+      border-color: var(--color-border-divider) !important;
+    }
   }
 }
 

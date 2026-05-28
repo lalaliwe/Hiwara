@@ -1,5 +1,27 @@
 {
-  "common": {},
+  "common": {
+    "followed": "팔로우했습니다",
+    "unfollowed": "팔로우 취소했습니다",
+    "followFailed": "팔로우 실패",
+    "unfollowFailed": "팔로우 취소 실패",
+    "liked": "좋아요했습니다",
+    "unliked": "좋아요 취소했습니다",
+    "likeFailed": "좋아요 실패",
+    "unlikeFailed": "좋아요 취소 실패",
+    "fetchCommentsFailed": "댓글 목록을 불러오지 못했습니다",
+    "fetchRepliesFailed": "답글을 불러오지 못했습니다",
+    "linkCopied": "링크가 클립보드에 복사되었습니다",
+    "copyLinkFailed": "링크 복사 실패",
+    "shareSuccess": "공유 성공",
+    "shareFailed": "공유 실패, 다시 시도해주세요",
+    "shareNotSupported": "현재 기기에서 공유 기능을 지원하지 않습니다",
+    "fetchDownloadFailed": "다운로드 링크를 가져오지 못했습니다",
+    "downloadLinkCopied": "다운로드 링크가 클립보드에 복사되었습니다",
+    "fetchRecommendFailed": "추천 이미지를 불러오지 못했습니다",
+    "fetchVideoListFailed": "동영상 목록을 불러오지 못했습니다",
+    "fetchImageListFailed": "이미지 목록을 불러오지 못했습니다",
+    "fetchUserInfoFailed": "사용자 정보를 가져오지 못했습니다"
+  },
   "setup": {
     "title": "설정",
     "autoPlay": "자동 재생",
@@ -147,13 +169,16 @@
       "reachedBottom": "마지막입니다"
     },
     "toast": {
-      "pressAgainToExit": "뒤로 가기를 한 번 더 누르면 앱이 종료됩니다"
+      "pressAgainToExit": "뒤로 가기를 한 번 더 누르면 앱이 종료됩니다",
+      "getUserInfoFailed": "사용자 정보를 가져오지 못했습니다",
+      "getHistoryFailed": "기록을 가져오지 못했습니다"
     },
     "my": {
       "space": "공간",
       "followers": "팔로우",
       "fans": "팬",
       "history": "기록",
+      "noHistory": "기록이 없습니다",
       "viewAllHistory": "전체 보기",
       "videoFavorites": "동영상 즐겨찾기",
       "imageFavorites": "일러스트 즐겨찾기",
@@ -224,6 +249,79 @@
       "retry": "클릭하여 재시도",
       "reachedBottom": "마지막입니다"
     }
+  },
+  "login": {
+    "title": "Iwara 계정에 로그인",
+    "usernameLabel": "사용자명 입력",
+    "passwordLabel": "비밀번호 입력",
+    "loginBtn": "로그인",
+    "loggingIn": "로그인 중",
+    "languageBtn": "Language/语言",
+    "aboutText": "본 앱은 MPL-2.0 오픈 소스 라이선스를 따릅니다. 상업적 목적으로 사용하지 마십시오.",
+    "usernameRequired": "사용자명을 입력해주세요",
+    "passwordRequired": "비밀번호를 입력해주세요",
+    "bothRequired": "사용자명과 비밀번호를 입력해주세요",
+    "success": "로그인 성공",
+    "invalidResponse": "로그인 실패: 서버 응답이 유효하지 않습니다",
+    "wrongCredentials": "사용자명 또는 비밀번호가 올바르지 않습니다",
+    "tooManyRequests": "로그인 시도가 너무 많습니다. 잠시 후 다시 시도해주세요",
+    "failed": "로그인 실패: {status}",
+    "networkError": "로그인 요청 실패. 네트워크 연결을 확인해주세요"
+  },
+  "player": {
+    "loading": "데이터 로딩 중",
+    "failed": "데이터 로딩에 실패했습니다~",
+    "infoTab": "정보",
+    "commentTab": "댓글",
+    "selectDefinition": "화질 선택",
+    "original": "원본",
+    "switchingServer": "서버 전환 중",
+    "refreshFailed": "서버 목록 새로고침 실패",
+    "aria2Failed": "Aria2 추가 실패",
+    "fetchInfoFailed": "동영상 정보를 가져오지 못했습니다",
+    "fetchFileFailed": "동영상 파일을 가져오지 못했습니다",
+    "switchedTo": "{definition}(으)로 전환됨"
+  },
+  "imageView": {
+    "loading": "데이터 로딩 중",
+    "failed": "데이터 로딩에 실패했습니다~",
+    "fetchInfoFailed": "이미지 정보를 가져오지 못했습니다"
+  },
+  "favorites": {
+    "title": "내 즐겨찾기",
+    "videoTab": "동영상",
+    "imageTab": "이미지"
+  },
+  "friends": {
+    "title": "{type}",
+    "followTab": "팔로우",
+    "fansTab": "팬",
+    "friendTab": "친구",
+    "loading": "데이터 로딩 중"
+  },
+  "offlineCache": {
+    "title": "오프라인 캐시",
+    "today": "오늘",
+    "cacheComplete": "캐시 완료",
+    "views": "재생",
+    "likes": "좋아요"
+  },
+  "search": {
+    "placeholder": "검색어 입력",
+    "submit": "검색",
+    "videoTab": "동영상",
+    "imageTab": "이미지",
+    "userTab": "사용자",
+    "loadingVideoFailed": "동영상 검색 결과 로딩 실패",
+    "loadingImageFailed": "이미지 검색 결과 로딩 실패",
+    "loadingUserFailed": "사용자 검색 결과 로딩 실패",
+    "historyLabel": "검색 기록",
+    "recommendLabel": "추천 검색"
+  },
+  "zone": {
+    "videoTab": "동영상",
+    "imageTab": "이미지",
+    "publishTab": "게시"
   },
   "forum": {
     "sections": {

@@ -1,7 +1,10 @@
 <script setup lang="ts">
 import { useRouter, useRoute } from 'vue-router';
 import { ref, onActivated } from 'vue';
+import { useI18n } from 'vue-i18n';
 import { setStatusBarTextStyle } from '../plugins/navbarStyle'
+
+const { t } = useI18n();
 
 defineOptions({
   name: 'OfflineCache'
@@ -151,14 +154,14 @@ onActivated(() => {
           <font-awesome-icon icon="fa-solid fa-angle-left" />
         </div>
         <div class="label">
-          离线缓存
+          {{ t('offlineCache.title') }}
         </div>
       </div>
     </div>
     <div class="list" ref="videoListView" @scroll="handleVideoScroll">
       <v-infinite-scroll color="#00796B" :on-load="loadMoreData" :has-more="!hasFinished">
         <div v-for="(groupItems, date) in groupByDate(videoCache)" :key="date" class="date-group">
-          <div class="date-header">{{ date === new Date().toISOString().split('T')[0] ? '今天' : date }}</div>
+          <div class="date-header">{{ date === new Date().toISOString().split('T')[0] ? t('offlineCache.today') : date }}</div>
           <v-list lines="two" class="pa-0">
             <v-list-item v-for="(item, index) in groupItems" :key="index" class="list-item">
               <!-- 左侧：预览图 -->
@@ -175,7 +178,7 @@ onActivated(() => {
                   {{ item.author }} • {{ item.time }}
                 </div>
                 <div class="list-stats">
-                  {{ item.viewNum }}播放 • {{ item.likeNum }}点赞 • {{ item.longNum }}
+                  {{ item.viewNum }}{{ t('offlineCache.views') }} • {{ item.likeNum }}{{ t('offlineCache.likes') }} • {{ item.longNum }}
                 </div>
                 <!-- 缓存进度条 -->
                 <div class="cache-progress-container">
@@ -186,7 +189,7 @@ onActivated(() => {
                     rounded
                   ></v-progress-linear>
                   <div class="cache-progress-text">
-                    {{ item.cacheProgress === 100 ? '缓存完成' : item.cacheProgress + '%' }}
+                    {{ item.cacheProgress === 100 ? t('offlineCache.cacheComplete') : item.cacheProgress + '%' }}
                   </div>
                 </div>
               </div>
@@ -252,24 +255,26 @@ onActivated(() => {
 
   .date-header {
     padding: 12px 16px 8px;
-    background-color: #f0f0f0;
+    background-color: var(--color-bg-section-alt);
     font-size: 0.8rem;
-    color: #666;
+    color: var(--color-text-muted);
     font-weight: 500;
   }
 
   .list-item {
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid var(--color-border-light);
     padding: 8px 16px;
+    background-color: var(--color-bg-card);
 
     .list-content {
       flex: 1;
-      min-width: 0; // 允许内容压缩
+      min-width: 0;
       margin: 0 16px;
 
       .list-title {
         font-weight: 500;
         font-size: 1rem;
+        color: var(--color-text-primary);
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
@@ -277,7 +282,7 @@ onActivated(() => {
 
       .list-subtitle {
         font-size: 0.8rem;
-        color: #616161;
+        color: var(--color-text-muted);
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
@@ -286,7 +291,7 @@ onActivated(() => {
 
       .list-stats {
         font-size: 0.75rem;
-        color: #959595;
+        color: var(--color-text-muted-lighter);
         margin-top: 4px;
         white-space: nowrap;
         overflow: hidden;
@@ -298,7 +303,7 @@ onActivated(() => {
 
         .cache-progress-text {
           font-size: 0.7rem;
-          color: #666;
+          color: var(--color-text-muted);
           text-align: right;
           margin-top: 4px;
         }

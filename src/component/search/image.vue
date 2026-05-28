@@ -1,11 +1,14 @@
 <script setup lang="ts">
 import { onActivated, ref, watch } from 'vue';
+import { useI18n } from 'vue-i18n';
 import cardButton from '../cardButton.vue';
 import { search } from '../../core/api/video';
 import loadingHuawu from '../loadingHuawu.vue';
 import errorHuawu from '../errorHuawu.vue';
 import { showShortToast } from '../../core/toast';
 import type { VInfiniteScroll } from 'vuetify/components'
+
+const { t } = useI18n();
 
 const props = defineProps<{
   keyword: string;
@@ -69,7 +72,7 @@ const loadMoreImageData = async ({ done }: any = { done: () => { } }) => {
     }
   } catch (error) {
     console.error('加载插画搜索结果失败:', error);
-    showShortToast('加载插画搜索结果失败');
+    showShortToast(t('search.loadingImageFailed'));
     if (imagePage.value === 0 && imageState.value === 'loading') {
       imageState.value = 'failed';
     } else {

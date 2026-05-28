@@ -1,5 +1,27 @@
 {
-  "common": {},
+  "common": {
+    "followed": "已關注",
+    "unfollowed": "已取消關注",
+    "followFailed": "關注失敗",
+    "unfollowFailed": "取消關注失敗",
+    "liked": "已按讚",
+    "unliked": "已取消按讚",
+    "likeFailed": "按讚失敗",
+    "unlikeFailed": "取消按讚失敗",
+    "fetchCommentsFailed": "獲取評論列表失敗",
+    "fetchRepliesFailed": "獲取回覆失敗",
+    "linkCopied": "連結已複製到剪貼簿",
+    "copyLinkFailed": "複製連結失敗",
+    "shareSuccess": "分享成功",
+    "shareFailed": "分享失敗，請重試",
+    "shareNotSupported": "目前裝置不支援分享功能",
+    "fetchDownloadFailed": "獲取下載連結失敗",
+    "downloadLinkCopied": "下載連結已複製到剪貼簿",
+    "fetchRecommendFailed": "插畫推薦獲取失敗",
+    "fetchVideoListFailed": "獲取影片列表失敗",
+    "fetchImageListFailed": "獲取插畫列表失敗",
+    "fetchUserInfoFailed": "獲取使用者資訊失敗"
+  },
   "setup": {
     "title": "設定",
     "autoPlay": "自動播放",
@@ -147,13 +169,16 @@
       "reachedBottom": "到底了"
     },
     "toast": {
-      "pressAgainToExit": "再按一次返回鍵退出應用"
+      "pressAgainToExit": "再按一次返回鍵退出應用",
+      "getUserInfoFailed": "獲取使用者資訊失敗",
+      "getHistoryFailed": "獲取歷史記錄失敗"
     },
     "my": {
       "space": "空間",
       "followers": "關注",
       "fans": "粉絲",
       "history": "歷史記錄",
+      "noHistory": "暫無歷史記錄",
       "viewAllHistory": "查看全部",
       "videoFavorites": "影片收藏",
       "imageFavorites": "插畫收藏",
@@ -224,6 +249,79 @@
       "retry": "點擊重試",
       "reachedBottom": "到底了"
     }
+  },
+  "login": {
+    "title": "登入到你的Iwara帳號",
+    "usernameLabel": "請輸入使用者名稱",
+    "passwordLabel": "請輸入密碼",
+    "loginBtn": "登入",
+    "loggingIn": "登入中",
+    "languageBtn": "Language/语言",
+    "aboutText": "本應用程式遵循MPL-2.0開源協議，請勿用於任何商業用途。",
+    "usernameRequired": "使用者名稱不得為空",
+    "passwordRequired": "密碼不得為空",
+    "bothRequired": "使用者名稱和密碼不得為空",
+    "success": "登入成功",
+    "invalidResponse": "登入失敗：伺服器回應無效",
+    "wrongCredentials": "使用者名稱或密碼錯誤",
+    "tooManyRequests": "登入過於頻繁，請稍後再試",
+    "failed": "登入失敗：{status}",
+    "networkError": "登入請求失敗，請檢查網路連線"
+  },
+  "player": {
+    "loading": "數據載入中",
+    "failed": "數據載入失敗了喵~",
+    "infoTab": "簡介",
+    "commentTab": "評論",
+    "selectDefinition": "選擇畫質",
+    "original": "原畫",
+    "switchingServer": "正在切換伺服器",
+    "refreshFailed": "重新整理伺服器列表失敗",
+    "aria2Failed": "aria2 新增失敗",
+    "fetchInfoFailed": "獲取影片資訊失敗",
+    "fetchFileFailed": "獲取影片檔案失敗",
+    "switchedTo": "已切換到 {definition}"
+  },
+  "imageView": {
+    "loading": "正在載入數據",
+    "failed": "數據載入失敗了喵~",
+    "fetchInfoFailed": "獲取插畫資訊失敗"
+  },
+  "favorites": {
+    "title": "我的收藏",
+    "videoTab": "影片",
+    "imageTab": "插畫"
+  },
+  "friends": {
+    "title": "{type}",
+    "followTab": "關注",
+    "fansTab": "粉絲",
+    "friendTab": "好友",
+    "loading": "數據載入中"
+  },
+  "offlineCache": {
+    "title": "離線快取",
+    "today": "今天",
+    "cacheComplete": "快取完成",
+    "views": "播放",
+    "likes": "讚"
+  },
+  "search": {
+    "placeholder": "輸入搜尋關鍵詞",
+    "submit": "搜尋",
+    "videoTab": "影片",
+    "imageTab": "插畫",
+    "userTab": "使用者",
+    "loadingVideoFailed": "載入影片搜尋結果失敗",
+    "loadingImageFailed": "載入插畫搜尋結果失敗",
+    "loadingUserFailed": "載入使用者搜尋結果失敗",
+    "historyLabel": "搜尋歷史",
+    "recommendLabel": "搜尋發現"
+  },
+  "zone": {
+    "videoTab": "影片",
+    "imageTab": "插畫",
+    "publishTab": "發布"
   },
   "forum": {
     "sections": {

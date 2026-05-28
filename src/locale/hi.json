@@ -1,5 +1,27 @@
 {
-  "common": {},
+  "common": {
+    "followed": "फ़ॉलो किया",
+    "unfollowed": "अनफ़ॉलो किया",
+    "followFailed": "फ़ॉलो करने में विफल",
+    "unfollowFailed": "अनफ़ॉलो करने में विफल",
+    "liked": "पसंद किया",
+    "unliked": "पसंद हटाया",
+    "likeFailed": "पसंद करने में विफल",
+    "unlikeFailed": "पसंद हटाने में विफल",
+    "fetchCommentsFailed": "टिप्पणियाँ लोड करने में विफल",
+    "fetchRepliesFailed": "उत्तर लोड करने में विफल",
+    "linkCopied": "लिंक क्लिपबोर्ड पर कॉपी हो गया",
+    "copyLinkFailed": "लिंक कॉपी करने में विफल",
+    "shareSuccess": "साझा करने में सफल",
+    "shareFailed": "साझा करने में विफल, कृपया पुनः प्रयास करें",
+    "shareNotSupported": "यह डिवाइस साझा करने की सुविधा का समर्थन नहीं करता",
+    "fetchDownloadFailed": "डाउनलोड लिंक प्राप्त करने में विफल",
+    "downloadLinkCopied": "डाउनलोड लिंक क्लिपबोर्ड पर कॉपी हो गया",
+    "fetchRecommendFailed": "अनुशंसाएँ लोड करने में विफल",
+    "fetchVideoListFailed": "वीडियो सूची लोड करने में विफल",
+    "fetchImageListFailed": "छवि सूची लोड करने में विफल",
+    "fetchUserInfoFailed": "उपयोगकर्ता जानकारी प्राप्त करने में विफल"
+  },
   "setup": {
     "title": "सेटिंग्स",
     "autoPlay": "ऑटो प्ले",
@@ -147,13 +169,16 @@
       "reachedBottom": "अंत तक पहुंच गए"
     },
     "toast": {
-      "pressAgainToExit": "ऐप से बाहर निकलने के लिए फिर से दबाएं"
+      "pressAgainToExit": "ऐप से बाहर निकलने के लिए फिर से दबाएं",
+      "getUserInfoFailed": "उपयोगकर्ता जानकारी प्राप्त करने में विफल",
+      "getHistoryFailed": "इतिहास प्राप्त करने में विफल"
     },
     "my": {
       "space": "स्थान",
       "followers": "फ़ॉलो कर रहे हैं",
       "fans": "प्रशंसक",
       "history": "इतिहास",
+      "noHistory": "कोई इतिहास नहीं",
       "viewAllHistory": "सभी देखें",
       "videoFavorites": "वीडियो पसंदीदा",
       "imageFavorites": "चित्र पसंदीदा",
@@ -224,6 +249,79 @@
       "retry": "पुनः प्रयास करने के लिए क्लिक करें",
       "reachedBottom": "अंत तक पहुंच गए"
     }
+  },
+  "login": {
+    "title": "अपने Iwara खाते में लॉग इन करें",
+    "usernameLabel": "उपयोगकर्ता नाम दर्ज करें",
+    "passwordLabel": "पासवर्ड दर्ज करें",
+    "loginBtn": "लॉग इन",
+    "loggingIn": "लॉग इन हो रहा है",
+    "languageBtn": "Language/语言",
+    "aboutText": "यह एप्लिकेशन MPL-2.0 ओपन सोर्स लाइसेंस का पालन करता है। कृपया इसे व्यावसायिक उद्देश्यों के लिए उपयोग न करें।",
+    "usernameRequired": "उपयोगकर्ता नाम आवश्यक है",
+    "passwordRequired": "पासवर्ड आवश्यक है",
+    "bothRequired": "उपयोगकर्ता नाम और पासवर्ड आवश्यक हैं",
+    "success": "लॉग इन सफल",
+    "invalidResponse": "लॉग इन विफल: सर्वर प्रतिक्रिया अमान्य",
+    "wrongCredentials": "उपयोगकर्ता नाम या पासवर्ड गलत",
+    "tooManyRequests": "बहुत अधिक लॉग इन प्रयास। कृपया बाद में पुनः प्रयास करें",
+    "failed": "लॉग इन विफल: {status}",
+    "networkError": "लॉग इन अनुरोध विफल। कृपया अपना नेटवर्क कनेक्शन जांचें"
+  },
+  "player": {
+    "loading": "डेटा लोड हो रहा है",
+    "failed": "डेटा लोड करने में विफल~",
+    "infoTab": "जानकारी",
+    "commentTab": "टिप्पणियाँ",
+    "selectDefinition": "गुणवत्ता चुनें",
+    "original": "मूल",
+    "switchingServer": "सर्वर बदल रहा है",
+    "refreshFailed": "सर्वर सूची ताज़ा करने में विफल",
+    "aria2Failed": "aria2 जोड़ने में विफल",
+    "fetchInfoFailed": "वीडियो जानकारी प्राप्त करने में विफल",
+    "fetchFileFailed": "वीडियो फ़ाइल प्राप्त करने में विफल",
+    "switchedTo": "{definition} पर स्विच किया गया"
+  },
+  "imageView": {
+    "loading": "डेटा लोड हो रहा है",
+    "failed": "डेटा लोड करने में विफल~",
+    "fetchInfoFailed": "छवि जानकारी प्राप्त करने में विफल"
+  },
+  "favorites": {
+    "title": "मेरे पसंदीदा",
+    "videoTab": "वीडियो",
+    "imageTab": "छवि"
+  },
+  "friends": {
+    "title": "{type}",
+    "followTab": "फ़ॉलो कर रहे हैं",
+    "fansTab": "प्रशंसक",
+    "friendTab": "मित्र",
+    "loading": "डेटा लोड हो रहा है"
+  },
+  "offlineCache": {
+    "title": "ऑफ़लाइन कैश",
+    "today": "आज",
+    "cacheComplete": "कैश पूर्ण",
+    "views": "दृश्य",
+    "likes": "पसंद"
+  },
+  "search": {
+    "placeholder": "खोज कीवर्ड दर्ज करें",
+    "submit": "खोजें",
+    "videoTab": "वीडियो",
+    "imageTab": "छवि",
+    "userTab": "उपयोगकर्ता",
+    "loadingVideoFailed": "वीडियो खोज परिणाम लोड करने में विफल",
+    "loadingImageFailed": "छवि खोज परिणाम लोड करने में विफल",
+    "loadingUserFailed": "उपयोगकर्ता खोज परिणाम लोड करने में विफल",
+    "historyLabel": "खोज इतिहास",
+    "recommendLabel": "खोजें"
+  },
+  "zone": {
+    "videoTab": "वीडियो",
+    "imageTab": "छवि",
+    "publishTab": "प्रकाशित करें"
   },
   "forum": {
     "sections": {

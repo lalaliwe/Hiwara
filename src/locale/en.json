@@ -1,5 +1,27 @@
 {
-  "common": {},
+  "common": {
+    "followed": "Followed",
+    "unfollowed": "Unfollowed",
+    "followFailed": "Follow failed",
+    "unfollowFailed": "Unfollow failed",
+    "liked": "Liked",
+    "unliked": "Unliked",
+    "likeFailed": "Like failed",
+    "unlikeFailed": "Unlike failed",
+    "fetchCommentsFailed": "Failed to load comments",
+    "fetchRepliesFailed": "Failed to load replies",
+    "linkCopied": "Link copied to clipboard",
+    "copyLinkFailed": "Failed to copy link",
+    "shareSuccess": "Shared successfully",
+    "shareFailed": "Share failed, please try again",
+    "shareNotSupported": "Sharing is not supported on this device",
+    "fetchDownloadFailed": "Failed to get download link",
+    "downloadLinkCopied": "Download link copied to clipboard",
+    "fetchRecommendFailed": "Failed to load recommendations",
+    "fetchVideoListFailed": "Failed to load video list",
+    "fetchImageListFailed": "Failed to load image list",
+    "fetchUserInfoFailed": "Failed to get user info"
+  },
   "setup": {
     "title": "Settings",
     "autoPlay": "Auto Play",
@@ -147,13 +169,16 @@
       "reachedBottom": "Reached bottom"
     },
     "toast": {
-      "pressAgainToExit": "Press again to exit"
+      "pressAgainToExit": "Press again to exit",
+      "getUserInfoFailed": "Failed to get user info",
+      "getHistoryFailed": "Failed to get history"
     },
     "my": {
       "space": "Space",
       "followers": "Following",
       "fans": "Fans",
       "history": "History",
+      "noHistory": "No history",
       "viewAllHistory": "View All",
       "videoFavorites": "Video Favorites",
       "imageFavorites": "Image Favorites",
@@ -224,6 +249,79 @@
       "retry": "Click to retry",
       "reachedBottom": "Reached bottom"
     }
+  },
+  "login": {
+    "title": "Log in to your Iwara account",
+    "usernameLabel": "Enter username",
+    "passwordLabel": "Enter password",
+    "loginBtn": "Log In",
+    "loggingIn": "Logging in...",
+    "languageBtn": "Language/语言",
+    "aboutText": "This application follows the MPL-2.0 open source license. Please do not use it for any commercial purposes.",
+    "usernameRequired": "Username is required",
+    "passwordRequired": "Password is required",
+    "bothRequired": "Username and password are required",
+    "success": "Login successful",
+    "invalidResponse": "Login failed: Invalid server response",
+    "wrongCredentials": "Invalid username or password",
+    "tooManyRequests": "Too many login attempts. Please try again later.",
+    "failed": "Login failed: {status}",
+    "networkError": "Login request failed. Please check your network connection."
+  },
+  "player": {
+    "loading": "Loading...",
+    "failed": "Failed to load data~",
+    "infoTab": "Info",
+    "commentTab": "Comments",
+    "selectDefinition": "Select Quality",
+    "original": "Original",
+    "switchingServer": "Switching server",
+    "refreshFailed": "Failed to refresh server list",
+    "aria2Failed": "Aria2 add failed",
+    "fetchInfoFailed": "Failed to get video info",
+    "fetchFileFailed": "Failed to get video file",
+    "switchedTo": "Switched to {definition}"
+  },
+  "imageView": {
+    "loading": "Loading data",
+    "failed": "Failed to load data~",
+    "fetchInfoFailed": "Failed to get image info"
+  },
+  "favorites": {
+    "title": "My Favorites",
+    "videoTab": "Video",
+    "imageTab": "Image"
+  },
+  "friends": {
+    "title": "{type}",
+    "followTab": "Following",
+    "fansTab": "Fans",
+    "friendTab": "Friends",
+    "loading": "Loading data"
+  },
+  "offlineCache": {
+    "title": "Offline Cache",
+    "today": "Today",
+    "cacheComplete": "Cache complete",
+    "views": " views",
+    "likes": " likes"
+  },
+  "search": {
+    "placeholder": "Enter search keywords",
+    "submit": "Search",
+    "videoTab": "Video",
+    "imageTab": "Image",
+    "userTab": "User",
+    "loadingVideoFailed": "Failed to load video search results",
+    "loadingImageFailed": "Failed to load image search results",
+    "loadingUserFailed": "Failed to load user search results",
+    "historyLabel": "Search History",
+    "recommendLabel": "Discover"
+  },
+  "zone": {
+    "videoTab": "Video",
+    "imageTab": "Image",
+    "publishTab": "Publish"
   },
   "forum": {
     "sections": {

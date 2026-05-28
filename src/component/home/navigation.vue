@@ -55,7 +55,7 @@ function refresh(tab: TabType) {
     <div class="btn" :class="{ active: value === 'video' }" @click="changeValue('video')" @dblclick="refresh('video')"
       v-ripple>
       <div>
-        <iconVideo theme="outline" :size="btnFontSize" :fill="value === 'video' ? '#00796B' : '#616161'" />
+        <iconVideo theme="outline" :size="btnFontSize" />
         <br>
         <span>{{ t('home.navigation.video') }}</span>
       </div>
@@ -63,7 +63,7 @@ function refresh(tab: TabType) {
     <div class="btn" :class="{ active: value === 'image' }" @click="changeValue('image')" @dblclick="refresh('image')"
       v-ripple>
       <div>
-        <iconPic theme="outline" :size="btnFontSize" :fill="value === 'image' ? '#00796B' : '#616161'" />
+        <iconPic theme="outline" :size="btnFontSize" />
         <br>
         <span>{{ t('home.navigation.image') }}</span>
       </div>
@@ -71,7 +71,7 @@ function refresh(tab: TabType) {
     <div class="btn" :class="{ active: value === 'subscribe' }" @click="changeValue('subscribe')"
       @dblclick="refresh('subscribe')" v-ripple>
       <div>
-        <iconRss theme="outline" :size="btnFontSize" :fill="value === 'subscribe' ? '#00796B' : '#616161'" />
+        <iconRss theme="outline" :size="btnFontSize" />
         <br>
         <span>{{ t('home.navigation.subscribe') }}</span>
       </div>
@@ -79,14 +79,14 @@ function refresh(tab: TabType) {
     <div class="btn" :class="{ active: value === 'forum' }" @click="changeValue('forum')" @dblclick="refresh('forum')"
       v-ripple>
       <div>
-        <iconComments theme="outline" :size="btnFontSize" :fill="value === 'forum' ? '#00796B' : '#616161'" />
+        <iconComments theme="outline" :size="btnFontSize" />
         <br>
         <span>{{ t('home.navigation.forum') }}</span>
       </div>
     </div>
     <div class="btn" :class="{ active: value === 'my' }" @click="changeValue('my')" v-ripple>
       <div>
-        <iconUser theme="outline" :size="btnFontSize" :fill="value === 'my' ? '#00796B' : '#616161'" />
+        <iconUser theme="outline" :size="btnFontSize" />
         <br>
         <span>{{ t('home.navigation.my') }}</span>
       </div>

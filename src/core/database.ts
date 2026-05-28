@@ -290,17 +290,17 @@ export function insertVideoHistory(
     try {
       const accessTime = Date.now(); // 当前时间戳
       
-      // 查询最新的记录ID
-      const latestRecord: Array<{ id: string }> = await sqlDB.select(
-        `SELECT id FROM video_history ORDER BY access_time DESC LIMIT 1`,
-        []
+      // 查询该ID是否已存在于表中（全局去重）
+      const existingRecord: Array<{ id: string }> = await sqlDB.select(
+        `SELECT id FROM video_history WHERE id = ?`,
+        [id]
       );
       
-      // 如果最新记录的ID与要插入的ID相同，只更新access_time
-      if (latestRecord.length > 0 && latestRecord[0].id === id) {
+      // 如果已存在，更新所有字段（access_time排到最前，其他字段可能变化）
+      if (existingRecord.length > 0) {
         await sqlDB.execute(
-          `UPDATE video_history SET access_time = ? WHERE id = ?`,
-          [accessTime, id]
+          `UPDATE video_history SET title = ?, author = ?, cover_url = ?, long_num = ?, create_time = ?, access_time = ? WHERE id = ?`,
+          [title, author, coverUrl, longNum, createTime, accessTime, id]
         );
         console.log('视频历史记录已更新:', id);
       } else {
@@ -332,17 +332,17 @@ export function insertImageHistory(
     try {
       const accessTime = Date.now(); // 当前时间戳
       
-      // 查询最新的记录ID
-      const latestRecord: Array<{ id: string }> = await sqlDB.select(
-        `SELECT id FROM image_history ORDER BY access_time DESC LIMIT 1`,
-        []
+      // 查询该ID是否已存在于表中（全局去重）
+      const existingRecord: Array<{ id: string }> = await sqlDB.select(
+        `SELECT id FROM image_history WHERE id = ?`,
+        [id]
       );
       
-      // 如果最新记录的ID与要插入的ID相同，只更新access_time
-      if (latestRecord.length > 0 && latestRecord[0].id === id) {
+      // 如果已存在，更新所有字段（access_time排到最前，其他字段可能变化）
+      if (existingRecord.length > 0) {
         await sqlDB.execute(
-          `UPDATE image_history SET access_time = ? WHERE id = ?`,
-          [accessTime, id]
+          `UPDATE image_history SET title = ?, author = ?, cover_url = ?, long_num = ?, create_time = ?, access_time = ? WHERE id = ?`,
+          [title, author, coverUrl, longNum, createTime, accessTime, id]
         );
         console.log('插画历史记录已更新:', id);
       } else {

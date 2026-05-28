@@ -1,5 +1,27 @@
 {
-  "common": {},
+  "common": {
+    "followed": "במעקב",
+    "unfollowed": "בוטל מעקב",
+    "followFailed": "המעקב נכשל",
+    "unfollowFailed": "ביטול המעקב נכשל",
+    "liked": "סומן בלייק",
+    "unliked": "הוסר לייק",
+    "likeFailed": "הלייק נכשל",
+    "unlikeFailed": "הסרת הלייק נכשלה",
+    "fetchCommentsFailed": "טעינת התגובות נכשלה",
+    "fetchRepliesFailed": "טעינת התשובות נכשלה",
+    "linkCopied": "הקישור הועתק ללוח",
+    "copyLinkFailed": "העתקת הקישור נכשלה",
+    "shareSuccess": "השיתוף הצליח",
+    "shareFailed": "השיתוף נכשל, אנא נסה שוב",
+    "shareNotSupported": "המכשיר הנוכחי אינו תומך בשיתוף",
+    "fetchDownloadFailed": "קבלת קישור ההורדה נכשלה",
+    "downloadLinkCopied": "קישור ההורדה הועתק ללוח",
+    "fetchRecommendFailed": "טעינת ההמלצות נכשלה",
+    "fetchVideoListFailed": "טעינת רשימת הסרטונים נכשלה",
+    "fetchImageListFailed": "טעינת רשימת התמונות נכשלה",
+    "fetchUserInfoFailed": "קבלת פרטי המשתמש נכשלה"
+  },
   "setup": {
     "title": "הגדרות",
     "autoPlay": "הפעלה אוטומטית",
@@ -147,13 +169,16 @@
       "reachedBottom": "הגעת לסוף"
     },
     "toast": {
-      "pressAgainToExit": "לחץ שוב כדי לצאת מהאפליקציה"
+      "pressAgainToExit": "לחץ שוב כדי לצאת מהאפליקציה",
+      "getUserInfoFailed": "קבלת פרטי המשתמש נכשלה",
+      "getHistoryFailed": "קבלת ההיסטוריה נכשלה"
     },
     "my": {
       "space": "מרחב",
       "followers": "עוקבים אחרי",
       "fans": "מעריצים",
       "history": "היסטוריה",
+      "noHistory": "אין היסטוריה",
       "viewAllHistory": "הצג הכל",
       "videoFavorites": "וידאו מועדפים",
       "imageFavorites": "איורים מועדפים",
@@ -224,6 +249,79 @@
       "retry": "לחץ לניסיון חוזר",
       "reachedBottom": "הגעת לסוף"
     }
+  },
+  "login": {
+    "title": "התחבר לחשבון Iwara שלך",
+    "usernameLabel": "הכנס שם משתמש",
+    "passwordLabel": "הכנס סיסמה",
+    "loginBtn": "התחבר",
+    "loggingIn": "מתחבר",
+    "languageBtn": "Language/语言",
+    "aboutText": "אפליקציה זו פועלת לפי רישיון הקוד הפתוח MPL-2.0. אנא אל תשתמש בה למטרות מסחריות.",
+    "usernameRequired": "שם המשתמש הוא חובה",
+    "passwordRequired": "הסיסמה היא חובה",
+    "bothRequired": "שם המשתמש והסיסמה הם חובה",
+    "success": "ההתחברות הצליחה",
+    "invalidResponse": "ההתחברות נכשלה: תגובת שרת לא תקינה",
+    "wrongCredentials": "שם משתמש או סיסמה שגויים",
+    "tooManyRequests": "יותר מדי ניסיונות התחברות. אנא נסה שוב מאוחר יותר",
+    "failed": "ההתחברות נכשלה: {status}",
+    "networkError": "בקשת ההתחברות נכשלה. אנא בדוק את חיבור הרשת"
+  },
+  "player": {
+    "loading": "טוען נתונים",
+    "failed": "טעינת הנתונים נכשלה~",
+    "infoTab": "מידע",
+    "commentTab": "תגובות",
+    "selectDefinition": "בחר איכות",
+    "original": "מקור",
+    "switchingServer": "מחליף שרת",
+    "refreshFailed": "רענון רשימת השרתים נכשל",
+    "aria2Failed": "הוספת aria2 נכשלה",
+    "fetchInfoFailed": "קבלת מידע הוידאו נכשלה",
+    "fetchFileFailed": "קבלת קובץ הוידאו נכשלה",
+    "switchedTo": "הועבר ל-{definition}"
+  },
+  "imageView": {
+    "loading": "טוען נתונים",
+    "failed": "טעינת הנתונים נכשלה~",
+    "fetchInfoFailed": "קבלת מידע התמונה נכשלה"
+  },
+  "favorites": {
+    "title": "המועדפים שלי",
+    "videoTab": "וידאו",
+    "imageTab": "תמונה"
+  },
+  "friends": {
+    "title": "{type}",
+    "followTab": "מעקב",
+    "fansTab": "מעריצים",
+    "friendTab": "חברים",
+    "loading": "טוען נתונים"
+  },
+  "offlineCache": {
+    "title": "מטמון לא מקוון",
+    "today": "היום",
+    "cacheComplete": "המטמון הושלם",
+    "views": "צפיות",
+    "likes": "לייקים"
+  },
+  "search": {
+    "placeholder": "הכנס מילות חיפוש",
+    "submit": "חפש",
+    "videoTab": "וידאו",
+    "imageTab": "תמונה",
+    "userTab": "משתמש",
+    "loadingVideoFailed": "טעינת תוצאות חיפוש הוידאו נכשלה",
+    "loadingImageFailed": "טעינת תוצאות חיפוש התמונה נכשלה",
+    "loadingUserFailed": "טעינת תוצאות חיפוש המשתמש נכשלה",
+    "historyLabel": "היסטוריית חיפוש",
+    "recommendLabel": "גלה"
+  },
+  "zone": {
+    "videoTab": "וידאו",
+    "imageTab": "תמונה",
+    "publishTab": "פרסם"
   },
   "forum": {
     "sections": {

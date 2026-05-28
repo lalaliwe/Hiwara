@@ -1,5 +1,27 @@
 {
-  "common": {},
+  "common": {
+    "followed": "已关注",
+    "unfollowed": "已取消关注",
+    "followFailed": "关注失败",
+    "unfollowFailed": "取消关注失败",
+    "liked": "已点赞",
+    "unliked": "已取消点赞",
+    "likeFailed": "点赞失败",
+    "unlikeFailed": "取消点赞失败",
+    "fetchCommentsFailed": "获取评论列表失败",
+    "fetchRepliesFailed": "获取回复失败",
+    "linkCopied": "链接已复制到剪贴板",
+    "copyLinkFailed": "复制链接失败",
+    "shareSuccess": "分享成功",
+    "shareFailed": "分享失败，请重试",
+    "shareNotSupported": "当前设备不支持分享功能",
+    "fetchDownloadFailed": "获取下载链接失败",
+    "downloadLinkCopied": "下载链接已复制到剪贴板",
+    "fetchRecommendFailed": "插画推荐获取失败",
+    "fetchVideoListFailed": "获取视频列表失败",
+    "fetchImageListFailed": "获取插画列表失败",
+    "fetchUserInfoFailed": "获取用户信息失败"
+  },
   "setup": {
     "title": "设置",
     "autoPlay": "自动播放",
@@ -147,13 +169,16 @@
       "reachedBottom": "到底了"
     },
     "toast": {
-      "pressAgainToExit": "再按一次返回键退出应用"
+      "pressAgainToExit": "再按一次返回键退出应用",
+      "getUserInfoFailed": "获取用户信息失败",
+      "getHistoryFailed": "获取历史记录失败"
     },
     "my": {
       "space": "空间",
       "followers": "关注",
       "fans": "粉丝",
       "history": "历史记录",
+      "noHistory": "暂无历史记录",
       "viewAllHistory": "查看全部",
       "videoFavorites": "视频收藏",
       "imageFavorites": "插画收藏",
@@ -224,6 +249,79 @@
       "retry": "点击重试",
       "reachedBottom": "到底了"
     }
+  },
+  "login": {
+    "title": "登录到你的Iwara账号",
+    "usernameLabel": "请输入用户名",
+    "passwordLabel": "请输入密码",
+    "loginBtn": "登录",
+    "loggingIn": "登录中",
+    "languageBtn": "Language/语言",
+    "aboutText": "本应用遵循MPL-2.0开源协议，请勿用于任何商业用途。",
+    "usernameRequired": "用户名不得为空",
+    "passwordRequired": "密码不得为空",
+    "bothRequired": "用户名和密码不得为空",
+    "success": "登录成功",
+    "invalidResponse": "登录失败：服务器响应无效",
+    "wrongCredentials": "用户名或密码错误",
+    "tooManyRequests": "登录过于频繁，请稍后再试",
+    "failed": "登录失败：{status}",
+    "networkError": "登录请求失败，请检查网络连接"
+  },
+  "player": {
+    "loading": "数据加载中",
+    "failed": "数据加载失败了喵~",
+    "infoTab": "简介",
+    "commentTab": "评论",
+    "selectDefinition": "选择清晰度",
+    "original": "原画",
+    "switchingServer": "正在切换服务器",
+    "refreshFailed": "刷新服务器列表失败",
+    "aria2Failed": "aria2 添加失败",
+    "fetchInfoFailed": "获取视频信息失败",
+    "fetchFileFailed": "获取视频文件失败",
+    "switchedTo": "已切换到 {definition}"
+  },
+  "imageView": {
+    "loading": "正在加载数据",
+    "failed": "数据加载失败了喵~",
+    "fetchInfoFailed": "获取插画信息失败"
+  },
+  "favorites": {
+    "title": "我的收藏",
+    "videoTab": "视频",
+    "imageTab": "插画"
+  },
+  "friends": {
+    "title": "{type}",
+    "followTab": "关注",
+    "fansTab": "粉丝",
+    "friendTab": "好友",
+    "loading": "数据加载中"
+  },
+  "offlineCache": {
+    "title": "离线缓存",
+    "today": "今天",
+    "cacheComplete": "缓存完成",
+    "views": "播放",
+    "likes": "点赞"
+  },
+  "search": {
+    "placeholder": "输入搜索关键词",
+    "submit": "搜索",
+    "videoTab": "视频",
+    "imageTab": "插画",
+    "userTab": "用户",
+    "loadingVideoFailed": "加载视频搜索结果失败",
+    "loadingImageFailed": "加载插画搜索结果失败",
+    "loadingUserFailed": "加载用户搜索结果失败",
+    "historyLabel": "搜索历史",
+    "recommendLabel": "搜索发现"
+  },
+  "zone": {
+    "videoTab": "视频",
+    "imageTab": "插画",
+    "publishTab": "发布"
   },
   "forum": {
     "sections": {

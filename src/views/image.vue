@@ -2,6 +2,7 @@
 import { ref, onMounted, onUnmounted, onActivated } from 'vue';
 import { setStatusBarTextStyle } from '../plugins/navbarStyle'
 import { useRouter, useRoute } from 'vue-router';
+import { useI18n } from 'vue-i18n';
 import ImageInfo from '../component/image/info.vue';
 import RecommendList from '../component/image/recommend.vue';
 import imgPreview from '../component/image/preview.vue';
@@ -14,6 +15,8 @@ import loadingHuawu from '../component/loadingHuawu.vue';
 import errorHuawu from '../component/errorHuawu.vue';
 import fullScreen from '../component/image/fullScreen.vue';
 import comment from '../component/image/comment.vue';
+
+const { t } = useI18n();
 
 defineOptions({
   name: 'Image'
@@ -57,6 +60,7 @@ const tags = ref<string[]>([]); // 插画标签数组
 const authorname = ref<string>(''); // 作者名称
 const username = ref<string>(''); // 作者用户名
 const uid = ref<string>(''); // 作者ID
+const avatar = ref<string>(''); // 作者头像URL
 const fansNum = ref<number>(0); // 粉丝数
 const imageNum = ref<number>(0);  // 插画数量
 const isFollow = ref<boolean>(false); // 是否已关注作者
@@ -159,6 +163,7 @@ async function getImageInfo(): Promise<void> {
     authorname.value = imageInfo.user.name;
     username.value = imageInfo.user.username;
     uid.value = imageInfo.user.id;
+    avatar.value = imageInfo.user.avatar; // 作者头像
     isFollow.value = imageInfo.user.followedBy;
     isLike.value = imageInfo.liked || false;
     // 插画文件数组
@@ -196,7 +201,7 @@ async function getImageInfo(): Promise<void> {
     }
   } catch (error) {
     console.error(`获取插画信息失败：`, error);
-    showShortToast('获取插画信息失败');
+    showShortToast(t('imageView.fetchInfoFailed'));
     isState.value = 'failed';
     throw error;
   }
@@ -243,10 +248,10 @@ const handleFollow = (isFollowed: boolean) => {
       </span>
     </div>
     <div v-if="isState === 'loading'" class="state-container">
-      <loadingHuawu>正在加载数据</loadingHuawu>
+      <loadingHuawu>{{ t('imageView.loading') }}</loadingHuawu>
     </div>
     <div v-else-if="isState === 'failed'" class="state-container">
-      <errorHuawu>数据加载失败了喵~</errorHuawu>
+      <errorHuawu>{{ t('imageView.failed') }}</errorHuawu>
     </div>
     <div v-else-if="isState === 'success'" class="image-container" ref="imageContainerRef" @scroll="handleScroll">
 
@@ -257,8 +262,9 @@ const handleFollow = (isFollowed: boolean) => {
       <!-- 第二部分：插画信息区域（已拆分为子组件） -->
       <ImageInfo v-if="isState === 'success'" :title="title" :view-count="viewCount" :created-at="createdAt" :pid="pid"
         :slug="slug" :resolution="resolution" :synopsis="synopsis" :tags="tags" :authorname="authorname"
-        :username="username" :uid="uid" :fans-num="fansNum" :image-num="imageNum" :is-follow="isFollow"
-        :is-like="isLike" @commentTrigger="handleCommentTrigger" @like="handleLike" @follow="handleFollow" />
+        :username="username" :uid="uid" :avatar="avatar" :fans-num="fansNum" :image-num="imageNum"
+        :is-follow="isFollow" :is-like="isLike" @commentTrigger="handleCommentTrigger" @like="handleLike"
+        @follow="handleFollow" />
       <!-- 第三部分：推荐列表（已拆分为子组件） -->
       <RecommendList :pid="pid" :uid="uid" />
     </div>

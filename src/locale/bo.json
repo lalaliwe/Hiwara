@@ -1,5 +1,27 @@
 {
-  "common": {},
+  "common": {
+    "followed": "རྗེས་སུ་འབྲངས་ཟིན།",
+    "unfollowed": "རྗེས་སུ་འབྲངས་པ་བཤིག་ཟིན།",
+    "followFailed": "རྗེས་སུ་འབྲངས་མ་ཐུབ།",
+    "unfollowFailed": "རྗེས་སུ་འབྲངས་པ་བཤིག་མ་ཐུབ།",
+    "liked": "དགའ་མོས་བྱས་ཟིན།",
+    "unliked": "དགའ་མོས་ཕྱིར་བཤིག་ཟིན།",
+    "likeFailed": "དགའ་མོས་མ་ཐུབ།",
+    "unlikeFailed": "དགའ་མོས་ཕྱིར་བཤིག་མ་ཐུབ།",
+    "fetchCommentsFailed": "བསམ་ཚུལ་ཐོབ་མ་ཐུབ།",
+    "fetchRepliesFailed": "ལན་འདེབས་ཐོབ་མ་ཐུབ།",
+    "linkCopied": "འབྲེལ་ཐག་འཕྲིན་ཤོག་ནང་བཤུས་ཟིན།",
+    "copyLinkFailed": "འབྲེལ་ཐག་བཤུས་མ་ཐུབ།",
+    "shareSuccess": "བགོ་བཤའ་ལེགས་པར་གྲུབ།",
+    "shareFailed": "བགོ་བཤའ་མ་ཐུབ། ཡང་བསྐྱར་ཞུས།",
+    "shareNotSupported": "ཡོ་བྱད་འདིས་བགོ་བཤའི་ལས་འགུལ་ལ་རྒྱབ་སྐྱོར་མི་ཐུབ།",
+    "fetchDownloadFailed": "ཕབ་ལེན་འབྲེལ་ཐག་ཐོབ་མ་ཐུབ།",
+    "downloadLinkCopied": "ཕབ་ལེན་འབྲེལ་ཐག་འཕྲིན་ཤོག་ནང་བཤུས་ཟིན།",
+    "fetchRecommendFailed": "འོས་སྦྱོར་ཐོབ་མ་ཐུབ།",
+    "fetchVideoListFailed": "བརྙན་ཐུང་ཐོ་བྱང་ཐོབ་མ་ཐུབ།",
+    "fetchImageListFailed": "པར་རིས་ཐོ་བྱང་ཐོབ་མ་ཐུབ།",
+    "fetchUserInfoFailed": "བེད་སྤྱོད་མཁན་གྱི་གནས་ཚུལ་ཐོབ་མ་ཐུབ།"
+  },
   "setup": {
     "title": "སྒྲིག་བཀོད།",
     "autoPlay": "རང་འཁོར་གཏོང་བ།",
@@ -147,13 +169,16 @@
       "reachedBottom": "མཐའ་རུ་སོན"
     },
     "toast": {
-      "pressAgainToExit": "ཡང་བསྐྱར་ནོན་ནས་ཉེར་སྤྱོད་ནས་ཐོན"
+      "pressAgainToExit": "ཡང་བསྐྱར་ནོན་ནས་ཉེར་སྤྱོད་ནས་ཐོན",
+      "getUserInfoFailed": "བེད་སྤྱོད་མཁན་གྱི་གནས་ཚུལ་ཐོབ་མ་ཐུབ།",
+      "getHistoryFailed": "ལོ་རྒྱུས་ཐོབ་མ་ཐུབ།"
     },
     "my": {
       "space": "བར་སྟོང",
       "followers": "རྗེས་སུ་འབྲངས",
       "fans": "རྣམ་པ་དགའ་མཁན",
       "history": "ལོ་རྒྱུས",
+      "noHistory": "ལོ་རྒྱུས་མེད",
       "viewAllHistory": "ཚང་མ་མཐོང",
       "videoFavorites": "དགའ་མོས་བརྙན་ཐུང",
       "imageFavorites": "དགའ་མོས་པར་རིས",
@@ -224,6 +249,79 @@
       "retry": "ཡང་བསྐྱར་འདིར་ནོན།",
       "reachedBottom": "མཐའ་རུ་སོན"
     }
+  },
+  "login": {
+    "title": "ཁྱེད་ཀྱི་Iwara རྒྱུས་ཐོར་ཞུགས།",
+    "usernameLabel": "བེད་སྤྱོད་མཚན་ཞུགས།",
+    "passwordLabel": "གསང་ཚིག་ཞུགས།",
+    "loginBtn": "ཞུགས།",
+    "loggingIn": "ཞུགས་བཞིན་ཡོད།",
+    "languageBtn": "Language/语言",
+    "aboutText": "ཉེར་སྤྱོད་འདི MPL-2.0 སྒོ་འབྱེད་མོས་གཞིའི་ལག་ཁྱེར་ལ་བརྩི་སྲུང་ཞུ། ཚོང་དོན་དམིགས་ཡུལ་དུ་སྤྱོད་པར་མི་འོས།",
+    "usernameRequired": "བེད་སྤྱོད་མཚན་དགོས།",
+    "passwordRequired": "གསང་ཚིག་དགོས།",
+    "bothRequired": "བེད་སྤྱོད་མཚན་དང་གསང་ཚིག་གཉིས་ཀ་དགོས།",
+    "success": "ཞུགས་པ་ལེགས་པར་གྲུབ།",
+    "invalidResponse": "ཞུགས་མ་ཐུབ། མཛོད་འཕྲུལ་གྱི་ལན་ནུས་མེད།",
+    "wrongCredentials": "བེད་སྤྱོད་མཚན་ནམ་གསང་ཚིག་ནོར་འཁྲུལ།",
+    "tooManyRequests": "ཞུགས་བརྒྱུད་ཧ་ཅང་མང་། ཕྱིས་བསྐྱར་ཞུས།",
+    "failed": "ཞུགས་མ་ཐུབ། {status}",
+    "networkError": "ཞུགས་བརྒྱུད་རེ་སྐུལ་མ་ཐུབ། དྲ་རྒྱའི་འབྲེལ་མཚམས་ཞིབ་བཤེར་ཞུས།"
+  },
+  "player": {
+    "loading": "གཞི་གྲངས་འཇུག་བཞིན་ཡོད།",
+    "failed": "གཞི་གྲངས་འཇུག་མ་ཐུབ།~",
+    "infoTab": "ངོ་སྤྲོད།",
+    "commentTab": "བསམ་ཚུལ།",
+    "selectDefinition": "སྤུས་ཚད་འདེམས།",
+    "original": "གཞི་རྩའི་པར།",
+    "switchingServer": "མཛོད་འཕྲུལ་བརྗེ་བཞིན་ཡོད།",
+    "refreshFailed": "མཛོད་འཕྲུལ་ཐོ་བྱང་གསར་བཅོས་མ་ཐུབ།",
+    "aria2Failed": "aria2 ཁ་སྣོན་མ་ཐུབ།",
+    "fetchInfoFailed": "བརྙན་ཐུང་གནས་ཚུལ་ཐོབ་མ་ཐུབ།",
+    "fetchFileFailed": "བརྙན་ཐུང་ཡིག་ཆ་ཐོབ་མ་ཐུབ།",
+    "switchedTo": "{definition}ལ་བརྗེས་ཟིན།"
+  },
+  "imageView": {
+    "loading": "གཞི་གྲངས་འཇུག་བཞིན་ཡོད།",
+    "failed": "གཞི་གྲངས་འཇུག་མ་ཐུབ།~",
+    "fetchInfoFailed": "པར་རིས་གནས་ཚུལ་ཐོབ་མ་ཐུབ།"
+  },
+  "favorites": {
+    "title": "ངའི་དགའ་མོས།",
+    "videoTab": "བརྙན་ཐུང",
+    "imageTab": "པར་རིས"
+  },
+  "friends": {
+    "title": "{type}",
+    "followTab": "རྗེས་སུ་འབྲངས།",
+    "fansTab": "དགའ་མཁན།",
+    "friendTab": "གྲོགས་པོ།",
+    "loading": "གཞི་གྲངས་འཇུག་བཞིན་ཡོད།"
+  },
+  "offlineCache": {
+    "title": "དྲ་མེད་མཛོད།",
+    "today": "དེ་རིང",
+    "cacheComplete": "མཛོད་རྫོགས།",
+    "views": "ལྟ་གྲངས།",
+    "likes": "དགའ་མོས།"
+  },
+  "search": {
+    "placeholder": "འཚོལ་ཞིབ་གནད་ཚིག་ཞུགས།",
+    "submit": "འཚོལ་ཞིབ།",
+    "videoTab": "བརྙན་ཐུང",
+    "imageTab": "པར་རིས",
+    "userTab": "བེད་སྤྱོད་མཁན།",
+    "loadingVideoFailed": "བརྙན་ཐུང་འཚོལ་ཞིབ་མཇུག་འབྲས་འཇུག་མ་ཐུབ།",
+    "loadingImageFailed": "པར་རིས་འཚོལ་ཞིབ་མཇུག་འབྲས་འཇུག་མ་ཐུབ།",
+    "loadingUserFailed": "བེད་སྤྱོད་མཁན་འཚོལ་ཞིབ་མཇུག་འབྲས་འཇུག་མ་ཐུབ།",
+    "historyLabel": "འཚོལ་ཞིབ་ལོ་རྒྱུས།",
+    "recommendLabel": "འཚོལ་ཞིབ་ཐོབ་ཐང།"
+  },
+  "zone": {
+    "videoTab": "བརྙན་ཐུང",
+    "imageTab": "པར་རིས",
+    "publishTab": "སྤེལ་བ།"
   },
   "forum": {
     "sections": {

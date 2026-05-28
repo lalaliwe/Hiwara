@@ -1,5 +1,27 @@
 {
-  "common": {},
+  "common": {
+    "followed": "បានតាមដាន",
+    "unfollowed": "បានឈប់តាមដាន",
+    "followFailed": "ការតាមដានបរាជ័យ",
+    "unfollowFailed": "ការឈប់តាមដានបរាជ័យ",
+    "liked": "បានចូលចិត្ត",
+    "unliked": "បានឈប់ចូលចិត្ត",
+    "likeFailed": "ការចូលចិត្តបរាជ័យ",
+    "unlikeFailed": "ការឈប់ចូលចិត្តបរាជ័យ",
+    "fetchCommentsFailed": "ការទាញយកមតិយោបល់បរាជ័យ",
+    "fetchRepliesFailed": "ការទាញយកចម្លើយបរាជ័យ",
+    "linkCopied": "តំណភ្ជាប់ត្រូវបានចម្លងទៅក្ដារតម្បៀតខ្ទាស់",
+    "copyLinkFailed": "ការចម្លងតំណភ្ជាប់បរាជ័យ",
+    "shareSuccess": "ការចែករំលែកបានជោគជ័យ",
+    "shareFailed": "ការចែករំលែកបរាជ័យ សូមព្យាយាមម្តងទៀត",
+    "shareNotSupported": "ឧបករណ៍បច្ចុប្បន្នមិនគាំទ្រមុខងារចែករំលែកទេ",
+    "fetchDownloadFailed": "ការទាញយកតំណភ្ជាប់ទាញយកបរាជ័យ",
+    "downloadLinkCopied": "តំណភ្ជាប់ទាញយកត្រូវបានចម្លងទៅក្ដារតម្បៀតខ្ទាស់",
+    "fetchRecommendFailed": "ការទាញយកអនុសាសន៍បរាជ័យ",
+    "fetchVideoListFailed": "ការទាញយកបញ្ជីវីដេអូបរាជ័យ",
+    "fetchImageListFailed": "ការទាញយកបញ្ជីរូបភាពបរាជ័យ",
+    "fetchUserInfoFailed": "ការទាញយកព័ត៌មានអ្នកប្រើប្រាស់បរាជ័យ"
+  },
   "setup": {
     "title": "ការកំណត់",
     "autoPlay": "ចាក់ស្វ័យប្រវត្តិ",
@@ -147,13 +169,16 @@
       "reachedBottom": "បានដល់បាត"
     },
     "toast": {
-      "pressAgainToExit": "ចុចម្តងទៀតដើម្បីចាកចេញពីកម្មវិធី"
+      "pressAgainToExit": "ចុចម្តងទៀតដើម្បីចាកចេញពីកម្មវិធី",
+      "getUserInfoFailed": "ការទាញយកព័ត៌មានអ្នកប្រើប្រាស់បរាជ័យ",
+      "getHistoryFailed": "ការទាញយកប្រវត្តិបរាជ័យ"
     },
     "my": {
       "space": "ទំហំ",
       "followers": "កំពុងតាមដាន",
       "fans": "អ្នកគាំទ្រ",
       "history": "ប្រវត្តិ",
+      "noHistory": "គ្មានប្រវត្តិ",
       "viewAllHistory": "មើលទាំងអស់",
       "videoFavorites": "វីដេអូដែលពេញចិត្ត",
       "imageFavorites": "រូបភាពដែលពេញចិត្ត",
@@ -224,6 +249,79 @@
       "retry": "ចុចដើម្បីសាកល្បងម្តងទៀត",
       "reachedBottom": "បានដល់បាត"
     }
+  },
+  "login": {
+    "title": "ចូលទៅក្នុងគណនី Iwara របស់អ្នក",
+    "usernameLabel": "បញ្ចូលឈ្មោះអ្នកប្រើ",
+    "passwordLabel": "បញ្ចូលពាក្យសម្ងាត់",
+    "loginBtn": "ចូល",
+    "loggingIn": "កំពុងចូល",
+    "languageBtn": "Language/语言",
+    "aboutText": "កម្មវិធីនេះអនុវត្តតាមអាជ្ញាប័ណ្ណប្រភពបើក MPL-2.0។ សូមកុំប្រើវាសម្រាប់គោលបំណងពាណិជ្ជកម្ម។",
+    "usernameRequired": "ឈ្មោះអ្នកប្រើត្រូវបានទាមទារ",
+    "passwordRequired": "ពាក្យសម្ងាត់ត្រូវបានទាមទារ",
+    "bothRequired": "ឈ្មោះអ្នកប្រើ និងពាក្យសម្ងាត់ត្រូវបានទាមទារ",
+    "success": "ការចូលបានជោគជ័យ",
+    "invalidResponse": "ការចូលបរាជ័យ: ការឆ្លើយតបម៉ាស៊ីនមេមិនត្រឹមត្រូវ",
+    "wrongCredentials": "ឈ្មោះអ្នកប្រើ ឬពាក្យសម្ងាត់មិនត្រឹមត្រូវ",
+    "tooManyRequests": "ការព្យាយាមចូលច្រើនពេក។ សូមព្យាយាមម្តងទៀតនៅពេលក្រោយ",
+    "failed": "ការចូលបរាជ័យ: {status}",
+    "networkError": "សំណើចូលបរាជ័យ។ សូមពិនិត្យការតភ្ជាប់បណ្តាញ"
+  },
+  "player": {
+    "loading": "កំពុងផ្ទុកទិន្នន័យ",
+    "failed": "ការផ្ទុកទិន្នន័យបរាជ័យ~",
+    "infoTab": "ព័ត៌មាន",
+    "commentTab": "មតិយោបល់",
+    "selectDefinition": "ជ្រើសរើសគុណភាព",
+    "original": "ដើម",
+    "switchingServer": "កំពុងប្តូរម៉ាស៊ីនមេ",
+    "refreshFailed": "ការធ្វើឱ្យស្រស់បញ្ជីម៉ាស៊ីនមេបរាជ័យ",
+    "aria2Failed": "ការបន្ថែម aria2 បរាជ័យ",
+    "fetchInfoFailed": "ការទាញយកព័ត៌មានវីដេអូបរាជ័យ",
+    "fetchFileFailed": "ការទាញយកឯកសារវីដេអូបរាជ័យ",
+    "switchedTo": "បានប្តូរទៅ {definition}"
+  },
+  "imageView": {
+    "loading": "កំពុងផ្ទុកទិន្នន័យ",
+    "failed": "ការផ្ទុកទិន្នន័យបរាជ័យ~",
+    "fetchInfoFailed": "ការទាញយកព័ត៌មានរូបភាពបរាជ័យ"
+  },
+  "favorites": {
+    "title": "ចំណូលចិត្តរបស់ខ្ញុំ",
+    "videoTab": "វីដេអូ",
+    "imageTab": "រូបភាព"
+  },
+  "friends": {
+    "title": "{type}",
+    "followTab": "កំពុងតាមដាន",
+    "fansTab": "អ្នកគាំទ្រ",
+    "friendTab": "មិត្តភក្តិ",
+    "loading": "កំពុងផ្ទុកទិន្នន័យ"
+  },
+  "offlineCache": {
+    "title": "ឃ្លាំងសម្ងាត់ក្រៅបណ្តាញ",
+    "today": "ថ្ងៃនេះ",
+    "cacheComplete": "ឃ្លាំងសម្ងាត់បានបញ្ចប់",
+    "views": "ចាក់",
+    "likes": "ចូលចិត្ត"
+  },
+  "search": {
+    "placeholder": "បញ្ចូលពាក្យគន្លឹះស្វែងរក",
+    "submit": "ស្វែងរក",
+    "videoTab": "វីដេអូ",
+    "imageTab": "រូបភាព",
+    "userTab": "អ្នកប្រើប្រាស់",
+    "loadingVideoFailed": "ការផ្ទុកលទ្ធផលស្វែងរកវីដេអូបរាជ័យ",
+    "loadingImageFailed": "ការផ្ទុកលទ្ធផលស្វែងរករូបភាពបរាជ័យ",
+    "loadingUserFailed": "ការផ្ទុកលទ្ធផលស្វែងរកអ្នកប្រើប្រាស់បរាជ័យ",
+    "historyLabel": "ប្រវត្តិស្វែងរក",
+    "recommendLabel": "រកឃើញ"
+  },
+  "zone": {
+    "videoTab": "វីដេអូ",
+    "imageTab": "រូបភាព",
+    "publishTab": "បោះពុម្ព"
   },
   "forum": {
     "sections": {

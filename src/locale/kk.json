@@ -1,5 +1,27 @@
 {
-  "common": {},
+  "common": {
+    "followed": "Жазылды",
+    "unfollowed": "Жазылудан бас тартты",
+    "followFailed": "Жазылу сәтсіз аяқталды",
+    "unfollowFailed": "Жазылудан бас тарту сәтсіз аяқталды",
+    "liked": "Ұнады",
+    "unliked": "Ұнату алынып тасталды",
+    "likeFailed": "Ұнату сәтсіз аяқталды",
+    "unlikeFailed": "Ұнатуды алып тастау сәтсіз аяқталды",
+    "fetchCommentsFailed": "Пікірлерді жүктеу сәтсіз аяқталды",
+    "fetchRepliesFailed": "Жауаптарды жүктеу сәтсіз аяқталды",
+    "linkCopied": "Сілтеме алмасу буферіне көшірілді",
+    "copyLinkFailed": "Сілтемені көшіру сәтсіз аяқталды",
+    "shareSuccess": "Бөлісу сәтті аяқталды",
+    "shareFailed": "Бөлісу сәтсіз аяқталды, қайталап көріңіз",
+    "shareNotSupported": "Ағымдағы құрылғы бөлісу функциясын қолдамайды",
+    "fetchDownloadFailed": "Жүктеу сілтемесін алу сәтсіз аяқталды",
+    "downloadLinkCopied": "Жүктеу сілтемесі алмасу буферіне көшірілді",
+    "fetchRecommendFailed": "Ұсыныстарды жүктеу сәтсіз аяқталды",
+    "fetchVideoListFailed": "Бейне тізімін жүктеу сәтсіз аяқталды",
+    "fetchImageListFailed": "Сурет тізімін жүктеу сәтсіз аяқталды",
+    "fetchUserInfoFailed": "Пайдаланушы ақпаратын алу сәтсіз аяқталды"
+  },
   "setup": {
     "title": "Параметрлер",
     "autoPlay": "Авто ойнату",
@@ -147,13 +169,16 @@
       "reachedBottom": "Соңына жетті"
     },
     "toast": {
-      "pressAgainToExit": "Қосымшадан шығу үшін қайта басыңыз"
+      "pressAgainToExit": "Қосымшадан шығу үшін қайта басыңыз",
+      "getUserInfoFailed": "Пайдаланушы ақпаратын алу сәтсіз аяқталды",
+      "getHistoryFailed": "Тарихты алу сәтсіз аяқталды"
     },
     "my": {
       "space": "Кеңістік",
       "followers": "Жазылымдар",
       "fans": "Фанаттар",
       "history": "Тарих",
+      "noHistory": "Тарих жоқ",
       "viewAllHistory": "Барлығын көру",
       "videoFavorites": "Таңдаулы бейнелер",
       "imageFavorites": "Таңдаулы суреттер",
@@ -224,6 +249,79 @@
       "retry": "Қайта әрекет ету үшін басыңыз",
       "reachedBottom": "Соңына жетті"
     }
+  },
+  "login": {
+    "title": "Iwara тіркелгіңізге кіріңіз",
+    "usernameLabel": "Пайдаланушы атын енгізіңіз",
+    "passwordLabel": "Құпия сөзді енгізіңіз",
+    "loginBtn": "Кіру",
+    "loggingIn": "Кіру",
+    "languageBtn": "Language/语言",
+    "aboutText": "Бұл қосымша MPL-2.0 ашық бастапқы код лицензиясын сақтайды. Оны коммерциялық мақсаттарда пайдаланбаңыз.",
+    "usernameRequired": "Пайдаланушы аты міндетті",
+    "passwordRequired": "Құпия сөз міндетті",
+    "bothRequired": "Пайдаланушы аты мен құпия сөз міндетті",
+    "success": "Кіру сәтті аяқталды",
+    "invalidResponse": "Кіру сәтсіз аяқталды: Сервер жауабы жарамсыз",
+    "wrongCredentials": "Пайдаланушы аты немесе құпия сөз қате",
+    "tooManyRequests": "Кіру әрекеті тым көп. Кейінірек қайталап көріңіз",
+    "failed": "Кіру сәтсіз аяқталды: {status}",
+    "networkError": "Кіру сұранысы сәтсіз аяқталды. Желі қосылымын тексеріңіз"
+  },
+  "player": {
+    "loading": "Деректер жүктелуде",
+    "failed": "Деректерді жүктеу сәтсіз аяқталды~",
+    "infoTab": "Ақпарат",
+    "commentTab": "Пікірлер",
+    "selectDefinition": "Сапаны таңдау",
+    "original": "Түпнұсқа",
+    "switchingServer": "Сервер ауыстырылуда",
+    "refreshFailed": "Сервер тізімін жаңарту сәтсіз аяқталды",
+    "aria2Failed": "aria2 қосу сәтсіз аяқталды",
+    "fetchInfoFailed": "Бейне ақпаратын алу сәтсіз аяқталды",
+    "fetchFileFailed": "Бейне файлын алу сәтсіз аяқталды",
+    "switchedTo": "{definition} ауыстырылды"
+  },
+  "imageView": {
+    "loading": "Деректер жүктелуде",
+    "failed": "Деректерді жүктеу сәтсіз аяқталды~",
+    "fetchInfoFailed": "Сурет ақпаратын алу сәтсіз аяқталды"
+  },
+  "favorites": {
+    "title": "Менің таңдаулым",
+    "videoTab": "Бейне",
+    "imageTab": "Сурет"
+  },
+  "friends": {
+    "title": "{type}",
+    "followTab": "Жазылымдар",
+    "fansTab": "Фанаттар",
+    "friendTab": "Достар",
+    "loading": "Деректер жүктелуде"
+  },
+  "offlineCache": {
+    "title": "Офлайн кэш",
+    "today": "Бүгін",
+    "cacheComplete": "Кэш аяқталды",
+    "views": "Көрілімдер",
+    "likes": "Ұнаулар"
+  },
+  "search": {
+    "placeholder": "Іздеу кілт сөздерін енгізіңіз",
+    "submit": "Іздеу",
+    "videoTab": "Бейне",
+    "imageTab": "Сурет",
+    "userTab": "Пайдаланушы",
+    "loadingVideoFailed": "Бейне іздеу нәтижелерін жүктеу сәтсіз аяқталды",
+    "loadingImageFailed": "Сурет іздеу нәтижелерін жүктеу сәтсіз аяқталды",
+    "loadingUserFailed": "Пайдаланушы іздеу нәтижелерін жүктеу сәтсіз аяқталды",
+    "historyLabel": "Іздеу тарихы",
+    "recommendLabel": "Табу"
+  },
+  "zone": {
+    "videoTab": "Бейне",
+    "imageTab": "Сурет",
+    "publishTab": "Жариялау"
   },
   "forum": {
     "sections": {

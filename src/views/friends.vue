@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { onActivated, onMounted, ref, watch } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import { setStatusBarTextStyle } from '../plugins/navbarStyle'
 import { uid as muid } from '../core/store';
 import { getMyselfInfo } from '../core/api';
@@ -8,6 +9,8 @@ import following from '../component/friends/following.vue'
 import fans from '../component/friends/fans.vue'
 import friend from '../component/friends/friend.vue'
 import loadingHuawu from '../component/loadingHuawu.vue'
+
+const { t } = useI18n();
 
 defineOptions({
   name: 'Friends'
@@ -152,19 +155,19 @@ onActivated(() => {
           <font-awesome-icon icon="fa-solid fa-angle-left" />
         </div>
         <div class="label">
-          {{ tab === 'follow' ? '关注' : tab === 'fans' ? '粉丝' : '好友' }}
+          {{ tab === 'follow' ? t('friends.followTab') : tab === 'fans' ? t('friends.fansTab') : t('friends.friendTab') }}
         </div>
       </div>
       <div class="tabs">
         <v-tabs v-model="tab" color="#00796B" align-tabs="center" density="compact" grow>
           <v-tab value="follow">
-            关注
+            {{ t('friends.followTab') }}
           </v-tab>
           <v-tab value="fans">
-            粉丝
+            {{ t('friends.fansTab') }}
           </v-tab>
           <v-tab v-if="isMyself" value="friend">
-            好友
+            {{ t('friends.friendTab') }}
           </v-tab>
         </v-tabs>
         <v-divider></v-divider>
@@ -172,7 +175,7 @@ onActivated(() => {
     </div>
     <!-- uid 未就绪时显示加载状态，避免子组件因空 uid 发起 API 请求 -->
     <div v-if="!isUidReady" class="loading-init">
-      <loadingHuawu>数据加载中</loadingHuawu>
+      <loadingHuawu>{{ t('friends.loading') }}</loadingHuawu>
     </div>
     <v-tabs-window v-else v-model="tab" class="tabs-window">
       <v-tabs-window-item value="follow">

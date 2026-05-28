@@ -447,6 +447,10 @@ const handleEnterFullscreen = () => {
     </div>
   </div>
   <div class="touch" v-show="!showControl" @click="handleMiddleClick" @mousemove="handleMouseMove"></div>
+  <!-- 当控制栏隐藏时显示底部进度指示条 -->
+  <div class="progress-indicator" v-show="!showControl && metadataLoaded">
+    <div class="progress-indicator-bar" :style="{ width: localProgress + '%' }"></div>
+  </div>
 </template>
 
 <style lang="scss" scoped>
@@ -554,5 +558,23 @@ const handleEnterFullscreen = () => {
   z-index: 25;
   cursor: pointer;
   touch-action: none; // 阻止默认触摸行为，让 Hammer.js 接管
+}
+
+// 控制栏隐藏时的底部进度指示条
+.progress-indicator {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  z-index: 24;
+  background: rgba(255, 255, 255, 0.15);
+  pointer-events: none;
+
+  .progress-indicator-bar {
+    height: 100%;
+    background: #00796B;
+    transition: width 0.1s linear;
+  }
 }
 </style>

@@ -1,5 +1,27 @@
 {
-  "common": {},
+  "common": {
+    "followed": "ئەگەشتى",
+    "unfollowed": "ئەگىشىشتىن ۋاز كەچتى",
+    "followFailed": "ئەگىشەلمىدى",
+    "unfollowFailed": "ئەگىشىشتىن ۋاز كېچەلمىدى",
+    "liked": "ياقتۇردى",
+    "unliked": "ياقتۇرۇشنى ئۆچۈردى",
+    "likeFailed": "ياقتۇرالمىدى",
+    "unlikeFailed": "ياقتۇرۇشنى ئۆچۈرەلمىدى",
+    "fetchCommentsFailed": "باھالارنى يۈكلىيەلمىدى",
+    "fetchRepliesFailed": "جاۋابلارنى يۈكلىيەلمىدى",
+    "linkCopied": "ئۇلانما چاپلاش تاختىسىغا كۆچۈرۈلدى",
+    "copyLinkFailed": "ئۇلانمىنى كۆچۈرەلمىدى",
+    "shareSuccess": "ھەمبەھىرلەش مۇۋەپپەقىيەتلىك بولدى",
+    "shareFailed": "ھەمبەھىرلەش مەغلۇب بولدى، قايتا سىناڭ",
+    "shareNotSupported": "نۆۋەتتىكى ئۈسكۈنە ھەمبەھىرلەش ئىقتىدارىنى قوللىمايدۇ",
+    "fetchDownloadFailed": "چۈشۈرۈش ئۇلانمىسىنى ئالالمىدى",
+    "downloadLinkCopied": "چۈشۈرۈش ئۇلانمىسى چاپلاش تاختىسىغا كۆچۈرۈلدى",
+    "fetchRecommendFailed": "تەۋسىيەلەرنى يۈكلىيەلمىدى",
+    "fetchVideoListFailed": "سىن تىزىملىكىنى يۈكلىيەلمىدى",
+    "fetchImageListFailed": "رەسىم تىزىملىكىنى يۈكلىيەلمىدى",
+    "fetchUserInfoFailed": "ئىشلەتكۈچى ئۇچۇرىنى ئالالمىدى"
+  },
   "setup": {
     "title": "تەڭشەكلەر",
     "autoPlay": "ئاپتوماتىك قويۇش",
@@ -147,13 +169,16 @@
       "reachedBottom": "ئاستىغا يەتتى"
     },
     "toast": {
-      "pressAgainToExit": "قوللانمىدىن چىقىش ئۈچۈن يەنە بېسىڭ"
+      "pressAgainToExit": "قوللانمىدىن چىقىش ئۈچۈن يەنە بېسىڭ",
+      "getUserInfoFailed": "ئىشلەتكۈچى ئۇچۇرىنى ئالالمىدى",
+      "getHistoryFailed": "تارىخنى ئالالمىدى"
     },
     "my": {
       "space": "بوشلۇق",
       "followers": "ئەگىشىۋاتقان",
       "fans": "مەستانىلەر",
       "history": "تارىخ",
+      "noHistory": "تارىخ يوق",
       "viewAllHistory": "ھەممىنى كۆرۈش",
       "videoFavorites": "ياقتۇرغان سىنلار",
       "imageFavorites": "ياقتۇرغان رەسىملەر",
@@ -224,6 +249,79 @@
       "retry": "قايتا سىناش ئۈچۈن چېكىڭ",
       "reachedBottom": "ئاستىغا يەتتى"
     }
+  },
+  "login": {
+    "title": "Iwara ھېساباتىڭىزغا كىرىڭ",
+    "usernameLabel": "ئىشلەتكۈچى ئاتىنى كىرگۈزۈڭ",
+    "passwordLabel": "پارولنى كىرگۈزۈڭ",
+    "loginBtn": "كىرىش",
+    "loggingIn": "كىرىۋاتىدۇ",
+    "languageBtn": "Language/语言",
+    "aboutText": "بۇ قوللانما MPL-2.0 ئوچۇق مەنبە ئىجازەتنامىسىگە ئەمەل قىلىدۇ. سودا مەقسىتىدە ئىشلەتمەڭ.",
+    "usernameRequired": "ئىشلەتكۈچى ئاتى تەلەپ قىلىنىدۇ",
+    "passwordRequired": "پارول تەلەپ قىلىنىدۇ",
+    "bothRequired": "ئىشلەتكۈچى ئاتى ۋە پارول تەلەپ قىلىنىدۇ",
+    "success": "كىرىش مۇۋەپپەقىيەتلىك بولدى",
+    "invalidResponse": "كىرىش مەغلۇب بولدى: مۇلازىمېتىر جاۋابى ئىناۋەتسىز",
+    "wrongCredentials": "ئىشلەتكۈچى ئاتى ياكى پارول خاتا",
+    "tooManyRequests": "كىرىش سىنىقى بەك كۆپ. كېيىن قايتا سىناڭ",
+    "failed": "كىرىش مەغلۇب بولدى: {status}",
+    "networkError": "كىرىش تەلەپنامىسى مەغلۇب بولدى. تور باغلىنىشىنى تەكشۈرۈڭ"
+  },
+  "player": {
+    "loading": "سانلىق مەلۇمات يۈكلىنىۋاتىدۇ",
+    "failed": "سانلىق مەلۇمات يۈكلەش مەغلۇب بولدى~",
+    "infoTab": "ئۇچۇر",
+    "commentTab": "باھا",
+    "selectDefinition": "سۈپەت تاللاش",
+    "original": "ئەسلى",
+    "switchingServer": "مۇلازىمېتىر ئالماشتۇرۇلىۋاتىدۇ",
+    "refreshFailed": "مۇلازىمېتىر تىزىملىكىنى يېڭىلاش مەغلۇب بولدى",
+    "aria2Failed": "aria2 قوشۇش مەغلۇب بولدى",
+    "fetchInfoFailed": "سىن ئۇچۇرىنى ئالاش مەغلۇب بولدى",
+    "fetchFileFailed": "سىن ھۆججىتىنى ئالاش مەغلۇب بولدى",
+    "switchedTo": "{definition} غا ئالماشتۇرۇلدى"
+  },
+  "imageView": {
+    "loading": "سانلىق مەلۇمات يۈكلىنىۋاتىدۇ",
+    "failed": "سانلىق مەلۇمات يۈكلەش مەغلۇب بولدى~",
+    "fetchInfoFailed": "رەسىم ئۇچۇرىنى ئالاش مەغلۇب بولدى"
+  },
+  "favorites": {
+    "title": "مېنىڭ ياقتۇرىدىغانلىرىم",
+    "videoTab": "سىن",
+    "imageTab": "رەسىم"
+  },
+  "friends": {
+    "title": "{type}",
+    "followTab": "ئەگىشىۋاتقان",
+    "fansTab": "مەستانىلەر",
+    "friendTab": "دوستلار",
+    "loading": "سانلىق مەلۇمات يۈكلىنىۋاتىدۇ"
+  },
+  "offlineCache": {
+    "title": "تورسىز كەش",
+    "today": "بۈگۈن",
+    "cacheComplete": "كەش توشتى",
+    "views": "قويۇش",
+    "likes": "ياقتۇرۇش"
+  },
+  "search": {
+    "placeholder": "ئىزدەش ئاچقۇچلۇق سۆزىنى كىرگۈزۈڭ",
+    "submit": "ئىزدەش",
+    "videoTab": "سىن",
+    "imageTab": "رەسىم",
+    "userTab": "ئىشلەتكۈچى",
+    "loadingVideoFailed": "سىن ئىزدەش نەتىجىسىنى يۈكلەش مەغلۇب بولدى",
+    "loadingImageFailed": "رەسىم ئىزدەش نەتىجىسىنى يۈكلەش مەغلۇب بولدى",
+    "loadingUserFailed": "ئىشلەتكۈچى ئىزدەش نەتىجىسىنى يۈكلەش مەغلۇب بولدى",
+    "historyLabel": "ئىزدەش تارىخى",
+    "recommendLabel": "بايقاش"
+  },
+  "zone": {
+    "videoTab": "سىن",
+    "imageTab": "رەسىم",
+    "publishTab": "يوللاش"
   },
   "forum": {
     "sections": {

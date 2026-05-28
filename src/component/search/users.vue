@@ -1,11 +1,14 @@
 <script setup lang="ts">
 import { onActivated, ref, watch } from 'vue';
+import { useI18n } from 'vue-i18n';
 import { search } from '../../core/api/video';
 import loadingHuawu from '../loadingHuawu.vue';
 import errorHuawu from '../errorHuawu.vue';
 import { showShortToast } from '../../core/toast';
 import userListItem from '../friends/userListItem.vue';
 import type { VInfiniteScroll } from 'vuetify/components'
+
+const { t } = useI18n();
 
 const props = defineProps<{
   keyword: string;
@@ -68,7 +71,7 @@ const loadMoreUserData = async ({ done }: any = { done: () => { } }) => {
     }
   } catch (error) {
     console.error('加载用户搜索结果失败:', error);
-    showShortToast('加载用户搜索结果失败');
+    showShortToast(t('search.loadingUserFailed'));
     if (userPage.value === 0 && userState.value === 'loading') {
       userState.value = 'failed';
     } else {
@@ -182,10 +185,6 @@ onActivated(() => {
 
   &::-webkit-scrollbar-track {
     margin: calc($top + 4px) 0 calc($bottom + 4px) 0;
-  }
-
-  .list-container {
-    // 包裹容器
   }
 }
 

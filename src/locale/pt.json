@@ -1,12 +1,34 @@
 {
-  "common": {},
+  "common": {
+    "followed": "Seguindo",
+    "unfollowed": "Deixou de seguir",
+    "followFailed": "Falha ao seguir",
+    "unfollowFailed": "Falha ao deixar de seguir",
+    "liked": "Curtiu",
+    "unliked": "Removeu curtida",
+    "likeFailed": "Falha ao curtir",
+    "unlikeFailed": "Falha ao remover curtida",
+    "fetchCommentsFailed": "Falha ao carregar comentários",
+    "fetchRepliesFailed": "Falha ao carregar respostas",
+    "linkCopied": "Link copiado para a área de transferência",
+    "copyLinkFailed": "Falha ao copiar link",
+    "shareSuccess": "Compartilhado com sucesso",
+    "shareFailed": "Falha ao compartilhar, tente novamente",
+    "shareNotSupported": "Este dispositivo não suporta compartilhamento",
+    "fetchDownloadFailed": "Falha ao obter link de download",
+    "downloadLinkCopied": "Link de download copiado para a área de transferência",
+    "fetchRecommendFailed": "Falha ao carregar recomendações",
+    "fetchVideoListFailed": "Falha ao carregar lista de vídeos",
+    "fetchImageListFailed": "Falha ao carregar lista de imagens",
+    "fetchUserInfoFailed": "Falha ao obter informações do usuário"
+  },
   "setup": {
     "title": "Configurações",
     "autoPlay": "Reprodução automática",
     "defaultDefinition": "Qualidade padrão",
     "defaultSearchMode": "Modo de pesquisa padrão",
     "downloadSettings": "Configurações de download",
-    "aria2Settings": "Configurações do Aria2",
+    "aria2Settings": "Configurações Aria2",
     "language": "Idioma (Language)",
     "about": "Sobre",
     "logout": "Sair",
@@ -20,7 +42,7 @@
       "version": "Versão",
       "versionType": "Tipo de versão",
       "beta": "Beta",
-      "buildTime": "Data de compilação",
+      "buildTime": "Tempo de compilação",
       "deviceType": "Tipo de dispositivo",
       "mobile": "Dispositivo móvel",
       "desktop": "Área de trabalho",
@@ -34,13 +56,13 @@
       "loading": "Carregando dados"
     },
     "aria2Page": {
-      "title": "Configurações do Aria2",
+      "title": "Configurações Aria2",
       "enableAria2": "Ativar Aria2",
-      "rpcAddress": "Endereço RPC do Aria2",
+      "rpcAddress": "Endereço RPC Aria2",
       "rpcPlaceholder": "Endereço RPC ex: http://127.0.0.1:6800/jsonrpc",
       "token": "Aria2 TOKEN",
-      "tokenPlaceholder": "Digite o TOKEN",
-      "downloadDir": "Diretório de download do Aria2",
+      "tokenPlaceholder": "Insira o TOKEN",
+      "downloadDir": "Diretório de download Aria2",
       "downloadDirPlaceholder": "Diretório de download ex: ~/Downloads/Iwara",
       "tip": "Dica: O diretório de download deve ser o diretório do servidor Aria2, não o diretório local."
     },
@@ -52,12 +74,12 @@
       "videoSavePath": "Caminho de salvamento de vídeo",
       "imageSavePath": "Caminho de salvamento de imagem",
       "notSet": "Não definido",
-      "selectVideoPath": "Selecionar caminho de vídeo",
-      "selectImagePath": "Selecionar caminho de imagem"
+      "selectVideoPath": "Selecionar caminho de salvamento de vídeo",
+      "selectImagePath": "Selecionar caminho de salvamento de imagem"
     },
     "languagePage": {
       "title": "Idioma (Language)",
-      "followSystem": "Seguir sistema",
+      "followSystem": "Seguir o sistema",
       "english": "Inglês",
       "simplifiedChinese": "Chinês simplificado",
       "traditionalChinese": "Chinês tradicional",
@@ -90,7 +112,7 @@
       "image": "Ilustrações",
       "subscribe": "Inscrições",
       "forum": "Fórum",
-      "my": "Meu perfil"
+      "my": "Minha página"
     },
     "searchBar": {
       "placeholder": "Pesquisar"
@@ -100,7 +122,7 @@
       "year": "Ano",
       "monthLabel": "Mês",
       "allYears": "Todos os anos",
-      "fullYear": "Ano inteiro",
+      "fullYear": "Ano completo",
       "months": {
         "1": "Janeiro",
         "2": "Fevereiro",
@@ -122,41 +144,44 @@
       "sortTabs": {
         "date": "Mais recentes",
         "trending": "Em alta",
-        "popularity": "Populares",
+        "popularity": "Popularidade",
         "views": "Visualizações",
         "likes": "Curtidas"
       },
       "loading": "Carregando...",
-      "noRecords": "Sem registros de vídeo",
+      "noRecords": "Nenhum registro de vídeo",
       "loadFailed": "Falha ao carregar, ",
       "retry": "Clique para tentar novamente",
-      "reachedBottom": "Fim atingido"
+      "reachedBottom": "Chegou ao fim"
     },
     "image": {
       "sortTabs": {
         "date": "Mais recentes",
         "trending": "Em alta",
-        "popularity": "Populares",
+        "popularity": "Popularidade",
         "views": "Visualizações",
         "likes": "Curtidas"
       },
       "loading": "Carregando...",
-      "noRecords": "Sem registros de ilustrações",
+      "noRecords": "Nenhum registro de imagem",
       "loadFailed": "Falha ao carregar, ",
       "retry": "Clique para tentar novamente",
-      "reachedBottom": "Fim atingido"
+      "reachedBottom": "Chegou ao fim"
     },
     "toast": {
-      "pressAgainToExit": "Pressione novamente para sair do aplicativo"
+      "pressAgainToExit": "Pressione novamente para sair do aplicativo",
+      "getUserInfoFailed": "Falha ao obter informações do usuário",
+      "getHistoryFailed": "Falha ao obter histórico"
     },
     "my": {
       "space": "Espaço",
       "followers": "Seguindo",
       "fans": "Fãs",
       "history": "Histórico",
+      "noHistory": "Sem histórico",
       "viewAllHistory": "Ver tudo",
       "videoFavorites": "Vídeos favoritos",
-      "imageFavorites": "Ilustrações favoritas",
+      "imageFavorites": "Imagens favoritas",
       "playlist": "Lista de reprodução",
       "offlineCache": "Cache offline",
       "notifications": "Notificações",
@@ -164,35 +189,35 @@
       "messages": "Mensagens",
       "settings": "Configurações",
       "iwaraServices": "Serviços Iwara",
-      "premium": "Premium",
+      "premium": "Membro Premium",
       "wura": "Wura",
       "faq": "Perguntas frequentes",
       "links": "Links",
-      "aboutText": "Este aplicativo segue a licença de código aberto MPL-2.0. Por favor, não o use para fins comerciais.",
-      "noRecords": "Sem registros de {type}"
+      "aboutText": "Este aplicativo segue a licença de código aberto MPL-2.0. Não o utilize para fins comerciais.",
+      "noRecords": "Nenhum registro de {type}"
     },
     "forum": {
-      "posts": "Postagens",
+      "posts": "Publicações",
       "topics": "Tópicos",
       "repliedAt": "Respondido em",
-      "latestPost": "Última postagem",
+      "latestPost": "Última publicação",
       "groups": {
-        "admin": "Admin",
+        "admin": "Administrador",
         "moderator": "Moderador",
         "japanese": "Japonês",
         "chinese": "Chinês"
       },
       "sections": {
-        "announcement": "Anúncios",
+        "announcement": "Anúncio",
         "announcement_desc": "Informações importantes",
         "feedback": "Feedback",
         "feedback_desc": "Ideias, sugestões e preocupações",
         "help": "Ajuda",
-        "help_desc": "Ajuda com problemas relacionados ao site",
+        "help_desc": "Ajuda com problemas do site",
         "general": "Geral",
         "general_desc": "Todo o resto",
         "guide": "Guia",
-        "guide_desc": "Informações úteis ou guias de \"como fazer\"",
+        "guide_desc": "Informações úteis ou guias de como fazer",
         "helpQuestion": "Ajuda/Pergunta",
         "helpQuestion_desc": "Perguntas não relacionadas ao site",
         "request": "Solicitação",
@@ -208,22 +233,95 @@
       "tab": "Vídeo",
       "loading": "Carregando...",
       "error": "Erro",
-      "noRecords": "Sem histórico de vídeos",
+      "noRecords": "Nenhum histórico de vídeo",
       "today": "Hoje",
       "loadFailed": "Falha ao carregar, ",
       "retry": "Clique para tentar novamente",
-      "reachedBottom": "Fim atingido"
+      "reachedBottom": "Chegou ao fim"
     },
     "image": {
-      "tab": "Ilustrações",
+      "tab": "Imagem",
       "loading": "Carregando...",
       "error": "Erro",
-      "noRecords": "Sem histórico de ilustrações",
+      "noRecords": "Nenhum histórico de imagem",
       "today": "Hoje",
       "loadFailed": "Falha ao carregar, ",
       "retry": "Clique para tentar novamente",
-      "reachedBottom": "Fim atingido"
+      "reachedBottom": "Chegou ao fim"
     }
+  },
+  "login": {
+    "title": "Faça login na sua conta Iwara",
+    "usernameLabel": "Insira o nome de usuário",
+    "passwordLabel": "Insira a senha",
+    "loginBtn": "Entrar",
+    "loggingIn": "Entrando",
+    "languageBtn": "Language/语言",
+    "aboutText": "Este aplicativo segue a licença de código aberto MPL-2.0. Não o utilize para fins comerciais.",
+    "usernameRequired": "O nome de usuário é obrigatório",
+    "passwordRequired": "A senha é obrigatória",
+    "bothRequired": "Nome de usuário e senha são obrigatórios",
+    "success": "Login bem-sucedido",
+    "invalidResponse": "Falha no login: resposta do servidor inválida",
+    "wrongCredentials": "Nome de usuário ou senha incorretos",
+    "tooManyRequests": "Muitas tentativas de login. Tente novamente mais tarde",
+    "failed": "Falha no login: {status}",
+    "networkError": "Falha na solicitação de login. Verifique sua conexão de rede"
+  },
+  "player": {
+    "loading": "Carregando dados",
+    "failed": "Falha ao carregar dados~",
+    "infoTab": "Informações",
+    "commentTab": "Comentários",
+    "selectDefinition": "Selecionar qualidade",
+    "original": "Original",
+    "switchingServer": "Trocando de servidor",
+    "refreshFailed": "Falha ao atualizar lista de servidores",
+    "aria2Failed": "Falha ao adicionar aria2",
+    "fetchInfoFailed": "Falha ao obter informações do vídeo",
+    "fetchFileFailed": "Falha ao obter arquivo de vídeo",
+    "switchedTo": "Alternado para {definition}"
+  },
+  "imageView": {
+    "loading": "Carregando dados",
+    "failed": "Falha ao carregar dados~",
+    "fetchInfoFailed": "Falha ao obter informações da imagem"
+  },
+  "favorites": {
+    "title": "Meus favoritos",
+    "videoTab": "Vídeo",
+    "imageTab": "Imagem"
+  },
+  "friends": {
+    "title": "{type}",
+    "followTab": "Seguindo",
+    "fansTab": "Fãs",
+    "friendTab": "Amigos",
+    "loading": "Carregando dados"
+  },
+  "offlineCache": {
+    "title": "Cache offline",
+    "today": "Hoje",
+    "cacheComplete": "Cache concluído",
+    "views": "Reproduções",
+    "likes": "Curtidas"
+  },
+  "search": {
+    "placeholder": "Insira palavras-chave de pesquisa",
+    "submit": "Pesquisar",
+    "videoTab": "Vídeo",
+    "imageTab": "Imagem",
+    "userTab": "Usuário",
+    "loadingVideoFailed": "Falha ao carregar resultados de pesquisa de vídeo",
+    "loadingImageFailed": "Falha ao carregar resultados de pesquisa de imagem",
+    "loadingUserFailed": "Falha ao carregar resultados de pesquisa de usuário",
+    "historyLabel": "Histórico de pesquisa",
+    "recommendLabel": "Descobrir"
+  },
+  "zone": {
+    "videoTab": "Vídeo",
+    "imageTab": "Imagem",
+    "publishTab": "Publicar"
   },
   "forum": {
     "sections": {
@@ -234,9 +332,9 @@
       "general": "Geral",
       "general_desc": "Todo o resto",
       "guide": "Guia",
-      "guide_desc": "Informações úteis ou guias de \"como fazer\"",
+      "guide_desc": "Informações úteis ou guias de como fazer",
       "help": "Ajuda",
-      "help_desc": "Ajuda com problemas relacionados ao site",
+      "help_desc": "Ajuda com problemas do site",
       "helpQuestion": "Ajuda/Pergunta",
       "helpQuestion_desc": "Perguntas não relacionadas ao site",
       "request": "Solicitação",
@@ -247,7 +345,7 @@
     "replies": "Respostas",
     "views": "Visualizações",
     "author": "Autor",
-    "lastReply": "Última postagem",
+    "lastReply": "Última resposta",
     "publishedAt": "Publicado em",
     "repliedAt": "Respondido em",
     "pinned": "Fixado",
@@ -256,9 +354,9 @@
     "publish": "Publicar",
     "publishSection": "Selecionar seção",
     "publishTitle": "Título",
-    "publishTitlePlaceholder": "Digite o título do post",
+    "publishTitlePlaceholder": "Insira o título da publicação",
     "publishBody": "Conteúdo",
-    "publishBodyPlaceholder": "Digite o conteúdo, suporta Markdown",
-    "publishSubmit": "Publicar post"
+    "publishBodyPlaceholder": "Insira o conteúdo, suporta Markdown",
+    "publishSubmit": "Enviar publicação"
   }
 }

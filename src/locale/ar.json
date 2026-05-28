@@ -1,5 +1,27 @@
 {
-  "common": {},
+  "common": {
+    "followed": "تم المتابعة",
+    "unfollowed": "تم إلغاء المتابعة",
+    "followFailed": "فشلت المتابعة",
+    "unfollowFailed": "فشل إلغاء المتابعة",
+    "liked": "تم الإعجاب",
+    "unliked": "تم إلغاء الإعجاب",
+    "likeFailed": "فشل الإعجاب",
+    "unlikeFailed": "فشل إلغاء الإعجاب",
+    "fetchCommentsFailed": "فشل تحميل التعليقات",
+    "fetchRepliesFailed": "فشل تحميل الردود",
+    "linkCopied": "تم نسخ الرابط إلى الحافظة",
+    "copyLinkFailed": "فشل نسخ الرابط",
+    "shareSuccess": "تم المشاركة بنجاح",
+    "shareFailed": "فشلت المشاركة، حاول مرة أخرى",
+    "shareNotSupported": "الجهاز الحالي لا يدعم ميزة المشاركة",
+    "fetchDownloadFailed": "فشل الحصول على رابط التحميل",
+    "downloadLinkCopied": "تم نسخ رابط التحميل إلى الحافظة",
+    "fetchRecommendFailed": "فشل تحميل التوصيات",
+    "fetchVideoListFailed": "فشل تحميل قائمة الفيديو",
+    "fetchImageListFailed": "فشل تحميل قائمة الصور",
+    "fetchUserInfoFailed": "فشل الحصول على معلومات المستخدم"
+  },
   "setup": {
     "title": "الإعدادات",
     "autoPlay": "التشغيل التلقائي",
@@ -11,24 +33,24 @@
     "about": "حول",
     "logout": "تسجيل الخروج",
     "enabled": "مفعل",
-    "disabled": "معطل",
-    "keywordSearch": "البحث بالكلمات المفتاحية",
-    "tagSearch": "البحث بالوسوم",
-    "original": "أصلي",
+    "disabled": "غير مفعل",
+    "keywordSearch": "الباحث بالكلمات المفتاحية",
+    "tagSearch": "البحث بالوسم",
+    "original": "الأصلي",
     "aboutPage": {
       "title": "حول",
       "version": "الإصدار",
       "versionType": "نوع الإصدار",
-      "beta": "بيتا",
+      "beta": "تجريبي",
       "buildTime": "وقت البناء",
       "deviceType": "نوع الجهاز",
-      "mobile": "محمول",
+      "mobile": "الهاتف المحمول",
       "desktop": "سطح المكتب",
-      "osName": "اسم نظام التشغيل",
-      "osVersion": "إصدار نظام التشغيل",
+      "osName": "اسم النظام",
+      "osVersion": "إصدار النظام",
       "webview": "WebView",
       "webviewVersion": "إصدار WebView",
-      "checkUpdate": "التحقق من التحديثات",
+      "checkUpdate": "التحقق من التحديث",
       "openSourceLicense": "رخصة المصدر المفتوح",
       "unknown": "غير معروف",
       "loading": "جارٍ تحميل البيانات"
@@ -38,9 +60,9 @@
       "enableAria2": "تفعيل Aria2",
       "rpcAddress": "عنوان RPC لـ Aria2",
       "rpcPlaceholder": "عنوان RPC مثال: http://127.0.0.1:6800/jsonrpc",
-      "token": "Aria2 TOKEN",
-      "tokenPlaceholder": "أدخل TOKEN",
-      "downloadDir": "دليل التحميل لـ Aria2",
+      "token": "رمز Aria2",
+      "tokenPlaceholder": "أدخل الرمز",
+      "downloadDir": "دليل تحميل Aria2",
       "downloadDirPlaceholder": "دليل التحميل مثال: ~/Downloads/Iwara",
       "tip": "تلميح: يجب أن يكون دليل التحميل هو دليل خادم Aria2 وليس الدليل المحلي."
     },
@@ -51,7 +73,7 @@
       "title": "إعدادات التحميل",
       "videoSavePath": "مسار حفظ الفيديو",
       "imageSavePath": "مسار حفظ الصور",
-      "notSet": "غير مضبوط",
+      "notSet": "لم يتم التعيين",
       "selectVideoPath": "اختيار مسار حفظ الفيديو",
       "selectImagePath": "اختيار مسار حفظ الصور"
     },
@@ -87,9 +109,9 @@
   "home": {
     "navigation": {
       "video": "فيديو",
-      "image": "رسوم توضيحية",
-      "subscribe": "اشتراكات",
-      "forum": "منتدى",
+      "image": "صور",
+      "subscribe": "اشتراك",
+      "forum": "المنتدى",
       "my": "صفحتي"
     },
     "searchBar": {
@@ -121,84 +143,87 @@
     "video": {
       "sortTabs": {
         "date": "الأحدث",
-        "trending": "الرائج",
-        "popularity": "الأكثر شعبية",
+        "trending": "رائج",
+        "popularity": "الشهرة",
         "views": "المشاهدات",
         "likes": "الإعجابات"
       },
-      "loading": "جاري التحميل...",
+      "loading": "جارٍ التحميل...",
       "noRecords": "لا توجد سجلات فيديو",
       "loadFailed": "فشل التحميل، ",
       "retry": "انقر لإعادة المحاولة",
-      "reachedBottom": "تم الوصول إلى النهاية"
+      "reachedBottom": "وصلت إلى النهاية"
     },
     "image": {
       "sortTabs": {
         "date": "الأحدث",
-        "trending": "الرائج",
-        "popularity": "الأكثر شعبية",
+        "trending": "رائج",
+        "popularity": "الشهرة",
         "views": "المشاهدات",
         "likes": "الإعجابات"
       },
-      "loading": "جاري التحميل...",
-      "noRecords": "لا توجد سجلات رسوم توضيحية",
+      "loading": "جارٍ التحميل...",
+      "noRecords": "لا توجد سجلات صور",
       "loadFailed": "فشل التحميل، ",
       "retry": "انقر لإعادة المحاولة",
-      "reachedBottom": "تم الوصول إلى النهاية"
+      "reachedBottom": "وصلت إلى النهاية"
     },
     "toast": {
-      "pressAgainToExit": "اضغط مرة أخرى للخروج من التطبيق"
+      "pressAgainToExit": "اضغط مرة أخرى للخروج من التطبيق",
+      "getUserInfoFailed": "فشل الحصول على معلومات المستخدم",
+      "getHistoryFailed": "فشل الحصول على السجل"
     },
     "my": {
-      "space": "المساحة",
-      "followers": "متابَعون",
-      "fans": "معجبون",
+      "space": "الفضاء",
+      "followers": "المتابَعون",
+      "fans": "المعجبون",
       "history": "السجل",
+      "noHistory": "لا يوجد سجل",
       "viewAllHistory": "عرض الكل",
-      "videoFavorites": "مقاطع الفيديو المفضلة",
-      "imageFavorites": "الرسوم التوضيحية المفضلة",
+      "videoFavorites": "فيديوهات مفضلة",
+      "imageFavorites": "صور مفضلة",
       "playlist": "قائمة التشغيل",
-      "offlineCache": "ذاكرة التخزين المؤقت دون اتصال",
+      "offlineCache": "ذاكرة تخزين مؤقت غير متصل",
       "notifications": "الإشعارات",
       "friends": "الأصدقاء",
       "messages": "الرسائل",
       "settings": "الإعدادات",
       "iwaraServices": "خدمات Iwara",
-      "premium": "بريميوم",
+      "premium": "عضوية مميزة",
       "wura": "Wura",
       "faq": "الأسئلة الشائعة",
-      "links": "روابط",
-      "aboutText": "يتبع هذا التطبيق ترخيص MPL-2.0 مفتوح المصدر. يرجى عدم استخدامه لأي أغراض تجارية.",
+      "links": "روابط ذات صلة",
+      "aboutText": "هذا التطبيق يتبع رخصة المصدر المفتوح MPL-2.0. يُرجى عدم استخدامه لأي أغراض تجارية.",
       "noRecords": "لا توجد سجلات {type}"
     },
     "forum": {
-      "posts": "منشورات",
-      "topics": "مواضيع",
+      "posts": "المنشورات",
+      "topics": "المواضيع",
       "repliedAt": "تم الرد في",
-      "latestPost": "أحدث منشور",
+      "latestPost": "آخر منشور",
       "groups": {
-        "admin": "المشرف",
-        "moderator": "مشرف",
+        "admin": "المدير",
+        "moderator": "المشرف",
         "japanese": "اليابانية",
         "chinese": "الصينية"
       },
       "sections": {
-        "announcement": "إعلانات",
+        "announcement": "إعلان",
         "announcement_desc": "معلومات مهمة",
         "feedback": "ملاحظات",
         "feedback_desc": "أفكار واقتراحات ومخاوف",
         "help": "مساعدة",
-        "help_desc": "المساعدة في مشكلات الموقع",
+        "help_desc": "المساعدة في حل مشكلات الموقع",
         "general": "عام",
         "general_desc": "كل شيء آخر",
         "guide": "دليل",
-        "guide_desc": "معلومات مفيدة أو أدلة \"كيفية\"",
+        "guide_desc": "معلومات مفيدة أو أدلة إرشادية",
         "helpQuestion": "مساعدة/سؤال",
-        "helpQuestion_desc": "أسئلة غير متعلقة بالموقع",
+        "helpQuestion_desc": "أسئلة غير مرتبطة بالموقع",
         "request": "طلب",
-        "request_desc": "المساعدة في البحث أو الإنشاء",
+        "request_desc": "مساعدة في البحث أو الإنشاء",
         "share": "مشاركة",
-        "share_desc": "مشاركة النماذج والحركات أو الإكسسوارات الأخرى"
+        "share_desc": "مشاركة النماذج أو الرسوم المتحركة أو الملحقات الأخرى"
       }
     }
   },
@@ -206,24 +231,97 @@
     "title": "السجل",
     "video": {
       "tab": "فيديو",
-      "loading": "جاري التحميل...",
+      "loading": "جارٍ التحميل...",
       "error": "خطأ",
       "noRecords": "لا يوجد سجل فيديو",
       "today": "اليوم",
       "loadFailed": "فشل التحميل، ",
       "retry": "انقر لإعادة المحاولة",
-      "reachedBottom": "تم الوصول إلى النهاية"
+      "reachedBottom": "وصلت إلى النهاية"
     },
     "image": {
-      "tab": "رسوم توضيحية",
-      "loading": "جاري التحميل...",
+      "tab": "صور",
+      "loading": "جارٍ التحميل...",
       "error": "خطأ",
-      "noRecords": "لا يوجد سجل رسوم توضيحية",
+      "noRecords": "لا يوجد سجل صور",
       "today": "اليوم",
       "loadFailed": "فشل التحميل، ",
       "retry": "انقر لإعادة المحاولة",
-      "reachedBottom": "تم الوصول إلى النهاية"
+      "reachedBottom": "وصلت إلى النهاية"
     }
+  },
+  "login": {
+    "title": "تسجيل الدخول إلى حساب Iwara الخاص بك",
+    "usernameLabel": "أدخل اسم المستخدم",
+    "passwordLabel": "أدخل كلمة المرور",
+    "loginBtn": "تسجيل الدخول",
+    "loggingIn": "جارٍ تسجيل الدخول",
+    "languageBtn": "Language/语言",
+    "aboutText": "هذا التطبيق يتبع رخصة المصدر المفتوح MPL-2.0. يُرجى عدم استخدامه لأي أغراض تجارية.",
+    "usernameRequired": "اسم المستخدم مطلوب",
+    "passwordRequired": "كلمة المرور مطلوبة",
+    "bothRequired": "اسم المستخدم وكلمة المرور مطلوبان",
+    "success": "تم تسجيل الدخول بنجاح",
+    "invalidResponse": "فشل تسجيل الدخول: استجابة الخادم غير صالحة",
+    "wrongCredentials": "اسم المستخدم أو كلمة المرور غير صحيحة",
+    "tooManyRequests": "محاولات تسجيل دخول كثيرة جداً. حاول مرة أخرى لاحقاً",
+    "failed": "فشل تسجيل الدخول: {status}",
+    "networkError": "فشل طلب تسجيل الدخول. تحقق من اتصال الشبكة"
+  },
+  "player": {
+    "loading": "جارٍ تحميل البيانات",
+    "failed": "فشل تحميل البيانات~",
+    "infoTab": "معلومات",
+    "commentTab": "تعليقات",
+    "selectDefinition": "اختيار الجودة",
+    "original": "الأصلي",
+    "switchingServer": "جارٍ تبديل الخادم",
+    "refreshFailed": "فشل تحديث قائمة الخوادم",
+    "aria2Failed": "فشل إضافة aria2",
+    "fetchInfoFailed": "فشل الحصول على معلومات الفيديو",
+    "fetchFileFailed": "فشل الحصول على ملف الفيديو",
+    "switchedTo": "تم التبديل إلى {definition}"
+  },
+  "imageView": {
+    "loading": "جارٍ تحميل البيانات",
+    "failed": "فشل تحميل البيانات~",
+    "fetchInfoFailed": "فشل الحصول على معلومات الصورة"
+  },
+  "favorites": {
+    "title": "المفضلة",
+    "videoTab": "فيديو",
+    "imageTab": "صور"
+  },
+  "friends": {
+    "title": "{type}",
+    "followTab": "متابعة",
+    "fansTab": "معجبون",
+    "friendTab": "أصدقاء",
+    "loading": "جارٍ تحميل البيانات"
+  },
+  "offlineCache": {
+    "title": "ذاكرة تخزين مؤقت غير متصل",
+    "today": "اليوم",
+    "cacheComplete": "اكتمل التخزين المؤقت",
+    "views": "مشاهدة",
+    "likes": "إعجاب"
+  },
+  "search": {
+    "placeholder": "أدخل كلمات البحث",
+    "submit": "بحث",
+    "videoTab": "فيديو",
+    "imageTab": "صور",
+    "userTab": "مستخدم",
+    "loadingVideoFailed": "فشل تحميل نتائج بحث الفيديو",
+    "loadingImageFailed": "فشل تحميل نتائج بحث الصور",
+    "loadingUserFailed": "فشل تحميل نتائج بحث المستخدم",
+    "historyLabel": "سجل البحث",
+    "recommendLabel": "اكتشاف"
+  },
+  "zone": {
+    "videoTab": "فيديو",
+    "imageTab": "صور",
+    "publishTab": "نشر"
   },
   "forum": {
     "sections": {
@@ -234,20 +332,20 @@
       "general": "عام",
       "general_desc": "كل شيء آخر",
       "guide": "دليل",
-      "guide_desc": "معلومات مفيدة أو أدلة \"كيفية\"",
+      "guide_desc": "معلومات مفيدة أو أدلة إرشادية",
       "help": "مساعدة",
-      "help_desc": "المساعدة في مشكلات الموقع",
+      "help_desc": "المساعدة في حل مشكلات الموقع",
       "helpQuestion": "مساعدة/سؤال",
-      "helpQuestion_desc": "أسئلة غير متعلقة بالموقع",
+      "helpQuestion_desc": "أسئلة غير مرتبطة بالموقع",
       "request": "طلب",
-      "request_desc": "المساعدة في البحث أو الإنشاء",
+      "request_desc": "مساعدة في البحث أو الإنشاء",
       "share": "مشاركة",
-      "share_desc": "مشاركة النماذج والحركات أو الإكسسوارات الأخرى"
+      "share_desc": "مشاركة النماذج أو الرسوم المتحركة أو الملحقات الأخرى"
     },
-    "replies": "الردود",
-    "views": "المشاهدات",
-    "author": "الكاتب",
-    "lastReply": "أحدث منشور",
+    "replies": "ردود",
+    "views": "مشاهدات",
+    "author": "الناشر",
+    "lastReply": "آخر رد",
     "publishedAt": "نُشر في",
     "repliedAt": "تم الرد في",
     "pinned": "مثبت",
@@ -256,9 +354,9 @@
     "publish": "نشر",
     "publishSection": "اختر القسم",
     "publishTitle": "العنوان",
-    "publishTitlePlaceholder": "أدخل عنوان الموضوع",
+    "publishTitlePlaceholder": "أدخل عنوان المنشور",
     "publishBody": "المحتوى",
-    "publishBodyPlaceholder": "أدخل محتوى الموضوع، يدعم Markdown",
-    "publishSubmit": "نشر الموضوع"
+    "publishBodyPlaceholder": "أدخل محتوى المنشور، يدعم Markdown",
+    "publishSubmit": "نشر المنشور"
   }
 }

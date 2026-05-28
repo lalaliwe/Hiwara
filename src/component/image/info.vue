@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted, computed, nextTick, watch } from 'vue';
+import { useI18n } from 'vue-i18n';
 import { useRouter } from 'vue-router';
 import {
   Like as iconLike,
@@ -20,6 +21,7 @@ import {
 } from '../../core/api';
 import { showShortToast } from '../../core/toast';
 
+const { t } = useI18n();
 const router = useRouter();
 
 // 内容容器（用于 ResizeObserver 动态高度重算）
@@ -189,7 +191,7 @@ watch(() => props.avatar, () => {
 // 复制下载链接到剪贴板
 async function copyDownloadLink() {
   if (!props.pid) {
-    showShortToast('获取下载链接失败');
+    showShortToast(t('common.fetchDownloadFailed'));
     return;
   }
   try {
@@ -199,22 +201,22 @@ async function copyDownloadLink() {
     else
       shareUrl = `https://iwara.tv/image/${props.pid}/${props.slug}`;
     await navigator.clipboard.writeText(shareUrl);
-    showShortToast('链接已复制到剪贴板');
+    showShortToast(t('common.linkCopied'));
   } catch (err) {
     console.error('复制失败:', err);
-    showShortToast('复制链接失败');
+    showShortToast(t('common.copyLinkFailed'));
   }
 }
 
 // 使用 Web Share API 分享插画
 async function shareImage() {
   if (!props.pid) {
-    showShortToast('获取分享链接失败');
+    showShortToast(t('common.fetchDownloadFailed'));
     return;
   }
   // 检查浏览器是否支持 Web Share API
   if (!navigator.share) {
-    showShortToast('当前设备不支持分享功能');
+    showShortToast(t('common.shareNotSupported'));
     return;
   }
   try {
@@ -228,12 +230,12 @@ async function shareImage() {
       text: `分享插画: ${props.title}`,
       url: shareUrl,
     });
-    showShortToast('分享成功');
+    showShortToast(t('common.shareSuccess'));
   } catch (err) {
     // 用户取消分享不显示错误提示
     if ((err as Error).name !== 'AbortError') {
       console.error('分享失败:', err);
-      showShortToast('分享失败，请重试');
+      showShortToast(t('common.shareFailed'));
     }
   }
 }
@@ -249,15 +251,15 @@ function clickFollow() {
     unfollowUser(props.uid).then((res) => {
       if (res.ok && res.status === 204) {
         console.log('取消关注成功');
-        showShortToast('已取消关注');
+        showShortToast(t('common.unfollowed'));
       } else {
         console.log('取消关注失败');
-        showShortToast('取消关注失败');
+        showShortToast(t('common.unfollowFailed'));
         emit('follow', true);
       }
     }).catch((error) => {
       console.error('取消关注请求失败:', error);
-      showShortToast('取消关注失败');
+      showShortToast(t('common.unfollowFailed'));
       emit('follow', true);
     }).finally(() => {
       isFollowing.value = false;
@@ -267,15 +269,15 @@ function clickFollow() {
     followUser(props.uid).then((res) => {
       if (res.ok && res.status === 201) {
         console.log('关注成功');
-        showShortToast('已关注');
+        showShortToast(t('common.followed'));
       } else {
         console.log('关注失败');
-        showShortToast('关注失败');
+        showShortToast(t('common.followFailed'));
         emit('follow', false);
       }
     }).catch((error) => {
       console.error('关注请求失败:', error);
-      showShortToast('关注失败');
+      showShortToast(t('common.followFailed'));
       emit('follow', false);
     }).finally(() => {
       isFollowing.value = false;
@@ -294,15 +296,15 @@ function clickLike() {
     unlikeImage(props.pid).then((res) => {
       if (res.ok && res.status === 204) {
         console.log('取消点赞成功');
-        showShortToast('已取消点赞');
+        showShortToast(t('common.unliked'));
       } else {
         console.log('取消点赞失败');
-        showShortToast('取消点赞失败');
+        showShortToast(t('common.unlikeFailed'));
         emit('like', true);
       }
     }).catch((error) => {
       console.error('取消点赞请求失败:', error);
-      showShortToast('取消点赞失败');
+      showShortToast(t('common.unlikeFailed'));
       emit('like', true);
     }).finally(() => {
       isLiking.value = false;
@@ -312,15 +314,15 @@ function clickLike() {
     likeImage(props.pid).then((res) => {
       if (res.ok && res.status === 201) {
         console.log('点赞成功');
-        showShortToast('已点赞');
+        showShortToast(t('common.liked'));
       } else {
         console.log('点赞失败');
-        showShortToast('点赞失败');
+        showShortToast(t('common.likeFailed'));
         emit('like', false);
       }
     }).catch((error) => {
       console.error('点赞请求失败:', error);
-      showShortToast('点赞失败');
+      showShortToast(t('common.likeFailed'));
       emit('like', false);
     }).finally(() => {
       isLiking.value = false;
@@ -373,8 +375,10 @@ const formatDate = (dateString: string) => {
           </template>
         </v-img>
       </div>
-      <div class="userinfo" @click="toZone">
-        <div class="authorname">{{ authorname }}</div>
+      <div class="userinfo">
+        <div class="authorname">
+          <span @click="toZone">{{ authorname }}</span>
+        </div>
         <div class="userdata" v-if="false">{{ fansNum }}粉丝 {{ imageNum }}插画</div>
       </div>
       <div class="follow">

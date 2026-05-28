@@ -542,6 +542,7 @@ onUnmounted(async () => {
   height: 100vh;
   border: none;
   padding-top: calc(env(safe-area-inset-top, 0) + 60px);
+  box-sizing: border-box;
 }
 
 // 加载指示器遮罩层

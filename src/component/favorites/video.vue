@@ -42,7 +42,7 @@ const loadMoreVideoData = async ({ done }: any = { done: () => { } }) => {
 
   try {
     const res = await getFavoritesVideoList(videoPage.value);
-    
+
     if (!res.ok) {
       throw new Error(`状态码：${res.status}, 错误信息：${res.statusText}`);
     }
@@ -221,7 +221,7 @@ defineExpose({
 .list-view {
   $top: calc(env(safe-area-inset-top, 0) + 60px + 40px);
   $bottom: calc(env(safe-area-inset-bottom, 0));
-  height: calc(100vh - env(safe-area-inset-top, 0) - $bottom);
+  height: 100vh;
   padding-top: $top;
   padding-bottom: $bottom;
   overflow: auto;

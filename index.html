@@ -114,6 +114,25 @@
       width: 110px;
       text-align: right;
     }
+
+    /* 暗黑模式 - 适配系统暗色主题 */
+    @media (prefers-color-scheme: dark) {
+      body {
+        background-color: #121212;
+      }
+
+      #loading {
+        background-color: #121212;
+      }
+
+      #loading-logo-wrapper {
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+      }
+
+      #loading-title {
+        color: #B0B0B0;
+      }
+    }
   </style>
 </head>
 

@@ -1,11 +1,14 @@
 <script setup lang="ts">
 import { onActivated, ref, watch } from 'vue';
+import { useI18n } from 'vue-i18n';
 import cardButton from '../cardButton.vue';
 import { search } from '../../core/api/video';
 import loadingHuawu from '../loadingHuawu.vue';
 import errorHuawu from '../errorHuawu.vue';
 import { showShortToast } from '../../core/toast';
 import type { VInfiniteScroll } from 'vuetify/components'
+
+const { t } = useI18n();
 
 const props = defineProps<{
   keyword: string;
@@ -71,7 +74,7 @@ const loadMoreVideoData = async ({ done }: any = { done: () => { } }) => {
     }
   } catch (error) {
     console.error('加载视频搜索结果失败:', error);
-    showShortToast('加载视频搜索结果失败');
+    showShortToast(t('search.loadingVideoFailed'));
     if (videoPage.value === 0 && videoState.value === 'loading') {
       videoState.value = 'failed';
     } else {

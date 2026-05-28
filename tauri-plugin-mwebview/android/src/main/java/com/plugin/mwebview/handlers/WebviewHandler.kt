@@ -112,26 +112,29 @@ class WebviewHandler(private val activity: Activity) {
                 android.util.Log.d("MWebview", "Loading URL: $url")
             }
 
-            // 布局参数：从 topBar 下方开始
-            // 注意：前端 getBoundingClientRect() 返回的是 CSS 像素，
-            // 需要乘以 density 转换为 Android 物理像素
+            // Tauri 开启 edge-to-edge 模式，activity 根视图为全屏。
+            // 前端 CSS viewport-fit=auto，100vh 可能等于安全区高度或全屏高度（因 WebView 实现而异）。
+            // native 侧安全做法：Y 加上状态栏高度作偏移，高度限制不超过屏幕底部。
             val density = activity.resources.displayMetrics.density
-
-            // 获取状态栏高度（Tauri 沉浸式模式下，内容绘制在状态栏后方）
             val statusBarResId = activity.resources.getIdentifier("status_bar_height", "dimen", "android")
             val statusBarPx = if (statusBarResId > 0) {
                 activity.resources.getDimensionPixelSize(statusBarResId)
             } else {
                 0
             }
-            android.util.Log.d("MWebview", "Status bar height: $statusBarPx px, density: $density")
+            val screenHeightPx = activity.resources.displayMetrics.heightPixels
 
             val realW = if (width > 0) (width * density).toInt() else ViewGroup.LayoutParams.MATCH_PARENT
-            val realH = if (height > 0) (height * density).toInt() else ViewGroup.LayoutParams.MATCH_PARENT
             val realX = (x * density).toInt()
-            // Y 坐标 = CSS Y 转换 + 状态栏高度（Tauri 沉浸式模式下需要补偿）
             val realY = (y * density).toInt() + statusBarPx
-            android.util.Log.d("MWebview", "CSS->PX: density=$density, ${width}x${height} -> ${realW}x${realH}, offset=(${realX},${realY}), statusBar=${statusBarPx}")
+            // 高度取前端传值 与 不超出屏幕底部 的较小值
+            val realH = if (height > 0) {
+                val h = (height * density).toInt()
+                minOf(h, screenHeightPx - realY)
+            } else {
+                ViewGroup.LayoutParams.MATCH_PARENT
+            }
+            android.util.Log.d("MWebview", "CSS->PX: density=$density, ${width}x${height} -> ${realW}x${realH}, offset=(${realX},${realY}), screenH=$screenHeightPx, statusBar=$statusBarPx")
 
             val layoutParams = FrameLayout.LayoutParams(realW, realH).apply {
                 leftMargin = realX
@@ -176,12 +179,14 @@ class WebviewHandler(private val activity: Activity) {
                     } else {
                         0
                     }
+                    val screenHeightPx = activity.resources.displayMetrics.heightPixels
+                    val realY = (y * density).toInt() + statusBarPx
                     layoutParams.leftMargin = (x * density).toInt()
-                    layoutParams.topMargin = (y * density).toInt() + statusBarPx
+                    layoutParams.topMargin = realY
                     if (width > 0) layoutParams.width = (width * density).toInt()
-                    if (height > 0) layoutParams.height = (height * density).toInt()
+                    if (height > 0) layoutParams.height = minOf((height * density).toInt(), screenHeightPx - realY)
                     wv.layoutParams = layoutParams
-                    android.util.Log.d("MWebview", "Bounds updated: x=$x, y=$y, w=$width, h=$height")
+                    android.util.Log.d("MWebview", "Bounds updated: x=$x, y=$y, w=$width, h=$height, realY=$realY, screenH=$screenHeightPx")
                 }
             }
 

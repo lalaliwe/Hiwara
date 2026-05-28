@@ -1,10 +1,13 @@
 <script setup lang="ts">
 import cardButton from '../../component/cardButton.vue';
 import { ref, watch } from 'vue';
+import { useI18n } from 'vue-i18n';
 import { getImageList as api_getImageList } from '../../core/api';
 import loadingHuawu from '../loadingHuawu.vue';
 import errorHuawu from '../errorHuawu.vue';
 import { showShortToast } from '../../core/toast';
+
+const { t } = useI18n();
 
 defineOptions({
   name: 'ImageList'
@@ -107,7 +110,7 @@ async function getImageList(): Promise<any> {
     }
   } catch (error) {
     console.error(`获取插画列表失败:`, error);
-    showShortToast('获取插画列表失败');
+    showShortToast(t('common.fetchImageListFailed'));
     throw error;
   }
 }
@@ -157,8 +160,6 @@ async function getImageList(): Promise<any> {
 </template>
 
 <style lang="scss" scoped>
-.list-content {}
-
 .list-view {
   overflow-y: auto;
   padding-top: 10px;

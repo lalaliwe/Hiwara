@@ -1,5 +1,27 @@
 {
-  "common": {},
+  "common": {
+    "followed": "Suivi",
+    "unfollowed": "Ne suit plus",
+    "followFailed": "Échec du suivi",
+    "unfollowFailed": "Échec du désabonnement",
+    "liked": "Aimé",
+    "unliked": "Retiré des likes",
+    "likeFailed": "Échec du like",
+    "unlikeFailed": "Échec du retrait du like",
+    "fetchCommentsFailed": "Échec du chargement des commentaires",
+    "fetchRepliesFailed": "Échec du chargement des réponses",
+    "linkCopied": "Lien copié dans le presse-papiers",
+    "copyLinkFailed": "Échec de la copie du lien",
+    "shareSuccess": "Partagé avec succès",
+    "shareFailed": "Échec du partage, veuillez réessayer",
+    "shareNotSupported": "Cet appareil ne prend pas en charge le partage",
+    "fetchDownloadFailed": "Échec de l'obtention du lien de téléchargement",
+    "downloadLinkCopied": "Lien de téléchargement copié dans le presse-papiers",
+    "fetchRecommendFailed": "Échec du chargement des recommandations",
+    "fetchVideoListFailed": "Échec du chargement de la liste des vidéos",
+    "fetchImageListFailed": "Échec du chargement de la liste des images",
+    "fetchUserInfoFailed": "Échec de l'obtention des informations utilisateur"
+  },
   "setup": {
     "title": "Paramètres",
     "autoPlay": "Lecture automatique",
@@ -24,8 +46,8 @@
       "deviceType": "Type d'appareil",
       "mobile": "Mobile",
       "desktop": "Bureau",
-      "osName": "Nom de l'OS",
-      "osVersion": "Version de l'OS",
+      "osName": "Nom du système",
+      "osVersion": "Version du système",
       "webview": "WebView",
       "webviewVersion": "Version WebView",
       "checkUpdate": "Vérifier les mises à jour",
@@ -39,10 +61,10 @@
       "rpcAddress": "Adresse RPC Aria2",
       "rpcPlaceholder": "Adresse RPC ex: http://127.0.0.1:6800/jsonrpc",
       "token": "Aria2 TOKEN",
-      "tokenPlaceholder": "Entrer le TOKEN",
+      "tokenPlaceholder": "Entrez le TOKEN",
       "downloadDir": "Répertoire de téléchargement Aria2",
       "downloadDirPlaceholder": "Répertoire de téléchargement ex: ~/Downloads/Iwara",
-      "tip": "Astuce : Le répertoire de téléchargement doit être celui du serveur Aria2, pas le répertoire local."
+      "tip": "Conseil : Le répertoire de téléchargement doit être celui du serveur Aria2, pas le répertoire local."
     },
     "definitionPage": {
       "title": "Qualité par défaut"
@@ -52,8 +74,8 @@
       "videoSavePath": "Chemin de sauvegarde vidéo",
       "imageSavePath": "Chemin de sauvegarde image",
       "notSet": "Non défini",
-      "selectVideoPath": "Sélectionner le chemin vidéo",
-      "selectImagePath": "Sélectionner le chemin image"
+      "selectVideoPath": "Sélectionner le chemin de sauvegarde vidéo",
+      "selectImagePath": "Sélectionner le chemin de sauvegarde image"
     },
     "languagePage": {
       "title": "Langue (Language)",
@@ -90,17 +112,17 @@
       "image": "Illustrations",
       "subscribe": "Abonnements",
       "forum": "Forum",
-      "my": "Mon compte"
+      "my": "Ma page"
     },
     "searchBar": {
       "placeholder": "Rechercher"
     },
     "dateFilter": {
-      "selectTime": "Sélectionner la période",
+      "selectTime": "Sélectionner une date",
       "year": "Année",
       "monthLabel": "Mois",
       "allYears": "Toutes les années",
-      "fullYear": "Toute l'année",
+      "fullYear": "Année complète",
       "months": {
         "1": "Janvier",
         "2": "Février",
@@ -120,9 +142,9 @@
     },
     "video": {
       "sortTabs": {
-        "date": "Récentes",
-        "trending": "Tendances",
-        "popularity": "Populaires",
+        "date": "Plus récent",
+        "trending": "Tendance",
+        "popularity": "Popularité",
         "views": "Vues",
         "likes": "J'aime"
       },
@@ -130,33 +152,36 @@
       "noRecords": "Aucun enregistrement vidéo",
       "loadFailed": "Échec du chargement, ",
       "retry": "Cliquez pour réessayer",
-      "reachedBottom": "Bas de page atteint"
+      "reachedBottom": "Vous avez atteint la fin"
     },
     "image": {
       "sortTabs": {
-        "date": "Récentes",
-        "trending": "Tendances",
-        "popularity": "Populaires",
+        "date": "Plus récent",
+        "trending": "Tendance",
+        "popularity": "Popularité",
         "views": "Vues",
         "likes": "J'aime"
       },
       "loading": "Chargement...",
-      "noRecords": "Aucun enregistrement d'illustration",
+      "noRecords": "Aucun enregistrement d'image",
       "loadFailed": "Échec du chargement, ",
       "retry": "Cliquez pour réessayer",
-      "reachedBottom": "Bas de page atteint"
+      "reachedBottom": "Vous avez atteint la fin"
     },
     "toast": {
-      "pressAgainToExit": "Appuyez à nouveau pour quitter l'application"
+      "pressAgainToExit": "Appuyez à nouveau pour quitter l'application",
+      "getUserInfoFailed": "Échec de l'obtention des informations utilisateur",
+      "getHistoryFailed": "Échec de l'obtention de l'historique"
     },
     "my": {
       "space": "Espace",
       "followers": "Abonnements",
       "fans": "Fans",
       "history": "Historique",
+      "noHistory": "Pas d'historique",
       "viewAllHistory": "Voir tout",
       "videoFavorites": "Vidéos favorites",
-      "imageFavorites": "Illustrations favorites",
+      "imageFavorites": "Images favorites",
       "playlist": "Liste de lecture",
       "offlineCache": "Cache hors ligne",
       "notifications": "Notifications",
@@ -164,7 +189,7 @@
       "messages": "Messages",
       "settings": "Paramètres",
       "iwaraServices": "Services Iwara",
-      "premium": "Premium",
+      "premium": "Membre Premium",
       "wura": "Wura",
       "faq": "FAQ",
       "links": "Liens",
@@ -177,22 +202,22 @@
       "repliedAt": "Répondu le",
       "latestPost": "Dernière publication",
       "groups": {
-        "admin": "Admin",
+        "admin": "Administrateur",
         "moderator": "Modérateur",
         "japanese": "Japonais",
         "chinese": "Chinois"
       },
       "sections": {
-        "announcement": "Annonces",
+        "announcement": "Annonce",
         "announcement_desc": "Informations importantes",
-        "feedback": "Commentaires",
+        "feedback": "Retour",
         "feedback_desc": "Idées, suggestions et préoccupations",
         "help": "Aide",
         "help_desc": "Aide pour les problèmes liés au site",
         "general": "Général",
         "general_desc": "Tout le reste",
         "guide": "Guide",
-        "guide_desc": "Informations utiles ou guides \"comment faire\"",
+        "guide_desc": "Informations utiles ou guides pratiques",
         "helpQuestion": "Aide/Question",
         "helpQuestion_desc": "Questions non liées au site",
         "request": "Demande",
@@ -212,29 +237,102 @@
       "today": "Aujourd'hui",
       "loadFailed": "Échec du chargement, ",
       "retry": "Cliquez pour réessayer",
-      "reachedBottom": "Bas de page atteint"
+      "reachedBottom": "Vous avez atteint la fin"
     },
     "image": {
-      "tab": "Illustrations",
+      "tab": "Image",
       "loading": "Chargement...",
       "error": "Erreur",
-      "noRecords": "Aucun historique d'illustrations",
+      "noRecords": "Aucun historique d'image",
       "today": "Aujourd'hui",
       "loadFailed": "Échec du chargement, ",
       "retry": "Cliquez pour réessayer",
-      "reachedBottom": "Bas de page atteint"
+      "reachedBottom": "Vous avez atteint la fin"
     }
+  },
+  "login": {
+    "title": "Connectez-vous à votre compte Iwara",
+    "usernameLabel": "Entrez votre nom d'utilisateur",
+    "passwordLabel": "Entrez votre mot de passe",
+    "loginBtn": "Connexion",
+    "loggingIn": "Connexion en cours",
+    "languageBtn": "Language/语言",
+    "aboutText": "Cette application suit la licence open source MPL-2.0. Veuillez ne pas l'utiliser à des fins commerciales.",
+    "usernameRequired": "Le nom d'utilisateur est requis",
+    "passwordRequired": "Le mot de passe est requis",
+    "bothRequired": "Le nom d'utilisateur et le mot de passe sont requis",
+    "success": "Connexion réussie",
+    "invalidResponse": "Échec de la connexion : réponse serveur invalide",
+    "wrongCredentials": "Nom d'utilisateur ou mot de passe incorrect",
+    "tooManyRequests": "Trop de tentatives de connexion. Veuillez réessayer plus tard",
+    "failed": "Échec de la connexion : {status}",
+    "networkError": "Échec de la demande de connexion. Vérifiez votre connexion réseau"
+  },
+  "player": {
+    "loading": "Chargement des données",
+    "failed": "Échec du chargement des données~",
+    "infoTab": "Informations",
+    "commentTab": "Commentaires",
+    "selectDefinition": "Sélectionner la qualité",
+    "original": "Original",
+    "switchingServer": "Changement de serveur en cours",
+    "refreshFailed": "Échec de l'actualisation de la liste des serveurs",
+    "aria2Failed": "Échec de l'ajout d'aria2",
+    "fetchInfoFailed": "Échec de l'obtention des informations vidéo",
+    "fetchFileFailed": "Échec de l'obtention du fichier vidéo",
+    "switchedTo": "Passé à {definition}"
+  },
+  "imageView": {
+    "loading": "Chargement des données",
+    "failed": "Échec du chargement des données~",
+    "fetchInfoFailed": "Échec de l'obtention des informations de l'image"
+  },
+  "favorites": {
+    "title": "Mes favoris",
+    "videoTab": "Vidéo",
+    "imageTab": "Image"
+  },
+  "friends": {
+    "title": "{type}",
+    "followTab": "Abonnements",
+    "fansTab": "Fans",
+    "friendTab": "Amis",
+    "loading": "Chargement des données"
+  },
+  "offlineCache": {
+    "title": "Cache hors ligne",
+    "today": "Aujourd'hui",
+    "cacheComplete": "Cache terminé",
+    "views": "Lecture",
+    "likes": "J'aime"
+  },
+  "search": {
+    "placeholder": "Entrez des mots-clés",
+    "submit": "Rechercher",
+    "videoTab": "Vidéo",
+    "imageTab": "Image",
+    "userTab": "Utilisateur",
+    "loadingVideoFailed": "Échec du chargement des résultats de recherche vidéo",
+    "loadingImageFailed": "Échec du chargement des résultats de recherche d'image",
+    "loadingUserFailed": "Échec du chargement des résultats de recherche d'utilisateur",
+    "historyLabel": "Historique de recherche",
+    "recommendLabel": "Découvrir"
+  },
+  "zone": {
+    "videoTab": "Vidéo",
+    "imageTab": "Image",
+    "publishTab": "Publier"
   },
   "forum": {
     "sections": {
       "announcements": "Annonces",
       "announcements_desc": "Informations importantes",
-      "feedback": "Commentaires",
+      "feedback": "Retour",
       "feedback_desc": "Idées, suggestions et préoccupations",
       "general": "Général",
       "general_desc": "Tout le reste",
       "guide": "Guide",
-      "guide_desc": "Informations utiles ou guides \"comment faire\"",
+      "guide_desc": "Informations utiles ou guides pratiques",
       "help": "Aide",
       "help_desc": "Aide pour les problèmes liés au site",
       "helpQuestion": "Aide/Question",
@@ -247,18 +345,18 @@
     "replies": "Réponses",
     "views": "Vues",
     "author": "Auteur",
-    "lastReply": "Dernière publication",
+    "lastReply": "Dernière réponse",
     "publishedAt": "Publié le",
     "repliedAt": "Répondu le",
     "pinned": "Épinglé",
     "loadMore": "Charger plus",
-    "noMore": "Rien de plus",
+    "noMore": "Pas plus",
     "publish": "Publier",
-    "publishSection": "Sélectionner une section",
+    "publishSection": "Sélectionner la section",
     "publishTitle": "Titre",
-    "publishTitlePlaceholder": "Entrez le titre du message",
+    "publishTitlePlaceholder": "Entrez le titre de la publication",
     "publishBody": "Contenu",
-    "publishBodyPlaceholder": "Entrez le contenu du message, syntaxe Markdown supportée",
-    "publishSubmit": "Publier le message"
+    "publishBodyPlaceholder": "Entrez le contenu, Markdown supporté",
+    "publishSubmit": "Soumettre la publication"
   }
 }
