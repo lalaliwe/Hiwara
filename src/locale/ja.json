@@ -100,7 +100,8 @@
       "hebrew": "ヘブライ語",
       "tibetan": "チベット語",
       "uyghur": "ウイグル語",
-      "kazakh": "カザフ語"
+      "kazakh": "カザフ語",
+      "mongolian": "モンゴル語"
     },
     "searchModePage": {
       "title": "デフォルト検索モード"

@@ -1,4 +1,4 @@
-{
+﻿{
   "common": {
     "followed": "已關注",
     "unfollowed": "已取消關注",
@@ -100,7 +100,8 @@
       "hebrew": "希伯來語",
       "tibetan": "藏文",
       "uyghur": "維吾爾語",
-      "kazakh": "哈薩克語"
+      "kazakh": "哈薩克語",
+      "mongolian": "蒙古語"
     },
     "searchModePage": {
       "title": "預設搜尋模式"

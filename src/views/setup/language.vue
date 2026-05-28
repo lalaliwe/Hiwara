@@ -37,7 +37,10 @@ const languages = [
   { label: t('setup.languagePage.hebrew'), subLabel: 'עברית', value: 'he' },
   { label: t('setup.languagePage.tibetan'), subLabel: 'བོད་ཡིག', value: 'bo' },
   { label: t('setup.languagePage.uyghur'), subLabel: 'ئۇيغۇر تىلى', value: 'ug' },
-  { label: t('setup.languagePage.kazakh'), subLabel: 'қазақ тілі', value: 'kk' }
+  { label: t('setup.languagePage.kazakh'), subLabel: 'قازاقشا', value: 'kk-Arab' },
+  { label: t('setup.languagePage.kazakh'), subLabel: 'қазақ тілі', value: 'kk-Cyrl' },
+  { label: t('setup.languagePage.mongolian'), subLabel: 'ᠮᠣᠩᠭᠣᠯᠪᠢᠴᠢᠭ', value: 'mn-Mong' },
+  { label: t('setup.languagePage.mongolian'), subLabel: 'Монгол Кирилл', value: 'mn-Cyrl' }
 ]
 
 // 返回上一页
@@ -91,8 +94,18 @@ const selectLanguage = async (langValue: string) => {
       locale.value = 'bo';
     } else if (browserLang.startsWith('ug')) {
       locale.value = 'ug';
+    } else if (browserLang.startsWith('kk-Arab')) {
+      locale.value = 'kk-Arab';
+    } else if (browserLang.startsWith('kk-Cyrl')) {
+      locale.value = 'kk-Cyrl';
     } else if (browserLang.startsWith('kk')) {
-      locale.value = 'kk';
+      locale.value = 'kk-Cyrl';
+    } else if (browserLang.startsWith('mn-Mong')) {
+      locale.value = 'mn-Mong';
+    } else if (browserLang.startsWith('mn-Cyrl')) {
+      locale.value = 'mn-Cyrl';
+    } else if (browserLang.startsWith('mn')) {
+      locale.value = 'mn-Cyrl';
     } else {
       locale.value = 'en';
     }

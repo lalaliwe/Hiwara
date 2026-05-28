@@ -1,4 +1,4 @@
-{
+﻿{
   "common": {
     "followed": "Đã theo dõi",
     "unfollowed": "Đã hủy theo dõi",
@@ -100,7 +100,8 @@
       "hebrew": "Tiếng Do Thái",
       "tibetan": "Tiếng Tây Tạng",
       "uyghur": "Tiếng Duy Ngô Nhĩ",
-      "kazakh": "Tiếng Kazakhstan"
+      "kazakh": "Tiếng Kazakhstan",
+      "mongolian": "Tiếng Mông Cổ"
     },
     "searchModePage": {
       "title": "Chế độ tìm kiếm mặc định"

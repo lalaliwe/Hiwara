@@ -2,8 +2,8 @@ import { createI18n } from 'vue-i18n';
 import { setupStore } from './store';
 
 // 导入语言文件（使用 BCP 47 语言标签）
-import zhHans from '../locale/zh-hans.json';
-import zhHant from '../locale/zh-hant.json';
+import zhHans from '../locale/zh-Hans.json';
+import zhHant from '../locale/zh-Hant.json';
 import en from '../locale/en.json';
 import ja from '../locale/ja.json';
 import ko from '../locale/ko.json';
@@ -22,11 +22,14 @@ import ar from '../locale/ar.json';
 import he from '../locale/he.json';
 import bo from '../locale/bo.json';
 import ug from '../locale/ug.json';
-import kk from '../locale/kk.json';
+import kkCyrl from '../locale/kk-Cyrl.json';
+import kkArab from '../locale/kk-Arab.json';
+import mnCyrl from '../locale/mn-Cyrl.json';
+import mnMong from '../locale/mn-Mong.json';
 
 // 定义支持的语言类型（BCP 47 标准）
-type SupportedLocale = 'auto' | 'en' | 'zh-Hans' | 'zh-Hant' | 'ja' | 'ko' | 'fr' | 'es' | 'pt' | 'de' | 'it' | 'ru' | 'uk' | 'th' | 'vi' | 'km' | 'hi' | 'ar' | 'he' | 'bo' | 'ug' | 'kk';
-type ResolvedLocale = 'en' | 'zh-Hans' | 'zh-Hant' | 'ja' | 'ko' | 'fr' | 'es' | 'pt' | 'de' | 'it' | 'ru' | 'uk' | 'th' | 'vi' | 'km' | 'hi' | 'ar' | 'he' | 'bo' | 'ug' | 'kk';
+type SupportedLocale = 'auto' | 'en' | 'zh-Hans' | 'zh-Hant' | 'ja' | 'ko' | 'fr' | 'es' | 'pt' | 'de' | 'it' | 'ru' | 'uk' | 'th' | 'vi' | 'km' | 'hi' | 'ar' | 'he' | 'bo' | 'ug' | 'kk-Cyrl' | 'kk-Arab' | 'mn-Cyrl' | 'mn-Mong';
+type ResolvedLocale = 'en' | 'zh-Hans' | 'zh-Hant' | 'ja' | 'ko' | 'fr' | 'es' | 'pt' | 'de' | 'it' | 'ru' | 'uk' | 'th' | 'vi' | 'km' | 'hi' | 'ar' | 'he' | 'bo' | 'ug' | 'kk-Cyrl' | 'kk-Arab' | 'mn-Cyrl' | 'mn-Mong';
 
 // 语言消息对象
 const messages = {
@@ -50,7 +53,10 @@ const messages = {
   'he': he,
   'bo': bo,
   'ug': ug,
-  'kk': kk,
+  'kk-Cyrl': kkCyrl,
+  'kk-Arab': kkArab,
+  'mn-Cyrl': mnCyrl,
+  'mn-Mong': mnMong,
 };
 
 // 检测浏览器语言并转换为 BCP 47 标签
@@ -133,9 +139,25 @@ function detectBrowserLanguage(): ResolvedLocale {
   if (browserLang.startsWith('ug')) {
     return 'ug';
   }
-  // 匹配哈萨克语
-  if (browserLang.startsWith('kk')) {
-    return 'kk';
+  // 匹配哈萨克语阿拉伯字母（须在 kk 之前检测，避免 kk-Arab 被误匹配为 kk）
+  if (browserLang.startsWith('kk-Arab')) {
+    return 'kk-Arab';
+  }
+  // 匹配哈萨克语（西里尔字母）
+  if (browserLang.startsWith('kk-Cyrl')) {
+    return 'kk-Cyrl';
+  }
+  // 匹配蒙古语（西里尔字母）
+  if (browserLang.startsWith('mn-Cyrl')) {
+    return 'mn-Cyrl';
+  }
+  // 匹配蒙古语（传统蒙文，须在 mn 之前检测）
+  if (browserLang.startsWith('mn-Mong')) {
+    return 'mn-Mong';
+  }
+  // 匹配蒙古语（通用标签回退到西里尔）
+  if (browserLang.startsWith('mn')) {
+    return 'mn-Cyrl';
   }
   // 默认返回英语
   return 'en';

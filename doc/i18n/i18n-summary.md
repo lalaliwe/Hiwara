@@ -34,7 +34,10 @@
 | `he` | 希伯来语 | עברית | ✅ he.json |
 | `bo` | 藏文 | བོད་ཡིག | ✅ bo.json |
 | `ug` | 维吾尔语 | ئۇيغۇر تىلى | ✅ ug.json |
-| `kk` | 哈萨克语 | қазақ тілі | ✅ kk.json |
+| `kk-Cyrl` | 哈萨克语（西里尔字母） | қазақ тілі | ✅ kk-Cyrl.json |
+| `kk-Arab` | 哈萨克语（阿拉伯字母） | قازاقشا | ✅ kk-Arab.json |
+| `mn-Cyrl` | 蒙古语（西里尔字母） | Монгол Кирилл | ✅ mn-Cyrl.json |
+| `mn-Mong` | 蒙古语（传统蒙古文） | ᠮᠣᠩᠭᠣᠯᠪᠢᠴᠢᠭ | ✅ mn-Mong.json |
 
 ### 4. 集成配置
 - ✅ 在 `src/main.ts` 中集成 i18n
