@@ -5,13 +5,14 @@ import homeImage from '../component/home/image.vue';
 import homeSubscribe from '../component/home/subscribe.vue';
 import homeForum from '../component/home/forum.vue';
 import homeMy from '../component/home/my.vue';
-import { ref, onMounted, onBeforeUnmount, onActivated, provide } from 'vue';
+import { ref, nextTick, onMounted, onBeforeUnmount, onActivated, provide, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 // import { on } from 'hammerjs';
 import { lockPortrait } from '../plugins/useOrientation'
 import { setStatusBarTextStyle } from '../plugins/navbarStyle'
 import { showShortToast } from '../core/toast';
 import { moveTaskToBack } from '../plugins/appControl';
+import { isLogin as isLoginStore } from '../core/store';
 
 const { t } = useI18n();
 
@@ -96,6 +97,20 @@ const refresh = (data: TabType) => {
   refreshToken.value++
 }
 provide('refreshToken', refreshToken)
+
+// 监听登录版本号变化，重新登录时重置选项卡并刷新所有子组件数据
+const loginStore = isLoginStore();
+watch(() => loginStore.loginVersion, () => {
+  // 仅在已登录状态下刷新，避免退出时 token 已清空导致 API 报错
+  if (!loginStore.value) return;
+  // 重置选项卡到默认的 subscribe
+  isTab.value = 'subscribe';
+  // 使用 nextTick 确保选项卡切换后再刷新子组件数据
+  nextTick(() => {
+    refreshToken.value++;
+    console.log('重新登录后刷新首页数据');
+  });
+});
 
 </script>
 

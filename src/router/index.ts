@@ -261,8 +261,11 @@ router.beforeEach(async (to, from) => {
   const { isLogin } = await import('../core/store');
   const isLoggedIn = isLogin().value;
 
-  // 如果未登录且目标不是登录页，重定向到登录页
-  if (!isLoggedIn && to.path !== '/login') {
+  // 无需登录即可访问的路径列表
+  const publicPaths = ['/login', '/setup/language'];
+
+  // 如果未登录且目标不在公开路径列表中，重定向到登录页
+  if (!isLoggedIn && !publicPaths.includes(to.path)) {
     return '/login';
   }
 

@@ -216,6 +216,19 @@ export function getUserToken(): Promise<string> {
   })
 }
 
+// 退出登录：清空用户token
+export function logout(): Promise<void> {
+  return new Promise(async (resolve, reject) => {
+    try {
+      await sqlDB.execute(`UPDATE users SET token = ''`);
+      console.log('用户已退出登录，token已清空');
+      resolve();
+    } catch (error) {
+      reject(error);
+    }
+  });
+}
+
 // 获取设置数据
 export async function getSetupData(): Promise<any> {
   try {

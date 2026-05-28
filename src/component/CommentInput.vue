@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import { ref } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { showShortToast } from '../core/toast'
+
+const { t } = useI18n()
 
 const props = defineProps<{
   contentId: string
@@ -28,13 +31,13 @@ async function handleSend() {
       emit('posted', res.data)
       commentContent.value = ''
       showExpanded.value = false
-      showShortToast('评论成功')
+      showShortToast(t('comment.publishSuccess'))
     } else {
-      showShortToast('评论失败')
+      showShortToast(t('comment.publishFailed'))
     }
   } catch (error) {
     console.error('发送评论失败:', error)
-    showShortToast('评论失败')
+    showShortToast(t('comment.publishFailed'))
   } finally {
     sending.value = false
   }
@@ -71,16 +74,16 @@ function handleSyntaxClick() {
 
   <div class="comment-input-area" :class="{ expanded: showExpanded }">
     <div v-if="replyTo" class="reply-hint">
-      <span>回复 @{{ replyTo.userName }}</span>
+      <span>{{ t('comment.replyTo', { name: replyTo.userName }) }}</span>
       <font-awesome-icon class="cancel-reply-btn" icon="fa-solid fa-xmark" @click="handleCancelReply" />
     </div>
     <div>
-      <v-textarea v-model="commentContent" label="发表评论" :rows="showExpanded ? 6 : 1" density="compact" hide-details
+      <v-textarea v-model="commentContent" :label="t('comment.inputPlaceholder')" :rows="showExpanded ? 6 : 1" density="compact" hide-details
         variant="outlined" no-resize color="#00796B" @focus="handleFocus" @blur="handleBlur"></v-textarea>
     </div>
     <div v-show="showExpanded" class="btns">
       <font-awesome-icon class="btn syntax-btn" icon="fa-solid fa-circle-question" @click="handleSyntaxClick" />
-      <v-btn color="#00796B" class="btn send-btn" :loading="sending" :disabled="sending" @click="handleSend">发送</v-btn>
+      <v-btn color="#00796B" class="btn send-btn" :loading="sending" :disabled="sending" @click="handleSend">{{ t('comment.send') }}</v-btn>
     </div>
   </div>
 </template>

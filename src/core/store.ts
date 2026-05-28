@@ -1,9 +1,42 @@
 import { defineStore } from 'pinia';
-import { getSetupData, updateSetupData, checkUserIsLogin, getUserInfo } from './database';
+import { getSetupData, updateSetupData, checkUserIsLogin, getUserToken, getUserInfo, logout as dbLogout } from './database';
+
+/**
+ * 解码 JWT token 的 payload 部分
+ * JWT 格式：header.payload.signature，payload 是 base64url 编码
+ */
+function decodeJwtPayload(token: string): Record<string, any> | null {
+  try {
+    const parts = token.split('.');
+    if (parts.length !== 3) return null;
+    // base64url -> base64: 替换 URL-safe 字符并补齐 padding
+    const base64 = parts[1].replace(/-/g, '+').replace(/_/g, '/');
+    const padding = '='.repeat((4 - base64.length % 4) % 4);
+    const decoded = atob(base64 + padding);
+    return JSON.parse(decoded);
+  } catch (error) {
+    console.error('解码 JWT payload 失败:', error);
+    return null;
+  }
+}
+
+/**
+ * 检查 JWT token 是否已过期
+ * 通过解析 payload 中的 exp（Unix 时间戳，秒）与当前时间比较
+ */
+function isTokenExpired(token: string): boolean {
+  const payload = decodeJwtPayload(token);
+  if (!payload || typeof payload.exp !== 'number') {
+    // 无法解析出过期时间，视为过期
+    return true;
+  }
+  return Date.now() >= payload.exp * 1000;
+}
 
 export const isLogin = defineStore('isLogin', {
   state: () => ({
     value: false, // 登录状态，默认为false
+    loginVersion: 0, // 登录版本号，退出/登录时递增，用于通知组件刷新
   }),
   getters: {
     // 如果需要，可以在这里添加getter
@@ -13,11 +46,29 @@ export const isLogin = defineStore('isLogin', {
     set(status: boolean) {
       this.value = status;
     },
-    // 从数据库初始化登录状态
+    // 从数据库初始化登录状态（含 token 过期检查）
     async initFromDatabase() {
       try {
         const isLoggedIn = await checkUserIsLogin();
-        this.set(isLoggedIn);
+        if (isLoggedIn) {
+          // 进一步检查 token 是否过期
+          try {
+            const userToken = await getUserToken();
+            if (userToken && !isTokenExpired(userToken)) {
+              this.set(true);
+            } else {
+              console.log('Token已过期，设置为未登录状态');
+              // 清理数据库中已过期的 token
+              await dbLogout();
+              this.set(false);
+            }
+          } catch {
+            // getUserToken 失败（如 token 为 null/空），设为未登录
+            this.set(false);
+          }
+        } else {
+          this.set(false);
+        }
       } catch (error) {
         console.error('Failed to initialize login status:', error);
         this.set(false);

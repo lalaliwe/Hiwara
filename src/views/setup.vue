@@ -4,6 +4,7 @@ import { useI18n } from 'vue-i18n'
 import { setStatusBarTextStyle } from '../plugins/navbarStyle'
 import { setupStore } from '../core/store'
 import { storeToRefs } from 'pinia'
+import { logout } from '../core/auth'
 
 defineOptions({
   name: 'Setup'
@@ -33,11 +34,21 @@ const toggleAutoPlay = async (value: boolean | null) => {
   await setup.updateSetting('autoPlay', Boolean(value));
 };
 
+// 退出登录
+const handleLogout = async () => {
+  try {
+    await logout();
+  } catch (error) {
+    console.error('退出登录失败:', error);
+  }
+};
+
 // 获取语言显示文本
 const getLanguageLabel = (lang: string) => {
   const langMap: Record<string, string> = {
     auto: t('setup.languagePage.followSystem'),
     'zh-Hans': t('setup.languagePage.simplifiedChinese'),
+    'zh-Hant': t('setup.languagePage.traditionalChinese'),
     en: t('setup.languagePage.english'),
     ja: t('setup.languagePage.japanese'),
     ko: t('setup.languagePage.korean'),
@@ -57,7 +68,10 @@ const getLanguageLabel = (lang: string) => {
     bo: t('setup.languagePage.tibetan'),
     ug: t('setup.languagePage.uyghur'),
     kk: t('setup.languagePage.kazakh'),
-    'zh-Hant': t('setup.languagePage.traditionalChinese')
+    'kk-Cyrl': t('setup.languagePage.kazakh'),
+    'kk-Arab': t('setup.languagePage.kazakh'),
+    'mn-Cyrl': t('setup.languagePage.mongolian'),
+    'mn-Mong': t('setup.languagePage.mongolian')
   }
   return langMap[lang] || 'English'
 }
@@ -135,7 +149,7 @@ const getLanguageLabel = (lang: string) => {
         <font-awesome-icon icon="fa-solid fa-angle-right" />
       </div>
     </div>
-    <div class="item">
+    <div class="item" @click="handleLogout">
       <div class="label">{{ t('setup.logout') }}</div>
       <div class="value">
         <font-awesome-icon icon="fa-solid fa-angle-right" />

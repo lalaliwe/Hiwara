@@ -1,22 +1,24 @@
 <script setup lang="ts">
+import { useI18n } from 'vue-i18n'
 defineEmits<{
   close: []
 }>()
+const { t } = useI18n()
 </script>
 
 <template>
   <div class="syntax-drawer">
     <div class="drawer-header">
-      <span class="drawer-title">语法说明</span>
+      <span class="drawer-title">{{ t('comment.syntaxTitle') }}</span>
       <font-awesome-icon class="drawer-close" icon="fa-solid fa-xmark" @click="$emit('close')" />
     </div>
     <div class="drawer-body">
       <!-- Iwara 专用语法 -->
       <div class="section">
-        <div class="section-title">Iwara 专用语法</div>
+        <div class="section-title">{{ t('comment.syntaxIwara') }}</div>
         <div class="syntax-table">
           <div class="syntax-row">
-            <div class="syntax-label">站内链接</div>
+            <div class="syntax-label">{{ t('comment.syntaxInternalLink') }}</div>
             <div class="syntax-desc">
               <code>https://iwara.tv/...</code>
               <div class="syntax-preview">
@@ -31,13 +33,13 @@ defineEmits<{
             </div>
           </div>
           <div class="syntax-row">
-            <div class="syntax-label">嵌入式投票</div>
+            <div class="syntax-label">{{ t('comment.syntaxEmbeddedPoll') }}</div>
             <div class="syntax-desc">
               <code>https://iwara.tv/poll/...</code>
             </div>
           </div>
           <div class="syntax-row">
-            <div class="syntax-label">提及用户</div>
+            <div class="syntax-label">{{ t('comment.syntaxMentionUser') }}</div>
             <div class="syntax-desc">
               <kbd>@</kbd><code>username</code>
               <div class="syntax-preview">@username</div>
@@ -49,13 +51,13 @@ defineEmits<{
       <!-- Markdown 基本语法 -->
       <div class="section">
         <a href="https://www.markdownguide.org/basic-syntax" target="_blank" rel="noreferrer nofollow" class="section-title link">
-          Markdown 基本语法 <font-awesome-icon icon="fa-solid fa-up-right-from-square" class="external-icon" />
+          {{ t('comment.syntaxMarkdown') }} <font-awesome-icon icon="fa-solid fa-up-right-from-square" class="external-icon" />
         </a>
         <div class="syntax-table">
           <div class="syntax-row">
             <div class="syntax-label">
-              段落
-              <div class="syntax-hint">中间留一个空行</div>
+              {{ t('comment.syntaxParagraph') }}
+              <div class="syntax-hint">{{ t('comment.syntaxBlankLine') }}</div>
             </div>
             <div class="syntax-desc">
               <kbd>Blank Line</kbd><br>
@@ -67,7 +69,7 @@ defineEmits<{
             </div>
           </div>
           <div class="syntax-row">
-            <div class="syntax-label">换行符</div>
+            <div class="syntax-label">{{ t('comment.syntaxLineBreak') }}</div>
             <div class="syntax-desc">
               <code>Line</code><kbd>Space</kbd><kbd>Space</kbd><br>
               <code>Break</code>
@@ -75,35 +77,35 @@ defineEmits<{
             </div>
           </div>
           <div class="syntax-row">
-            <div class="syntax-label">粗体</div>
+            <div class="syntax-label">{{ t('comment.syntaxBold') }}</div>
             <div class="syntax-desc">
               <kbd>*</kbd><kbd>*</kbd><code>bold text</code><kbd>*</kbd><kbd>*</kbd>
               <div class="syntax-preview"><strong>bold text</strong></div>
             </div>
           </div>
           <div class="syntax-row">
-            <div class="syntax-label">斜体</div>
+            <div class="syntax-label">{{ t('comment.syntaxItalic') }}</div>
             <div class="syntax-desc">
               <kbd>*</kbd><code>italic text</code><kbd>*</kbd>
               <div class="syntax-preview"><em>italic text</em></div>
             </div>
           </div>
           <div class="syntax-row">
-            <div class="syntax-label">删除线</div>
+            <div class="syntax-label">{{ t('comment.syntaxStrikethrough') }}</div>
             <div class="syntax-desc">
               <kbd>~</kbd><code>striked text</code><kbd>~</kbd>
               <div class="syntax-preview"><del>striked text</del></div>
             </div>
           </div>
           <div class="syntax-row">
-            <div class="syntax-label">代码</div>
+            <div class="syntax-label">{{ t('comment.syntaxCode') }}</div>
             <div class="syntax-desc">
               <kbd>`</kbd><code>code text</code><kbd>`</kbd>
               <div class="syntax-preview"><code>code text</code></div>
             </div>
           </div>
           <div class="syntax-row">
-            <div class="syntax-label">分隔线</div>
+            <div class="syntax-label">{{ t('comment.syntaxDivider') }}</div>
             <div class="syntax-desc">
               <kbd>Blank Line</kbd><br>
               <kbd>-</kbd><kbd>-</kbd><kbd>-</kbd><br>
@@ -112,7 +114,7 @@ defineEmits<{
             </div>
           </div>
           <div class="syntax-row">
-            <div class="syntax-label">引用区块</div>
+            <div class="syntax-label">{{ t('comment.syntaxBlockquote') }}</div>
             <div class="syntax-desc">
               <kbd>></kbd><kbd>Space</kbd><code>blockquote</code><br>
               <kbd>></kbd><kbd>Space</kbd><code>text</code><br>
@@ -123,7 +125,7 @@ defineEmits<{
             </div>
           </div>
           <div class="syntax-row">
-            <div class="syntax-label">列表</div>
+            <div class="syntax-label">{{ t('comment.syntaxList') }}</div>
             <div class="syntax-desc">
               <kbd>1</kbd><kbd>.</kbd><kbd>Space</kbd><code>Ordered List</code><br>
               <kbd>2</kbd><kbd>.</kbd><kbd>Space</kbd><code>Nested List</code><br>
@@ -142,20 +144,20 @@ defineEmits<{
             </div>
           </div>
           <div class="syntax-row">
-            <div class="syntax-label">链接</div>
+            <div class="syntax-label">{{ t('comment.syntaxLink') }}</div>
             <div class="syntax-desc">
               <kbd>[</kbd><code>Link text</code><kbd>]</kbd><kbd>(</kbd><code>https://iwara.tv</code><kbd>)</kbd>
               <div class="syntax-preview"><a href="#">Link text</a></div>
             </div>
           </div>
           <div class="syntax-row">
-            <div class="syntax-label">图片</div>
+            <div class="syntax-label">{{ t('comment.syntaxImage') }}</div>
             <div class="syntax-desc">
               <kbd>!</kbd><kbd>[</kbd><kbd>]</kbd><kbd>(</kbd><code>/images/logo.png</code><kbd>)</kbd>
             </div>
           </div>
           <div class="syntax-row">
-            <div class="syntax-label">标题</div>
+            <div class="syntax-label">{{ t('comment.syntaxHeading') }}</div>
             <div class="syntax-desc">
               <kbd>Blank Line</kbd><br>
               <kbd>#</kbd><kbd>Space</kbd><code>Heading 1</code><br>
@@ -166,7 +168,7 @@ defineEmits<{
             </div>
           </div>
           <div class="syntax-row">
-            <div class="syntax-label">替代语法</div>
+            <div class="syntax-label">{{ t('comment.syntaxAlternative') }}</div>
             <div class="syntax-desc">
               <kbd>Blank Line</kbd><br>
               <code>Heading 1</code><br>

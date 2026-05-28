@@ -100,7 +100,9 @@ async function login() {
           }).catch((err) => {
             console.error('Failed to update user info:', err);
           });
-          isLogin().set(true);
+          const loginStore = isLogin();
+          loginStore.set(true);
+          loginStore.loginVersion++;
           showShortToast(t('login.success'));
           // 跳转到首页
           router.push('/');
@@ -128,9 +130,9 @@ async function login() {
 </script>
 <template>
   <div id="loginView">
-    <div class="language">
+    <div class="language" @click="router.push('/setup/language')">
       <font-awesome-icon icon="fa-solid fa-language" />
-      {{ t('login.languageBtn') }}
+      <span>{{ t('setup.language') }}</span>
     </div>
     <div class="form">
       <div class="title">{{ t('login.title') }}</div>
@@ -204,7 +206,9 @@ async function login() {
   padding: 12px;
   cursor: pointer;
   user-select: none;
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
   font-size: 0.9rem;
   position: absolute;
   top: env(safe-area-inset-top, 0);
