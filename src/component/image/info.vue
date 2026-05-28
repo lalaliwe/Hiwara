@@ -226,8 +226,8 @@ async function shareImage() {
     else
       shareUrl = `https://iwara.tv/image/${props.pid}/${props.slug}`;
     await navigator.share({
-      title: props.title || 'Iwara 插画分享',
-      text: `分享插画: ${props.title}`,
+      title: props.title || t('imageView.shareTitle'),
+      text: t('imageView.shareText', { title: props.title }),
       url: shareUrl,
     });
     showShortToast(t('common.shareSuccess'));
@@ -336,7 +336,7 @@ function toZone() {
   });
 }
 
-// 格式化时间: YYYY年MM月DD日 HH:mm
+// 格式化时间（支持多语言）
 const formatDate = (dateString: string) => {
   if (!dateString) return '';
   const date = new Date(dateString);
@@ -345,7 +345,7 @@ const formatDate = (dateString: string) => {
   const day = String(date.getDate()).padStart(2, '0');
   const hours = String(date.getHours()).padStart(2, '0');
   const minutes = String(date.getMinutes()).padStart(2, '0');
-  return `${year}年${month}月${day}日 ${hours}:${minutes}`;
+  return `${year}/${month}/${day} ${hours}:${minutes}`;
 };
 </script>
 
@@ -363,9 +363,9 @@ const formatDate = (dateString: string) => {
       &nbsp;
       <font-awesome-icon icon="fa-regular fa-clock" /> {{ formatDate(createdAt) }}
       <br>
-      <span>插画ID {{ pid }}</span>
+      <span>{{ t('imageView.imageId', { id: pid }) }}</span>
       &nbsp;
-      <span v-if="resolution !== ''">分辨率 {{ resolution }}</span>
+      <span v-if="resolution !== ''">{{ t('imageView.resolution', { res: resolution }) }}</span>
     </div>
     <div class="author">
       <div class="avatar" @click="toZone">
@@ -385,25 +385,25 @@ const formatDate = (dateString: string) => {
         <span v-if="!isFollow && !isMyFans">
           <v-btn size="small" variant="flat" color="#00796B" @click="clickFollow" :loading="isFollowing">
             <font-awesome-icon icon="fa-solid fa-plus" />
-            关注
+            {{ t('imageView.follow') }}
           </v-btn>
         </span>
         <span v-else-if="isFollow && !isMyFans">
           <v-btn size="small" variant="outlined" color="#00796B" @click="clickFollow" :loading="isFollowing">
             <font-awesome-icon icon="fa-solid fa-bars" />
-            已关注
+            {{ t('imageView.followed') }}
           </v-btn>
         </span>
         <span v-else-if="isFollow && isMyFans">
           <v-btn size="small" variant="outlined" color="#00796B" @click="clickFollow" :loading="isFollowing">
             <font-awesome-icon icon="fa-solid fa-bars" />
-            已互粉
+            {{ t('imageView.followMutual') }}
           </v-btn>
         </span>
         <span v-else-if="!isFollow && isMyFans">
           <v-btn size="small" variant="flat" color="#00796B" @click="clickFollow" :loading="isFollowing">
             <font-awesome-icon icon="fa-solid fa-plus" />
-            回关
+            {{ t('imageView.followBack') }}
           </v-btn>
         </span>
       </div>
@@ -418,17 +418,17 @@ const formatDate = (dateString: string) => {
         <iconLike v-if="isLike" theme="filled" size="22" fill="#FF3D00" />
         <iconLike v-else theme="outline" size="22" fill="#212121" />
         <br>
-        <span v-if="isLike">已点赞</span>
-        <span v-else>点赞</span>
+        <span v-if="isLike">{{ t('imageView.liked') }}</span>
+        <span v-else>{{ t('imageView.like') }}</span>
       </div>
       <div @click="shareImage">
-        <iconShareOne theme="two-tone" size="22" :fill="['#424242', '#00796B']" /><br>分享
+        <iconShareOne theme="two-tone" size="22" :fill="['#424242', '#00796B']" /><br>{{ t('imageView.share') }}
       </div>
       <div @click="emit('commentTrigger')">
-        <iconComments theme="multi-color" size="22" :fill="['#484848', '#00796B', '#FFFFFF', '#00796B']" /><br>评论
+        <iconComments theme="multi-color" size="22" :fill="['#484848', '#00796B', '#FFFFFF', '#00796B']" /><br>{{ t('imageView.comment') }}
       </div>
       <div @click="copyDownloadLink">
-        <iconCopyLink theme="multi-color" size="22" :fill="['#424242', '#00796B', '#FFF', '#00796B']" /><br>链接
+        <iconCopyLink theme="multi-color" size="22" :fill="['#424242', '#00796B', '#FFF', '#00796B']" /><br>{{ t('imageView.link') }}
       </div>
     </div>
     <div class="tags" ref="tagsContainerRef" :style="{ height: tagsContainerHeight }">

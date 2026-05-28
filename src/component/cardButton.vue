@@ -4,9 +4,11 @@ import lossImg from '../static/img/loss.png';
 import iwaraSVG from '../assets/svg/iwara.svg'
 import { computed, type PropType, ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
+import { useI18n } from 'vue-i18n';
 import { getImageIwara } from '../core/api';
 
 const router = useRouter();
+const { t, locale } = useI18n()
 
 // 定义卡片数据接口
 interface CardData {
@@ -26,63 +28,74 @@ const props = defineProps({
   data: { type: Object as PropType<CardData>, required: true },
 });
 
-// 中文大数单位数组，按从小到大排列
-const chineseUnits = [
-  { value: 1, name: '' },           // 个位
-  { value: 10000, name: '万' },     // 万
-  { value: 100000000, name: '亿' }, // 亿
-  { value: 1000000000000, name: '兆' }, // 兆
-  { value: 10000000000000000, name: '京' }, // 京
-  { value: 100000000000000000000, name: '垓' }, // 垓
-  { value: 1000000000000000000000000, name: '秭' }, // 秭
-  { value: 10000000000000000000000000000, name: '穰' }, // 穂
-  { value: 100000000000000000000000000000000, name: '沟' }, // 沟
-  { value: 1000000000000000000000000000000000000, name: '涧' }, // 涧
-  { value: 10000000000000000000000000000000000000000, name: '正' }, // 正
-  { value: 100000000000000000000000000000000000000000000, name: '载' }, // 载
-  { value: 1000000000000000000000000000000000000000000000000, name: '极' } // 极
-];
+// 检测 CJK 语言（使用 10^4 进制大数单位）
+const isCJK = computed(() => {
+  const loc = locale.value
+  return loc === 'zh-Hans' || loc === 'zh-Hant' || loc === 'ja' || loc === 'ko'
+})
 
-// 最大支持的数值（10000极）
-const MAX_SUPPORTED_VALUE = 10000 * 1000000000000000000000000000000000000000000000000;
+// 根据语言构建数字单位数组（CJK: 10^4 进制; 其他: 10^3 进制）
+const numberUnits = computed(() => {
+  const cjkThresholds = [1, 1e4, 1e8, 1e12, 1e16, 1e20, 1e24, 1e28, 1e32, 1e36, 1e40, 1e44, 1e48]
+  const westernThresholds = [1, 1e3, 1e6, 1e9, 1e12, 1e15, 1e18, 1e21, 1e24, 1e27, 1e30, 1e33, 1e36]
+  const thresholds = isCJK.value ? cjkThresholds : westernThresholds
 
-// 数字格式化函数 - 支持所有中文大数单位
+  return thresholds.map((value, index) => ({
+    value,
+    name: index === 0 ? '' : t(`card.numberUnit${index}`)
+  }))
+})
+
+// 最大支持的数值
+const maxSupportedValue = computed(() => {
+  const lastUnit = numberUnits.value[numberUnits.value.length - 1]
+  return (isCJK.value ? 10000 : 1000) * lastUnit.value
+})
+
+// 直接显示阈值（小于该值不进行单位转换）
+const directThreshold = computed(() => isCJK.value ? 10000 : 1000)
+
+// 数字格式化函数 - 支持多语言大数单位
 const formatNumber = (num: number): string => {
-  if (isNaN(num)) return '0';
+  if (isNaN(num)) return '0'
 
-  // 小于10000直接显示
-  if (num < 10000) {
-    return num.toString();
+  const units = numberUnits.value
+  const maxVal = maxSupportedValue.value
+  const threshold = directThreshold.value
+
+  // 小于阈值直接显示
+  if (num < threshold) {
+    return num.toString()
   }
 
   // 超过最大支持范围显示∞
-  if (num > MAX_SUPPORTED_VALUE) {
-    return '∞';
+  if (num > maxVal) {
+    return '∞'
   }
 
   // 从最大的单位开始查找合适的单位
-  for (let i = chineseUnits.length - 1; i >= 0; i--) {
-    const unit = chineseUnits[i];
+  for (let i = units.length - 1; i >= 0; i--) {
+    const unit = units[i]
     if (num >= unit.value) {
-      const result = num / unit.value;
+      const result = num / unit.value
       // 优化小数显示：如果是整数或者小数部分为0，则不显示小数点
       if (result === Math.floor(result)) {
-        return Math.floor(result) + unit.name;
+        return Math.floor(result) + unit.name
       } else {
         // 保留一位小数，但如果小数部分为0则显示整数
-        const rounded = Math.round(result * 10) / 10;
+        const rounded = Math.round(result * 10) / 10
         if (rounded === Math.floor(rounded)) {
-          return Math.floor(rounded) + unit.name;
+          return Math.floor(rounded) + unit.name
         } else {
-          return rounded.toFixed(1) + unit.name;
+          return rounded.toFixed(1) + unit.name
         }
       }
     }
   }
 
   // 默认返回原数字（理论上不会到达这里）
-  return num.toString();
-};
+  return num.toString()
+}
 
 // 时间格式化函数 - 将秒数转换为 hh:mm:ss 或 mm:ss 格式
 const formatTime = (seconds: number): string => {
@@ -106,71 +119,67 @@ const formatTime = (seconds: number): string => {
   }
 };
 
-// 时间显示格式化函数
+// 时间显示格式化函数（多语言支持）
 const formatTimeDisplay = (timeStr: string | undefined): string => {
-  if (!timeStr) return '';
+  if (!timeStr) return ''
 
-  const now = new Date();
-  const date = new Date(timeStr);
+  const now = new Date()
+  const date = new Date(timeStr)
 
   // 检查日期是否有效
-  if (isNaN(date.getTime())) return '';
+  if (isNaN(date.getTime())) return ''
 
-  // 计算时间差（毫秒）
-  const diffMs = now.getTime() - date.getTime();
-  const diffMinutes = Math.floor(diffMs / (1000 * 60));
-  const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+  const year = date.getFullYear()
+  const month = (date.getMonth() + 1).toString().padStart(2, '0')
+  const day = date.getDate().toString().padStart(2, '0')
+  const dateStr = `${year}-${month}-${day}`
+  const hours = date.getHours().toString().padStart(2, '0')
+  const minutes = date.getMinutes().toString().padStart(2, '0')
+  const timeFmt = `${hours}:${minutes}`
 
-  // 获取当天零点的时间戳用于比较“今天”、“昨天”等
-  const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
-  const dateStart = new Date(date.getFullYear(), date.getMonth(), date.getDate()).getTime();
-  const diffDays = Math.floor((todayStart - dateStart) / (1000 * 60 * 60 * 24));
+  // 获取当天零点的时间戳用于比较"今天"
+  const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime()
+  const dateStart = new Date(date.getFullYear(), date.getMonth(), date.getDate()).getTime()
+  const diffDays = Math.floor((todayStart - dateStart) / (1000 * 60 * 60 * 24))
 
-  // 十分钟及以内：X分钟前
-  if (diffMinutes < 10) {
-    // 如果是负数或极小值（比如未来时间或刚发生），显示刚刚或0分钟前
-    const mins = diffMinutes < 0 ? 0 : diffMinutes;
-    return `${mins}分钟前`;
+  // 非 CJK 语言：今天显示 HH:mm，其他显示 YYYY-MM-DD
+  if (!isCJK.value) {
+    if (diffDays === 0) {
+      return timeFmt
+    }
+    return dateStr
   }
 
-  // 十分钟以上一小时以内：XX分钟前
+  // 计算时间差（毫秒）
+  const diffMs = now.getTime() - date.getTime()
+  const diffMinutes = Math.floor(diffMs / (1000 * 60))
+
+  // 一小时内：X分钟前
   if (diffMinutes < 60) {
-    return `${diffMinutes}分钟前`;
+    const mins = diffMinutes < 0 ? 0 : diffMinutes
+    if (mins <= 1) {
+      return t('card.timeMinuteAgo', { n: mins })
+    }
+    return t('card.timeMinutesAgo', { n: mins })
   }
 
   // 今天：今天 HH:mm
   if (diffDays === 0) {
-    const hours = date.getHours().toString().padStart(2, '0');
-    const minutes = date.getMinutes().toString().padStart(2, '0');
-    return `今天 ${hours}:${minutes}`;
+    return t('card.timeToday', { time: timeFmt })
   }
 
   // 昨天：昨天 HH:mm
   if (diffDays === 1) {
-    const hours = date.getHours().toString().padStart(2, '0');
-    const minutes = date.getMinutes().toString().padStart(2, '0');
-    return `昨天 ${hours}:${minutes}`;
+    return t('card.timeYesterday', { time: timeFmt })
   }
 
-  // 前天：2天前 HH:mm
-  if (diffDays === 2) {
-    const hours = date.getHours().toString().padStart(2, '0');
-    const minutes = date.getMinutes().toString().padStart(2, '0');
-    return `2天前 ${hours}:${minutes}`;
-  }
-
-  // 大前天：3天前 HH:mm
-  if (diffDays === 3) {
-    const hours = date.getHours().toString().padStart(2, '0');
-    const minutes = date.getMinutes().toString().padStart(2, '0');
-    return `3天前 ${hours}:${minutes}`;
+  // 2-3天前：N天前 HH:mm
+  if (diffDays <= 3) {
+    return t('card.timeDaysAgo', { n: diffDays, time: timeFmt })
   }
 
   // 再往前：YYYY-MM-DD
-  const year = date.getFullYear();
-  const month = (date.getMonth() + 1).toString().padStart(2, '0');
-  const day = date.getDate().toString().padStart(2, '0');
-  return `${year}-${month}-${day}`;
+  return dateStr
 };
 
 // 计算属性用于格式化显示的数字

@@ -88,27 +88,41 @@ class WebviewHandler: NSObject {
         isPageLoaded = false
     }
 
-    /// 注入 JavaScript（页面加载后执行）
-    /// 暂存脚本，在页面加载完成时自动注入
+    /// 注入 JavaScript（页面加载前/后执行）
+    /// 暂存脚本，在 didCommit/didFinish 时自动注入
+    /// 同时立即尝试注入，确保在 SPA 初始化前 token 就绪
     func injectScript(script: String, completion: @escaping (Bool, String?) -> Void) {
         postScript = script
 
-        if isPageLoaded, let webView = webView {
+        // 立即尝试注入（无论页面是否加载完成），解决 SPA 初始化前 token 未就绪的竞态
+        if let webView = webView {
             webView.evaluateJavaScript(script) { _, error in
                 if let error = error {
-                    completion(false, error.localizedDescription)
+                    print("[MWebview] Eager script injection failed: \(error.localizedDescription)")
                 } else {
-                    completion(true, nil)
+                    print("[MWebview] Script injected eagerly")
                 }
             }
-        } else {
-            completion(true, nil)
         }
+
+        completion(true, nil)
     }
 
     /// 设置初始化脚本（在下一次页面加载时注入）
     func setInitScript(script: String) {
         self.initScript = script
+
+        // 如果 WebView 已存在，立即将脚本添加到 userContentController
+        // 修复：此前在 createWebview 之后调用 setInitScript 导致首次加载未注入 CSS
+        if let webView = webView {
+            let userScript = WKUserScript(
+                source: script,
+                injectionTime: .atDocumentStart,
+                forMainFrameOnly: true
+            )
+            webView.configuration.userContentController.addUserScript(userScript)
+            print("[MWebview] Init script added to existing WebView")
+        }
     }
 
     /// 后退导航
@@ -130,11 +144,20 @@ extension WebviewHandler: WKNavigationDelegate {
         isPageLoaded = false
     }
 
-    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
-        isPageLoaded = true
-        // 页面加载完成后注入 post-load 脚本（token）
+    /// 页面内容开始到达时注入 token（早于 didFinish，确保 SPA 初始化前 token 已就绪）
+    func webView(_ webView: WKWebView, didCommit navigation: WKNavigation!) {
         if let script = postScript {
             webView.evaluateJavaScript(script, completionHandler: nil)
+            print("[MWebview] Post-load script injected on didCommit (early)")
+        }
+    }
+
+    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+        isPageLoaded = true
+        // 页面加载完成后再次注入 token 脚本（兜底，防止 didCommit 时脚本未就绪）
+        if let script = postScript {
+            webView.evaluateJavaScript(script, completionHandler: nil)
+            print("[MWebview] Post-load script injected on didFinish (fallback)")
         }
     }
 

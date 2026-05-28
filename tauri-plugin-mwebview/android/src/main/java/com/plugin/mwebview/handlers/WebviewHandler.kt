@@ -91,16 +91,21 @@ class WebviewHandler(private val activity: Activity) {
                             view?.evaluateJavascript(script, null)
                             android.util.Log.d("MWebview", "Init script injected on page start")
                         }
+                        // 在页面开始加载时就注入 token 脚本，确保 SPA 初始化前 token 已就绪
+                        pendingPostScript?.let { script ->
+                            view?.evaluateJavascript(script, null)
+                            android.util.Log.d("MWebview", "Post-load script injected on page start (early)")
+                        }
                     }
 
                     override fun onPageFinished(view: WebView?, url: String?) {
                         super.onPageFinished(view, url)
                         android.util.Log.d("MWebview", "Page finished: $url")
                         pageLoaded = true
-                        // 页面加载完成后注入 token 脚本
+                        // 页面加载完成后再次注入 token 脚本（兜底，防止 onPageStarted 时脚本未就绪）
                         pendingPostScript?.let { script ->
                             view?.evaluateJavascript(script, null)
-                            android.util.Log.d("MWebview", "Post-load script injected on page finished")
+                            android.util.Log.d("MWebview", "Post-load script injected on page finished (fallback)")
                         }
                     }
                 }
@@ -210,24 +215,21 @@ class WebviewHandler(private val activity: Activity) {
     }
 
     /**
-     * 注入 JavaScript 脚本（页面加载后执行）
-     * 脚本会暂存，在 onPageFinished 时自动注入
-     * 如果页面已加载完成，立即执行
+     * 注入 JavaScript 脚本（页面加载前/后执行）
+     * 脚本会暂存，在 onPageStarted 和 onPageFinished 时自动注入
+     * 同时立即尝试注入，确保在 SPA 初始化前 token 就绪
      */
     fun injectScript(invoke: Invoke) {
         try {
             val args = invoke.parseArgs(InjectScriptArgs::class.java)
             val script = args.script ?: return invoke.reject("Script is required")
 
-            // 暂存脚本，等待页面加载完成时注入
+            // 暂存脚本，等待 onPageStarted/onPageFinished 时再次注入
             pendingPostScript = script
 
-            if (pageLoaded) {
-                webView?.evaluateJavascript(script, null)
-                android.util.Log.d("MWebview", "Script injected immediately (page already loaded)")
-            } else {
-                android.util.Log.d("MWebview", "Script saved, will inject on page finished")
-            }
+            // 立即尝试注入（无论页面是否加载完成），解决 SPA 初始化前 token 未就绪的竞态
+            webView?.evaluateJavascript(script, null)
+            android.util.Log.d("MWebview", "Script injected immediately (pending save + eager eval)")
 
             val response = JSObject()
             response.put("success", true)
@@ -239,6 +241,7 @@ class WebviewHandler(private val activity: Activity) {
 
     /**
      * 注入初始化脚本（页面加载前执行）
+     * 立即尝试注入 + 暂存，在 onPageStarted 时再次注入（兜底）
      */
     fun injectInitScript(invoke: Invoke) {
         try {
@@ -255,11 +258,12 @@ class WebviewHandler(private val activity: Activity) {
                 })();
             """.trimIndent()
 
+            // 暂存脚本，在 onPageStarted 时再次注入（兜底，防止 document.head 还不可用）
             pendingInitScript = script
 
-            // 如果 WebView 已加载页面，立即执行
+            // 立即尝试注入（如果页面已有 DOM 则生效，否则由 onPageStarted 兜底）
             webView?.evaluateJavascript(script, null)
-            android.util.Log.d("MWebview", "Init script saved")
+            android.util.Log.d("MWebview", "Init script saved + eager eval")
 
             val response = JSObject()
             response.put("success", true)

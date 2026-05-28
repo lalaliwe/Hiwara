@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted, inject, watch, nextTick } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { lockPortrait, lockLandscape } from '../../plugins/useOrientation'
 import { enterImmersive, exitImmersive } from '../../plugins/immersive'
 import controlFullscreen from './controlFullscreen.vue';
@@ -9,6 +10,7 @@ import { setupStore } from '../../core/store';
 
 // 获取 store 实例
 const setup = setupStore();
+const { t } = useI18n();
 
 // 定义 props
 const props = defineProps<{
@@ -353,7 +355,7 @@ const handleGestureEvent = (event: { type: string; value?: number; isEnd?: boole
         hideGestureMessage()
       } else {
         // 滑动中，更新消息
-        showGestureMessageTemporary(`亮度: ${Math.round(event.value || 0)}%`)
+        showGestureMessageTemporary(t('player.brightness', { n: Math.round(event.value || 0) }))
       }
       break
     case 'volume':
@@ -363,7 +365,7 @@ const handleGestureEvent = (event: { type: string; value?: number; isEnd?: boole
         hideGestureMessage()
       } else {
         // 滑动中，更新消息
-        showGestureMessageTemporary(`音量: ${Math.round(event.value || 0)}%`)
+        showGestureMessageTemporary(t('player.volume', { n: Math.round(event.value || 0) }))
       }
       break
     case 'seek':
@@ -383,12 +385,12 @@ const handleGestureEvent = (event: { type: string; value?: number; isEnd?: boole
     case 'rewind':
       // 快退10秒 - 双击操作，延迟隐藏
       videoRef.value.currentTime = Math.max(0, videoRef.value.currentTime - 10)
-      showGestureMessageDelayed('快退 10s')
+      showGestureMessageDelayed(t('player.rewind10s'))
       break
     case 'forward':
       // 快进10秒 - 双击操作，延迟隐藏
       videoRef.value.currentTime = Math.min(videoRef.value.duration, videoRef.value.currentTime + 10)
-      showGestureMessageDelayed('快进 10s')
+      showGestureMessageDelayed(t('player.forward10s'))
       break
   }
 }

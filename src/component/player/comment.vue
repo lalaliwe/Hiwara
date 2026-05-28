@@ -322,7 +322,7 @@ async function toggleReplies(comment: Comment) {
   }
 }
 
-// 格式化日期
+// 格式化日期（多语言支持）
 function formatDate(dateString: string): string {
   const date = new Date(dateString)
   const now = new Date()
@@ -335,17 +335,21 @@ function formatDate(dateString: string): string {
   const year = 365 * day
 
   if (diff < minute) {
-    return '刚刚'
+    return t('comment.justNow')
   } else if (diff < hour) {
-    return `${Math.floor(diff / minute)}分钟前`
+    const mins = Math.floor(diff / minute)
+    if (mins <= 1) {
+      return t('comment.minuteAgo', { n: mins })
+    }
+    return t('comment.minutesAgo', { n: mins })
   } else if (diff < day) {
-    return `${Math.floor(diff / hour)}小时前`
+    return t('comment.hoursAgo', { n: Math.floor(diff / hour) })
   } else if (diff < month) {
-    return `${Math.floor(diff / day)}天前`
+    return t('comment.daysAgo', { n: Math.floor(diff / day) })
   } else if (diff < year) {
-    return `${Math.floor(diff / month)}个月前`
+    return t('comment.monthsAgo', { n: Math.floor(diff / month) })
   } else {
-    return `${Math.floor(diff / year)}年前`
+    return t('comment.yearsAgo', { n: Math.floor(diff / year) })
   }
 }
 
@@ -372,13 +376,13 @@ onActivated(() => {
     </Transition>
 
     <div v-if="commentState === 'failed'" class="status-overlay" @click="handleErrorClick">
-      <errorHuawu>评论加载失败了喵~</errorHuawu>
+      <errorHuawu>{{ t('comment.loadFailed') }}</errorHuawu>
     </div>
     <div v-else-if="commentState === 'empty'" class="status-overlay" @click="handleErrorClick">
-      <errorHuawu>当前还没有评论</errorHuawu>
+      <errorHuawu>{{ t('comment.noComment') }}</errorHuawu>
     </div>
     <div v-else-if="commentState === 'loading'" class="status-overlay">
-      <loadingHuawu>评论加载中</loadingHuawu>
+      <loadingHuawu>{{ t('comment.loading') }}</loadingHuawu>
     </div>
     <v-infinite-scroll class="commentList" v-else color="#00796B" @load="handleScrollToEnd" :disabled="commentMore" @scroll="handleScroll"
       ref="commentListRef">
@@ -405,12 +409,12 @@ onActivated(() => {
                     class="reply-count"
                     :class="{ active: repliesExpanded[item.id] }"
                     @click="toggleReplies(item)">
-                    {{ item.numReplies }}条回复&nbsp;&nbsp;
+                    {{ t('comment.replyCount', { n: item.numReplies }) }}&nbsp;&nbsp;
                   </div>
-                  <div class="reply-btn" @click="handleReply(item)">回复</div>
+                  <div class="reply-btn" @click="handleReply(item)">{{ t('comment.reply') }}</div>
                 </div>
                 <div class="toggle-btn" v-if="needToggle(item.body)" @click="toggleExpand(item.id)">
-                  {{ expandedMap[item.id] ? '收起' : '展开' }}
+                  {{ expandedMap[item.id] ? t('comment.collapse') : t('comment.expand') }}
                 </div>
               </div>
             </div>
@@ -421,7 +425,7 @@ onActivated(() => {
           <!-- 加载中：简单转圈 -->
           <div v-if="repliesLoading[item.id]" class="replies-loading">
             <div class="spinner"></div>
-            <span>加载回复中...</span>
+            <span>{{ t('comment.loadingReplies') }}</span>
           </div>
           <!-- 回复列表 -->
           <template v-else>
@@ -449,13 +453,13 @@ onActivated(() => {
       </template>
       <template v-slot:error="{ props }">
         <div class="load-more-failed">
-          <span>加载失败，</span>
-          <span class="retry-btn" v-bind=props>点击重试</span>
+          <span>{{ t('comment.loadFailedHint') }}</span>
+          <span class="retry-btn" v-bind=props>{{ t('comment.retry') }}</span>
         </div>
       </template>
       <template v-slot:empty>
         <div class="listEnd">
-          已经到底了喵~
+          {{ t('comment.endOfList') }}
         </div>
       </template>
     </v-infinite-scroll>

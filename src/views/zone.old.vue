@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted, watch, nextTick, onActivated } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { useI18n } from 'vue-i18n'
 import { Swiper, SwiperSlide } from 'swiper/vue';
 import type { Swiper as SwiperType } from 'swiper';
 import 'swiper/swiper-bundle.css';
@@ -21,8 +20,6 @@ import { uid as muid, uname as muname } from '../core/store';
 import kivotos from '../static/img/kivotos.png'
 import loadingHuawu from '../component/loadingHuawu.vue';
 import errorHuawu from '../component/errorHuawu.vue';
-
-const { t } = useI18n();
 
 defineOptions({
   name: 'Zone'
@@ -195,59 +192,99 @@ function clampScrollPosition() {
   saveCurrentScrollPosition();
 }
 
-// --- Swiper 联动逻辑 ---
-const swiperInstance = ref<SwiperType | null>(null);
-
-const onSwiper = (swiper: SwiperType) => {
-  swiperInstance.value = swiper;
-};
-
-// 监听 tab 变化，控制 Swiper 切换
-watch(tab, (newVal) => {
-  if (swiperInstance.value) {
-    const targetIndex = newVal === 'video' ? 0 : newVal === 'image' ? 1 : 2;
-    if (swiperInstance.value.activeIndex !== targetIndex) {
-      saveCurrentScrollPosition();
-      swiperInstance.value.slideTo(targetIndex);
-      isManualTabChange = false;
-    }
-  }
-});
-
-// 监听 Swiper 滑动，反控 tab 变化
-const onSlideChange = (swiper: SwiperType) => {
-  const activeIndex = swiper.activeIndex;
-  const newTab = activeIndex === 0 ? 'video' : activeIndex === 1 ? 'image' : 'publish';
-  if (tab.value !== newTab) {
-    isManualTabChange = true;
-    saveCurrentScrollPosition();
-    tab.value = newTab;
-  }
-};
-
-// Swiper 过渡动画完成后恢复滚动位置
-const onSlideChangeTransitionEnd = (swiper: SwiperType) => {
-  const activeIndex = swiper.activeIndex;
-  const targetTab = activeIndex === 0 ? 'video' : activeIndex === 1 ? 'image' : 'publish';
-  restoreScrollPosition(targetTab);
-  isManualTabChange = false;
-};
-// --- End Swiper 联动逻辑 ---
-
-// 组件激活时恢复tab状态
-onActivated(() => {
-  nextTick(() => {
-    restoreScrollPosition(tab.value);
-    updateTopBarColor();
-  });
-})
-
 // 处理窗口大小改变
 function handleResize() {
   updateTopBarColor();
   clampScrollPosition();
   restoreScrollPosition(tab.value);
 }
+
+// Swiper 实例
+const swiperInstance = ref<SwiperType | null>(null);
+
+// 监听 tab 变化，控制 Swiper 切换（滚动恢复由过渡完成事件处理）
+watch(tab, (newVal) => {
+  if (swiperInstance.value) {
+    let targetIndex: number;
+    switch (newVal) {
+      case 'video':
+        targetIndex = 0;
+        break;
+      case 'image':
+        targetIndex = 1;
+        break;
+      case 'publish':
+        targetIndex = 2;
+        break;
+      default:
+        targetIndex = 0;
+    }
+    if (swiperInstance.value.activeIndex !== targetIndex) {
+      isManualTabChange = true;
+      swiperInstance.value.slideTo(targetIndex);
+    }
+  }
+});
+
+// Swiper 实例初始化
+const onSwiper = (swiper: SwiperType) => {
+  swiperInstance.value = swiper;
+};
+
+// 监听 Swiper 滑动中，反控 tab 变化并保存滚动位置
+const onSlideChange = (swiper: SwiperType) => {
+  let newTab: 'video' | 'image' | 'publish';
+  switch (swiper.activeIndex) {
+    case 0:
+      newTab = 'video';
+      break;
+    case 1:
+      newTab = 'image';
+      break;
+    case 2:
+      newTab = 'publish';
+      break;
+    default:
+      newTab = 'video';
+  }
+
+  if (newTab !== tab.value) {
+    // 保存当前滚动位置
+    saveCurrentScrollPosition();
+    tab.value = newTab;
+  }
+};
+
+// 监听 Swiper 切换过渡结束（高度已稳定），恢复滚动位置
+const onSlideChangeTransitionEnd = (swiper: SwiperType) => {
+  // 确保 tab 状态一致
+  let newTab: 'video' | 'image' | 'publish';
+  switch (swiper.activeIndex) {
+    case 0: newTab = 'video'; break;
+    case 1: newTab = 'image'; break;
+    case 2: newTab = 'publish'; break;
+    default: newTab = 'video';
+  }
+  if (newTab !== tab.value) {
+    tab.value = newTab;
+  }
+
+  // 等待一帧确保高度彻底稳定
+  requestAnimationFrame(() => {
+    restoreScrollPosition(tab.value);
+    updateTopBarColor();
+    isManualTabChange = false;
+  });
+};
+
+// 组件激活时恢复tab状态
+onActivated(() => {
+  // 在下一个tick恢复滚动位置
+  nextTick(() => {
+    restoreScrollPosition(tab.value);
+    updateTopBarColor();
+  });
+});
 
 onMounted(() => {
   const container = zoneContainerRef.value;
@@ -338,15 +375,23 @@ async function getData() {
     // 获取关注状态
     isMyFollow.value = res.data.user.following || false;
 
-    // 设置默认背景（立即生效，不等待 header 加载）
+    // 设置 zone-bg 背景
     const defaultBgStyle = `background-image: url('${kivotos}'); background-size: cover; background-position: center; background-repeat: no-repeat;`;
-    zoneBgStyle.value = defaultBgStyle;
 
-    // 后台异步加载 header 背景图，不阻塞主流程
     if (res.data.header) {
-      loadHeaderBackground(res.data.header);
+      try {
+        const headerUrl = `https://i.iwara.tv/image/profileHeader/${res.data.header.id}/${res.data.header.name}`;
+        const bgImageUrl = await getImageIwara(headerUrl);
+        zoneBgStyle.value = `background-image: url('${bgImageUrl}'); background-size: cover; background-position: center; background-repeat: no-repeat;`;
+      } catch (error) {
+        console.error('获取header背景失败:', error);
+        // 失败时使用默认背景
+        zoneBgStyle.value = defaultBgStyle;
+      }
+    } else {
+      // 没有 header 时使用默认背景
+      zoneBgStyle.value = defaultBgStyle;
     }
-
     await Promise.allSettled([
       getFollowersNum(uid.value),
       getFansNum(uid.value)
@@ -355,20 +400,8 @@ async function getData() {
     });
   } catch (error) {
     console.error(error);
-    showShortToast(t('common.fetchUserInfoFailed'));
+    showShortToast('获取用户信息失败');
     state.value = 'error';
-  }
-
-  // 后台异步加载 header 背景图
-  async function loadHeaderBackground(header: any) {
-    try {
-      const headerUrl = `https://i.iwara.tv/image/profileHeader/${header.id}/${header.name}`;
-      const bgImageUrl = await getImageIwara(headerUrl);
-      zoneBgStyle.value = `background-image: url('${bgImageUrl}'); background-size: cover; background-position: center; background-repeat: no-repeat;`;
-    } catch (error) {
-      console.error('获取header背景失败:', error);
-      // 失败时继续保持默认背景
-    }
   }
   async function getFollowersNum(uid: string) {
     try {
@@ -405,10 +438,10 @@ async function getData() {
     </div>
 
     <div v-if="state === 'loading'" class="state-container">
-      <loadingHuawu>{{ t('imageView.loading') }}</loadingHuawu>
+      <loadingHuawu>正在加载数据</loadingHuawu>
     </div>
     <div v-else-if="state === 'error'" class="state-container">
-      <errorHuawu>{{ t('imageView.failed') }}</errorHuawu>
+      <errorHuawu>数据加载失败了喵~</errorHuawu>
     </div>
     <div v-else-if="state === 'success'" class="zone-container" ref="zoneContainerRef" @scroll="handleGlobalScroll">
 
@@ -423,9 +456,9 @@ async function getData() {
       <div class="tabs-sticky">
         <div class="tabs">
           <v-tabs v-model="tab" color="#00796B">
-            <v-tab value="video">{{ t('zone.videoTab') }}</v-tab>
-            <v-tab value="image">{{ t('zone.imageTab') }}</v-tab>
-            <v-tab value="publish" v-if="false">{{ t('zone.publishTab') }}</v-tab>
+            <v-tab value="video">视频</v-tab>
+            <v-tab value="image">插画</v-tab>
+            <v-tab value="publish" v-if="false">发布</v-tab>
           </v-tabs>
           <v-divider></v-divider>
         </div>

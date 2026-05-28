@@ -1,8 +1,11 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, watch } from 'vue';
+import { useI18n } from 'vue-i18n';
 import { getImageIwara } from '../../core/api';
 import notImg from '../../static/img/not-img.jpg'
 import iwaraSVG from '../../assets/svg/iwara.svg'
+
+const { t } = useI18n();
 
 interface ImageFile {
   id: string;
@@ -125,7 +128,7 @@ function fullScreen(num: number = 0) {
     </div>
     <!-- 展开/收起按钮（只有多张图片时才显示） -->
     <span v-if="processedImages.length > 1" class="expand-btn" @click="imageExpand = !imageExpand">
-      {{ imageExpand ? '收起' : '展开全部' }}
+      {{ imageExpand ? t('imageView.collapse') : t('imageView.expandAll') }}
     </span>
   </div>
 </template>

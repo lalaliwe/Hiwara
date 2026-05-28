@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted, nextTick } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import { setStatusBarTextStyle } from '../plugins/navbarStyle'
 import { Webview } from '@tauri-apps/api/webview'
 import { getCurrentWebviewWindow } from '@tauri-apps/api/webviewWindow'
@@ -17,6 +18,7 @@ defineOptions({
 
 setStatusBarTextStyle('light')
 
+const { t } = useI18n()
 const route = useRoute()
 const router = useRouter()
 
@@ -111,16 +113,20 @@ const buildCSSRules = (cssConfig: DomainCSSConfig): string => {
 }
 
 /** 构建 token 注入脚本 */
-const buildTokenScript = (token: string | null): string => {
+const buildTokenScript = (token: string | null): string | null => {
+  // 修复：此前 '${token}' 当 token 为 null 时变成字符串 'null'（truthy），
+  // 导致注入字面量 "null" 到 localStorage
+  if (!token) {
+    console.log('[WebView] Token 为空，跳过 token 注入')
+    return null
+  }
   return `
     (function() {
-      if ('${token}') {
-        try {
-          localStorage.setItem('token', '${token}');
-          console.log('[WebView] Auth token injected to localStorage');
-        } catch (e) {
-          console.error('[WebView] Failed to set localStorage:', e);
-        }
+      try {
+        localStorage.setItem('token', '${token}');
+        console.log('[WebView] Auth token injected to localStorage');
+      } catch (e) {
+        console.error('[WebView] Failed to set localStorage:', e);
       }
     })();
   `
@@ -151,10 +157,14 @@ const injectContentToWebview = async () => {
       }
 
       const script = buildTokenScript(token)
-      await invoke('plugin:mwebview|inject_script', {
-        payload: { script }
-      })
-      console.log('脚本注入成功')
+      if (script) {
+        await invoke('plugin:mwebview|inject_script', {
+          payload: { script }
+        })
+        console.log('Token 脚本注入成功')
+      } else {
+        console.log('无有效 token，跳过脚本注入')
+      }
     } else {
       // == 桌面端：使用 Rust 命令注入 ==
       if (cssConfig) {
@@ -170,11 +180,15 @@ const injectContentToWebview = async () => {
       }
 
       const script = buildTokenScript(token)
-      await invoke('inject_webview_script', {
-        webviewLabel: webviewLabel,
-        script: script
-      })
-      console.log('脚本注入成功')
+      if (script) {
+        await invoke('inject_webview_script', {
+          webviewLabel: webviewLabel,
+          script: script
+        })
+        console.log('Token 脚本注入成功')
+      } else {
+        console.log('无有效 token，跳过脚本注入')
+      }
     }
   } catch (error) {
     console.error('注入内容失败:', error)
@@ -482,10 +496,10 @@ onUnmounted(async () => {
     </div>
     <!-- 加载状态显示 -->
     <div v-if="loadState === 'loading'" class="loading-overlay">
-      <LoadingHuawu>正在加载中</LoadingHuawu>
+      <LoadingHuawu>{{ t('webview.loading') }}</LoadingHuawu>
     </div>
     <div v-else-if="loadState === 'failed'" class="loading-overlay">
-      <errorHuawu>网页加载失败了喵~</errorHuawu>
+      <errorHuawu>{{ t('webview.failed') }}</errorHuawu>
     </div>
 
     <!-- WebView 容器 -->

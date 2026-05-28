@@ -28,7 +28,7 @@ import { useRouter } from 'vue-router';
 
 const router = useRouter();
 
-// 格式化时间: YYYY年MM月DD日 HH:mm
+// 格式化时间（支持多语言）
 const formatDate = (dateString: string) => {
   if (!dateString) return '';
   const date = new Date(dateString);
@@ -37,7 +37,7 @@ const formatDate = (dateString: string) => {
   const day = String(date.getDate()).padStart(2, '0');
   const hours = String(date.getHours()).padStart(2, '0');
   const minutes = String(date.getMinutes()).padStart(2, '0');
-  return `${year}年${month}月${day}日 ${hours}:${minutes}`;
+  return `${year}/${month}/${day} ${hours}:${minutes}`;
 };
 
 interface Props {
@@ -101,8 +101,8 @@ async function shareDownloadLink() {
     else
       shareUrl = `https://iwara.tv/video/${props.vid}/${props.slug}`;
     await navigator.share({
-      title: props.title || 'Iwara 视频分享',
-      text: `分享视频: ${props.title}`,
+      title: props.title || t('player.shareTitle'),
+      text: t('player.shareText', { title: props.title }),
       url: shareUrl,
     });
     showShortToast(t('common.shareSuccess'));
@@ -157,10 +157,10 @@ const isLiking = ref(false); // 点赞操作进行中状态
 
 // 关注按钮状态合并计算
 const followBtn = computed(() => {
-  if (props.isFollow && props.isMyFans) return { text: '已互粉', variant: 'outlined' as const, icon: 'fa-solid fa-bars' };
-  if (props.isFollow) return { text: '已关注', variant: 'outlined' as const, icon: 'fa-solid fa-bars' };
-  if (props.isMyFans) return { text: '回关', variant: 'flat' as const, icon: 'fa-solid fa-plus' };
-  return { text: '关注', variant: 'flat' as const, icon: 'fa-solid fa-plus' };
+  if (props.isFollow && props.isMyFans) return { text: t('player.followMutual'), variant: 'outlined' as const, icon: 'fa-solid fa-bars' };
+  if (props.isFollow) return { text: t('player.followed'), variant: 'outlined' as const, icon: 'fa-solid fa-bars' };
+  if (props.isMyFans) return { text: t('player.followBack'), variant: 'flat' as const, icon: 'fa-solid fa-plus' };
+  return { text: t('player.follow'), variant: 'flat' as const, icon: 'fa-solid fa-plus' };
 });
 
 // 加载作者其他视频
@@ -474,22 +474,22 @@ function toZone() {
           <iconLike v-if="isLike" theme="filled" size="22" fill="#FF3D00" />
           <iconLike v-else theme="outline" size="22" fill="#212121" />
           <br>
-          <span v-if="isLike">已点赞</span>
-          <span v-else>点赞</span>
+          <span v-if="isLike">{{ t('player.liked') }}</span>
+          <span v-else>{{ t('player.like') }}</span>
         </div>
         <div @click="shareDownloadLink">
-          <iconShareOne theme="two-tone" size="22" :fill="['#424242', '#00796B']" /><br>分享
+          <iconShareOne theme="two-tone" size="22" :fill="['#424242', '#00796B']" /><br>{{ t('player.share') }}
         </div>
         <div>
-          <iconDownloadFour theme="two-tone" size="22" :fill="['#424242', '#00796B']" /><br>缓存
+          <iconDownloadFour theme="two-tone" size="22" :fill="['#424242', '#00796B']" /><br>{{ t('player.cache') }}
         </div>
         <div @click="copyDownloadLink">
-          <iconCopyLink theme="multi-color" size="22" :fill="['#424242', '#00796B', '#FFF', '#00796B']" /><br>下载链接
+          <iconCopyLink theme="multi-color" size="22" :fill="['#424242', '#00796B', '#FFF', '#00796B']" /><br>{{ t('player.downloadLink') }}
         </div>
       </div>
       <div class="recommend">
         <div class="label" v-if="!isLoadingAuthorVideos && authorOtherVideoList.length > 0">
-          该作者其他视频
+          {{ t('player.authorOtherVideos') }}
         </div>
         <div class="lists" v-if="!isLoadingAuthorVideos && authorOtherVideoList.length > 0">
           <cardButton v-for="(item, index) in authorOtherVideoList" :key="item.id" type="video" :data="{
@@ -505,7 +505,7 @@ function toZone() {
           }" class="card-button" />
         </div>
         <div class="label" v-if="!isLoadingRecommendVideos && recommendVideoList.length > 0">
-          更多推荐
+          {{ t('player.moreRecommend') }}
         </div>
         <div class="lists" v-if="!isLoadingRecommendVideos && recommendVideoList.length > 0">
           <cardButton v-for="(item, index) in recommendVideoList" :key="item.id" type="video" :data="{
