@@ -32,6 +32,12 @@
     "language": "Sprache (Language)",
     "about": "Über",
     "logout": "Abmelden",
+    "logoutDialog": {
+      "title": "Abmeldung bestätigen",
+      "message": "Möchten Sie sich wirklich abmelden?",
+      "cancel": "Abbrechen",
+      "confirm": "Bestätigen"
+    },
     "enabled": "Aktiviert",
     "disabled": "Deaktiviert",
     "keywordSearch": "Stichwortsuche",

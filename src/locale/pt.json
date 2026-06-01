@@ -32,6 +32,12 @@
     "language": "Idioma (Language)",
     "about": "Sobre",
     "logout": "Sair",
+    "logoutDialog": {
+      "title": "Confirmar saída",
+      "message": "Tem certeza de que deseja sair?",
+      "cancel": "Cancelar",
+      "confirm": "Confirmar"
+    },
     "enabled": "Ativado",
     "disabled": "Desativado",
     "keywordSearch": "Pesquisa por palavra-chave",

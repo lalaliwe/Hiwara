@@ -32,6 +32,12 @@
     "language": "语言（Language）",
     "about": "关于",
     "logout": "退出登录",
+    "logoutDialog": {
+      "title": "确认退出",
+      "message": "确定要退出登录吗？",
+      "cancel": "取消",
+      "confirm": "确定"
+    },
     "enabled": "已启用",
     "disabled": "未启用",
     "keywordSearch": "关键字搜索",

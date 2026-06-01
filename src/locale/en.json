@@ -32,6 +32,12 @@
     "language": "Language",
     "about": "About",
     "logout": "Log Out",
+    "logoutDialog": {
+      "title": "Confirm Logout",
+      "message": "Are you sure you want to log out?",
+      "cancel": "Cancel",
+      "confirm": "Confirm"
+    },
     "enabled": "Enabled",
     "disabled": "Disabled",
     "keywordSearch": "Keyword Search",

@@ -32,6 +32,12 @@
     "language": "Мова (Language)",
     "about": "Про додаток",
     "logout": "Вийти",
+    "logoutDialog": {
+      "title": "Підтвердження виходу",
+      "message": "Ви впевнені, що хочете вийти?",
+      "cancel": "Скасувати",
+      "confirm": "Підтвердити"
+    },
     "enabled": "Увімкнено",
     "disabled": "Вимкнено",
     "keywordSearch": "Пошук за ключовими словами",

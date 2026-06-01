@@ -32,6 +32,12 @@
     "language": "ភាសា (Language)",
     "about": "អំពី",
     "logout": "ចាកចេញ",
+    "logoutDialog": {
+      "title": "បញ្ជាក់ការចាកចេញ",
+      "message": "តើអ្នកប្រាកដជាចង់ចាកចេញមែនទេ?",
+      "cancel": "បោះបង់",
+      "confirm": "យល់ព្រម"
+    },
     "enabled": "បានបើក",
     "disabled": "បានបិទ",
     "keywordSearch": "ស្វែងរកតាមពាក្យគន្លឹះ",

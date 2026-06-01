@@ -32,6 +32,12 @@
     "language": "Тіл (Language)",
     "about": "Қосымша туралы",
     "logout": "Шығу",
+    "logoutDialog": {
+      "title": "Шығуды растау",
+      "message": "Шығуды қалайсыз ба?",
+      "cancel": "Болдырмау",
+      "confirm": "Растау"
+    },
     "enabled": "Қосылған",
     "disabled": "Өшірілген",
     "keywordSearch": "Кілт сөзбен іздеу",

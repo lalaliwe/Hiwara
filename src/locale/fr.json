@@ -32,6 +32,12 @@
     "language": "Langue (Language)",
     "about": "À propos",
     "logout": "Déconnexion",
+    "logoutDialog": {
+      "title": "Confirmer la déconnexion",
+      "message": "Êtes-vous sûr de vouloir vous déconnecter ?",
+      "cancel": "Annuler",
+      "confirm": "Confirmer"
+    },
     "enabled": "Activé",
     "disabled": "Désactivé",
     "keywordSearch": "Recherche par mot-clé",

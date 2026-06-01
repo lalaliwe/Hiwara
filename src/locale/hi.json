@@ -32,6 +32,12 @@
     "language": "भाषा (Language)",
     "about": "हमारे बारे में",
     "logout": "लॉग आउट",
+    "logoutDialog": {
+      "title": "लॉग आउट की पुष्टि करें",
+      "message": "क्या आप वाकई लॉग आउट करना चाहते हैं?",
+      "cancel": "रद्द करें",
+      "confirm": "पुष्टि करें"
+    },
     "enabled": "सक्षम",
     "disabled": "अक्षम",
     "keywordSearch": "कीवर्ड खोज",

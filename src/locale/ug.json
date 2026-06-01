@@ -32,6 +32,12 @@
     "language": "تىل (Language)",
     "about": "ھەققىدە",
     "logout": "چېكىنىش",
+    "logoutDialog": {
+      "title": "چېكىنىشنى جەزملەش",
+      "message": "چېكىنىشنى راستتىنلا خالامسىز؟",
+      "cancel": "بىكار قىلىش",
+      "confirm": "جەزملەش"
+    },
     "enabled": "قوزغىتىلغان",
     "disabled": "توسۇلغان",
     "keywordSearch": "ئاچقۇچلۇق سۆز ئىزدەش",

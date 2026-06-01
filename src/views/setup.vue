@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { setStatusBarTextStyle } from '../plugins/navbarStyle'
@@ -20,6 +21,9 @@ const router = useRouter()
 const setup = setupStore()
 const { autoPlay, definition, searchMode, aria2Switch, language } = storeToRefs(setup)
 
+// 退出登录确认弹窗
+const showLogoutDialog = ref(false)
+
 // 返回上一页
 const goBack = () => {
   router.back();
@@ -35,7 +39,13 @@ const toggleAutoPlay = async (value: boolean | null) => {
 };
 
 // 退出登录
-const handleLogout = async () => {
+const handleLogout = () => {
+  showLogoutDialog.value = true
+};
+
+// 确认退出登录
+const confirmLogout = async () => {
+  showLogoutDialog.value = false
   try {
     await logout();
   } catch (error) {
@@ -155,6 +165,27 @@ const getLanguageLabel = (lang: string) => {
         <font-awesome-icon icon="fa-solid fa-angle-right" />
       </div>
     </div>
+
+    <!-- 退出登录确认弹窗 -->
+    <v-dialog v-model="showLogoutDialog" max-width="320" scrim="transparent">
+      <v-card>
+        <v-card-title>
+          {{ t('setup.logoutDialog.title') }}
+        </v-card-title>
+        <v-card-text>
+          {{ t('setup.logoutDialog.message') }}
+        </v-card-text>
+        <v-divider></v-divider>
+        <v-card-actions class="justify-end">
+          <v-btn variant="text" @click="showLogoutDialog = false">
+            {{ t('setup.logoutDialog.cancel') }}
+          </v-btn>
+          <v-btn variant="text" color="#00796B" @click="confirmLogout">
+            {{ t('setup.logoutDialog.confirm') }}
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 

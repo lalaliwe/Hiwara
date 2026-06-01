@@ -32,6 +32,12 @@
     "language": "言語（Language）",
     "about": "このアプリについて",
     "logout": "ログアウト",
+    "logoutDialog": {
+      "title": "ログアウト確認",
+      "message": "ログアウトしてもよろしいですか？",
+      "cancel": "キャンセル",
+      "confirm": "確認"
+    },
     "enabled": "有効",
     "disabled": "無効",
     "keywordSearch": "キーワード検索",

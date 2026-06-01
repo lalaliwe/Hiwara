@@ -32,6 +32,12 @@
     "language": "تىل (Language)",
     "about": "قوسىمشا تۋرالى",
     "logout": "شىعۋ",
+    "logoutDialog": {
+      "title": "شىعۋدى راستاۋ",
+      "message": "شىعۋدى قالايسىز با?",
+      "cancel": "بولدىرماۋ",
+      "confirm": "راستاۋ"
+    },
     "enabled": "قوسىلعان",
     "disabled": "وشىرىلگەن",
     "keywordSearch": "كىلت سوزبەن ىزدەۋ",

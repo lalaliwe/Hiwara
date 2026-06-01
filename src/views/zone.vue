@@ -19,6 +19,7 @@ import {
 import { showShortToast } from '../core/toast';
 import { uid as muid, uname as muname } from '../core/store';
 import iwaraSVG from '../assets/svg/iwara.svg'
+import kivotosPng from '../static/img/kivotos.png'
 import loadingHuawu from '../component/loadingHuawu.vue';
 import errorHuawu from '../component/errorHuawu.vue';
 
@@ -107,7 +108,8 @@ function routerGoTo(path: string, query?: any) {
 // 保存当前滚动位置
 function saveCurrentScrollPosition() {
   const container = zoneContainerRef.value;
-  if (!container) return;
+  // 容器不可见时（如 keep-alive 缓存期间）跳过，避免保存错误的滚动位置
+  if (!container || container.clientHeight === 0) return;
   const scrollTop = container.scrollTop;
   switch (tab.value) {
     case 'video':
@@ -191,6 +193,8 @@ function updateTopBarColor() {
 function clampScrollPosition() {
   const container = zoneContainerRef.value;
   if (!container) return;
+  // 容器不可见时（如 keep-alive 缓存期间）跳过，避免错误重置滚动位置
+  if (container.clientHeight === 0) return;
   const maxScrollTop = container.scrollHeight - container.clientHeight;
   if (container.scrollTop > maxScrollTop) {
     container.scrollTop = Math.max(0, maxScrollTop);
@@ -247,6 +251,9 @@ onActivated(() => {
 
 // 处理窗口大小改变
 function handleResize() {
+  const container = zoneContainerRef.value;
+  // 容器不可见时（如 keep-alive 缓存期间）跳过，避免错误重置滚动位置
+  if (!container || container.clientHeight === 0) return;
   updateTopBarColor();
   clampScrollPosition();
   restoreScrollPosition(tab.value);
@@ -348,7 +355,8 @@ async function getData() {
     if (res.data.header) {
       loadHeaderBackground(res.data.header);
     } else {
-      // 没有 header 时，标记为已加载以隐藏占位图
+      // 没有 header 时，使用 kivotos 作为默认头图
+      zoneBgStyle.value = `background-image: url('${kivotosPng}'); background-size: cover; background-position: center; background-repeat: no-repeat;`;
       headerLoaded.value = true;
     }
 
@@ -373,7 +381,9 @@ async function getData() {
       headerLoaded.value = true;
     } catch (error) {
       console.error('获取header背景失败:', error);
-      // 失败时继续保持默认背景
+      // 加载失败时使用 kivotos 作为默认头图
+      zoneBgStyle.value = `background-image: url('${kivotosPng}'); background-size: cover; background-position: center; background-repeat: no-repeat;`;
+      headerLoaded.value = true;
     }
   }
   async function getFollowersNum(uid: string) {

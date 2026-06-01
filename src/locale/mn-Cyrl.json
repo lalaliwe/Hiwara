@@ -32,6 +32,12 @@
     "language": "Хэл (Language)",
     "about": "Програмын тухай",
     "logout": "Гарах",
+    "logoutDialog": {
+      "title": "Гарахыг баталгаажуулах",
+      "message": "Та гарахдаа итгэлтэй байна уу?",
+      "cancel": "Цуцлах",
+      "confirm": "Батлах"
+    },
     "enabled": "Идэвхжүүлсэн",
     "disabled": "Идэвхгүй",
     "keywordSearch": "Түлхүүр үгээр хайх",

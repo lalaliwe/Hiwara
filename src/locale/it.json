@@ -32,6 +32,12 @@
     "language": "Lingua (Language)",
     "about": "Informazioni",
     "logout": "Esci",
+    "logoutDialog": {
+      "title": "Conferma uscita",
+      "message": "Sei sicuro di voler uscire?",
+      "cancel": "Annulla",
+      "confirm": "Conferma"
+    },
     "enabled": "Abilitato",
     "disabled": "Disabilitato",
     "keywordSearch": "Ricerca per parola chiave",

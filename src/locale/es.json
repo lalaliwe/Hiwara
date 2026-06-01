@@ -32,6 +32,12 @@
     "language": "Idioma (Language)",
     "about": "Acerca de",
     "logout": "Cerrar sesión",
+    "logoutDialog": {
+      "title": "Confirmar cierre de sesión",
+      "message": "¿Estás seguro de que deseas cerrar sesión?",
+      "cancel": "Cancelar",
+      "confirm": "Confirmar"
+    },
     "enabled": "Activado",
     "disabled": "Desactivado",
     "keywordSearch": "Búsqueda por palabra clave",

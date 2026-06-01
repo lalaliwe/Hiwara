@@ -32,6 +32,12 @@
     "language": "Язык (Language)",
     "about": "О приложении",
     "logout": "Выйти",
+    "logoutDialog": {
+      "title": "Подтверждение выхода",
+      "message": "Вы уверены, что хотите выйти?",
+      "cancel": "Отмена",
+      "confirm": "Подтвердить"
+    },
     "enabled": "Включено",
     "disabled": "Отключено",
     "keywordSearch": "Поиск по ключевым словам",

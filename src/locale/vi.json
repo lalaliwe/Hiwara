@@ -32,6 +32,12 @@
     "language": "Ngôn ngữ (Language)",
     "about": "Giới thiệu",
     "logout": "Đăng xuất",
+    "logoutDialog": {
+      "title": "Xác nhận đăng xuất",
+      "message": "Bạn có chắc chắn muốn đăng xuất không?",
+      "cancel": "Hủy",
+      "confirm": "Xác nhận"
+    },
     "enabled": "Đã bật",
     "disabled": "Đã tắt",
     "keywordSearch": "Tìm kiếm từ khóa",

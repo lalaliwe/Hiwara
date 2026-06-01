@@ -32,6 +32,12 @@
     "language": "اللغة (Language)",
     "about": "حول",
     "logout": "تسجيل الخروج",
+    "logoutDialog": {
+      "title": "تأكيد تسجيل الخروج",
+      "message": "هل أنت متأكد من أنك تريد تسجيل الخروج؟",
+      "cancel": "إلغاء",
+      "confirm": "تأكيد"
+    },
     "enabled": "مفعل",
     "disabled": "غير مفعل",
     "keywordSearch": "الباحث بالكلمات المفتاحية",

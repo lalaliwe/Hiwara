@@ -32,6 +32,12 @@
     "language": "שפה (Language)",
     "about": "אודות",
     "logout": "התנתק",
+    "logoutDialog": {
+      "title": "אישור התנתקות",
+      "message": "האם אתה בטוח שברצונך להתנתק?",
+      "cancel": "ביטול",
+      "confirm": "אישור"
+    },
     "enabled": "מופעל",
     "disabled": "מושבת",
     "keywordSearch": "חיפוש לפי מילת מפתח",

@@ -32,6 +32,12 @@
     "language": "ᠬᠡᠯᠡ (Language)",
     "about": "ᠬᠥᠲᠡᠯᠪᠦᠷᠢ ᠵᠢᠨ ᠲᠤᠬᠠᠢ",
     "logout": "ᠭᠠᠷᠬᠤ",
+    "logoutDialog": {
+      "title": "ᠭᠠᠷᠬᠤ ᠶᠢ ᠪᠠᠲᠤᠯᠠᠬᠤ",
+      "message": "ᠲᠠ ᠭᠠᠷᠬᠤ ᠪᠤᠯᠤᠨ ᠤᠤ?",
+      "cancel": "ᠴᠦᠴᠡᠭᠡᠬᠦ",
+      "confirm": "ᠪᠠᠲᠤᠯᠠᠬᠤ"
+    },
     "enabled": "ᠢᠳᠡᠭᠡᠵᠢᠭᠦᠯᠦᠭᠰᠡᠨ",
     "disabled": "ᠢᠳᠡᠭᠡᠵᠢᠭᠦᠯᠦᠭᠰᠡᠨ ᠦᠭᠡᠢ",
     "keywordSearch": "ᠲᠦᠯᠬᠦᠭᠦᠷ ᠦᠭᠡ ᠪᠡᠷ ᠡᠷᠢᠬᠦ",

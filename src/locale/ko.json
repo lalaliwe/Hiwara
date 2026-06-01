@@ -32,6 +32,12 @@
     "language": "언어（Language）",
     "about": "정보",
     "logout": "로그아웃",
+    "logoutDialog": {
+      "title": "로그아웃 확인",
+      "message": "로그아웃하시겠습니까?",
+      "cancel": "취소",
+      "confirm": "확인"
+    },
     "enabled": "활성화",
     "disabled": "비활성화",
     "keywordSearch": "키워드 검색",
