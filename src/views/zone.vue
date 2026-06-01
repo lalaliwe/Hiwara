@@ -18,7 +18,7 @@ import {
 } from '../core/api'
 import { showShortToast } from '../core/toast';
 import { uid as muid, uname as muname } from '../core/store';
-import kivotos from '../static/img/kivotos.png'
+import iwaraSVG from '../assets/svg/iwara.svg'
 import loadingHuawu from '../component/loadingHuawu.vue';
 import errorHuawu from '../component/errorHuawu.vue';
 
@@ -48,6 +48,9 @@ const zoneBgStyle = ref<string>('');
 
 // 页面加载状态
 const state = ref<'loading' | 'success' | 'error'>('loading')
+
+// header 背景图是否已加载完成（用于占位图显示控制）
+const headerLoaded = ref(false);
 
 // 使用内存变量保存tab状态，初始值为 'video'
 const tab = ref<'video' | 'image' | 'publish'>('video')
@@ -338,13 +341,15 @@ async function getData() {
     // 获取关注状态
     isMyFollow.value = res.data.user.following || false;
 
-    // 设置默认背景（立即生效，不等待 header 加载）
-    const defaultBgStyle = `background-image: url('${kivotos}'); background-size: cover; background-position: center; background-repeat: no-repeat;`;
-    zoneBgStyle.value = defaultBgStyle;
+    // 无需设置默认背景图，CSS 中 background-color 作为占位色
+    zoneBgStyle.value = '';
 
     // 后台异步加载 header 背景图，不阻塞主流程
     if (res.data.header) {
       loadHeaderBackground(res.data.header);
+    } else {
+      // 没有 header 时，标记为已加载以隐藏占位图
+      headerLoaded.value = true;
     }
 
     await Promise.allSettled([
@@ -365,6 +370,7 @@ async function getData() {
       const headerUrl = `https://i.iwara.tv/image/profileHeader/${header.id}/${header.name}`;
       const bgImageUrl = await getImageIwara(headerUrl);
       zoneBgStyle.value = `background-image: url('${bgImageUrl}'); background-size: cover; background-position: center; background-repeat: no-repeat;`;
+      headerLoaded.value = true;
     } catch (error) {
       console.error('获取header背景失败:', error);
       // 失败时继续保持默认背景
@@ -413,7 +419,11 @@ async function getData() {
     <div v-else-if="state === 'success'" class="zone-container" ref="zoneContainerRef" @scroll="handleGlobalScroll">
 
       <div class="zone-info" ref="zoneInfoRef">
-        <div class="zone-bg" :style="zoneBgStyle"></div>
+        <div class="zone-bg" :style="zoneBgStyle">
+          <div v-if="!headerLoaded" class="zone-bg-placeholder">
+            <img :src="iwaraSVG" class="zone-bg-placeholder-icon" />
+          </div>
+        </div>
         <UserInfo :username="username" :nickname="nickname" :userSignature="userSignature" :avatar="avatar"
           :followNum="followNum" :fansNum="fansNum" :isMyFollow="isMyFollow" :isMyFans="isMyFans" :isMyself="isMyself"
           :uid="uid" @follow="(val) => isMyFollow = val" />
@@ -513,6 +523,20 @@ async function getData() {
     width: 100%;
     height: 160px;
     background-color: var(--color-bg-placeholder);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .zone-bg-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .zone-bg-placeholder-icon {
+    width: 90px;
   }
 }
 
