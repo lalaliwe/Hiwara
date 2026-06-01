@@ -152,6 +152,8 @@
       "loading": "로딩 중...",
       "noRecords": "동영상 기록이 없습니다",
       "loadFailed": "로딩 실패,",
+      "loadFailedFull": "동영상 목록 로딩 실패",
+      "emptyFull": "동영상 목록이 비어 있습니다",
       "retry": "클릭하여 재시도",
       "reachedBottom": "마지막입니다"
     },
@@ -166,6 +168,8 @@
       "loading": "로딩 중...",
       "noRecords": "일러스트 기록이 없습니다",
       "loadFailed": "로딩 실패,",
+      "loadFailedFull": "일러스트 목록 로딩 실패",
+      "emptyFull": "일러스트 목록이 비어 있습니다",
       "retry": "클릭하여 재시도",
       "reachedBottom": "마지막입니다"
     },
@@ -198,6 +202,10 @@
       "noRecords": "{type} 기록이 없습니다"
     },
     "forum": {
+      "listLoadFailed": "목록 로딩 실패",
+      "listEmpty": "목록이 비어 있습니다",
+      "homeLoadFailed": "포럼 홈 로딩 실패",
+      "homeEmpty": "포럼 홈이 비어 있습니다",
       "posts": "게시물",
       "topics": "주제",
       "repliedAt": "답변 시간",

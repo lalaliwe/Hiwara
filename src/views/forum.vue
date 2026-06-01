@@ -256,11 +256,11 @@ fetchForumData(0);
     <div class="content" id="forumContent">
       <!-- 加载失败 -->
       <div v-if="forumState === 'failed'" class="status-container" @click="handleErrorClick">
-        <errorHuawu>{{ t('home.video.loadFailed') }}{{ label1Text }}</errorHuawu>
+        <errorHuawu>{{ t('home.forum.listLoadFailed') }}</errorHuawu>
       </div>
       <!-- 数据为空 -->
       <div v-else-if="forumState === 'empty'" class="status-container">
-        <errorHuawu>{{ label1Text }}{{ t('home.my.noRecords', { type: '' }) }}</errorHuawu>
+        <errorHuawu>{{ t('home.forum.listEmpty') }}</errorHuawu>
       </div>
       <!-- 加载中 -->
       <div v-else-if="forumState === 'loading'" class="status-container">

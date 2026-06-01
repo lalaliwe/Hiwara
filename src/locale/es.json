@@ -152,6 +152,8 @@
       "loading": "Cargando...",
       "noRecords": "No hay registros de video",
       "loadFailed": "Error al cargar, ",
+      "loadFailedFull": "Error al cargar la lista de videos",
+      "emptyFull": "La lista de videos está vacía",
       "retry": "Haga clic para reintentar",
       "reachedBottom": "Has llegado al final"
     },
@@ -166,6 +168,8 @@
       "loading": "Cargando...",
       "noRecords": "No hay registros de imágenes",
       "loadFailed": "Error al cargar, ",
+      "loadFailedFull": "Error al cargar la lista de imágenes",
+      "emptyFull": "La lista de imágenes está vacía",
       "retry": "Haga clic para reintentar",
       "reachedBottom": "Has llegado al final"
     },
@@ -198,6 +202,10 @@
       "noRecords": "No hay registros de {type}"
     },
     "forum": {
+      "listLoadFailed": "Error al cargar la lista",
+      "listEmpty": "La lista está vacía",
+      "homeLoadFailed": "Error al cargar la página de inicio del foro",
+      "homeEmpty": "La página de inicio del foro está vacía",
       "posts": "Publicaciones",
       "topics": "Temas",
       "repliedAt": "Respondido el",

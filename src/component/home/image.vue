@@ -264,10 +264,10 @@ function handleDateConfirm(dateParam: string | undefined) {
       @slide-change="onSlideChange">
       <swiper-slide v-for="(item, i) in tabArray" :key="`tabs-window_${item.value}`">
         <div v-if="state[i] === 'failed'" class="loading" @click="handleErrorClick(i)">
-          <errorHuawu>{{ t('home.image.loadFailed') }}{{ t('home.navigation.image') }}</errorHuawu>
+          <errorHuawu>{{ t('home.image.loadFailedFull') }}</errorHuawu>
         </div>
         <div v-else-if="state[i] === 'empty'" class="loading" @click="handleErrorClick(i)">
-          <errorHuawu>{{ t('home.navigation.image') }}{{ t('home.image.noRecords') }}</errorHuawu>
+          <errorHuawu>{{ t('home.image.emptyFull') }}</errorHuawu>
         </div>
         <div v-else-if="state[i] === 'loading'" class="loading">
           <loadingHuawu>{{ t('home.image.loading') }}</loadingHuawu>

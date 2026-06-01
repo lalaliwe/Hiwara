@@ -152,6 +152,8 @@
       "loading": "Carregando...",
       "noRecords": "Nenhum registro de vídeo",
       "loadFailed": "Falha ao carregar, ",
+      "loadFailedFull": "Falha ao carregar a lista de vídeos",
+      "emptyFull": "A lista de vídeos está vazia",
       "retry": "Clique para tentar novamente",
       "reachedBottom": "Chegou ao fim"
     },
@@ -166,6 +168,8 @@
       "loading": "Carregando...",
       "noRecords": "Nenhum registro de imagem",
       "loadFailed": "Falha ao carregar, ",
+      "loadFailedFull": "Falha ao carregar a lista de imagens",
+      "emptyFull": "A lista de imagens está vazia",
       "retry": "Clique para tentar novamente",
       "reachedBottom": "Chegou ao fim"
     },
@@ -198,6 +202,10 @@
       "noRecords": "Nenhum registro de {type}"
     },
     "forum": {
+      "listLoadFailed": "Falha ao carregar a lista",
+      "listEmpty": "A lista está vazia",
+      "homeLoadFailed": "Falha ao carregar a página inicial do fórum",
+      "homeEmpty": "A página inicial do fórum está vazia",
       "posts": "Publicações",
       "topics": "Tópicos",
       "repliedAt": "Respondido em",

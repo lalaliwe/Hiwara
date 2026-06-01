@@ -152,6 +152,8 @@
       "loading": "Loading...",
       "noRecords": "No video records",
       "loadFailed": "Load failed, ",
+      "loadFailedFull": "Video list load failed",
+      "emptyFull": "Video list is empty",
       "retry": "Click to retry",
       "reachedBottom": "Reached bottom"
     },
@@ -166,6 +168,8 @@
       "loading": "Loading...",
       "noRecords": "No image records",
       "loadFailed": "Load failed, ",
+      "loadFailedFull": "Image list load failed",
+      "emptyFull": "Image list is empty",
       "retry": "Click to retry",
       "reachedBottom": "Reached bottom"
     },
@@ -198,6 +202,10 @@
       "noRecords": "No {type} records"
     },
     "forum": {
+      "listLoadFailed": "List load failed",
+      "listEmpty": "List is empty",
+      "homeLoadFailed": "Forum home load failed",
+      "homeEmpty": "Forum home is empty",
       "posts": "Posts",
       "topics": "Topics",
       "repliedAt": "Replied at",

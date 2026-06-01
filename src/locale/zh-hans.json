@@ -152,6 +152,8 @@
       "loading": "数据加载中",
       "noRecords": "暂无视频记录",
       "loadFailed": "加载失败，",
+      "loadFailedFull": "视频列表加载失败",
+      "emptyFull": "视频列表为空",
       "retry": "点击重试",
       "reachedBottom": "到底了"
     },
@@ -166,6 +168,8 @@
       "loading": "数据加载中",
       "noRecords": "暂无插画记录",
       "loadFailed": "加载失败，",
+      "loadFailedFull": "插画列表加载失败",
+      "emptyFull": "插画列表为空",
       "retry": "点击重试",
       "reachedBottom": "到底了"
     },
@@ -198,6 +202,10 @@
       "noRecords": "{type}暂无记录"
     },
     "forum": {
+      "listLoadFailed": "列表加载失败",
+      "listEmpty": "列表为空",
+      "homeLoadFailed": "论坛首页加载失败",
+      "homeEmpty": "论坛首页为空",
       "posts": "发布",
       "topics": "主题",
       "repliedAt": "回复于",

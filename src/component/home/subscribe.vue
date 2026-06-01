@@ -293,10 +293,10 @@ async function getSubscribeImageList(): Promise<any> {
       @slide-change="onSlideChange">
       <swiper-slide>
         <div v-if="videoState === 'failed'" class="loading" @click="handleVideoErrorClick">
-          <errorHuawu>{{ t('home.video.loadFailed') }}{{ t('home.navigation.video') }}</errorHuawu>
+          <errorHuawu>{{ t('home.video.loadFailedFull') }}</errorHuawu>
         </div>
         <div v-else-if="videoState === 'empty'" class="loading" @click="handleVideoErrorClick">
-          <errorHuawu>{{ t('home.navigation.video') }}{{ t('home.video.noRecords') }}</errorHuawu>
+          <errorHuawu>{{ t('home.video.emptyFull') }}</errorHuawu>
         </div>
         <div v-else-if="videoState === 'loading'" class="loading">
           <loadingHuawu>{{ t('home.video.loading') }}</loadingHuawu>
@@ -333,10 +333,10 @@ async function getSubscribeImageList(): Promise<any> {
       </swiper-slide>
       <swiper-slide>
         <div v-if="imageState === 'failed'" class="loading" @click="handleImageErrorClick">
-          <errorHuawu>{{ t('home.image.loadFailed') }}{{ t('home.navigation.image') }}</errorHuawu>
+          <errorHuawu>{{ t('home.image.loadFailedFull') }}</errorHuawu>
         </div>
         <div v-else-if="imageState === 'empty'" class="loading" @click="handleImageErrorClick">
-          <errorHuawu>{{ t('home.navigation.image') }}{{ t('home.image.noRecords') }}</errorHuawu>
+          <errorHuawu>{{ t('home.image.emptyFull') }}</errorHuawu>
         </div>
         <div v-else-if="imageState === 'loading'" class="loading">
           <loadingHuawu>{{ t('home.image.loading') }}</loadingHuawu>

@@ -152,6 +152,8 @@
       "loading": "読み込み中...",
       "noRecords": "動画記録がありません",
       "loadFailed": "読み込み失敗、",
+      "loadFailedFull": "動画リストの読み込みに失敗しました",
+      "emptyFull": "動画リストは空です",
       "retry": "クリックして再試行",
       "reachedBottom": "一番下まで到達しました"
     },
@@ -166,6 +168,8 @@
       "loading": "読み込み中...",
       "noRecords": "イラスト記録がありません",
       "loadFailed": "読み込み失敗、",
+      "loadFailedFull": "イラストリストの読み込みに失敗しました",
+      "emptyFull": "イラストリストは空です",
       "retry": "クリックして再試行",
       "reachedBottom": "一番下まで到達しました"
     },
@@ -198,6 +202,10 @@
       "noRecords": "{type}の記録がありません"
     },
     "forum": {
+      "listLoadFailed": "リストの読み込みに失敗しました",
+      "listEmpty": "リストは空です",
+      "homeLoadFailed": "フォーラムホームの読み込みに失敗しました",
+      "homeEmpty": "フォーラムホームは空です",
       "posts": "投稿",
       "topics": "トピック",
       "repliedAt": "返信日時",

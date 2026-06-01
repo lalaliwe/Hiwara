@@ -408,6 +408,9 @@ function toZone() {
     path: `/zone/${props.username}`,
   });
 }
+function downloadVideo() {
+  showShortToast('功能未开放');
+}
 </script>
 <template>
   <div class="infoView" @scroll="handleSroll" ref="infoViewRef">
@@ -480,11 +483,12 @@ function toZone() {
         <div @click="shareDownloadLink">
           <iconShareOne theme="two-tone" size="22" :fill="['#424242', '#00796B']" /><br>{{ t('player.share') }}
         </div>
-        <div>
+        <div @click="downloadVideo">
           <iconDownloadFour theme="two-tone" size="22" :fill="['#424242', '#00796B']" /><br>{{ t('player.cache') }}
         </div>
         <div @click="copyDownloadLink">
-          <iconCopyLink theme="multi-color" size="22" :fill="['#424242', '#00796B', '#FFF', '#00796B']" /><br>{{ t('player.downloadLink') }}
+          <iconCopyLink theme="multi-color" size="22" :fill="['#424242', '#00796B', '#FFF', '#00796B']" /><br>{{
+            t('player.downloadLink') }}
         </div>
       </div>
       <div class="recommend">

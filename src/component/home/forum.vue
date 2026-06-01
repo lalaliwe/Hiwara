@@ -215,10 +215,10 @@ onActivated(() => {
     </div>
     <div class="content" ref="forumView" @scroll="handleScroll">
       <div v-if="forumState === 'failed'" class="loading" @click="handleErrorClick">
-        <errorHuawu>{{ t('home.video.loadFailed') }}{{ t('home.navigation.forum') }}</errorHuawu>
+        <errorHuawu>{{ t('home.forum.homeLoadFailed') }}</errorHuawu>
       </div>
       <div v-else-if="forumState === 'empty'" class="loading">
-        <errorHuawu>{{ t('home.navigation.forum') }}{{ t('home.my.noRecords', { type: '' }) }}</errorHuawu>
+        <errorHuawu>{{ t('home.forum.homeEmpty') }}</errorHuawu>
       </div>
       <div v-else-if="forumState === 'loading'" class="loading">
         <loadingHuawu>{{ t('home.video.loading') }}</loadingHuawu>

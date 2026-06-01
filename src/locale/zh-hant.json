@@ -152,6 +152,8 @@
       "loading": "載入中...",
       "noRecords": "暫無影片記錄",
       "loadFailed": "載入失敗，",
+      "loadFailedFull": "影片列表載入失敗",
+      "emptyFull": "影片列表為空",
       "retry": "點擊重試",
       "reachedBottom": "到底了"
     },
@@ -166,6 +168,8 @@
       "loading": "載入中...",
       "noRecords": "暫無插畫記錄",
       "loadFailed": "載入失敗，",
+      "loadFailedFull": "插畫列表載入失敗",
+      "emptyFull": "插畫列表為空",
       "retry": "點擊重試",
       "reachedBottom": "到底了"
     },
@@ -198,6 +202,10 @@
       "noRecords": "{type}暫無記錄"
     },
     "forum": {
+      "listLoadFailed": "列表載入失敗",
+      "listEmpty": "列表為空",
+      "homeLoadFailed": "論壇首頁載入失敗",
+      "homeEmpty": "論壇首頁為空",
       "posts": "發布",
       "topics": "主題",
       "repliedAt": "回覆於",

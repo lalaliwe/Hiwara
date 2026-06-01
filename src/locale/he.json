@@ -152,6 +152,8 @@
       "loading": "טוען...",
       "noRecords": "אין רשומות וידאו",
       "loadFailed": "טעינה נכשלה, ",
+      "loadFailedFull": "טעינת רשימת הווידאו נכשלה",
+      "emptyFull": "רשימת הווידאו ריקה",
       "retry": "לחץ לניסיון חוזר",
       "reachedBottom": "הגעת לסוף"
     },
@@ -166,6 +168,8 @@
       "loading": "טוען...",
       "noRecords": "אין רשומות איורים",
       "loadFailed": "טעינה נכשלה, ",
+      "loadFailedFull": "טעינת רשימת התמונות נכשלה",
+      "emptyFull": "רשימת התמונות ריקה",
       "retry": "לחץ לניסיון חוזר",
       "reachedBottom": "הגעת לסוף"
     },
@@ -198,6 +202,10 @@
       "noRecords": "אין רשומות {type}"
     },
     "forum": {
+      "listLoadFailed": "טעינת הרשימה נכשלה",
+      "listEmpty": "הרשימה ריקה",
+      "homeLoadFailed": "טעינת דף הבית של הפורום נכשלה",
+      "homeEmpty": "דף הבית של הפורום ריק",
       "posts": "פרסומים",
       "topics": "נושאים",
       "repliedAt": "הושב ב",

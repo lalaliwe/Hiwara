@@ -152,6 +152,8 @@
       "loading": "Caricamento...",
       "noRecords": "Nessun video trovato",
       "loadFailed": "Caricamento fallito, ",
+      "loadFailedFull": "Caricamento della lista video fallito",
+      "emptyFull": "La lista video è vuota",
       "retry": "Clicca per riprovare",
       "reachedBottom": "Fine raggiunta"
     },
@@ -166,6 +168,8 @@
       "loading": "Caricamento...",
       "noRecords": "Nessuna immagine trovata",
       "loadFailed": "Caricamento fallito, ",
+      "loadFailedFull": "Caricamento della lista immagini fallito",
+      "emptyFull": "La lista immagini è vuota",
       "retry": "Clicca per riprovare",
       "reachedBottom": "Fine raggiunta"
     },
@@ -198,6 +202,10 @@
       "noRecords": "Nessun record {type}"
     },
     "forum": {
+      "listLoadFailed": "Caricamento della lista fallito",
+      "listEmpty": "La lista è vuota",
+      "homeLoadFailed": "Caricamento della home del forum fallito",
+      "homeEmpty": "La home del forum è vuota",
       "posts": "Post",
       "topics": "Argomenti",
       "repliedAt": "Risposto il",

@@ -144,6 +144,11 @@ function handleWheelScroll(event: WheelEvent) {
     historyContainer.value.scrollLeft += event.deltaY;
   }
 }
+
+// 未实现功能
+function handleUnimplemented() {
+  showShortToast(t('功能未开放'));
+}
 </script>
 <template>
   <div class="container">
@@ -220,13 +225,13 @@ function handleWheelScroll(event: WheelEvent) {
             </div>
             <div class="text">{{ t('home.my.imageFavorites') }}</div>
           </div>
-          <div class="btn">
+          <div class="btn" @click="handleUnimplemented">
             <div class="icon">
               <font-awesome-icon icon="fa-solid fa-forward-fast" />
             </div>
             <div class="text">{{ t('home.my.playlist') }}</div>
           </div>
-          <div class="btn" @click="routerGoTo('/offline-cache')">
+          <div class="btn" @click="handleUnimplemented">
             <div class="icon">
               <font-awesome-icon icon="fa-solid fa-download" />
             </div>

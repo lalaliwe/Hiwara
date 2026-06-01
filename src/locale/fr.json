@@ -152,6 +152,8 @@
       "loading": "Chargement...",
       "noRecords": "Aucun enregistrement vidéo",
       "loadFailed": "Échec du chargement, ",
+      "loadFailedFull": "Échec du chargement de la liste vidéo",
+      "emptyFull": "La liste vidéo est vide",
       "retry": "Cliquez pour réessayer",
       "reachedBottom": "Vous avez atteint la fin"
     },
@@ -166,6 +168,8 @@
       "loading": "Chargement...",
       "noRecords": "Aucun enregistrement d'image",
       "loadFailed": "Échec du chargement, ",
+      "loadFailedFull": "Échec du chargement de la liste d'images",
+      "emptyFull": "La liste d'images est vide",
       "retry": "Cliquez pour réessayer",
       "reachedBottom": "Vous avez atteint la fin"
     },
@@ -198,6 +202,10 @@
       "noRecords": "Aucun enregistrement {type}"
     },
     "forum": {
+      "listLoadFailed": "Échec du chargement de la liste",
+      "listEmpty": "La liste est vide",
+      "homeLoadFailed": "Échec du chargement de la page d'accueil du forum",
+      "homeEmpty": "La page d'accueil du forum est vide",
       "posts": "Publications",
       "topics": "Sujets",
       "repliedAt": "Répondu le",

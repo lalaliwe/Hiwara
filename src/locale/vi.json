@@ -152,6 +152,8 @@
       "loading": "Đang tải...",
       "noRecords": "Không có bản ghi video",
       "loadFailed": "Tải thất bại, ",
+      "loadFailedFull": "Tải danh sách video thất bại",
+      "emptyFull": "Danh sách video trống",
       "retry": "Nhấp để thử lại",
       "reachedBottom": "Đã đến cuối"
     },
@@ -166,6 +168,8 @@
       "loading": "Đang tải...",
       "noRecords": "Không có bản ghi hình ảnh",
       "loadFailed": "Tải thất bại, ",
+      "loadFailedFull": "Tải danh sách hình ảnh thất bại",
+      "emptyFull": "Danh sách hình ảnh trống",
       "retry": "Nhấp để thử lại",
       "reachedBottom": "Đã đến cuối"
     },
@@ -198,6 +202,10 @@
       "noRecords": "Không có bản ghi {type}"
     },
     "forum": {
+      "listLoadFailed": "Tải danh sách thất bại",
+      "listEmpty": "Danh sách trống",
+      "homeLoadFailed": "Tải trang chủ diễn đàn thất bại",
+      "homeEmpty": "Trang chủ diễn đàn trống",
       "posts": "Bài đăng",
       "topics": "Chủ đề",
       "repliedAt": "Đã trả lời lúc",

@@ -152,6 +152,8 @@
       "loading": "Laden...",
       "noRecords": "Keine Videoaufzeichnungen",
       "loadFailed": "Laden fehlgeschlagen, ",
+      "loadFailedFull": "Videoliste konnte nicht geladen werden",
+      "emptyFull": "Videoliste ist leer",
       "retry": "Klicken zum Wiederholen",
       "reachedBottom": "Ende erreicht"
     },
@@ -166,6 +168,8 @@
       "loading": "Laden...",
       "noRecords": "Keine Bildaufzeichnungen",
       "loadFailed": "Laden fehlgeschlagen, ",
+      "loadFailedFull": "Bildliste konnte nicht geladen werden",
+      "emptyFull": "Bildliste ist leer",
       "retry": "Klicken zum Wiederholen",
       "reachedBottom": "Ende erreicht"
     },
@@ -198,6 +202,10 @@
       "noRecords": "Keine {type}-Aufzeichnungen"
     },
     "forum": {
+      "listLoadFailed": "Liste konnte nicht geladen werden",
+      "listEmpty": "Liste ist leer",
+      "homeLoadFailed": "Forum-Startseite konnte nicht geladen werden",
+      "homeEmpty": "Forum-Startseite ist leer",
       "posts": "Beiträge",
       "topics": "Themen",
       "repliedAt": "Geantwortet am",
