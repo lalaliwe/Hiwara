@@ -85,7 +85,7 @@ const routes: Array<RouteRecordRaw & { meta?: RouteMeta }> = [
     meta: { transition: 'stack', componentName: 'Home' },
   },
   {
-    path: '/player/:id',
+    path: '/player/:id/:salt?',
     name: 'Player',
     component: player,
     meta: { transition: 'stack', componentName: 'Player' },
@@ -220,11 +220,15 @@ const createStackItem = (route: RouteLocationNormalized): PageStackItem => {
   const metaName = (route.meta as RouteMeta)?.componentName
   const baseComponentName = metaName || getComponentName(route)
 
-  // 生成唯一缓存标识：对于动态路由，拼接 id 参数
+  // 生成唯一缓存标识：对于动态路由，拼接 id 参数；若有 salt 也一并拼接，防止 keep-alive 缓存耦合
   let cacheKey = baseComponentName
   const id = route.params.id
+  const salt = route.params.salt
   if (id) {
     cacheKey = `${baseComponentName}_${id}`
+    if (salt) {
+      cacheKey = `${cacheKey}_${salt}`
+    }
   }
 
   return {

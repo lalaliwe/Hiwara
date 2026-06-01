@@ -225,7 +225,7 @@ async function clickCard() {
     return;
   }
   if (props.type === 'video') {
-    router.push({ path: `/player/${props.data.id}` });
+    router.push({ path: `/player/${props.data.id}/${Math.random().toString(36).substring(2, 8)}` });
   } else if (props.type === 'image') {
     router.push({ path: `/image/${props.data.id}` });
   }

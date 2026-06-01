@@ -190,8 +190,7 @@ const enterFullscreen = async () => {
     lockLandscape();
     // 请求全屏
     await videoPlayerRef.value.requestFullscreen();
-    // 针对手机端，进入全屏时推入一个历史记录，用于捕获返回键
-    history.pushState({ fullscreen: true }, '');
+    // Android 返回键由 App.vue 的 onBackButtonPress 统一拦截，不再插入假历史状态
   } catch (err) {
     console.error('进入全屏失败:', err);
   }
@@ -228,26 +227,15 @@ const handleDefinitionChange = (index: number) => {
   // console.log('[videoPlayer.vue] 触发清晰度切换:', index)
   emit('definition-change', index)
 }
-
-// 监听全屏状态变化 (处理 ESC 键、手势退出等情况)
+// 监听全屏状态变化 (处理 ESC 键、手势退出、App.vue 返回键拦截触发的退出等情况)
 const handleFullscreenChange = () => {
-  const isNowFullscreen = !!document.fullscreenElement;
-  // 状态同步
-  fullscreenState.value = isNowFullscreen;
-  // 逻辑处理：
-  // 如果退出了全屏，且历史栈里有我们推入的状态，则将其弹出
-  // 这样可以防止用户按 ESC 退出后，还需要点两次返回键才能退出页面
-  if (!isNowFullscreen && history.state?.fullscreen) {
-    history.back();
-  }
+  // 仅同步状态，不操作路由（Android 返回键由 App.vue 的 onBackButtonPress 统一拦截）
+  fullscreenState.value = !!document.fullscreenElement;
 };
 
-// 监听手机返回键 (popstate)
-const handlePopState = () => {
-  // 如果用户按了返回键，且当前处于全屏，则退出全屏
-  if (fullscreenState.value) {
-    exitFullscreen();
-  }
+// 响应 App.vue 返回键拦截：完整退出全屏（含沉浸模式恢复、横屏恢复）
+const handlePlayerExitFullscreen = () => {
+  exitFullscreen();
 };
 
 const goBack = inject<() => void>('goBack');
@@ -256,7 +244,7 @@ const goHome = inject<() => void>('goHome');
 onMounted(async () => {
   // 挂载/卸载监听
   document.addEventListener('fullscreenchange', handleFullscreenChange);
-  window.addEventListener('popstate', handlePopState);
+  window.addEventListener('player-exit-fullscreen', handlePlayerExitFullscreen);
 
   // 绑定视频事件
   if (videoRef.value) {
@@ -319,7 +307,7 @@ onMounted(async () => {
 
 onUnmounted(() => {
   document.removeEventListener('fullscreenchange', handleFullscreenChange);
-  window.removeEventListener('popstate', handlePopState);
+  window.removeEventListener('player-exit-fullscreen', handlePlayerExitFullscreen);
   // 清理事件监听
   if (videoRef.value) {
     videoRef.value.removeEventListener('loadstart', () => { });

@@ -73,7 +73,7 @@ function clickItem() {
     return;
   }
   if (props.type === 'video') {
-    router.push({ path: `/player/${props.item.id}` });
+    router.push({ path: `/player/${props.item.id}/${Math.random().toString(36).substring(2, 8)}` });
   } else if (props.type === 'image') {
     router.push({ path: `/image/${props.item.id}` });
   }

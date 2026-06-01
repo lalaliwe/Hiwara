@@ -131,7 +131,13 @@ onMounted(() => {
             return
           }
 
-          // 2. 不在首页：希望"回退到上一页"
+          // 2. 如果当前在播放页且处于全屏状态，通知播放器退出全屏，不放行返回键
+          if (route.name === 'Player' && document.fullscreenElement) {
+            window.dispatchEvent(new CustomEvent('player-exit-fullscreen'))
+            return
+          }
+
+          // 3. 不在首页且非全屏：希望"回退到上一页"
           // 优先用 Tauri 提供的 canGoBack 信息
           if (canGoBack) {
             router.back()

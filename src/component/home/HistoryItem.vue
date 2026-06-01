@@ -38,7 +38,7 @@ function clickItem() {
     console.error('缺少id');
     return;
   }
-  router.push({ path: `/player/${props.item.id}` });
+  router.push({ path: `/player/${props.item.id}/${Math.random().toString(36).substring(2, 8)}` });
 }
 </script>
 
