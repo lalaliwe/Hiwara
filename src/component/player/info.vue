@@ -411,7 +411,63 @@ function toZone() {
 function downloadVideo() {
   showShortToast('功能未开放');
 }
+
+// 暗色模式响应式检测
+const isDarkMode = ref(detectDarkMode());
+let darkModeMediaQuery: MediaQueryList | null = null;
+let darkModeChangeHandler: ((e: MediaQueryListEvent) => void) | null = null;
+
+function updateDarkMode() {
+  isDarkMode.value = detectDarkMode();
+}
+
+onMounted(() => {
+  // 监听系统暗色模式变化
+  darkModeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+  darkModeChangeHandler = (e: MediaQueryListEvent) => {
+    updateDarkMode();
+  };
+  darkModeMediaQuery.addEventListener('change', darkModeChangeHandler);
+
+  // 监听 .dark-theme class 变化（通过 MutationObserver）
+  const observer = new MutationObserver(() => {
+    updateDarkMode();
+  });
+  observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+
+  // 存储 observer 以便卸载时断开
+  (window as any).__darkModeObserver = observer;
+});
+
+onUnmounted(() => {
+  if (darkModeMediaQuery && darkModeChangeHandler) {
+    darkModeMediaQuery.removeEventListener('change', darkModeChangeHandler);
+  }
+  // 断开 MutationObserver
+  const observer = (window as any).__darkModeObserver;
+  if (observer) {
+    observer.disconnect();
+    (window as any).__darkModeObserver = null;
+  }
+});
+
+// 暗色模式下图标第一个 fill 值
+const iconFirstFill = computed(() => isDarkMode.value ? '#bdbdbd' : '#424242');
+const iconLikeOutlineFill = computed(() => isDarkMode.value ? '#bdbdbd' : '#212121');
 </script>
+
+<script lang="ts">
+/**
+ * 暗色模式检测函数
+ * 判断依据：.dark-theme class 或系统 prefers-color-scheme: dark
+ */
+function detectDarkMode(): boolean {
+  if (typeof document === 'undefined') return false;
+  return document.documentElement.classList.contains('dark-theme') ||
+    window.matchMedia('(prefers-color-scheme: dark)').matches;
+}
+</script>
+
 <template>
   <div class="infoView" @scroll="handleSroll" ref="infoViewRef">
     <div ref="infoViewContentRef">
@@ -475,19 +531,19 @@ function downloadVideo() {
       <div class="operation">
         <div @click="clickLike">
           <iconLike v-if="isLike" theme="filled" size="22" fill="#FF3D00" />
-          <iconLike v-else theme="outline" size="22" fill="#212121" />
+          <iconLike v-else theme="outline" size="22" :fill="iconLikeOutlineFill" />
           <br>
           <span v-if="isLike">{{ t('player.liked') }}</span>
           <span v-else>{{ t('player.like') }}</span>
         </div>
         <div @click="shareDownloadLink">
-          <iconShareOne theme="two-tone" size="22" :fill="['#424242', '#00796B']" /><br>{{ t('player.share') }}
+          <iconShareOne theme="two-tone" size="22" :fill="[iconFirstFill, '#00796B']" /><br>{{ t('player.share') }}
         </div>
         <div @click="downloadVideo">
-          <iconDownloadFour theme="two-tone" size="22" :fill="['#424242', '#00796B']" /><br>{{ t('player.cache') }}
+          <iconDownloadFour theme="two-tone" size="22" :fill="[iconFirstFill, '#00796B']" /><br>{{ t('player.cache') }}
         </div>
         <div @click="copyDownloadLink">
-          <iconCopyLink theme="multi-color" size="22" :fill="['#424242', '#00796B', '#FFF', '#00796B']" /><br>{{
+          <iconCopyLink theme="multi-color" size="22" :fill="[iconFirstFill, '#00796B', '#FFF', '#00796B']" /><br>{{
             t('player.downloadLink') }}
         </div>
       </div>

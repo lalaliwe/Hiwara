@@ -655,6 +655,7 @@ onUnmounted(() => {
       line-height: 1.5em;
       text-align: justify;
       overflow-wrap: anywhere;
+      color: var(--color-text-primary);
 
       &.fold {
         display: -webkit-box;
@@ -780,6 +781,7 @@ onUnmounted(() => {
       line-height: 1.5em;
       text-align: justify;
       overflow-wrap: anywhere;
+      color: var(--color-text-primary);
     }
 
     .reply-created-time {

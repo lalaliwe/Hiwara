@@ -557,6 +557,7 @@ onActivated(() => {
       text-align: justify;
       overflow-wrap: break-word;
       word-break: break-word;
+      color: var(--color-text-primary);
 
       &.fold {
         display: -webkit-box;
@@ -696,6 +697,7 @@ onActivated(() => {
       overflow-wrap: break-word;
       word-break: break-word;
       margin-top: 2px;
+      color: var(--color-text-primary);
     }
 
     .reply-created-time {

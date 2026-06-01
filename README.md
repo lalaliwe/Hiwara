@@ -169,7 +169,7 @@ TBD
 * ✅ 论坛浏览 | Forum browsing
 * ✅ 论坛发帖 | Forum posting
 * ✅ 多语言支持 | Multi-language support
-* ⬜ Aria2支持 | Aria2 support
+* ✅ Aria2支持 | Aria2 support
 * ⬜ DLAN支持 | DLNA support
 * ⬜ DoH 支持 | DoH support
 * ⬜ 鸿蒙系统支持 | HarmonyOS support
@@ -181,30 +181,28 @@ TBD
 
 ## 🌏 语言适配 | Multilingual support
 
-* 简体中文 | 简体中文 | Chinese Simplified 🚩
+* 简体中文 | 简体中文 | Chinese Simplified
 * 繁体中文 | 繁體中文 | Chinese Traditional
 * 英语 | English | English
 * 日语 | 日本語 | Japanese
 * 韩语 | 한국어 | Korean
 * 法语 | Français | French
 * 西班牙语 | Español | Spanish
-* 葡萄牙语 | Português | Portuguese 
+* 葡萄牙语 | Português | Portuguese
 * 德语 | Deutsch | German
 * 意大利语 | Italiano | Italian
 * 俄语 | Русский | Russian
 * 乌克兰语 | Українська | Ukrainian
 * 泰语 | ภาษาไทย | Thai
-* 越南语 | Tiếng Việt | Vietnamese 
+* 越南语 | Tiếng Việt | Vietnamese
 * 高棉语 | ភាសាខ្មែរ | Khmer
-* 印地语 | भाषा | Indian
+* 印地语 | हिन्दी | Hindi
 * 阿拉伯语 | العربية | Arabic
 * 希伯来语 | עברית | Hebrew
 * 藏文 | བོད་ཡིག | Tibetan
 * 维吾尔语 | ئۇيغۇر تىلى | Uyghur
 * 哈萨克语 | қазақ тілі | Kazakh
-
-\* 标🚩表示当前语言已适配  
-\* 🚩 indicates languages that have been adapted
+* 蒙古语 | монгол хэл | Mongolian
 
 ## 📕 旧版本 | Old version
 
