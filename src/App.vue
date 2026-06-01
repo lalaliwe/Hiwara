@@ -137,6 +137,12 @@ onMounted(() => {
             return
           }
 
+          // 2.5 如果当前在搜索页，分发事件给 search.vue 自行处理
+          if (route.name === 'Search') {
+            window.dispatchEvent(new CustomEvent('search-back-pressed'))
+            return
+          }
+
           // 3. 不在首页且非全屏：希望"回退到上一页"
           // 优先用 Tauri 提供的 canGoBack 信息
           if (canGoBack) {
