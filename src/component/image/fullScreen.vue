@@ -31,6 +31,8 @@ const loading = ref(false);
 const currentIndex = ref(1);
 // Swiper 模块
 const modules = [Navigation];
+// Swiper navigation 配置（使用 any 类型绕过 swiper 12.x 的 PropType 类型推导缺陷）
+const swiperNavigation: any = { enabled: true };
 // Swiper 实例
 let swiperInstance: SwiperType | null = null;
 // 按钮显示状态
@@ -236,7 +238,7 @@ onUnmounted(() => {
     </div>
 
     <!-- Swiper 轮播 -->
-    <Swiper v-else-if="processedImages.length > 0" :modules="modules" :navigation="true" :slides-per-view="1"
+    <Swiper v-else-if="processedImages.length > 0" :modules="modules" :navigation="swiperNavigation" :slides-per-view="1"
       :space-between="0" class="swiper-container" @swiper="onSwiper" @slide-change="onSlideChange">
       <SwiperSlide v-for="(img, index) in processedImages" :key="index">
         <div class="slide-content">
