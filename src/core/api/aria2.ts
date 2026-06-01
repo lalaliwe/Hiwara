@@ -1,4 +1,4 @@
-import { fetch } from '@tauri-apps/plugin-http';
+import { invoke } from '@tauri-apps/api/core';
 
 /**
  * 清理文件名中的非法字符（Windows 和 Linux）
@@ -63,15 +63,13 @@ export async function addAria2Download(
       params: params,
     };
 
-    const response = await fetch(rpcUrl, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
+    const response: { status: number; headers: Record<string, string>; data: string } = await invoke('post_https_request', {
+      url: rpcUrl,
       body: JSON.stringify(body),
+      headers: { 'Content-Type': 'application/json' },
     });
 
-    const data = await response.json();
+    const data = JSON.parse(response.data);
 
     if (data.error) {
       return {
