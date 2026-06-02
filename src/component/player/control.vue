@@ -206,18 +206,31 @@ const setupHammerGestures = (mc: InstanceType<typeof Hammer>) => {
     const elementHeight = (ev.target as HTMLElement).offsetHeight
 
     // 在第一次有明显移动时，根据初始滑动方向确定最终的操作类型
+    // 角度死区系数：K=1.73（≈30°），滑动方向与轴夹角 < 30° 才被确认
+    // 避免垂直滑动中微小水平偏移被误判为 seek
+    const DIRECTION_THRESHOLD = 1.73
     if (panType === 'seek' && (Math.abs(deltaX) > 5 || Math.abs(deltaY) > 5)) {
       // 根据初始的主要滑动方向确定类型，之后不再改变
-      if (Math.abs(deltaX) > Math.abs(deltaY)) {
+      if (Math.abs(deltaX) > Math.abs(deltaY) * DIRECTION_THRESHOLD) {
         // 初始是左右滑动 → 进度调整
         panType = 'seek'
         // console.log('[control.vue] 确定为左右滑动 - 进度调整')
-      } else {
-        // 初始是上下滑动 → 根据左右区域判断是亮度还是音量
-        const isLeftSide = startX < (elementWidth / 2)
-        panType = isLeftSide ? 'brightness' : 'volume'
+      } else if (Math.abs(deltaY) > Math.abs(deltaX) * DIRECTION_THRESHOLD) {
+        // 初始是上下滑动 → 触控区域四等分，最左1/4亮度，最右1/4音量
+        const sectionWidth = elementWidth / 4
+        if (startX < sectionWidth) {
+          // 最左边四分之一区域 → 亮度
+          panType = 'brightness'
+        } else if (startX > elementWidth - sectionWidth) {
+          // 最右边四分之一区域 → 音量
+          panType = 'volume'
+        } else {
+          // 中间区域（1/4 ~ 3/4）垂直滑动不触发操作
+          panType = null
+        }
         // console.log('[control.vue] 确定为上下滑动', { panType })
       }
+      // 死区：两个条件都不满足，保持 panType = 'seek' 等待更多数据
     }
 
     // 根据确定的类型执行相应操作（之后无论怎么滑动都不会改变类型）
