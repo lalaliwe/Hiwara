@@ -2,7 +2,7 @@
 import { useRouter, useRoute } from 'vue-router';
 import { ref, onActivated } from 'vue';
 import { useI18n } from 'vue-i18n';
-import { setStatusBarTextStyle } from '../plugins/navbarStyle'
+import { useAutoStatusBar } from '../composables/useAutoStatusBar'
 
 const { t } = useI18n();
 
@@ -13,12 +13,8 @@ defineOptions({
 const router = useRouter();
 const route = useRoute();
 
-// 应用页面设置的函数
-const applyPageSettings = () => {
-  // 设置状态栏白色文字
-  setStatusBarTextStyle('light')
-}
-applyPageSettings()
+// 自动状态栏文字颜色自适应（根据 --color-primary-90 亮度判断）
+useAutoStatusBar({ cssVar: '--color-primary-90' })
 
 const goBack = () => {
   router.back();
@@ -138,8 +134,6 @@ function handleVideoScroll(event: Event): void {
 
 // 页面激活时恢复滚动位置
 onActivated(() => {
-  applyPageSettings()
-
   if (videoListView.value && typeof videoListView.value.scrollTo === 'function') {
     videoListView.value.scrollTo({ top: videoScrollTop });
   }

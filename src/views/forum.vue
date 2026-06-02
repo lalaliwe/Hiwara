@@ -2,7 +2,7 @@
 import { useRouter, useRoute } from 'vue-router';
 import { ref, computed, onActivated } from 'vue';
 import { useI18n } from 'vue-i18n';
-import { setStatusBarTextStyle } from '../plugins/navbarStyle';
+import { useAutoStatusBar } from '../composables/useAutoStatusBar';
 import { getForumCategoryList } from '../core/api';
 import { showShortToast } from '../core/toast';
 import loadingHuawu from '../component/loadingHuawu.vue';
@@ -223,20 +223,15 @@ function goToPublish() {
   });
 }
 
-// 应用页面设置的函数
-const applyPageSettings = () => {
-  // 设置状态栏白色文字
-  setStatusBarTextStyle('light')
-}
-applyPageSettings()
+// 自动状态栏文字颜色自适应（根据 --color-primary-90 亮度判断）
+useAutoStatusBar({ cssVar: '--color-primary-90' })
 
 const goBack = () => {
   router.back();
 }
 
-// 页面激活时应用设置
+// 页面激活时恢复滚动位置
 onActivated(() => {
-  applyPageSettings()
   if (forumListView.value) {
     forumListView.value.$el.scrollTop = forumScrollTop;
   }

@@ -312,7 +312,8 @@
     "brightness": "Helligkeit: {n}%",
     "volume": "Lautstärke: {n}%",
     "rewind10s": "10s zurück",
-    "forward10s": "10s vor"
+    "forward10s": "10s vor",
+    "switchComplete": "Serverwechsel abgeschlossen"
   },
   "imageView": {
     "loading": "Lade Daten",

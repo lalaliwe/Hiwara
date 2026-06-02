@@ -312,7 +312,8 @@
     "brightness": "السطوع: {n}%",
     "volume": "الصوت: {n}%",
     "rewind10s": "رجوع 10ث",
-    "forward10s": "تقديم 10ث"
+    "forward10s": "تقديم 10ث",
+    "switchComplete": "تم تبديل الخادم بنجاح"
   },
   "imageView": {
     "loading": "جارٍ تحميل البيانات",

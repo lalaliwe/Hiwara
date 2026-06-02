@@ -312,7 +312,8 @@
     "brightness": "جارىقتىق: {n}%",
     "volume": "دىبىس: {n}%",
     "rewind10s": "10s ارتقا",
-    "forward10s": "10s العا"
+    "forward10s": "10s العا",
+    "switchComplete": "سەرۆەر اۋىستىرۋ اياقتالدى"
   },
   "imageView": {
     "loading": "دەرەكتەر جۇكتەلۋدە",

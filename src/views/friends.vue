@@ -2,7 +2,7 @@
 import { onActivated, onMounted, ref, watch } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
-import { setStatusBarTextStyle } from '../plugins/navbarStyle'
+import { useAutoStatusBar } from '../composables/useAutoStatusBar'
 import { uid as muid } from '../core/store';
 import { getMyselfInfo } from '../core/api';
 import following from '../component/friends/following.vue'
@@ -16,12 +16,8 @@ defineOptions({
   name: 'Friends'
 })
 
-// 应用页面设置的函数
-const applyPageSettings = () => {
-  // 设置状态栏白色文字
-  setStatusBarTextStyle('light')
-}
-applyPageSettings()
+// 自动状态栏文字颜色自适应（根据 --color-primary-90 亮度判断）
+useAutoStatusBar({ cssVar: '--color-primary-90' })
 
 const router = useRouter()
 const route = useRoute()
@@ -130,9 +126,6 @@ const fansListRef = ref<InstanceType<typeof fans>>()
 const friendListRef = ref<HTMLElement>()
 
 onActivated(() => {
-  // console.log('friends 页面激活')
-  // 进入页面时，重新应用页面设置
-  applyPageSettings()
   // 恢复滚动条位置
   if (followListRef.value && typeof followListRef.value.$el.querySelector === 'function') {
     const scrollElement = followListRef.value.$el.querySelector('.list')

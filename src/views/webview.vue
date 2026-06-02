@@ -2,7 +2,7 @@
 import { ref, onMounted, onUnmounted, nextTick } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
-import { setStatusBarTextStyle } from '../plugins/navbarStyle'
+import { useAutoStatusBar } from '../composables/useAutoStatusBar'
 import { Webview } from '@tauri-apps/api/webview'
 import { getCurrentWebviewWindow } from '@tauri-apps/api/webviewWindow'
 import { openUrl } from '@tauri-apps/plugin-opener'
@@ -16,7 +16,8 @@ defineOptions({
   name: 'Webview'
 })
 
-setStatusBarTextStyle('light')
+// 自动状态栏文字颜色自适应（根据 --color-primary-solid 亮度判断）
+useAutoStatusBar({ cssVar: '--color-primary-solid' })
 
 const { t } = useI18n()
 const route = useRoute()

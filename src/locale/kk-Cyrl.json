@@ -312,7 +312,8 @@
     "brightness": "Жарықтық: {n}%",
     "volume": "Дыбыс: {n}%",
     "rewind10s": "10с артқа",
-    "forward10s": "10с алға"
+    "forward10s": "10с алға",
+    "switchComplete": "Сервер ауыстыру аяқталды"
   },
   "imageView": {
     "loading": "Деректер жүктелуде",

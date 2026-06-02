@@ -2,7 +2,7 @@
 import { ref, computed, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
-import { setStatusBarTextStyle } from '../../plugins/navbarStyle';
+import { useAutoStatusBar } from '../../composables/useAutoStatusBar';
 import { createForumThread, getForumHome } from '../../core/api';
 import { showShortToast } from '../../core/toast';
 import ForumSyntaxGuide from '../../component/ForumSyntaxGuide.vue';
@@ -173,11 +173,8 @@ function handleDrawerClose() {
   showSyntaxDrawer.value = false;
 }
 
-// 应用页面设置
-const applyPageSettings = () => {
-  setStatusBarTextStyle('light');
-}
-applyPageSettings();
+// 自动状态栏文字颜色自适应（根据 --color-primary-90 亮度判断）
+useAutoStatusBar({ cssVar: '--color-primary-90' });
 
 onMounted(() => {
   fetchSections();

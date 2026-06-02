@@ -9,7 +9,7 @@ import { ref, nextTick, onMounted, onBeforeUnmount, onActivated, provide, watch 
 import { useI18n } from 'vue-i18n';
 // import { on } from 'hammerjs';
 import { lockPortrait } from '../plugins/useOrientation'
-import { setStatusBarTextStyle } from '../plugins/navbarStyle'
+import { useAutoStatusBar } from '../composables/useAutoStatusBar'
 import { showShortToast } from '../core/toast';
 import { moveTaskToBack } from '../plugins/appControl';
 import { isLogin as isLoginStore } from '../core/store';
@@ -32,19 +32,11 @@ const refreshToken = ref(0);
 let lastBackPressedTime: number | null = null;
 const DOUBLE_BACK_PRESS_TIMEOUT = 2000; // 2秒内再次按下返回键则退出
 
-// 应用页面设置的函数
-const applyPageSettings = () => {
-  // 固定竖屏
-  lockPortrait()
-  // 设置状态栏白色文字
-  setStatusBarTextStyle('light')
-}
-applyPageSettings()
+// 自动状态栏文字颜色自适应（根据 --color-primary-90 亮度判断）
+useAutoStatusBar({ cssVar: '--color-primary-90' })
 
-// 当页面被激活时（从 keep-alive 缓存中恢复）也应用设置
-onActivated(() => {
-  applyPageSettings()
-})
+// 固定竖屏
+lockPortrait()
 
 onMounted(() => {
   // 监听来自App.vue的返回键事件

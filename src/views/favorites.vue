@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { useRouter, useRoute } from 'vue-router';
-import { ref, onActivated } from 'vue';
+import { ref } from 'vue';
 import { useI18n } from 'vue-i18n';
-import { setStatusBarTextStyle } from '../plugins/navbarStyle'
+import { useAutoStatusBar } from '../composables/useAutoStatusBar'
 import VideoFavorites from '../component/favorites/video.vue'
 import ImageFavorites from '../component/favorites/image.vue'
 
@@ -15,12 +15,8 @@ defineOptions({
 const router = useRouter();
 const route = useRoute();
 
-// 应用页面设置的函数
-const applyPageSettings = () => {
-  // 设置状态栏白色文字
-  setStatusBarTextStyle('light')
-}
-applyPageSettings()
+// 自动状态栏文字颜色自适应（根据 --color-primary-90 亮度判断）
+useAutoStatusBar({ cssVar: '--color-primary-90' })
 
 const goBack = () => {
   router.back();
@@ -29,10 +25,6 @@ const goBack = () => {
 // 定义选项卡，默认为 'video'
 const tab = ref<'video' | 'image'>(route.query.type === 'image' ? 'image' : 'video');
 
-// 页面激活时应用设置（子组件内部自动处理滚动位置恢复）
-onActivated(() => {
-  applyPageSettings()
-});
 </script>
 
 <template>

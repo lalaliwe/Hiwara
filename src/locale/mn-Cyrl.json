@@ -312,7 +312,8 @@
     "brightness": "Гэрэлтэл: {n}%",
     "volume": "Дуу: {n}%",
     "rewind10s": "10с урагш",
-    "forward10s": "10с хойш"
+    "forward10s": "10с хойш",
+    "switchComplete": "Сервер солих амжилттай"
   },
   "imageView": {
     "loading": "Өгөгдөл ачааллаж байна",

@@ -312,7 +312,8 @@
     "brightness": "Độ sáng: {n}%",
     "volume": "Âm lượng: {n}%",
     "rewind10s": "Lùi 10s",
-    "forward10s": "Tiến 10s"
+    "forward10s": "Tiến 10s",
+    "switchComplete": "Chuyển đổi máy chủ hoàn tất"
   },
   "imageView": {
     "loading": "Đang tải dữ liệu",

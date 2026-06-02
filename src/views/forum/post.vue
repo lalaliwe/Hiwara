@@ -2,7 +2,7 @@
 import { useRouter, useRoute } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import { ref, onActivated } from 'vue';
-import { setStatusBarTextStyle } from '../../plugins/navbarStyle';
+import { useAutoStatusBar } from '../../composables/useAutoStatusBar';
 import { getForumPostReplies, getMyselfInfo } from '../../core/api';
 import { showShortToast } from '../../core/toast';
 import loadingHuawu from '../../component/loadingHuawu.vue';
@@ -198,12 +198,8 @@ async function handlePosted(reply: any) {
   totalCount.value++;
 }
 
-// 应用页面设置的函数
-const applyPageSettings = () => {
-  // 设置状态栏白色文字
-  setStatusBarTextStyle('light')
-}
-applyPageSettings()
+// 自动状态栏文字颜色自适应（根据 --color-primary-90 亮度判断）
+useAutoStatusBar({ cssVar: '--color-primary-90' })
 
 const goBack = () => {
   router.back();
@@ -217,7 +213,6 @@ const goToPublish = () => {
 
 // 页面激活时恢复滚动位置
 onActivated(() => {
-  applyPageSettings()
   if (postListView.value) {
     postListView.value.$el.scrollTop = postScrollTop;
   }

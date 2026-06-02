@@ -312,7 +312,8 @@
     "brightness": "चमक: {n}%",
     "volume": "आवाज़: {n}%",
     "rewind10s": "10 सेकंड पीछे",
-    "forward10s": "10 सेकंड आगे"
+    "forward10s": "10 सेकंड आगे",
+    "switchComplete": "सर्वर स्विच पूर्ण"
   },
   "imageView": {
     "loading": "डेटा लोड हो रहा है",

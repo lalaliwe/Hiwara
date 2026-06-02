@@ -312,7 +312,8 @@
     "brightness": "밝기: {n}%",
     "volume": "볼륨: {n}%",
     "rewind10s": "10초 뒤로",
-    "forward10s": "10초 앞으로"
+    "forward10s": "10초 앞으로",
+    "switchComplete": "서버 전환 완료"
   },
   "imageView": {
     "loading": "데이터 로딩 중",

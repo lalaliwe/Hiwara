@@ -312,7 +312,8 @@
     "brightness": "בהירות: {n}%",
     "volume": "עוצמת קול: {n}%",
     "rewind10s": "הרץ אחורה 10s",
-    "forward10s": "הרץ קדימה 10s"
+    "forward10s": "הרץ קדימה 10s",
+    "switchComplete": "החלפת השרת הושלמה"
   },
   "imageView": {
     "loading": "טוען נתונים",

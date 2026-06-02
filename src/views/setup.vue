@@ -2,7 +2,7 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
-import { setStatusBarTextStyle } from '../plugins/navbarStyle'
+import { useAutoStatusBar } from '../composables/useAutoStatusBar'
 import { setupStore } from '../core/store'
 import { storeToRefs } from 'pinia'
 import { logout } from '../core/auth'
@@ -11,10 +11,8 @@ defineOptions({
   name: 'Setup'
 })
 
-/**
- * 不会返回此页面，无需onActivated
- */
-setStatusBarTextStyle('light')
+// 自动状态栏文字颜色自适应（根据 --color-primary-90 亮度判断）
+useAutoStatusBar({ cssVar: '--color-primary-90' })
 
 const { t } = useI18n()
 const router = useRouter()

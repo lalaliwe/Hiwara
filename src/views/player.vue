@@ -5,7 +5,7 @@ import { useI18n } from 'vue-i18n';
 import videoPlayer from '../component/player/videoPlayer.vue';
 import infoView from '../component/player/info.vue';
 import commentView from '../component/player/comment.vue';
-import { setStatusBarTextStyle } from '../plugins/navbarStyle';
+import { useAutoStatusBar } from '../composables/useAutoStatusBar';
 import { Swiper, SwiperSlide } from 'swiper/vue';
 import type { Swiper as SwiperType } from 'swiper';
 import 'swiper/swiper-bundle.css';
@@ -113,11 +113,8 @@ const goHome = () => {
 };
 provide('goHome', goHome);
 
-// 应用页面设置的函数
-const applyPageSettings = () => {
-  // 设置状态栏白色文字
-  setStatusBarTextStyle('light')
-}
+// 自动状态栏文字颜色自适应（根据 --color-primary-90 亮度判断）
+useAutoStatusBar({ cssVar: '--color-primary-90' })
 
 // 获取视频信息
 const fetchVideoInfo = async () => {
@@ -374,15 +371,11 @@ const refreshVideoFile = async () => {
 }
 
 onActivated(() => {
-  applyPageSettings()
   console.log('🔄 Player activated', id.value);
 })
 onDeactivated(() => {
   console.log('⏸️ Player deactivated', id.value);
 })
-onMounted(() => {
-  applyPageSettings();
-});
 onUnmounted(() => {
   console.log('❌ Player unmounted', id.value);
 })

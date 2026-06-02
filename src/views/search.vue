@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { onActivated, onMounted, onBeforeUnmount, ref } from 'vue';
+import { onMounted, onBeforeUnmount, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import topBarView from '../component/search/topBar.vue';
 import emptyView from '../component/search/empty.vue';
 import resultView from '../component/search/result.vue';
-import { setStatusBarTextStyle } from '../plugins/navbarStyle'
+import { useAutoStatusBar } from '../composables/useAutoStatusBar'
 
 defineOptions({
   name: 'Search'
@@ -14,12 +14,8 @@ const router = useRouter();
 const searching = ref<'empty' | 'result'>('empty');
 const searchKeyword = ref('');
 
-// 应用页面设置的函数
-const applyPageSettings = () => {
-  // 设置状态栏白色文字
-  setStatusBarTextStyle('light')
-}
-applyPageSettings()
+// 自动状态栏文字颜色自适应（根据 --color-primary-90 亮度判断）
+useAutoStatusBar({ cssVar: '--color-primary-90' })
 
 // 处理返回操作（左上角按钮）
 function handleBack() {
@@ -60,10 +56,6 @@ const handleSearchBackPressed = () => {
   }
 };
 
-onActivated(() => {
-  // 进入页面时，重新应用页面设置
-  applyPageSettings()
-})
 
 onMounted(() => {
   // 监听来自 App.vue 的返回键事件

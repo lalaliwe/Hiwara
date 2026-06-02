@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted, onBeforeUnmount, onActivated } from 'vue';
-import { setStatusBarTextStyle } from '../plugins/navbarStyle'
+import { ref, computed, onMounted, onUnmounted, onBeforeUnmount, onActivated } from 'vue';
+import { useAutoStatusBar } from '../composables/useAutoStatusBar'
 import { useRouter, useRoute } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import ImageInfo from '../component/image/info.vue';
@@ -24,13 +24,6 @@ defineOptions({
 
 const router = useRouter();
 const route = useRoute();
-
-// 应用页面设置的函数
-const applyPageSettings = () => {
-  // 设置状态栏黑色文字
-  setStatusBarTextStyle('dark')
-}
-applyPageSettings()
 
 // 插画图片数据
 interface ImageFile {
@@ -69,6 +62,14 @@ const isLike = ref<boolean>(false); // 是否已点赞
 // 顶部导航栏颜色状态
 const isTopGreen = ref(false);
 const imageContainerRef = ref<HTMLElement | null>(null);
+
+// 自动状态栏文字颜色自适应
+// 初始时顶部透明，透出页面背景色；滚动后 .top-green 启用 --color-primary-90
+const statusBarBg = computed(() => {
+  const varName = isTopGreen.value ? '--color-primary-90' : '--color-bg-page'
+  return getComputedStyle(document.documentElement).getPropertyValue(varName).trim()
+})
+useAutoStatusBar({ color: statusBarBg })
 
 const fullScreenRef = ref();
 
@@ -136,8 +137,6 @@ function handleSroll(e: Event): void {
   scrollTop = (e.target as HTMLElement).scrollTop;
 }
 onActivated(() => {
-  // 当页面被激活时（从 keep-alive 缓存中恢复）也应用设置
-  applyPageSettings()
   // 恢复滚动条位置
   if (imageContainerRef.value && typeof imageContainerRef.value.scrollTo === 'function')
     imageContainerRef.value.scrollTo({ top: scrollTop });

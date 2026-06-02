@@ -312,7 +312,8 @@
     "brightness": "Brillo: {n}%",
     "volume": "Volumen: {n}%",
     "rewind10s": "Retroceder 10s",
-    "forward10s": "Avanzar 10s"
+    "forward10s": "Avanzar 10s",
+    "switchComplete": "Cambio de servidor completado"
   },
   "imageView": {
     "loading": "Cargando datos",

@@ -312,7 +312,8 @@
     "brightness": "明るさ: {n}%",
     "volume": "音量: {n}%",
     "rewind10s": "10秒戻す",
-    "forward10s": "10秒進む"
+    "forward10s": "10秒進む",
+    "switchComplete": "サーバー切り替え完了"
   },
   "imageView": {
     "loading": "データを読み込み中",

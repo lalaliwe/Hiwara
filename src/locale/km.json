@@ -312,7 +312,8 @@
     "brightness": "ពន្លឺ: {n}%",
     "volume": "សំឡេង: {n}%",
     "rewind10s": "ថយក្រោយ 10s",
-    "forward10s": "ទៅមុខ 10s"
+    "forward10s": "ទៅមុខ 10s",
+    "switchComplete": "ការប្តូរម៉ាស៊ីនមេបានបញ្ចប់"
   },
   "imageView": {
     "loading": "កំពុងផ្ទុកទិន្នន័យ",

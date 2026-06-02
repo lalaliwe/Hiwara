@@ -312,7 +312,8 @@
     "brightness": "Luminosità: {n}%",
     "volume": "Volume: {n}%",
     "rewind10s": "Indietro 10s",
-    "forward10s": "Avanti 10s"
+    "forward10s": "Avanti 10s",
+    "switchComplete": "Completamento cambio server"
   },
   "imageView": {
     "loading": "Caricamento dati",
