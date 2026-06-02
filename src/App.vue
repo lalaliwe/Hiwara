@@ -126,6 +126,12 @@ onMounted(() => {
             return
           }
 
+          // 2.6 如果当前在插画页，分发事件给 image.vue 自行处理
+          if (route.name === 'Image') {
+            window.dispatchEvent(new CustomEvent('image-back-pressed'))
+            return
+          }
+
           // 3. 不在首页且非全屏：希望"回退到上一页"
           // 优先用 Tauri 提供的 canGoBack 信息
           if (canGoBack) {

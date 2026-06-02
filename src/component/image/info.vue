@@ -516,7 +516,7 @@ function detectDarkMode(): boolean {
 .more {
   position: relative;
   height: 0;
-  top: 8px;
+  top: 4px;
   left: -8px;
   text-align: right;
   font-size: 0.7rem;
@@ -536,7 +536,8 @@ function detectDarkMode(): boolean {
 }
 
 .title {
-  padding: 15px 15px 0 10px;
+  margin: 5px 0;
+  padding: 0 15px 0 10px;
   text-overflow: ellipsis;
   overflow: hidden;
   font-size: 1.1rem;
@@ -546,9 +547,10 @@ function detectDarkMode(): boolean {
 }
 
 .infomsg {
-  padding: 10px 10px 0 10px;
+  padding: 0 10px;
   font-size: 0.8rem;
   color: var(--color-text-muted);
+  cursor: pointer;
 }
 
 .author {
@@ -562,7 +564,7 @@ function detectDarkMode(): boolean {
     cursor: pointer;
     user-select: none;
 
-    img {
+    .v-img {
       width: 40px;
       height: 40px;
       border-radius: 50%;
@@ -580,6 +582,7 @@ function detectDarkMode(): boolean {
       font-size: 0.9rem;
       cursor: pointer;
       user-select: none;
+      color: var(--color-text-primary);
     }
 
     .userdata {
@@ -593,10 +596,6 @@ function detectDarkMode(): boolean {
     flex-direction: column;
     justify-content: center;
     padding: 0 10px;
-
-    .btn {
-      width: 80px;
-    }
   }
 }
 
@@ -608,7 +607,7 @@ function detectDarkMode(): boolean {
   transition: height 0.3s ease-in-out;
 
   .text {
-    padding-top: 10px;
+    padding: 4px 0 2px 0;
   }
 }
 

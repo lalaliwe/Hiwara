@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted, onActivated } from 'vue';
+import { ref, onMounted, onUnmounted, onBeforeUnmount, onActivated } from 'vue';
 import { setStatusBarTextStyle } from '../plugins/navbarStyle'
 import { useRouter, useRoute } from 'vue-router';
 import { useI18n } from 'vue-i18n';
@@ -79,6 +79,22 @@ function scrollToTop() {
     container.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
+// 处理安卓返回键事件（来自 App.vue）
+const handleImageBackPressed = () => {
+  // 1. 如果全屏打开 → 关闭全屏
+  if (fullScreenVisible.value) {
+    fullScreenVisible.value = false;
+    return;
+  }
+  // 2. 如果评论打开 → 关闭评论
+  if (commentVisible.value) {
+    commentVisible.value = false;
+    return;
+  }
+  // 3. 无抽屉打开 → 回退到上一页
+  router.back();
+};
+
 // 返回
 function goBack() {
   router.back();
@@ -131,6 +147,13 @@ onMounted(() => {
   const container = imageContainerRef.value;
   if (container)
     container.addEventListener('scroll', handleScroll);
+
+  // 监听来自 App.vue 的安卓返回键事件
+  window.addEventListener('image-back-pressed', handleImageBackPressed);
+})
+onBeforeUnmount(() => {
+  // 移除返回键事件监听
+  window.removeEventListener('image-back-pressed', handleImageBackPressed);
 })
 onUnmounted(() => {
   // 清理事件监听器
