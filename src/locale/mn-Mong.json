@@ -312,7 +312,8 @@
     "brightness": "ᠭᠡᠷᠡᠯ: {n}%",
     "volume": "ᠳᠤᠤ: {n}%",
     "rewind10s": "ᠠᠷᠠᠭᠤᠰᠢ 10ᠰ",
-    "forward10s": "ᠦᠷᠭᠦᠯᠵᠢ 10ᠰ"
+    "forward10s": "ᠦᠷᠭᠦᠯᠵᠢ 10ᠰ",
+    "switchComplete": "ᠰᠧᠷᠪᠧᠷ ᠰᠣᠯᠢᠬᠤ ᠪᠦᠲᠦᠭᠡᠭᠳᠡᠪᠡ"
   },
   "imageView": {
     "loading": "ᠥᠭᠦᠭᠳᠡᠯ ᠠᠴᠢᠶᠠᠯᠠᠭᠳᠠᠵᠤ ᠪᠠᠢᠨᠠ",
