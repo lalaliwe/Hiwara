@@ -122,4 +122,32 @@ impl<R: Runtime> Device<R> {
       .run_mobile_plugin("moveTaskToBack", ())
       .map_err(Into::into)
   }
+
+  pub fn set_screen_brightness(&self, payload: SetScreenBrightnessRequest) -> crate::Result<SetScreenBrightnessResponse> {
+    self
+      .0
+      .run_mobile_plugin("setScreenBrightness", payload)
+      .map_err(Into::into)
+  }
+
+  pub fn get_screen_brightness(&self) -> crate::Result<GetScreenBrightnessResponse> {
+    self
+      .0
+      .run_mobile_plugin("getScreenBrightness", ())
+      .map_err(Into::into)
+  }
+
+  pub fn set_volume(&self, payload: SetVolumeRequest) -> crate::Result<SetVolumeResponse> {
+    self
+      .0
+      .run_mobile_plugin("setVolume", payload)
+      .map_err(Into::into)
+  }
+
+  pub fn get_volume(&self) -> crate::Result<GetVolumeResponse> {
+    self
+      .0
+      .run_mobile_plugin("getVolume", ())
+      .map_err(Into::into)
+  }
 }

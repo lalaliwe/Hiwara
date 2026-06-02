@@ -50,6 +50,10 @@ pub fn init<R: Runtime>() -> TauriPlugin<R> {
       commands::unlock_orientation,
       commands::show_toast,
       commands::move_task_to_back,
+      commands::set_screen_brightness,
+      commands::get_screen_brightness,
+      commands::set_volume,
+      commands::get_volume,
     ])
     .setup(|app, api| {
       #[cfg(mobile)]

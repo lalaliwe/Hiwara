@@ -287,11 +287,11 @@ const setupHammerGestures = (mc: InstanceType<typeof Hammer>) => {
     } else if (panType === 'brightness') {
       // 左边上下滑动 - 调整亮度
       const deltaPercent = -(deltaY / elementHeight) * 100
-      emit('gesture', { type: 'brightness', value: Math.max(0, Math.min(100, deltaPercent)), isEnd: false })
+      emit('gesture', { type: 'brightness', value: deltaPercent, isEnd: false })
     } else if (panType === 'volume') {
       // 右边上下滑动 - 调整音量
       const deltaPercent = -(deltaY / elementHeight) * 100
-      emit('gesture', { type: 'volume', value: Math.max(0, Math.min(100, deltaPercent)), isEnd: false })
+      emit('gesture', { type: 'volume', value: deltaPercent, isEnd: false })
     }
   })
 

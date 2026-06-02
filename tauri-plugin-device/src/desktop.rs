@@ -231,4 +231,24 @@ impl<R: Runtime> Device<R> {
     // On desktop platforms, this is a no-op
     Ok(MoveTaskToBackResponse { success: true })
   }
+
+  pub fn set_screen_brightness(&self, _payload: SetScreenBrightnessRequest) -> crate::Result<SetScreenBrightnessResponse> {
+    // Desktop: no-op, brightness control is mobile-only
+    Ok(SetScreenBrightnessResponse { success: true })
+  }
+
+  pub fn get_screen_brightness(&self) -> crate::Result<GetScreenBrightnessResponse> {
+    // Desktop: return -1 (system default)
+    Ok(GetScreenBrightnessResponse { brightness: -1.0 })
+  }
+
+  pub fn set_volume(&self, _payload: SetVolumeRequest) -> crate::Result<SetVolumeResponse> {
+    // Desktop: no-op, volume control is mobile-only
+    Ok(SetVolumeResponse { success: true })
+  }
+
+  pub fn get_volume(&self) -> crate::Result<GetVolumeResponse> {
+    // Desktop: return default
+    Ok(GetVolumeResponse { volume: 1.0, max_volume: 1.0 })
+  }
 }

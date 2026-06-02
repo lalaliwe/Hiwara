@@ -102,3 +102,56 @@ export interface MoveTaskToBackResponse {
 export async function moveTaskToBack(): Promise<MoveTaskToBackResponse> {
   return await invoke('plugin:device|move_task_to_back');
 }
+
+export interface SetScreenBrightnessResponse {
+  success: boolean;
+}
+
+export interface GetScreenBrightnessResponse {
+  brightness: number;
+}
+
+export interface SetVolumeResponse {
+  success: boolean;
+}
+
+export interface GetVolumeResponse {
+  volume: number;
+  maxVolume: number;
+}
+
+/**
+ * 设置屏幕亮度（仅当前 Activity 有效）
+ * @param brightness 0.0~1.0；传 -1.0 恢复系统默认
+ */
+export async function setScreenBrightness(brightness: number): Promise<SetScreenBrightnessResponse> {
+  return await invoke('plugin:device|set_screen_brightness', {
+    payload: { brightness }
+  });
+}
+
+/**
+ * 获取当前屏幕亮度
+ * @returns brightness: -1.0=系统默认, 0.0~1.0=具体值
+ */
+export async function getScreenBrightness(): Promise<GetScreenBrightnessResponse> {
+  return await invoke('plugin:device|get_screen_brightness');
+}
+
+/**
+ * 设置媒体音量
+ * @param volume 0.0~1.0
+ */
+export async function setVolume(volume: number): Promise<SetVolumeResponse> {
+  return await invoke('plugin:device|set_volume', {
+    payload: { volume }
+  });
+}
+
+/**
+ * 获取当前媒体音量
+ * @returns volume: 0.0~1.0 (归一化), maxVolume: 系统最大值
+ */
+export async function getVolume(): Promise<GetVolumeResponse> {
+  return await invoke('plugin:device|get_volume');
+}

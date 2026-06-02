@@ -58,6 +58,33 @@ class DevicePlugin: Plugin {
   @objc public func showToast(_ invoke: Invoke) throws {
     try toastHandler.showToast(invoke)
   }
+
+  @objc public func setScreenBrightness(_ invoke: Invoke) throws {
+    let args = try invoke.parseArgs(SetBrightnessArgs.self)
+    DispatchQueue.main.async {
+      UIScreen.main.brightness = CGFloat(args.brightness)
+      invoke.resolve(["success": true])
+    }
+  }
+
+  @objc public func getScreenBrightness(_ invoke: Invoke) throws {
+    DispatchQueue.main.async {
+      invoke.resolve(["brightness": Double(UIScreen.main.brightness)])
+    }
+  }
+
+  @objc public func setVolume(_ invoke: Invoke) throws {
+    // iOS 音量控制需要使用 MPVolumeView，暂不实现
+    invoke.resolve(["success": true])
+  }
+
+  @objc public func getVolume(_ invoke: Invoke) throws {
+    invoke.resolve(["volume": 1.0, "maxVolume": 1.0])
+  }
+}
+
+class SetBrightnessArgs: Decodable {
+  let brightness: Double
 }
 
 @_cdecl("init_plugin_device")

@@ -18,6 +18,10 @@ Default permissions for the plugin
 - `allow-unlock-orientation`
 - `allow-show-toast`
 - `allow-move-task-to-back`
+- `allow-set-screen-brightness`
+- `allow-get-screen-brightness`
+- `allow-set-volume`
+- `allow-get-volume`
 
 ## Permission Table
 
@@ -76,6 +80,58 @@ Enables the get_device_info command without any pre-configured scope.
 <td>
 
 Denies the get_device_info command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`device:allow-get-screen-brightness`
+
+</td>
+<td>
+
+Enables the get_screen_brightness command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`device:deny-get-screen-brightness`
+
+</td>
+<td>
+
+Denies the get_screen_brightness command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`device:allow-get-volume`
+
+</td>
+<td>
+
+Enables the get_volume command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`device:deny-get-volume`
+
+</td>
+<td>
+
+Denies the get_volume command without any pre-configured scope.
 
 </td>
 </tr>
@@ -310,6 +366,58 @@ Enables the ping command without any pre-configured scope.
 <td>
 
 Denies the ping command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`device:allow-set-screen-brightness`
+
+</td>
+<td>
+
+Enables the set_screen_brightness command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`device:deny-set-screen-brightness`
+
+</td>
+<td>
+
+Denies the set_screen_brightness command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`device:allow-set-volume`
+
+</td>
+<td>
+
+Enables the set_volume command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`device:deny-set-volume`
+
+</td>
+<td>
+
+Denies the set_volume command without any pre-configured scope.
 
 </td>
 </tr>

@@ -120,3 +120,42 @@ pub struct ShowToastResponse {
 pub struct MoveTaskToBackResponse {
   pub success: bool,
 }
+
+// ========== Screen Brightness 相关 =========
+#[derive(Debug, Deserialize, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct SetScreenBrightnessRequest {
+  pub brightness: f32, // 0.0 ~ 1.0; pass -1.0 to restore system default
+}
+
+#[derive(Debug, Clone, Default, Deserialize, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct SetScreenBrightnessResponse {
+  pub success: bool,
+}
+
+#[derive(Debug, Clone, Default, Deserialize, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct GetScreenBrightnessResponse {
+  pub brightness: f32, // -1.0 = system default, 0.0~1.0 = specific value
+}
+
+// ========== Volume 相关 =========
+#[derive(Debug, Deserialize, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct SetVolumeRequest {
+  pub volume: f32, // 0.0 ~ 1.0
+}
+
+#[derive(Debug, Clone, Default, Deserialize, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct SetVolumeResponse {
+  pub success: bool,
+}
+
+#[derive(Debug, Clone, Default, Deserialize, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct GetVolumeResponse {
+  pub volume: f32,      // 0.0 ~ 1.0, normalized
+  pub max_volume: f32,  // system max volume value
+}

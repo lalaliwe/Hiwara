@@ -8,11 +8,13 @@ import app.tauri.annotation.TauriPlugin
 import app.tauri.plugin.JSObject
 import app.tauri.plugin.Plugin
 import app.tauri.plugin.Invoke
+import com.plugin.device.handlers.BrightnessHandler
 import com.plugin.device.handlers.DeviceInfoHandler
 import com.plugin.device.handlers.ImmersiveHandler
 import com.plugin.device.handlers.NavbarStyleHandler
 import com.plugin.device.handlers.OrientationHandler
 import com.plugin.device.handlers.ToastHandler
+import com.plugin.device.handlers.VolumeHandler
 
 @InvokeArg
 class PingArgs {
@@ -26,6 +28,8 @@ class DevicePlugin(private val activity: Activity): Plugin(activity) {
     private val navbarStyleHandler = NavbarStyleHandler(activity)
     private val orientationHandler = OrientationHandler(activity)
     private val toastHandler = ToastHandler(activity)
+    private val brightnessHandler = BrightnessHandler(activity)
+    private val volumeHandler = VolumeHandler(activity)
 
     override fun load(webView: WebView) {
         super.load(webView)
@@ -113,5 +117,25 @@ class DevicePlugin(private val activity: Activity): Plugin(activity) {
         } catch (e: Exception) {
             invoke.reject(e.message)
         }
+    }
+
+    @Command
+    fun setScreenBrightness(invoke: Invoke) {
+        brightnessHandler.setScreenBrightness(invoke)
+    }
+
+    @Command
+    fun getScreenBrightness(invoke: Invoke) {
+        brightnessHandler.getScreenBrightness(invoke)
+    }
+
+    @Command
+    fun setVolume(invoke: Invoke) {
+        volumeHandler.setVolume(invoke)
+    }
+
+    @Command
+    fun getVolume(invoke: Invoke) {
+        volumeHandler.getVolume(invoke)
     }
 }

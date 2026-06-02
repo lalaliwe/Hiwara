@@ -3,6 +3,12 @@ import { ref, onMounted, onUnmounted, inject, watch, nextTick } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { lockPortrait, lockLandscape } from '../../plugins/useOrientation'
 import { enterImmersive, exitImmersive } from '../../plugins/immersive'
+import {
+  setScreenBrightness,
+  getScreenBrightness,
+  setVolume,
+  getVolume
+} from '../../plugins/screenControl'
 import controlFullscreen from './controlFullscreen.vue';
 import control from './control.vue';
 import { getImageIwara } from '../../core/api';
@@ -76,6 +82,14 @@ const isLoading = ref(false); // 缓冲加载状态
 const isState = ref<'failed' | 'empty' | 'loading' | 'success'>('empty'); // 视频加载状态
 const metadataLoaded = ref(false); // 是否已经播放过（用于控制自动隐藏）
 const videoEnded = ref(false); // 视频是否播放完成
+
+// 亮度/音量 - 页面生命周期内保存的原始亮度值
+const originalBrightness = ref<number>(-1)
+
+// 手势基准值（非 ref，不需要响应式）
+// 手势开始时读取系统当前亮度/音量作为基准，后续用 deltaPercent 做偏移
+let gestureBrightnessBase: number | null = null
+let gestureVolumeBase: number | null = null
 
 // 手势操作消息显示
 const gestureMessage = ref<string>('')
@@ -303,6 +317,13 @@ onMounted(async () => {
       totalTime.value = formatTime(videoRef.value.duration);
     }
   }
+
+  // 保存进入页面时的原始屏幕亮度，用于离开时恢复
+  try {
+    originalBrightness.value = await getScreenBrightness()
+  } catch (e) {
+    console.warn('[videoPlayer] 获取原始亮度失败:', e)
+  }
 });
 
 onUnmounted(() => {
@@ -327,35 +348,63 @@ onUnmounted(() => {
   if (localPosterUrl.value) {
     URL.revokeObjectURL(localPosterUrl.value);
   }
+  // 恢复原始屏幕亮度（-1.0 表示系统默认，让系统接管）
+  try {
+    setScreenBrightness(originalBrightness.value)
+  } catch (e) {
+    console.warn('[videoPlayer] 恢复亮度失败:', e)
+  }
 });
 
 // 处理子组件的手势事件
-const handleGestureEvent = (event: { type: string; value?: number; isEnd?: boolean }) => {
-  console.log('[videoPlayer.vue] 收到手势事件:', event)
+const handleGestureEvent = async (event: { type: string; value?: number; isEnd?: boolean }) => {
+  // console.log('[videoPlayer.vue] 收到手势事件:', event)
 
   if (!videoRef.value) return
 
   switch (event.type) {
-    case 'brightness':
-      // 调整亮度（具体功能待实现）
+    case 'brightness': {
       if (event.isEnd) {
-        // 滑动结束，立即隐藏消息
+        // 滑动结束，重置基准值，隐藏消息
+        gestureBrightnessBase = null
         hideGestureMessage()
-      } else {
-        // 滑动中，更新消息
-        showGestureMessageTemporary(t('player.brightness', { n: Math.round(event.value || 0) }))
+      } else if (event.value !== undefined) {
+        // 第一帧：读取系统当前亮度作为基准
+        if (gestureBrightnessBase === null) {
+          const sysBrightness = await getScreenBrightness()
+          // sysBrightness: -1(系统默认) → 当作 100; 0.0~1.0 → 映射为 0~100
+          gestureBrightnessBase = sysBrightness < 0 ? 100 : Math.round(sysBrightness * 100)
+        }
+        // deltaPercent(event.value) 是相对位移，叠加到基准值上得到绝对值
+        const absolute = gestureBrightnessBase + event.value
+        const clamped = Math.max(0, Math.min(100, Math.round(absolute)))
+        const normalized = clamped / 100 // 转为 0.0~1.0
+        setScreenBrightness(normalized)
+        showGestureMessageTemporary(t('player.brightness', { n: clamped }))
       }
       break
-    case 'volume':
-      // 调整音量（具体功能待实现）
+    }
+    case 'volume': {
       if (event.isEnd) {
-        // 滑动结束，立即隐藏消息
+        // 滑动结束，重置基准值，隐藏消息
+        gestureVolumeBase = null
         hideGestureMessage()
-      } else {
-        // 滑动中，更新消息
-        showGestureMessageTemporary(t('player.volume', { n: Math.round(event.value || 0) }))
+      } else if (event.value !== undefined) {
+        // 第一帧：读取系统当前音量作为基准
+        if (gestureVolumeBase === null) {
+          const sysVolume = await getVolume()
+          // sysVolume: 0.0~1.0 → 映射为 0~100
+          gestureVolumeBase = Math.round(sysVolume * 100)
+        }
+        // deltaPercent(event.value) 是相对位移，叠加到基准值上得到绝对值
+        const absolute = gestureVolumeBase + event.value
+        const clamped = Math.max(0, Math.min(100, Math.round(absolute)))
+        const normalized = clamped / 100 // 转为 0.0~1.0
+        setVolume(normalized)
+        showGestureMessageTemporary(t('player.volume', { n: clamped }))
       }
       break
+    }
     case 'seek':
       // 调整视频进度
       if (event.isEnd) {

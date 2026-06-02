@@ -98,3 +98,33 @@ pub(crate) async fn move_task_to_back<R: Runtime>(
 ) -> Result<MoveTaskToBackResponse> {
     app.device().move_task_to_back()
 }
+
+#[command]
+pub(crate) async fn set_screen_brightness<R: Runtime>(
+    app: AppHandle<R>,
+    payload: SetScreenBrightnessRequest,
+) -> Result<SetScreenBrightnessResponse> {
+    app.device().set_screen_brightness(payload)
+}
+
+#[command]
+pub(crate) async fn get_screen_brightness<R: Runtime>(
+    app: AppHandle<R>,
+) -> Result<GetScreenBrightnessResponse> {
+    app.device().get_screen_brightness()
+}
+
+#[command]
+pub(crate) async fn set_volume<R: Runtime>(
+    app: AppHandle<R>,
+    payload: SetVolumeRequest,
+) -> Result<SetVolumeResponse> {
+    app.device().set_volume(payload)
+}
+
+#[command]
+pub(crate) async fn get_volume<R: Runtime>(
+    app: AppHandle<R>,
+) -> Result<GetVolumeResponse> {
+    app.device().get_volume()
+}

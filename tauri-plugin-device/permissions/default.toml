@@ -15,4 +15,8 @@ permissions = [
     "allow-unlock-orientation",
     "allow-show-toast",
     "allow-move-task-to-back",
+    "allow-set-screen-brightness",
+    "allow-get-screen-brightness",
+    "allow-set-volume",
+    "allow-get-volume",
 ]
