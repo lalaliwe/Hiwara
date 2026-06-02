@@ -502,7 +502,7 @@ defineExpose({ replay });
       @click="togglePlay"></video>
     <!-- 视频暗色遮罩（播放完成时显示） -->
     <div v-if="videoEnded" class="black-overlay"></div>
-    <!-- 仅在缓冲时显示加载指示器，且没有手势消息时显示 -->
+    <!-- 缓冲加载指示器 -->
     <div v-if="isLoading && !gestureMessage" class="msg-view">
       <v-progress-circular color="#00796B" bg-color="#ffffff66" :size="70" :width="7"
         indeterminate></v-progress-circular>

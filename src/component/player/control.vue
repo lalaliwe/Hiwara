@@ -179,8 +179,8 @@ const setupHammerGestures = (mc: InstanceType<typeof Hammer>) => {
 
   // 处理 pan 开始
   mc.on('panstart', (ev: HammerInput) => {
-    // 只在触摸屏上响应
-    if (pointerType.value !== 'touch') return
+    // 只在触摸屏上响应，且元数据加载完成才能操作
+    if (pointerType.value !== 'touch' || !props.metadataLoaded) return
 
     isPanning = true
     startX = ev.center.x
@@ -199,8 +199,8 @@ const setupHammerGestures = (mc: InstanceType<typeof Hammer>) => {
 
   // 处理 pan 移动
   mc.on('panmove', (ev: HammerInput) => {
-    // 只在触摸屏上响应
-    if (pointerType.value !== 'touch' || !isPanning || !panType) return
+    // 只在触摸屏上响应，且元数据加载完成才能操作
+    if (pointerType.value !== 'touch' || !isPanning || !panType || !props.metadataLoaded) return
 
     const deltaX = ev.center.x - startX
     const deltaY = ev.center.y - startY
@@ -257,7 +257,7 @@ const setupHammerGestures = (mc: InstanceType<typeof Hammer>) => {
 
   // 处理 pan 结束
   mc.on('panend', () => {
-    if (pointerType.value !== 'touch') return
+    if (pointerType.value !== 'touch' || !props.metadataLoaded) return
 
     isPanning = false
 
@@ -272,8 +272,8 @@ const setupHammerGestures = (mc: InstanceType<typeof Hammer>) => {
 
   // 处理双击
   mc.on('doubletap', (ev: HammerInput) => {
-    // 只在触摸屏上响应
-    if (pointerType.value !== 'touch') return
+    // 只在触摸屏上响应，且元数据加载完成才能操作
+    if (pointerType.value !== 'touch' || !props.metadataLoaded) return
 
     const elementWidth = (ev.target as HTMLElement).offsetWidth
     const tapX = ev.center.x
