@@ -20,6 +20,7 @@ const props = defineProps<{
   videoFiles?: Array<{ id: string; name: string; server: string; type: string; view: string; download: string }> // 视频文件列表
   currentDefinitionIndex?: number // 当前选中的清晰度索引
   videoEnded?: boolean // 视频是否播放完成
+  isRefreshingServer?: boolean // 是否正在切换服务器
 }>()
 
 // Emits - 向父组件事件
@@ -67,6 +68,8 @@ let clickTimer: number | null = null
 let clickCount = 0
 // 双击后重置 clickCount 的定时器，防止后续单击被阻塞
 let doubleTapResetTimer: number | null = null
+// 上次点击时间戳，用于过滤硬件噪声导致的假双击（如 10ms 间隔的触点抖动）
+let lastClickTime = 0
 const pointerType = ref<'mouse' | 'touch' | 'pen'>('mouse')
 
 // Hammer.js 实例
@@ -221,7 +224,7 @@ const destroyHammer = () => {
 const setupHammerGestures = (mc: InstanceType<typeof Hammer>) => {
   // 启用所有需要的手势
   mc.get('pan').set({ direction: Hammer.DIRECTION_ALL })
-  mc.get('tap').set({ taps: 2, posThreshold: 80 }) // 双击，放宽位置容差避免移动端手指晃动导致识别失败
+  mc.get('tap').set({ taps: 2, posThreshold: 150 }) // 双击，位置容差约 1cm²（~150px @300DPI），避免手指晃动导致识别失败
 
   // 记录起始位置和状态
   let startX = 0
@@ -381,6 +384,15 @@ const handlePointerDown = (event: PointerEvent) => {
 // 处理中间区域点击
 const handleMiddleClick = () => {
   // console.log('[controlFullscreen.vue] handleMiddleClick 被调用, 当前 clickCount:', clickCount, 'pointerType:', pointerType.value)
+
+  // 过滤硬件噪声导致的假双击：相邻 click 间隔 < 100ms 视为触点抖动，忽略
+  // 人手最快双击间隔约 150ms，100ms 阈值足够安全
+  const now = Date.now()
+  if (now - lastClickTime < 100) {
+    return
+  }
+  lastClickTime = now
+
   clickCount++
 
   if (clickCount === 1) {
@@ -663,8 +675,14 @@ onUnmounted(() => {
       </div>
       <div class="space"></div>
       <div class="text-btn">
-        <span @click="handleRefreshServer">
-          <font-awesome-icon icon="fa-solid fa-server" />{{ server || 'hiwara' }}
+        <span @click="!props.isRefreshingServer && handleRefreshServer()"
+              :class="{ 'text-btn-disabled': props.isRefreshingServer }">
+          <template v-if="props.isRefreshingServer">
+            <v-progress-circular :size="16" :width="2" color="inherit" indeterminate />
+          </template>
+          <template v-else>
+            <font-awesome-icon icon="fa-solid fa-server" />{{ server || 'hiwara' }}
+          </template>
         </span>
         <span @click="toggleDrawer">
           <font-awesome-icon icon="fa-solid fa-film" />{{ definitionTextFormat(videoFiles?.[currentDefinitionIndex ||
@@ -793,6 +811,13 @@ onUnmounted(() => {
         padding: 0 4px;
         cursor: pointer;
         user-select: none;
+      }
+
+      .text-btn-disabled {
+        opacity: 0.5;
+        pointer-events: none;
+        min-width: 60px;
+        justify-content: center;
       }
     }
   }

@@ -26,6 +26,7 @@ const props = defineProps<{
   server?: string // 服务器名称
   videoFiles?: Array<{ id: string; name: string; server: string; type: string; view: string; download: string }> // 视频文件列表
   currentDefinitionIndex?: number // 当前选中的清晰度索引
+  isRefreshingServer?: boolean // 是否正在切换服务器
 }>()
 
 // 定义 emits
@@ -61,6 +62,7 @@ watch(() => props.src, (newSrc) => {
   if (newSrc) {
     videoSrc.value = newSrc;
     videoEnded.value = false; // 切换源时重置结束状态
+    isState.value = 'loading' // 新源开始加载
     // src 动态变更后尝试自动播放（不能用 HTML autoplay 属性，因为初始化时已被空 src 消耗）
     if (setup.autoPlay) {
       nextTick(() => {
@@ -74,7 +76,9 @@ const fullscreenState = ref(false); // 内部维护的全屏状态
 const videoPlayerRef = ref<HTMLElement | null>(null); // 播放器元素
 const videoRef = ref<HTMLVideoElement | null>(null);  // 视频元素
 const isPlaying = ref(false); // 播放状态
-const progress = ref<number>(0);  // 进度
+const progress = ref<number>(0);  // 实际播放进度（由 timeupdate 驱动）
+const displayProgress = ref<number>(0) // 显示进度（与播放进度解耦，用于进度条显示和用户交互）
+const isSeeking = ref(false) // 是否正在拖拽/滑动进度中
 const buffered = ref<number>(0);  // 已缓冲
 const currentTime = ref<string>('00:00'); // 当前时间
 const totalTime = ref<string>('00:00'); // 总时长
@@ -140,6 +144,10 @@ const updateTime = () => {
   const duration = videoRef.value.duration;
 
   progress.value = duration ? (current / duration) * 100 : 0;
+  // 非拖拽状态才同步显示进度，拖拽/滑动中由用户控制
+  if (!isSeeking.value) {
+    displayProgress.value = progress.value
+  }
   currentTime.value = formatTime(current);
   totalTime.value = formatTime(duration || 0);
 
@@ -155,10 +163,14 @@ const togglePlay = () => {
   if (!videoRef.value) return;
   if (isPlaying.value) {
     videoRef.value.pause();
+    isPlaying.value = false // pause 是同步操作，直接翻转
   } else {
-    videoRef.value.play();
+    isPlaying.value = true // 乐观更新，先显示播放状态
+    videoRef.value.play().catch(() => {
+      // play() 被浏览器阻止（如自动播放策略），回滚状态
+      isPlaying.value = false
+    })
   }
-  isPlaying.value = !isPlaying.value;
 };
 
 // 自动播放视频（先静音启动，成功后再取消静音）
@@ -182,14 +194,23 @@ const autoPlayVideo = async () => {
 // 进度条变化（拖动过程中）
 const onProgressChange = (value: number) => {
   if (!videoRef.value || !videoRef.value.duration) return
+  // 标记正在拖拽，阻止 timeupdate 覆盖显示进度
+  isSeeking.value = true
+  // 仅更新显示进度，不跳转视频（松手后才跳转）
+  displayProgress.value = value
   const newTime = (value / 100) * videoRef.value.duration
-  videoRef.value.currentTime = newTime
   // 显示当前时间消息（使用临时显示，等待 change 事件来隐藏）
   showGestureMessageTemporary(`${formatTime(newTime)}`)
 }
 
 // 进度条拖动结束（松开鼠标/手指）
 const onProgressChangeEnd = () => {
+  // 将显示进度同步到实际播放进度
+  if (videoRef.value?.duration) {
+    const newTime = (displayProgress.value / 100) * videoRef.value.duration
+    videoRef.value.currentTime = newTime
+  }
+  isSeeking.value = false
   // 立即隐藏消息
   hideGestureMessage()
 }
@@ -265,6 +286,15 @@ onMounted(async () => {
     // 视频资源开始加载
     videoRef.value.addEventListener('loadstart', () => {
       isLoading.value = true; // 开始加载视频
+      isState.value = 'loading' // 标记加载中
+    });
+    // 加载失败（网络错误、资源不存在、格式不支持等）
+    videoRef.value.addEventListener('error', () => {
+      // 没有实际视频源时忽略 error（空 src 加载会被浏览器报 error）
+      if (!videoSrc.value) return
+      isLoading.value = false
+      isState.value = 'failed'
+      console.error('[videoPlayer] 视频加载失败')
     });
     // 缓存数据足够播放，暂停加载数据
     videoRef.value.addEventListener('suspend', () => { });
@@ -311,6 +341,9 @@ onMounted(async () => {
     // 缓冲完成
     videoRef.value.addEventListener('canplaythrough', () => {
       isLoading.value = false; // 已缓冲足够，隐藏加载指示器
+      if (isState.value === 'loading') {
+        isState.value = 'success' // 加载成功
+      }
     });
     // 初始化总时长
     if (videoRef.value.duration) {
@@ -406,15 +439,22 @@ const handleGestureEvent = async (event: { type: string; value?: number; isEnd?:
       break
     }
     case 'seek':
-      // 调整视频进度
+      // 调整视频进度（滑动中仅更新显示，松手后才跳转）
       if (event.isEnd) {
-        // 滑动结束，立即隐藏消息
+        // 滑动结束：将显示进度同步到实际播放
+        if (videoRef.value?.duration) {
+          const newTime = (displayProgress.value / 100) * videoRef.value.duration
+          videoRef.value.currentTime = newTime
+        }
+        isSeeking.value = false
+        // 立即隐藏消息
         hideGestureMessage()
       } else if (event.value !== undefined) {
-        // 滑动中，更新消息和时间
+        // 滑动中，标记正在滑动，仅更新显示进度
+        isSeeking.value = true
+        displayProgress.value = event.value
         if (videoRef.value.duration) {
           const newTime = (event.value / 100) * videoRef.value.duration
-          videoRef.value.currentTime = newTime
           showGestureMessageTemporary(`${formatTime(newTime)} / ${totalTime.value}`)
         }
       }
@@ -437,9 +477,20 @@ const replay = () => {
   if (!videoRef.value) return;
   videoEnded.value = false;
   videoRef.value.currentTime = 0;
-  videoRef.value.play();
-  isPlaying.value = true;
+  isPlaying.value = true // 乐观更新
+  videoRef.value.play().catch(() => {
+    // play() 被浏览器阻止，回滚状态
+    isPlaying.value = false
+  })
 };
+
+// 视频加载失败后重试
+const handleRetry = () => {
+  if (!videoRef.value) return
+  isState.value = 'loading'
+  isLoading.value = true
+  videoRef.value.load()
+}
 
 defineExpose({ replay });
 </script>
@@ -456,19 +507,28 @@ defineExpose({ replay });
       <v-progress-circular color="#00796B" bg-color="#ffffff66" :size="70" :width="7"
         indeterminate></v-progress-circular>
     </div>
+    <!-- 视频加载失败提示（样式与重新播放按钮保持一致） -->
+    <div v-if="isState === 'failed'" class="fail-view">
+      <div class="fail-text">加载失败</div>
+      <div class="fail-retry" @click="handleRetry">
+        <font-awesome-icon icon="fa-solid fa-rotate-right" />
+        <span>重新加载</span>
+      </div>
+    </div>
     <!-- 手势操作消息显示 -->
     <div v-if="gestureMessage" class="msg-view">
       <div class="msg">{{ gestureMessage }}</div>
     </div>
     <!-- 使用 fullscreenState 控制显示 -->
-    <controlFullscreen v-if="fullscreenState" :is-playing="isPlaying" :progress="progress" :buffered="buffered"
+    <controlFullscreen v-if="fullscreenState" :is-playing="isPlaying" :progress="displayProgress" :buffered="buffered"
       :current-time="currentTime" :total-time="totalTime" :video-element="videoRef" :metadataLoaded="metadataLoaded"
       :title="props.title" :server="props.server" :video-files="props.videoFiles"
       :current-definition-index="props.currentDefinitionIndex" @exit="handleExitFullscreen" @toggle-play="togglePlay"
       @progress-change="onProgressChange" @progress-change-end="onProgressChangeEnd" @gesture="handleGestureEvent"
-      @refresh-server="handleRefreshServer" @definition-change="handleDefinitionChange" @replay="replay"
+      :is-refreshing-server="props.isRefreshingServer" @refresh-server="handleRefreshServer"
+      @definition-change="handleDefinitionChange" @replay="replay"
       :video-ended="videoEnded" />
-    <control v-else :is-playing="isPlaying" :progress="progress" :buffered="buffered" :current-time="currentTime"
+    <control v-else :is-playing="isPlaying" :progress="displayProgress" :buffered="buffered" :current-time="currentTime"
       :total-time="totalTime" :metadataLoaded="metadataLoaded" @toggle-play="togglePlay" @progress-change="onProgressChange"
       @progress-change-end="onProgressChangeEnd" @enter-fullscreen="enterFullscreen" @go-back="goBack" @go-home="goHome"
       @gesture="handleGestureEvent" @replay="replay" :video-ended="videoEnded" />
@@ -519,6 +579,52 @@ defineExpose({ replay });
       width: 100px;
       height: 40px;
       border-radius: 8px;
+    }
+  }
+}
+
+// 视频加载失败（样式与重新播放按钮保持一致）
+.fail-view {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  color: #fff;
+  z-index: 3;
+
+  .fail-text {
+    font-size: 0.9rem;
+    opacity: 0.8;
+  }
+
+  .fail-retry {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    cursor: pointer;
+    user-select: none;
+    background: none;
+    border: none;
+    padding: 12px 16px;
+    color: #fff;
+
+    svg {
+      font-size: 1.4rem;
+    }
+
+    span {
+      font-size: 0.9rem;
+    }
+
+    &:active {
+      opacity: 0.7;
     }
   }
 }

@@ -45,6 +45,8 @@ let clickTimer: number | null = null
 let clickCount = 0
 // 双击后重置 clickCount 的定时器，防止后续单击被阻塞
 let doubleTapResetTimer: number | null = null
+// 上次点击时间戳，用于过滤硬件噪声导致的假双击（如 10ms 间隔的触点抖动）
+let lastClickTime = 0
 const pointerType = ref<'mouse' | 'touch' | 'pen'>('mouse')
 
 // Hammer.js 实例
@@ -166,7 +168,7 @@ const destroyHammer = () => {
 const setupHammerGestures = (mc: InstanceType<typeof Hammer>) => {
   // 启用所有需要的手势
   mc.get('pan').set({ direction: Hammer.DIRECTION_ALL })
-  mc.get('tap').set({ taps: 2, posThreshold: 80 }) // 双击，放宽位置容差避免移动端手指晃动导致识别失败
+  mc.get('tap').set({ taps: 2, posThreshold: 150 }) // 双击，位置容差约 1cm²（~150px @300DPI），避免手指晃动导致识别失败
 
   // 记录起始位置和状态
   let startX = 0
@@ -328,6 +330,14 @@ const handleMiddleClick = () => {
   // 视频元数据未加载完成时不处理点击
   if (!props.metadataLoaded)
     return
+
+  // 过滤硬件噪声导致的假双击：相邻 click 间隔 < 100ms 视为触点抖动，忽略
+  // 人手最快双击间隔约 150ms，100ms 阈值足够安全
+  const now = Date.now()
+  if (now - lastClickTime < 100) {
+    return
+  }
+  lastClickTime = now
 
   clickCount++
   if (clickCount === 1) {

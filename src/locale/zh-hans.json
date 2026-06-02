@@ -312,7 +312,8 @@
     "brightness": "亮度: {n}%",
     "volume": "音量: {n}%",
     "rewind10s": "快退 10s",
-    "forward10s": "快进 10s"
+    "forward10s": "快进 10s",
+    "switchComplete": "服务器切换完成"
   },
   "imageView": {
     "loading": "正在加载数据",

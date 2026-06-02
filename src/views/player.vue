@@ -66,6 +66,8 @@ const showDefinitionDialog = ref(false); // 控制清晰度选择对话框显示
 // 聚合状态：'failed' | 'loading' | 'success'
 type VideoInfoState = 'failed' | 'loading' | 'success';
 const videoInfoState = ref<VideoInfoState>('loading');
+// 是否正在切换服务器
+const isRefreshingServer = ref(false)
 
 // 当前选中的视频文件信息
 const currentServer = computed(() => {
@@ -306,27 +308,70 @@ const getOriginalIndex = (file: VideoFileItem) => {
   return videoFile.value.findIndex(f => f.id === file.id);
 };
 
-// 刷新视频文件列表
+// 刷新视频文件列表（切换服务器，最多重试 10 次）
 const refreshVideoFile = async () => {
-  showShortToast(t('player.switchingServer'));
-  try {
-    const res = await api_getVideoInfo(id.value as string);
-    if (res.ok && res.data?.fileUrl) {
-      let extension = '.mp4';
+  // 切换中防止重复点击
+  if (isRefreshingServer.value) return
+  const maxRetries = 10
+  const originalServer = currentServer.value
+  const currentDefName = videoFile.value[videoSelect.value]?.name
+
+  isRefreshingServer.value = true
+
+  for (let attempt = 0; attempt < maxRetries; attempt++) {
+    try {
+      const res = await api_getVideoInfo(id.value as string)
+      if (!res.ok || !res.data?.fileUrl) continue
+
+      let extension = '.mp4'
       if (res.data.file?.name) {
-        const lastDotIndex = res.data.file.name.lastIndexOf('.');
+        const lastDotIndex = res.data.file.name.lastIndexOf('.')
         if (lastDotIndex !== -1) {
-          extension = res.data.file.name.substring(lastDotIndex);
+          extension = res.data.file.name.substring(lastDotIndex)
         }
       }
-      const filename = `Iwara - ${res.data.title} [${res.data.id}]${extension}`;
-      await fetchVideoFile(res.data.fileUrl, filename);
+      const filename = `Iwara - ${res.data.title} [${res.data.id}]${extension}`
+
+      const fileRes = await api_getVideoFileSQ(res.data.fileUrl, filename)
+      if (!fileRes.ok || !fileRes.data || !Array.isArray(fileRes.data)) continue
+
+      // 在返回数据中找当前清晰度对应的文件
+      const matchedItem = fileRes.data.find(
+        (item: any) => item.name === currentDefName
+      )
+
+      if (matchedItem) {
+        // 提取新服务器名
+        let newServer = 'unknown'
+        if (matchedItem.src && matchedItem.src.view) {
+          const match = matchedItem.src.view.match(/\/\/([^.]+)\./)
+          if (match && match[1]) newServer = match[1]
+        }
+
+        if (newServer !== originalServer) {
+          // 找到不同服务器 → 只更新当前清晰度的 view URL 和 server 名
+          const newUrl = `https:${matchedItem.src.view}`
+          videoFile.value = videoFile.value.map((file, index) => {
+            if (index === videoSelect.value) {
+              return { ...file, view: newUrl, server: newServer }
+            }
+            return file
+          })
+          isRefreshingServer.value = false
+          showShortToast(t('player.switchComplete'))
+          return
+        }
+
+        console.log(`[refreshVideoFile] 服务器相同(${newServer}), 第${attempt + 1}次重试`)
+      }
+    } catch (error) {
+      console.error('刷新服务器列表失败:', error)
     }
-  } catch (error) {
-    console.error('刷新服务器列表失败:', error);
-    showShortToast(t('player.refreshFailed'));
   }
-};
+
+  // 10 次重试后服务器仍相同，不更新 URL（无提示）
+  isRefreshingServer.value = false
+}
 
 onActivated(() => {
   applyPageSettings()
@@ -412,8 +457,8 @@ const followTrigger = (val: boolean) => {
   <div id="playerView">
     <div class="topBar"></div>
     <div class="video-player-wrapper">
-      <videoPlayer class="video-player" :poster="poster" :src="currentVideoSrc" :title="title"
-        :server="currentServer" :video-files="videoFile" :current-definition-index="videoSelect"
+      <videoPlayer class="video-player" :poster="poster" :src="currentVideoSrc" :title="title" :server="currentServer"
+        :video-files="videoFile" :current-definition-index="videoSelect" :is-refreshing-server="isRefreshingServer"
         @refresh-server="refreshVideoFile" @definition-change="selectDefinition" />
     </div>
 
@@ -436,8 +481,14 @@ const followTrigger = (val: boolean) => {
             <v-tab value="comment">{{ t('player.commentTab') }}</v-tab>
           </v-tabs>
           <div class="right" v-if="videoFile.length > 0">
-            <span v-ripple @click="refreshVideoFile">
-              <font-awesome-icon icon="fa-solid fa-server" />{{ currentServer }}
+            <span v-ripple @click="refreshVideoFile"
+                  :class="{ 'right-btn-disabled': isRefreshingServer }">
+              <template v-if="isRefreshingServer">
+                <v-progress-circular :size="16" :width="2" color="inherit" indeterminate />
+              </template>
+              <template v-else>
+                <font-awesome-icon icon="fa-solid fa-server" />{{ currentServer }}
+              </template>
             </span>
             <span v-ripple @click="showDefinitionDialog = true">
               <font-awesome-icon icon="fa-solid fa-film" />{{ definitionTextFormat(currentDefinition) }}
@@ -451,11 +502,10 @@ const followTrigger = (val: boolean) => {
         <swiper class="tabs-window" :slides-per-view="1" :space-between="0" @swiper="onSwiper"
           @slide-change="onSlideChange">
           <swiper-slide>
-            <infoView :title="title" :synopsis="synopsis" :playNum="playNum"
-              :likeNum="likeNum" :createdAt="createdAt" :isLike="isLike" :tags="tags" :authorname="authorname"
-              :username="username" :avatar="avatar" :fansNum="fansNum" :videoNum="videoNum" :isFollow="isFollow"
-              :vid="id as string" :uid="uid" :download="currentDownloadUrl" :slug="slug" @like="likeTrigger"
-              @follow="followTrigger" />
+            <infoView :title="title" :synopsis="synopsis" :playNum="playNum" :likeNum="likeNum" :createdAt="createdAt"
+              :isLike="isLike" :tags="tags" :authorname="authorname" :username="username" :avatar="avatar"
+              :fansNum="fansNum" :videoNum="videoNum" :isFollow="isFollow" :vid="id as string" :uid="uid"
+              :download="currentDownloadUrl" :slug="slug" @like="likeTrigger" @follow="followTrigger" />
           </swiper-slide>
           <swiper-slide>
             <commentView :vid="id as string" />
@@ -564,6 +614,12 @@ const followTrigger = (val: boolean) => {
         user-select: none;
         justify-content: center;
         cursor: pointer;
+      }
+
+      .right-btn-disabled {
+        pointer-events: none;
+        min-width: 60px;
+        justify-content: center;
       }
 
       span:nth-child(1) {
