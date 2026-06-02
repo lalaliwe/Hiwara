@@ -220,6 +220,7 @@ onMounted(async () => {
 });
 
 async function clickCard() {
+  // return
   if (!props.data.id) {
     console.error('缺少id');
     return;
@@ -288,6 +289,7 @@ async function clickCard() {
 
 <style lang="scss" scoped>
 .card-button {
+  position: relative;
   height: 180px;
   width: 100%;
   overflow: hidden;

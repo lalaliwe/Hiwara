@@ -211,7 +211,6 @@ const router = createRouter({
 // 页面栈管理
 // ========================
 let pageStack: PageStackItem[] = []
-let isFirstLoad = true
 
 /** 将当前路由信息转换为栈项 */
 const createStackItem = (route: RouteLocationNormalized): PageStackItem => {
@@ -245,16 +244,6 @@ const createStackItem = (route: RouteLocationNormalized): PageStackItem => {
 // 移除了初始化逻辑，因为已在 main.ts 中统一初始化
 
 router.beforeEach(async (to, from) => {
-  // 首次加载处理（禁用首页动画）
-  if (isFirstLoad) {
-    to.meta = to.meta || {}
-    to.meta.isFirstLoad = true
-    if (to.path === '/') {
-      to.meta.transition = ''
-    }
-    isFirstLoad = false
-  }
-
   const toItem = createStackItem(to)
   const fromKey = from.name ? getPageKey(from) : null
 
@@ -281,7 +270,7 @@ router.beforeEach(async (to, from) => {
   // 初始化：无来源路由（冷启动直接进入）
   if (!fromKey) {
     pageStack = [toItem]
-    to.meta.transition = to.meta?.isFirstLoad ? '' : 'stack'
+    to.meta.transition = 'stack'
     return
   }
 
@@ -333,7 +322,6 @@ export function getCachedPageKeys(): string[] {
 /** 重置导航历史（如退出登录后调用） */
 export const resetNavigationHistory = () => {
   pageStack = []
-  isFirstLoad = true
 }
 
 export default router

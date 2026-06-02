@@ -17,9 +17,6 @@ const cachedPages = ref<string[]>([])
 // 存储首页组件名称，使其不受 max 限制
 const homeComponentName = ref<string>('Home')
 
-// 检测是否是首次加载（冷启动）
-const isFirstLoad = ref(true)
-
 // 缓存已生成的包装组件，避免重复创建
 const wrappedComponentCache = new Map<string, Component>()
 
@@ -49,22 +46,8 @@ function wrapComponent(originalComp: Component, cacheKey: string): Component {
   return wrapped
 }
 
-// 监听路由变化，标记非首次加载
-watch(
-  () => route.path,
-  () => {
-    isFirstLoad.value = false
-  },
-  { immediate: true }
-)
-
 // 计算过渡名称
 const transitionName = computed(() => {
-  // 如果是首次加载首页，则不使用过渡动画
-  if (isFirstLoad.value && route.path === '/') {
-    return ''
-  }
-
   const transition = route.meta?.transition
   // 当过渡名称为空字符串时，不会应用任何过渡效果
   return typeof transition === 'string' ? transition : 'fade'

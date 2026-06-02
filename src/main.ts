@@ -62,6 +62,11 @@ library.add(fas, far, fab)
 app.component('font-awesome-icon', FontAwesomeIcon);
 app.config.globalProperties.$hammer = Hammer;
 
+// 注册自定义 v-ripple 指令覆盖 Vuetify 的 buggy 实现
+// 修复：touchend 在 80ms 前触发时，setTimeout 中 e.currentTarget 为 null 导致涟漪不消失
+import Ripple from './directives/ripple';
+app.directive('ripple', Ripple);
+
 // 在挂载应用之前，统一初始化所有 Store
 await initializeAllStores();
 
@@ -71,8 +76,14 @@ initI18nLanguage(i18n);
 app.mount("#app");
 
 router.isReady().then(() => {
-  // 路由就绪后隐藏加载遮罩，防止白屏
-  hideLoading();
+  // 等待页面渲染和过渡动画完成后，再隐藏加载遮罩
+  // 使用 requestAnimationFrame 确保 Vue 已完成首帧渲染，
+  // 再等待 300ms（CSS 过渡动画时长 250ms + 缓冲）让入场动画完整播放
+  requestAnimationFrame(() => {
+    setTimeout(() => {
+      hideLoading();
+    }, 300);
+  });
 });
 
 // 隐藏加载遮罩
