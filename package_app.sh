@@ -6,8 +6,6 @@
 # 支持架构: x86, x64, armv7, arm64
 # ============================================================
 
-set -e  # 遇到错误立即退出
-
 # 架构列表
 ARCHITECTURES=(
     "i686-unknown-linux-gnu"       # x86 (32-bit)
@@ -37,14 +35,14 @@ done
 echo ""
 
 # ============================================================
-# 第二步：逐架构逐格式打包（推荐，方便排查构建问题）
+# 第二步：逐架构逐格式打包（一个出错不影响其他）
 # ============================================================
 for arch in "${ARCHITECTURES[@]}"; do
     for bundle in "${BUNDLES[@]}"; do
         echo "========================================"
         echo "Building: $arch  ->  $bundle"
         echo "========================================"
-        npx tauri build --target "$arch" --bundles "$bundle"
+        npx tauri build --target "$arch" --bundles "$bundle" || echo "[!] $arch / $bundle 打包失败，继续下一个..."
     done
 done
 
