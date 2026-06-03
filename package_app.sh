@@ -44,9 +44,13 @@ for arch in "${ARCHITECTURES[@]}"; do
         echo "========================================"
 
         if [[ "$arch" == "aarch64-unknown-linux-gnu" ]]; then
-            # ARM64 交叉编译需要设置 pkg-config 环境变量
-            # PKG_CONFIG_ALLOW_CROSS=1   -> 允许跨架构查找 .pc 文件
-            # PKG_CONFIG_PATH             -> 指向 ARM64 的 .pc 文件目录
+            # ARM64 交叉编译需要设置以下环境变量：
+            # CC_aarch64_unknown_linux_gnu                    -> 指定 ARM64 C 编译器
+            # CARGO_TARGET_AARCH64_UNKNOWN_LINUX_GNU_LINKER   -> 指定 ARM64 链接器
+            # PKG_CONFIG_ALLOW_CROSS=1                        -> 允许跨架构查找 .pc 文件
+            # PKG_CONFIG_PATH                                 -> 指向 ARM64 的 .pc 文件目录
+            CC_aarch64_unknown_linux_gnu=aarch64-linux-gnu-gcc \
+            CARGO_TARGET_AARCH64_UNKNOWN_LINUX_GNU_LINKER=aarch64-linux-gnu-gcc \
             PKG_CONFIG_ALLOW_CROSS=1 \
             PKG_CONFIG_PATH=/usr/lib/aarch64-linux-gnu/pkgconfig \
             npx tauri build --target "$arch" --bundles "$bundle" || \
@@ -64,6 +68,8 @@ done
 # ============================================================
 # for arch in "${ARCHITECTURES[@]}"; do
 #     if [[ "$arch" == "aarch64-unknown-linux-gnu" ]]; then
+#         CC_aarch64_unknown_linux_gnu=aarch64-linux-gnu-gcc \
+#         CARGO_TARGET_AARCH64_UNKNOWN_LINUX_GNU_LINKER=aarch64-linux-gnu-gcc \
 #         PKG_CONFIG_ALLOW_CROSS=1 \
 #         PKG_CONFIG_PATH=/usr/lib/aarch64-linux-gnu/pkgconfig \
 #         npx tauri build --target "$arch" --bundles "deb,rpm,appimage"
