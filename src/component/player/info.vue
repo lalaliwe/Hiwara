@@ -22,9 +22,9 @@ import {
   unfollowUser,
 } from '../../core/api';
 import { showShortToast } from '../../core/toast';
+import { useRouter } from 'vue-router';
 
 const { t } = useI18n();
-import { useRouter } from 'vue-router';
 
 const router = useRouter();
 
