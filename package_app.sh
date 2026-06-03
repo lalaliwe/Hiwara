@@ -6,6 +6,8 @@
 # 支持架构: x86, x64, armv7, arm64
 # ============================================================
 
+set -e  # 遇到错误立即退出
+
 # 架构列表
 ARCHITECTURES=(
     "i686-unknown-linux-gnu"       # x86 (32-bit)
@@ -18,7 +20,24 @@ ARCHITECTURES=(
 BUNDLES=("deb" "rpm" "appimage" "targz")
 
 # ============================================================
-# 方式一：逐架构逐格式打包（推荐，方便排查构建问题）
+# 第一步：自动安装缺失的 Rust target
+# ============================================================
+echo "========================================"
+echo "检查并安装缺失的 Rust target..."
+echo "========================================"
+for arch in "${ARCHITECTURES[@]}"; do
+    if rustup target list --installed 2>/dev/null | grep -q "^$arch$"; then
+        echo "[✓] $arch 已安装"
+    else
+        echo "[ ] $arch 未安装，正在安装..."
+        rustup target add "$arch"
+        echo "[✓] $arch 安装完成"
+    fi
+done
+echo ""
+
+# ============================================================
+# 第二步：逐架构逐格式打包（推荐，方便排查构建问题）
 # ============================================================
 for arch in "${ARCHITECTURES[@]}"; do
     for bundle in "${BUNDLES[@]}"; do
