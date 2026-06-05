@@ -11,6 +11,8 @@
 此应用兼容最新版Iwara网站，桌面端支持Windows、MacOS、Linux，移动端支持Android和iOS，使用Tauri、Vue和Typescript编写。后期计划支持鸿蒙系统。  
 This app is compatible with the latest Iwara website. It supports Windows, macOS, and Linux on desktop, and Android and iOS on mobile. Built with Tauri, Vue, and TypeScript. Plans to support HarmonyOS in the future.
 
+<img src="./app-icon.png" width="200px">
+
 ## 📱 支持平台 | Supported Platforms
 
 * Windows
@@ -141,8 +143,172 @@ npx tauri android run
 
 ## 📦 打包App | Packaging App
 
-略  
-TBD
+### Windows & Android
+
+Windows 打包脚本 [`package_app.ps1`](package_app.ps1) 同时支持 Windows 和 Android 打包。
+The [`package_app.ps1`](package_app.ps1) script supports both Windows and Android packaging.
+
+```powershell
+.\package_app.ps1
+```
+
+该脚本会自动检查 Rust target 并构建 Windows 和 Android 应用。  
+It automatically checks Rust targets and builds both Windows and Android apps.
+
+**Windows 手动打包 | Manual Windows build：**
+
+```powershell
+npx tauri build --target x86_64-pc-windows-msvc    # x64
+npx tauri build --target aarch64-pc-windows-msvc   # ARM64
+npx tauri build --target i686-pc-windows-msvc      # x86
+```
+
+**Android 手动打包 | Manual Android build：**
+
+```bash
+# 开发调试（连接手机后）/ Run on connected device
+npx tauri android run
+
+# 打包 APK / Build APK
+npm run tauri android build -- --apk --split-per-abi
+```
+
+> Android 打包前需先完成 Android 环境搭建（见上方环境搭建章节）  
+> Android build requires the Android environment setup (see the setup section above)
+
+---
+
+### Linux
+
+#### 脚本打包 | Script packaging
+
+- [`package_app_linux_arm64.sh`](package_app_linux_arm64.sh) — ARM64 交叉编译（deb / rpm / appimage）
+
+```bash
+./package_app_linux_arm64.sh
+```
+
+> ARM64 交叉编译需要 ARM64 系统库。x86_64 和 ARM64 的 WebKit 库无法共存，运行前需移除冲突包。  
+> ARM64 cross-compilation requires ARM64 system libraries. x86_64 and ARM64 WebKit libraries conflict, remove conflicting packages before running:
+
+```bash
+sudo apt remove -y libwebkit2gtk-4.1-dev libxdo-dev libayatana-appindicator3-dev
+```
+
+#### 手动打包 | Manual packaging
+
+**安装 Linux 构建依赖 | Install build dependencies：**
+
+```bash
+# Debian / Ubuntu
+sudo apt install -y \
+  libwebkit2gtk-4.1-dev libxdo-dev \
+  libayatana-appindicator3-dev librsvg2-dev libssl-dev
+
+# Fedora
+sudo dnf install webkit2gtk4.1-devel xdo-devel \
+  libappindicator-gtk3-devel librsvg2-devel openssl-devel
+
+# Arch
+sudo pacman -S webkit2gtk-4.1 xdo libappindicator-gtk3 librsvg openssl
+```
+
+**构建 | Build：**
+
+```bash
+npm install
+npm run build
+
+# 默认当前架构 / Current architecture
+npx tauri build
+
+# 指定架构和格式 / Specify target and bundle format
+npx tauri build --target x86_64-unknown-linux-gnu --bundles "deb,rpm,appimage"
+npx tauri build --target aarch64-unknown-linux-gnu --bundles "deb,rpm,appimage"
+```
+
+**支持格式 | Supported bundle formats：**
+
+| 格式 | 说明 | Description |
+|---|---|---|
+| `deb` | Debian/Ubuntu 安装包 | Debian/Ubuntu package |
+| `rpm` | Fedora/RHEL 安装包 | Fedora/RHEL package |
+| `appimage` | 便携式应用 | Portable application |
+
+> Linux 打包依赖详见 [Tauri Linux Prerequisites](https://tauri.app/zh-cn/start/prerequisites/#linux)
+
+---
+
+### macOS
+
+#### 脚本打包（推荐） | Script packaging (recommended)
+
+zsh 打包脚本 [`package_app_macos.sh`](package_app_macos.sh) 一键完成双架构构建、自签名和 Universal DMG。  
+The [`package_app_macos.sh`](package_app_macos.sh) script provides one-click build, signing, and Universal DMG creation.
+
+```bash
+./package_app_macos.sh
+```
+
+脚本执行流程：  
+The script will:
+
+1. 检查 Xcode 和 Rust target  
+   Check Xcode and Rust targets
+2. 构建 Intel + Apple Silicon 的 `.app`  
+   Build `.app` for both architectures
+3. Ad-hoc 自签名  
+   Ad-hoc sign with `codesign -s -`
+4. `lipo` 合并为 Universal Binary，`hdiutil` 创建 DMG  
+   Merge with `lipo` and create DMG with `hdiutil`
+
+**输出产物 | Output：**
+
+```
+src-tauri/target/universal/Hiwara-universal.dmg      # 通用 DMG
+src-tauri/target/universal/Hiwara.app                # 通用 App（x86_64 + arm64）
+```
+
+**如需正式签名（分发给其他用户）| For distribution with Developer ID signing：**
+
+```bash
+cp doc/macos-packaging-config.md package_app_macos.env
+# 编辑 package_app_macos.env 配置签名信息
+# Edit the config file with your Developer ID credentials
+./package_app_macos.sh
+```
+
+> 配置文档详见 [`doc/macos-packaging-config.md`](doc/macos-packaging-config.md)
+> 查看可用签名证书：`security find-identity -v -p basic`
+
+**注意事项 | Notes：**
+
+- 首次运行需编译 Rust 后端，约 15-30 分钟  
+  First build compiles Rust backend (~15-30 min)
+- 构建中断后可重新运行，已编译部分会缓存  
+  Re-run if interrupted, already compiled crates are cached
+
+#### 手动打包 | Manual packaging
+
+手动打包步骤详见 [`doc/macos-packaging-manual.md`](doc/macos-packaging-manual.md)  
+See [`doc/macos-packaging-manual.md`](doc/macos-packaging-manual.md) for manual packaging steps.
+
+**快速命令 | Quick commands：**
+
+```bash
+# 构建指定架构 / Build for specific architecture
+npx tauri build --target x86_64-apple-darwin       # Intel
+npx tauri build --target aarch64-apple-darwin      # Apple Silicon
+
+# 合并 Universal Binary / Create Universal Binary
+lipo -create \
+    src-tauri/target/x86_64-apple-darwin/release/hiwara \
+    src-tauri/target/aarch64-apple-darwin/release/hiwara \
+    -output path/to/universal/hiwara
+
+# 创建 DMG / Create DMG
+hdiutil create -volname "Hiwara" -srcfolder Hiwara.app -ov -format UDZO Hiwara-universal.dmg
+```
 
 ## 🗓️ 开发进度 | Development progress
 
