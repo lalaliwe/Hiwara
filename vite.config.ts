@@ -1,5 +1,9 @@
 import { defineConfig } from "vite";
 import vue from "@vitejs/plugin-vue";
+import path from "path";
+import { fileURLToPath } from "url";
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 // @ts-expect-error process is a nodejs global
 const host = process.env.TAURI_DEV_HOST;
@@ -16,6 +20,18 @@ const buildTime = new Date().toLocaleString('zh-CN', {
 // https://vite.dev/config/
 export default defineConfig(async () => ({
   plugins: [vue()],
+  resolve: {
+    alias: {
+      "@": path.resolve(__dirname, "src"),
+    },
+  },
+  css: {
+    preprocessorOptions: {
+      scss: {
+        additionalData: `@use "@/assets/mixins" as *;\n`,
+      },
+    },
+  },
   build: {
     // 将构建目标设置为最新标准，允许使用顶层 await 等现代语法
     target: 'esnext',

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import homeNavigation from '../component/home/navigation.vue';
+import homeNavigationVertical from '../component/home/navigationVertical.vue';
 import homeVideo from '../component/home/video.vue';
 import homeImage from '../component/home/image.vue';
 import homeSubscribe from '../component/home/subscribe.vue';
@@ -108,22 +109,41 @@ watch(() => loginStore.loginVersion, () => {
 
 <template>
   <div id="homeView">
-    <!-- 内容区域 -->
-    <homeVideo class="main" v-show="isTab === 'video'" />
-    <homeImage class="main" v-show="isTab === 'image'" />
-    <homeSubscribe class="main" v-show="isTab === 'subscribe'" />
-    <homeForum class="main" v-show="isTab === 'forum'" />
-    <homeMy class="main" v-show="isTab === 'my'" />
-    <!-- 底部按钮 -->
+    <!-- 纵向导航（>= md 宽度时显示） -->
+    <homeNavigationVertical class="nav-vertical" :model-value="isTab" @update:tab="handleTabChange" @refresh="refresh" />
+    <div class="main-wrapper">
+      <!-- 内容区域 -->
+      <homeVideo class="main" v-show="isTab === 'video'" />
+      <homeImage class="main" v-show="isTab === 'image'" />
+      <homeSubscribe class="main" v-show="isTab === 'subscribe'" />
+      <homeForum class="main" v-show="isTab === 'forum'" />
+      <homeMy class="main" v-show="isTab === 'my'" />
+    </div>
+    <!-- 底部横向导航（< md 宽度时显示） -->
     <homeNavigation class="bottom" :model-value="isTab" @update:tab="handleTabChange" @refresh="refresh" />
   </div>
 </template>
 
 <style lang="scss" scoped>
+@use '../assets/mixins' as *;
+
 #homeView {
   background-color: var(--color-bg-page);
   display: flex;
   flex-direction: column;
+
+  // 大屏时改为行布局
+  @include up(md) {
+    flex-direction: row;
+  }
+}
+
+.main-wrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  position: relative;
 }
 
 .main {
@@ -134,8 +154,25 @@ watch(() => loginStore.loginVersion, () => {
 
 .bottom {
   position: absolute;
-  bottom: 0;
   width: 100%;
   z-index: 400;
+  left: 0;
+  bottom: 0;
+
+  // 大屏时隐藏底部横向导航
+  @include up(md) {
+    display: none;
+  }
+}
+
+.nav-vertical {
+  display: none;
+
+  // 大屏时显示纵向导航
+  @include up(md) {
+    display: flex;
+    flex-shrink: 0;
+    width: 74px;
+  }
 }
 </style>

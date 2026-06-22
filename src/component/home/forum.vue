@@ -281,6 +281,8 @@ onActivated(() => {
 </template>
 
 <style lang="scss" scoped>
+@use '../../assets/mixins' as *;
+
 .container {
   flex: 1;
 }
@@ -329,13 +331,18 @@ onActivated(() => {
 }
 
 .content {
+  --nav-bottom-height: 60px;
   height: 100%;
-  padding: calc(60px + env(safe-area-inset-top, 0)) 0 calc(60px + env(safe-area-inset-bottom, 0)) 0;
+  padding: calc(60px + env(safe-area-inset-top, 0)) 0 calc(var(--nav-bottom-height) + env(safe-area-inset-bottom, 0)) 0;
   overflow-y: auto;
   color: var(--color-text-body);
 
+  @include up(md) {
+    --nav-bottom-height: 0px;
+  }
+
   &::-webkit-scrollbar-track {
-    margin: calc(60px + env(safe-area-inset-top, 0)) 0 calc(60px + env(safe-area-inset-bottom, 0) + 4px) 0;
+    margin: calc(60px + env(safe-area-inset-top, 0)) 0 calc(var(--nav-bottom-height) + env(safe-area-inset-bottom, 0) + 4px) 0;
   }
 }
 

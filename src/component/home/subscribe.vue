@@ -375,6 +375,8 @@ async function getSubscribeImageList(): Promise<any> {
   </div>
 </template>
 <style lang="scss" scoped>
+@use '../../assets/mixins' as *;
+
 .top {
   position: absolute;
   width: 100%;
@@ -421,11 +423,16 @@ async function getSubscribeImageList(): Promise<any> {
   }
 
   .list-view {
+    --nav-bottom-height: 60px;
     $top: calc(env(safe-area-inset-top, 0) + 60px + 40px);
-    $bottom: calc(env(safe-area-inset-bottom, 0) + 60px);
+    $bottom: calc(env(safe-area-inset-bottom, 0) + var(--nav-bottom-height));
     height: calc(100vh - $top - 10px - $bottom);
     padding-top: calc($top + 10px);
     padding-bottom: $bottom;
+
+    @include up(md) {
+      --nav-bottom-height: 0px;
+    }
 
     &::-webkit-scrollbar-track {
       margin: calc($top + 4px) 0 calc($bottom + 4px) 0;
@@ -436,6 +443,18 @@ async function getSubscribeImageList(): Promise<any> {
       grid-template-columns: repeat(2, 1fr);
       gap: 10px;
       padding: 0 10px 0 10px;
+
+      @include up(md) {
+        grid-template-columns: repeat(4, 1fr);
+      }
+
+      @include up(xl) {
+        grid-template-columns: repeat(6, 1fr);
+      }
+
+      @include up(xxl) {
+        grid-template-columns: repeat(8, 1fr);
+      }
 
       >* {
         content-visibility: auto;

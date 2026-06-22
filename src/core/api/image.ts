@@ -11,7 +11,7 @@ export async function getSubscribeImageList(page: number): Promise<any> {
   const query = {
     rating: 'all',
     page: page,
-    limit: 32,
+    limit: 48,
     subscribed: true
   };
   try {
@@ -51,7 +51,7 @@ export async function getImageList(page: number, sort: string, date?: string, us
   const query = {
     rating: 'all',
     page: page,
-    limit: 32,
+    limit: 48,
     sort: sort,
     ...(date && { date }),
     ...(user && { user })
