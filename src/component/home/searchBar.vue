@@ -1,16 +1,24 @@
 <script setup lang="ts">
-import { inject, ref } from 'vue';
+import { inject } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRouter } from 'vue-router';
+import { ai as aiStore } from '../../core/store';
 
 const { t } = useI18n();
 const router = useRouter();
-const isAI = ref(false)
+
+// 获取 ai store 实例
+const ai = aiStore();
 
 const tabSwitchToMy = inject<() => void>('tabSwitchToMy')
+// 注入刷新令牌，用于切换 AI 状态后通知所有子组件重新获取数据
+const refreshToken = inject('refreshToken') as { value: number };
 
 function toggleAI() {
-  isAI.value = !isAI.value
+  // 切换 ai store 的值
+  ai.value = !ai.value;
+  // 递增刷新令牌，触发所有 home 子组件重新获取数据
+  refreshToken.value++;
 }
 function toSearch() {
   router.push('/search')
@@ -31,7 +39,7 @@ function toSearch() {
       </div>
     </div>
     <div class="logo" @click="toggleAI">
-      <span v-if="isAI">
+      <span v-if="ai.value">
         Hiwara AI
       </span>
       <span v-else>

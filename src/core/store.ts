@@ -126,6 +126,15 @@ export const uname = defineStore('uname', {
   }
 })
 
+export const ai = defineStore('ai', {
+  state: () => ({ value: false }),
+  actions: {
+    set(value: boolean) {
+      this.value = value;
+    }
+  }
+})
+
 // 定义设置状态的接口
 interface SetupState {
   autoPlay: boolean;

@@ -1,4 +1,25 @@
 import { invoke } from '@tauri-apps/api/core';
+import { ai } from '../store';
+
+const referersArr = [
+  'https://www.iwara.tv/',
+  'https://www.iwara.ai/',
+];
+const xSiteArr = ['www.iwara.tv', 'www.iwara.ai'];
+
+/**
+ * 根据 ai store 的值动态获取 referer 和 xSite
+ * ai = false → iwara.tv (索引0)
+ * ai = true  → iwara.ai (索引1)
+ */
+function getRefererAndSite(): { referer: string; xSite: string } {
+  const aiStore = ai();
+  const index = aiStore.value ? 1 : 0;
+  return {
+    referer: referersArr[index],
+    xSite: xSiteArr[index],
+  };
+}
 
 // 发送GET请求(iwara)
 export async function getSendRequestIwara(url: string, headers?: any, query?: any) {
@@ -23,7 +44,8 @@ export async function getSendRequestIwara(url: string, headers?: any, query?: an
     const requestHeaders: Record<string, string> = {
       'Content-Type': 'application/json',
       'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-      'Referer': 'https://www.iwara.tv/',
+      'Referer': getRefererAndSite().referer,
+      'X-Site': getRefererAndSite().xSite,
       'Accept-Encoding': 'gzip, deflate, br', // 支持压缩编码
       ...(headers || {}),
     };
@@ -76,7 +98,8 @@ export async function postSendRequestIwara(url: string, headers?: any, body?: an
     const requestHeaders: Record<string, string> = {
       'Content-Type': 'application/json',
       'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-      'Referer': 'https://www.iwara.tv/',
+      'Referer': getRefererAndSite().referer,
+      'X-Site': getRefererAndSite().xSite,
       'Accept-Encoding': 'gzip, deflate, br', // 支持压缩编码
       ...(headers || {}),
     };
@@ -130,7 +153,8 @@ export async function deleteSendRequestIwara(url: string, headers?: any) {
     const requestHeaders: Record<string, string> = {
       'Content-Type': 'application/json',
       'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-      'Referer': 'https://www.iwara.tv/',
+      'Referer': getRefererAndSite().referer,
+      'X-Site': getRefererAndSite().xSite,
       'Accept-Encoding': 'gzip, deflate, br', // 支持压缩编码
       ...(headers || {}),
     };
@@ -189,7 +213,8 @@ export async function getImageIwara(url: string, timeout: number = 15000): Promi
       // 构建请求头
       const headers: Record<string, string> = {
         'Accept': 'image/webp,image/apng,image/*,*/*;q=0.8',
-        'Referer': 'https://www.iwara.tv/',
+        'Referer': getRefererAndSite().referer,
+        'X-Site': getRefererAndSite().xSite,
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
       };
       // 使用我们创建的自定义网络请求命令获取二进制数据，模拟浏览器请求
