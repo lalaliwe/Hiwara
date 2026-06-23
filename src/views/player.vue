@@ -571,15 +571,15 @@ onUnmounted(() => {
     </div>
     <div class="view-side">
       <!-- 加载中 -->
-      <div class="status-view" v-show="!sideDataLoaded && videoInfoState === 'loading'">
+      <div class="status-view" v-show="videoInfoState === 'loading' || (videoInfoState === 'success' && !sideDataLoaded)">
         <loadingHuawu>{{ t('player.loading') }}</loadingHuawu>
       </div>
       <!-- 加载失败 -->
-      <div class="status-view" v-show="!sideDataLoaded && videoInfoState === 'failed'">
+      <div class="status-view" v-show="videoInfoState === 'failed'">
         <errorHuawu>{{ t('player.failed') }}</errorHuawu>
       </div>
       <!-- 加载成功 / side 已有数据 -->
-      <div class="view-side-content" v-show="sideDataLoaded || videoInfoState === 'success'">
+      <div class="view-side-content" v-show="sideDataLoaded && videoInfoState === 'success'">
         <div class="tabs">
           <div class="tabs-bar">
             <v-tabs class="left" v-model="tab2" color="#00796B" density="comfortable">
