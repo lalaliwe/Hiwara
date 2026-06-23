@@ -5,6 +5,7 @@ import { useI18n } from 'vue-i18n';
 import videoPlayer from '../component/player/videoPlayer.vue';
 import infoView from '../component/player/info.vue';
 import commentView from '../component/player/comment.vue';
+import recommend from '../component/player/recommend.vue';
 import { useAutoStatusBar } from '../composables/useAutoStatusBar';
 import { Swiper, SwiperSlide } from 'swiper/vue';
 import type { Swiper as SwiperType } from 'swiper';
@@ -34,6 +35,11 @@ const route = useRoute();
 const tab = ref('info');  // 当前选中的tab
 const tab2 = ref('recommend');  // 当前选中的tab
 const id = ref(route.params.id);  // 视频id
+// view-side 侧边栏是否已获取到推荐数据（独立于 main 的 videoInfoState）
+const sideDataLoaded = ref(false);
+const onSideDataLoaded = () => {
+  sideDataLoaded.value = true;
+};
 const title = ref<string>('');   // 视频标题
 const synopsis = ref<string>('');  // 视频简介
 const poster = ref<string>(''); //视频封面
@@ -526,7 +532,6 @@ onUnmounted(() => {
           </div>
           <v-divider></v-divider>
         </div>
-
         <div class="tabs-content">
           <swiper class="tabs-window" :slides-per-view="1" :space-between="0" @swiper="onSwiper"
             @slide-change="onSlideChange">
@@ -541,7 +546,6 @@ onUnmounted(() => {
             </swiper-slide>
           </swiper>
         </div>
-
         <!-- 清晰度选择对话框 -->
         <v-dialog v-model="showDefinitionDialog" max-width="400">
           <v-card>
@@ -566,27 +570,36 @@ onUnmounted(() => {
       </div>
     </div>
     <div class="view-side">
-      <div class="tabs">
-        <div class="tabs-bar">
-          <v-tabs class="left" v-model="tab2" color="#00796B" density="comfortable">
-            <v-tab value="recommend">推荐</v-tab>
-            <v-tab value="comment">{{ t('player.commentTab') }}</v-tab>
-          </v-tabs>
-        </div>
-        <v-divider></v-divider>
+      <!-- 加载中 -->
+      <div class="status-view" v-show="!sideDataLoaded && videoInfoState === 'loading'">
+        <loadingHuawu>{{ t('player.loading') }}</loadingHuawu>
       </div>
-      <div class="tabs-content">
-        <swiper class="tabs-window" :slides-per-view="1" :space-between="0" @swiper="onSwiper2"
-          @slide-change="onSlideChange2">
-          <swiper-slide>
-            <div>
-              推荐
-            </div>
-          </swiper-slide>
-          <swiper-slide>
-            <commentView :vid="id as string" />
-          </swiper-slide>
-        </swiper>
+      <!-- 加载失败 -->
+      <div class="status-view" v-show="!sideDataLoaded && videoInfoState === 'failed'">
+        <errorHuawu>{{ t('player.failed') }}</errorHuawu>
+      </div>
+      <!-- 加载成功 / side 已有数据 -->
+      <div class="view-side-content" v-show="sideDataLoaded || videoInfoState === 'success'">
+        <div class="tabs">
+          <div class="tabs-bar">
+            <v-tabs class="left" v-model="tab2" color="#00796B" density="comfortable">
+              <v-tab value="recommend">推荐</v-tab>
+              <v-tab value="comment">{{ t('player.commentTab') }}</v-tab>
+            </v-tabs>
+          </div>
+          <v-divider></v-divider>
+        </div>
+        <div class="tabs-content">
+          <swiper class="tabs-window" :slides-per-view="1" :space-between="0" @swiper="onSwiper2"
+            @slide-change="onSlideChange2">
+            <swiper-slide>
+              <recommend :vid="id as string" :uid="uid" @data-loaded="onSideDataLoaded" />
+            </swiper-slide>
+            <swiper-slide>
+              <commentView :vid="id as string" />
+            </swiper-slide>
+          </swiper>
+        </div>
       </div>
     </div>
   </div>
@@ -615,6 +628,13 @@ onUnmounted(() => {
   @include down(md) {
     display: none;
   }
+}
+
+.view-side-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 }
 
 .topBar {

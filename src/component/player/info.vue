@@ -7,20 +7,17 @@ import {
   DownloadFour as iconDownloadFour,
   CopyLink as iconCopyLink,
 } from '@icon-park/vue-next';
-import test1Img from '../../static/img/test1.jpg';
 import defaultAvatarImg from '../../static/img/avatar-default.jpg';
 import avatarPlaceholderImg from '../../static/img/avatar-placeholder.png';
 import avatarErrorImg from '../../static/img/avatar-error.png';
-import cardButton from '../cardButton.vue';
 import {
   getImageIwara,
-  getVideoRecommendByUser,
-  getVideoRecommendByOther,
   likeVideo,
   unlikeVideo,
   followUser,
   unfollowUser,
 } from '../../core/api';
+import recommend from './recommend.vue';
 import { showShortToast } from '../../core/toast';
 import { useRouter } from 'vue-router';
 
@@ -128,30 +125,11 @@ const heights = ref({
   synopsis: 0
 });
 
-interface ListItem {
-  id: string;
-  title: string;
-  img: string;
-  author: string;
-  time: string;
-  viewNum: number;
-  likeNum: number;
-  longNum: number;
-  isR18: boolean;
-}
-// 初始化列表数据
-const authorOtherVideoList = ref<ListItem[]>([]); // 作者其他视频
-const recommendVideoList = ref<ListItem[]>([]); // 推荐视频
-
 // 当前滚动条位置
 let scrollTop = 0;
 const infoViewRef = ref<HTMLElement>();
 const infoViewContentRef = ref<HTMLElement>(); // 内层内容容器
 let contentResizeObserver: ResizeObserver | null = null; // ResizeObserver 实例
-
-// 加载状态
-const isLoadingAuthorVideos = ref(false);
-const isLoadingRecommendVideos = ref(false);
 const isFollowing = ref(false); // 关注操作进行中状态
 const isLiking = ref(false); // 点赞操作进行中状态
 
@@ -162,64 +140,6 @@ const followBtn = computed(() => {
   if (props.isMyFans) return { text: t('player.followBack'), variant: 'flat' as const, icon: 'fa-solid fa-plus' };
   return { text: t('player.follow'), variant: 'flat' as const, icon: 'fa-solid fa-plus' };
 });
-
-// 加载作者其他视频
-async function loadAuthorOtherVideos() {
-  if (!props.vid || !props.uid) return;
-
-  isLoadingAuthorVideos.value = true;
-  try {
-    const response = await getVideoRecommendByUser(props.vid, props.uid);
-    if (response.ok && response.data.results) {
-      authorOtherVideoList.value = await Promise.all(response.data.results.map(async (item: any) => ({
-        id: item.id,
-        title: item.title,
-        img: item.file ? `https://i.iwara.tv/image/thumbnail/${item.file.id}/thumbnail-${String(item.thumbnail ?? 0).padStart(2, '0')}.jpg` : test1Img,
-        author: item.user?.name || item.user?.username || '',
-        time: item.createdAt,  // 传递原始时间字符串，让cardButton自己格式化
-        viewNum: item.numViews || 0,
-        likeNum: item.numLikes || 0,
-        longNum: item.file?.duration || 0,
-        isR18: item.rating === 'ecchi' || item.rating === 'r18',
-      })));
-    }
-  } catch (error) {
-    console.error('Failed to load author other videos:', error);
-  } finally {
-    isLoadingAuthorVideos.value = false;
-  }
-}
-
-// 加载推荐视频
-async function loadRecommendVideos() {
-  if (!props.vid) return;
-
-  isLoadingRecommendVideos.value = true;
-  try {
-    const response = await getVideoRecommendByOther(props.vid);
-    if (response.ok && response.data.results) {
-      recommendVideoList.value = await Promise.all(response.data.results.map(async (item: any) => ({
-        id: item.id,
-        title: item.title,
-        img: item.file ? `https://i.iwara.tv/image/thumbnail/${item.file.id}/thumbnail-${String(item.thumbnail ?? 0).padStart(2, '0')}.jpg` : test1Img,
-        author: item.user?.name || item.user?.username || '',
-        time: item.createdAt,  // 传递原始时间字符串，让cardButton自己格式化
-        viewNum: item.numViews || 0,
-        likeNum: item.numLikes || 0,
-        longNum: item.file?.duration || 0,
-        isR18: item.rating === 'ecchi' || item.rating === 'r18',
-      })));
-    }
-  } catch (error) {
-    console.error('Failed to load recommend videos:', error);
-  } finally {
-    isLoadingRecommendVideos.value = false;
-  }
-}
-
-// 在setup阶段立即加载数据（在onMounted之前）
-loadAuthorOtherVideos();
-loadRecommendVideos();
 
 // 处理窗口大小改变
 function handleResize() {
@@ -547,40 +467,7 @@ function detectDarkMode(): boolean {
             t('player.downloadLink') }}
         </div>
       </div>
-      <div class="recommend">
-        <div class="label" v-if="!isLoadingAuthorVideos && authorOtherVideoList.length > 0">
-          {{ t('player.authorOtherVideos') }}
-        </div>
-        <div class="lists" v-if="!isLoadingAuthorVideos && authorOtherVideoList.length > 0">
-          <cardButton v-for="(item, index) in authorOtherVideoList" :key="item.id" type="video" :data="{
-            id: item.id,
-            title: item.title,
-            img: item.img,
-            author: item.author,
-            time: item.time,
-            viewNum: item.viewNum,
-            likeNum: item.likeNum,
-            longNum: item.longNum,
-            isR18: item.isR18
-          }" class="card-button" />
-        </div>
-        <div class="label" v-if="!isLoadingRecommendVideos && recommendVideoList.length > 0">
-          {{ t('player.moreRecommend') }}
-        </div>
-        <div class="lists" v-if="!isLoadingRecommendVideos && recommendVideoList.length > 0">
-          <cardButton v-for="(item, index) in recommendVideoList" :key="item.id" type="video" :data="{
-            id: item.id,
-            title: item.title,
-            img: item.img,
-            author: item.author,
-            time: item.time,
-            viewNum: item.viewNum,
-            likeNum: item.likeNum,
-            longNum: item.longNum,
-            isR18: item.isR18
-          }" class="card-button" />
-        </div>
-      </div>
+      <recommend :vid="vid" :uid="uid" />
     </div>
   </div>
 </template>
@@ -748,26 +635,9 @@ function detectDarkMode(): boolean {
   }
 }
 
-.recommend {
-  overflow: hidden;
-
-  .label {
-    font-size: 0.8rem;
-    padding: 0 10px;
-    color: var(--color-text-muted);
-  }
-
-  .lists {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 10px;
-    padding: 10px;
-  }
-}
-
-// 桌面端（>=720px）：info 内的推荐区域由 view-side 接管，此处隐藏
+// 桌面端（>=720px）：info 内的推荐由 view-side 接管，此处隐藏
 @media (min-width: 720px) {
-  .recommend {
+  :deep(.recommend) {
     display: none;
   }
 }
