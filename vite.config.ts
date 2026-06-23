@@ -1,12 +1,16 @@
 import { defineConfig } from "vite";
 import vue from "@vitejs/plugin-vue";
 import path from "path";
+import fs from "fs";
 import { fileURLToPath } from "url";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-// @ts-expect-error process is a nodejs global
 const host = process.env.TAURI_DEV_HOST;
+
+// 从 package.json 读取版本号
+const pkg = JSON.parse(fs.readFileSync(path.resolve(__dirname, 'package.json'), 'utf-8'));
+const appVersion = pkg.version;
 
 // 获取构建时间
 const buildTime = new Date().toLocaleString('zh-CN', {
@@ -61,6 +65,7 @@ export default defineConfig(async () => ({
     },
   },
   define: {
-    __BUILD_TIME__: JSON.stringify(buildTime)
+    __BUILD_TIME__: JSON.stringify(buildTime),
+    __APP_VERSION__: JSON.stringify(appVersion)
   }
 }));

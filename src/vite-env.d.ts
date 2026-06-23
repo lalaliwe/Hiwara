@@ -33,3 +33,4 @@ declare module '*.webp' {
 
 // Vite define 全局变量声明
 declare const __BUILD_TIME__: string;
+declare const __APP_VERSION__: string;

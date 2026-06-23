@@ -1,15 +1,18 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { useRouter } from 'vue-router'
 import {
   Video as iconVideo,
   Pic as iconPic,
   Rss as iconRss,
   Comments as iconComments,
-  User as iconUser
+  User as iconUser,
+  SettingConfig as iconSetting
 } from '@icon-park/vue-next';
 
 const { t } = useI18n();
+const router = useRouter()
 
 // 定义Tab类型
 type TabType = 'video' | 'image' | 'subscribe' | 'forum' | 'my';
@@ -47,6 +50,11 @@ const changeValue = (newValue: TabType) => {
 //刷新
 function refresh(tab: TabType) {
   emit('refresh', tab)
+}
+
+// 跳转到设置页面
+const goToSetup = () => {
+  router.push('/setup')
 }
 </script>
 
@@ -94,11 +102,27 @@ function refresh(tab: TabType) {
         <span>{{ t('home.navigation.my') }}</span>
       </div>
     </div>
+    <div class="spacer"></div>
+    <div class="btn btn-setting" @click="goToSetup" v-ripple>
+      <iconSetting theme="outline" :size="btnFontSize" />
+    </div>
   </div>
 </template>
 
 <style lang="scss" scoped>
 .tabs-vertical {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--color-bg-section);
+  box-shadow: var(--shadow-vertical-nav);
+  padding-bottom: env(safe-area-inset-bottom, 0);
+  width: 100%;
+  z-index: 500;
+
+  .spacer {
+    flex: 1;
+  }
   display: flex;
   flex-direction: column;
   background-color: var(--color-bg-section);

@@ -12,7 +12,7 @@ const { t } = useI18n()
 const router = useRouter()
 
 // 响应式数据
-const version = ref('0.1.0')
+const version = ref(__APP_VERSION__ || '0.1.0')
 const buildTime = ref(t('setup.aboutPage.loading'))
 const deviceType = ref(t('setup.aboutPage.loading'))
 const osName = ref(t('setup.aboutPage.loading'))
