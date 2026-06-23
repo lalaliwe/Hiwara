@@ -613,14 +613,16 @@ onUnmounted(() => {
 }
 
 .view-main {
-  flex: 2;
+  flex: 1;
+  min-width: 0;
   display: flex;
   flex-direction: column;
   overflow: hidden;
 }
 
 .view-side {
-  flex: 1;
+  flex: 0 0 auto;
+  width: clamp(380px, 25vw, 580px);
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -646,12 +648,20 @@ onUnmounted(() => {
 .video-player-wrapper {
   position: relative;
   width: 100%;
+
+  @include up(md) {
+    max-height: 66.67vh;
+  }
 }
 
 .video-player {
   width: 100%;
   aspect-ratio: 16 / 9;
   display: block;
+
+  @include up(md) {
+    max-height: 66.67vh;
+  }
 }
 
 /* 加载/失败 状态容器 */
