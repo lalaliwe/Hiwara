@@ -90,7 +90,7 @@ function handleSyntaxClick() {
 
 <style lang="scss" scoped>
 .overlay {
-  position: fixed;
+  position: absolute;
   top: 0;
   left: 0;
   width: 100%;

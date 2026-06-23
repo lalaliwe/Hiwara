@@ -32,6 +32,7 @@ const router = useRouter();
 const route = useRoute();
 
 const tab = ref('info');  // 当前选中的tab
+const tab2 = ref('recommend');  // 当前选中的tab
 const id = ref(route.params.id);  // 视频id
 const title = ref<string>('');   // 视频标题
 const synopsis = ref<string>('');  // 视频简介
@@ -84,6 +85,7 @@ const currentDownloadUrl = computed(() => {
 });
 
 // --- Swiper 联动逻辑 ---
+// 左侧主内容区 Swiper（info / comment）
 const swiperInstance = ref<SwiperType | null>(null);
 
 const onSwiper = (swiper: SwiperType) => {
@@ -101,6 +103,26 @@ watch(tab, (newVal) => {
 
 const onSlideChange = (swiper: SwiperType) => {
   tab.value = swiper.activeIndex === 0 ? 'info' : 'comment';
+};
+
+// 右侧侧边栏 Swiper（recommend / comment）
+const swiperInstance2 = ref<SwiperType | null>(null);
+
+const onSwiper2 = (swiper: SwiperType) => {
+  swiperInstance2.value = swiper;
+};
+
+watch(tab2, (newVal) => {
+  if (swiperInstance2.value) {
+    const targetIndex = newVal === 'recommend' ? 0 : 1;
+    if (swiperInstance2.value.activeIndex !== targetIndex) {
+      swiperInstance2.value.slideTo(targetIndex);
+    }
+  }
+});
+
+const onSlideChange2 = (swiper: SwiperType) => {
+  tab2.value = swiper.activeIndex === 0 ? 'recommend' : 'comment';
 };
 // --- End Swiper 联动逻辑 ---
 
@@ -445,96 +467,154 @@ const followTrigger = (val: boolean) => {
   isFollow.value = val;
 }
 
+// 桌面端检测（>=720px），用于条件渲染
+const isDesktop = ref(window.innerWidth >= 720);
+const mql = window.matchMedia('(min-width: 720px)');
+const onMqlChange = (e: MediaQueryListEvent) => {
+  isDesktop.value = e.matches;
+  // 从桌面切回移动端时，重置 tab 防止评论 slide 仍处于选中状态
+  if (!e.matches && tab.value === 'comment') {
+    tab.value = 'info';
+  }
+};
+onMounted(() => {
+  mql.addEventListener('change', onMqlChange);
+});
+onUnmounted(() => {
+  mql.removeEventListener('change', onMqlChange);
+});
 </script>
 <template>
   <div id="playerView">
-    <div class="topBar"></div>
-    <div class="video-player-wrapper">
-      <videoPlayer class="video-player" :poster="poster" :src="currentVideoSrc" :title="title" :server="currentServer"
-        :video-files="videoFile" :current-definition-index="videoSelect" :is-refreshing-server="isRefreshingServer"
-        @refresh-server="refreshVideoFile" @definition-change="selectDefinition" />
-    </div>
+    <div class="view-main">
+      <div class="topBar"></div>
+      <div class="video-player-wrapper">
+        <videoPlayer class="video-player" :poster="poster" :src="currentVideoSrc" :title="title" :server="currentServer"
+          :video-files="videoFile" :current-definition-index="videoSelect" :is-refreshing-server="isRefreshingServer"
+          @refresh-server="refreshVideoFile" @definition-change="selectDefinition" />
+      </div>
 
-    <!-- 加载中 -->
-    <div class="status-view" v-if="videoInfoState === 'loading'">
-      <loadingHuawu>{{ t('player.loading') }}</loadingHuawu>
-    </div>
+      <!-- 加载中 -->
+      <div class="status-view" v-if="videoInfoState === 'loading'">
+        <loadingHuawu>{{ t('player.loading') }}</loadingHuawu>
+      </div>
+      <!-- 加载失败 -->
+      <div class="status-view" v-else-if="videoInfoState === 'failed'">
+        <errorHuawu>{{ t('player.failed') }}</errorHuawu>
+      </div>
+      <!-- 加载成功：视频信息 + Swiper 内容 -->
+      <div class="video-info" v-else>
+        <div class="tabs">
+          <div class="tabs-bar">
+            <v-tabs class="left" v-model="tab" color="#00796B" density="comfortable">
+              <v-tab value="info">{{ t('player.infoTab') }}</v-tab>
+              <v-tab v-if="!isDesktop" value="comment">{{ t('player.commentTab') }}</v-tab>
+            </v-tabs>
+            <div class="right" v-if="videoFile.length > 0">
+              <span v-ripple @click="refreshVideoFile" :class="{ 'right-btn-disabled': isRefreshingServer }">
+                <template v-if="isRefreshingServer">
+                  <v-progress-circular :size="16" :width="2" color="inherit" indeterminate />
+                </template>
+                <template v-else>
+                  <font-awesome-icon icon="fa-solid fa-server" />{{ currentServer }}
+                </template>
+              </span>
+              <span v-ripple @click="showDefinitionDialog = true">
+                <font-awesome-icon icon="fa-solid fa-film" />{{ definitionTextFormat(currentDefinition) }}
+              </span>
+            </div>
+          </div>
+          <v-divider></v-divider>
+        </div>
 
-    <!-- 加载失败 -->
-    <div class="status-view" v-else-if="videoInfoState === 'failed'">
-      <errorHuawu>{{ t('player.failed') }}</errorHuawu>
-    </div>
+        <div class="tabs-content">
+          <swiper class="tabs-window" :slides-per-view="1" :space-between="0" @swiper="onSwiper"
+            @slide-change="onSlideChange">
+            <swiper-slide>
+              <infoView :title="title" :synopsis="synopsis" :playNum="playNum" :likeNum="likeNum" :createdAt="createdAt"
+                :isLike="isLike" :tags="tags" :authorname="authorname" :username="username" :avatar="avatar"
+                :fansNum="fansNum" :videoNum="videoNum" :isFollow="isFollow" :vid="id as string" :uid="uid"
+                :download="currentDownloadUrl" :slug="slug" @like="likeTrigger" @follow="followTrigger" />
+            </swiper-slide>
+            <swiper-slide v-if="!isDesktop">
+              <commentView :vid="id as string" />
+            </swiper-slide>
+          </swiper>
+        </div>
 
-    <!-- 加载成功：视频信息 + Swiper 内容 -->
-    <div class="video-info" v-else>
+        <!-- 清晰度选择对话框 -->
+        <v-dialog v-model="showDefinitionDialog" max-width="400">
+          <v-card>
+            <v-card-title class="text-center">
+              {{ t('player.selectDefinition') }}
+            </v-card-title>
+            <v-divider></v-divider>
+            <v-list>
+              <v-list-item v-for="(file, index) in sortedVideoFiles" :key="file.id"
+                @click="selectDefinition(getOriginalIndex(file))" :active="getOriginalIndex(file) === videoSelect">
+                <template v-slot:prepend>
+                  <v-icon icon="fa-solid fa-film"></v-icon>
+                </template>
+                <v-list-item-title>{{ definitionTextFormat(file.name) }}</v-list-item-title>
+                <template v-slot:append v-if="getOriginalIndex(file) === videoSelect">
+                  <v-icon color="primary" icon="fa-solid fa-check"></v-icon>
+                </template>
+              </v-list-item>
+            </v-list>
+          </v-card>
+        </v-dialog>
+      </div>
+    </div>
+    <div class="view-side">
       <div class="tabs">
         <div class="tabs-bar">
-          <v-tabs class="left" v-model="tab" color="#00796B" density="comfortable">
-            <v-tab value="info">{{ t('player.infoTab') }}</v-tab>
+          <v-tabs class="left" v-model="tab2" color="#00796B" density="comfortable">
+            <v-tab value="recommend">推荐</v-tab>
             <v-tab value="comment">{{ t('player.commentTab') }}</v-tab>
           </v-tabs>
-          <div class="right" v-if="videoFile.length > 0">
-            <span v-ripple @click="refreshVideoFile"
-                  :class="{ 'right-btn-disabled': isRefreshingServer }">
-              <template v-if="isRefreshingServer">
-                <v-progress-circular :size="16" :width="2" color="inherit" indeterminate />
-              </template>
-              <template v-else>
-                <font-awesome-icon icon="fa-solid fa-server" />{{ currentServer }}
-              </template>
-            </span>
-            <span v-ripple @click="showDefinitionDialog = true">
-              <font-awesome-icon icon="fa-solid fa-film" />{{ definitionTextFormat(currentDefinition) }}
-            </span>
-          </div>
         </div>
         <v-divider></v-divider>
       </div>
-
       <div class="tabs-content">
-        <swiper class="tabs-window" :slides-per-view="1" :space-between="0" @swiper="onSwiper"
-          @slide-change="onSlideChange">
+        <swiper class="tabs-window" :slides-per-view="1" :space-between="0" @swiper="onSwiper2"
+          @slide-change="onSlideChange2">
           <swiper-slide>
-            <infoView :title="title" :synopsis="synopsis" :playNum="playNum" :likeNum="likeNum" :createdAt="createdAt"
-              :isLike="isLike" :tags="tags" :authorname="authorname" :username="username" :avatar="avatar"
-              :fansNum="fansNum" :videoNum="videoNum" :isFollow="isFollow" :vid="id as string" :uid="uid"
-              :download="currentDownloadUrl" :slug="slug" @like="likeTrigger" @follow="followTrigger" />
+            <div>
+              推荐
+            </div>
           </swiper-slide>
           <swiper-slide>
             <commentView :vid="id as string" />
           </swiper-slide>
         </swiper>
       </div>
-
-      <!-- 清晰度选择对话框 -->
-      <v-dialog v-model="showDefinitionDialog" max-width="400">
-        <v-card>
-          <v-card-title class="text-center">
-            {{ t('player.selectDefinition') }}
-          </v-card-title>
-          <v-divider></v-divider>
-          <v-list>
-            <v-list-item v-for="(file, index) in sortedVideoFiles" :key="file.id"
-              @click="selectDefinition(getOriginalIndex(file))" :active="getOriginalIndex(file) === videoSelect">
-              <template v-slot:prepend>
-                <v-icon icon="fa-solid fa-film"></v-icon>
-              </template>
-              <v-list-item-title>{{ definitionTextFormat(file.name) }}</v-list-item-title>
-              <template v-slot:append v-if="getOriginalIndex(file) === videoSelect">
-                <v-icon color="primary" icon="fa-solid fa-check"></v-icon>
-              </template>
-            </v-list-item>
-          </v-list>
-        </v-card>
-      </v-dialog>
     </div>
   </div>
 </template>
 <style lang="scss" scoped>
+@use '../assets/mixins' as *;
+
 #playerView {
+  background-color: var(--color-bg-page);
+  display: flex;
+}
+
+.view-main {
+  flex: 2;
   display: flex;
   flex-direction: column;
-  background-color: var(--color-bg-page);
+  overflow: hidden;
+}
+
+.view-side {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+
+  @include down(md) {
+    display: none;
+  }
 }
 
 .topBar {

@@ -764,4 +764,11 @@ function detectDarkMode(): boolean {
     padding: 10px;
   }
 }
+
+// 桌面端（>=720px）：info 内的推荐区域由 view-side 接管，此处隐藏
+@media (min-width: 720px) {
+  .recommend {
+    display: none;
+  }
+}
 </style>
