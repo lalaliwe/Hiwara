@@ -128,7 +128,7 @@ async function loadAvatar() {
 
 async function getHistoryList() {
   try {
-    const res = await getVideoHistoryList(0, 6);
+    const res = await getVideoHistoryList(0, 16);
     console.log('获取历史记录:', res);
     historyList.value = res;
   } catch (err) {
@@ -311,6 +311,7 @@ function handleUnimplemented() {
   </div>
 </template>
 <style lang="scss" scoped>
+@use '@/assets/mixins' as *;
 .container {
   flex: 1;
   position: relative;
@@ -514,6 +515,14 @@ function handleUnimplemented() {
       grid-template-columns: repeat(4, 1fr);
 
       gap: 10px;
+
+      @include up(md) {
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+
+        .btn {
+          max-width: 140px;
+        }
+      }
 
       .btn {
         text-align: center;

@@ -1,3 +1,5 @@
+@use 'sass:map';
+
 /* =============================================================
    响应式断点变量 & Mixin
    ============================================================= */
@@ -12,26 +14,26 @@ $breakpoints: (
 /// 向上适配（min-width），常用于「从小屏到大屏」渐进增强
 /// @param {String} $bp - 断点名称，如 sm / md / lg / xl / xxl
 @mixin up($bp) {
-  $width: map-get($breakpoints, $bp);
+  $width: map.get($breakpoints, $bp);
   @if $width {
     @media (min-width: $width) {
       @content;
     }
   } @else {
-    @error "未知断点 `#{$bp}`，可选值: #{map-keys($breakpoints)}";
+    @error "未知断点 `#{$bp}`，可选值: #{map.keys($breakpoints)}";
   }
 }
 
 /// 向下适配（max-width），常用于「从大屏到小屏」降级适配
 /// @param {String} $bp - 断点名称
 @mixin down($bp) {
-  $width: map-get($breakpoints, $bp);
+  $width: map.get($breakpoints, $bp);
   @if $width {
     @media (max-width: ($width - 1px)) {
       @content;
     }
   } @else {
-    @error "未知断点 `#{$bp}`，可选值: #{map-keys($breakpoints)}";
+    @error "未知断点 `#{$bp}`，可选值: #{map.keys($breakpoints)}";
   }
 }
 
@@ -39,13 +41,13 @@ $breakpoints: (
 /// @param {String} $lower - 下限断点（含）
 /// @param {String} $upper - 上限断点（不含）
 @mixin between($lower, $upper) {
-  $lower-w: map-get($breakpoints, $lower);
-  $upper-w: map-get($breakpoints, $upper);
+  $lower-w: map.get($breakpoints, $lower);
+  $upper-w: map.get($breakpoints, $upper);
   @if $lower-w and $upper-w {
     @media (min-width: $lower-w) and (max-width: ($upper-w - 1px)) {
       @content;
     }
   } @else {
-    @error "未知断点，可选值: #{map-keys($breakpoints)}";
+    @error "未知断点，可选值: #{map.keys($breakpoints)}";
   }
 }

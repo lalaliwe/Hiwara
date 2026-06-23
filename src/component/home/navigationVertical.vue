@@ -102,7 +102,7 @@ function refresh(tab: TabType) {
   display: flex;
   flex-direction: column;
   background-color: var(--color-bg-section);
-  box-shadow: var(--shadow-bottom-nav);
+  box-shadow: var(--shadow-vertical-nav);
   padding-bottom: env(safe-area-inset-bottom, 0);
   width: 100%;
   z-index: 500;

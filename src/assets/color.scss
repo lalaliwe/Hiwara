@@ -112,7 +112,8 @@ $shadow-card: 2px 2px 4px rgba(0, 0, 0, 0.1);     // 卡片阴影
 $shadow-bottom-bar: 0 -2px 6px rgba(0, 0, 0, 0.1); // 底部栏阴影
 $shadow-top-bar: 0 2px 6px rgba(0, 0, 0, 0.1);     // 顶部栏阴影
 $shadow-tab-bar: 0 2px 4px rgba(0, 0, 0, 0.1);     // Tab 栏阴影
-$shadow-bottom-nav: 0 -2px 4px rgba(0, 0, 0, 0.1);  // 底部导航阴影
+$shadow-bottom-nav: 0 -2px 4px rgba(0, 0, 0, 0.1);   // 底部导航阴影（水平底部导航栏）
+$shadow-vertical-nav: 0 -2px 6px rgba(0, 0, 0, 0.4); // 垂直导航阴影（侧边导航栏）
 $shadow-avatar: 2px 2px 4px rgba(0, 0, 0, 0.2);    // 头像阴影
 $shadow-thumb: 0 2px 4px rgba(0, 0, 0, 0.3);       // 滑块阴影
 $shadow-modal: 0 -4px 20px rgba(0, 0, 0, 0.15);    // 弹窗阴影
@@ -220,6 +221,7 @@ $color-scrollbar-track: transparent;                // 滚动条轨道
   --shadow-top-bar: #{$shadow-top-bar};
   --shadow-tab-bar: #{$shadow-tab-bar};
   --shadow-bottom-nav: #{$shadow-bottom-nav};
+  --shadow-vertical-nav: #{$shadow-vertical-nav};
   --shadow-avatar: #{$shadow-avatar};
   --shadow-thumb: #{$shadow-thumb};
   --shadow-modal: #{$shadow-modal};
@@ -329,6 +331,7 @@ $color-scrollbar-track: transparent;                // 滚动条轨道
   --shadow-top-bar: 0 2px 8px rgba(0, 0, 0, 0.4);
   --shadow-tab-bar: 0 2px 6px rgba(0, 0, 0, 0.4);
   --shadow-bottom-nav: 0 -2px 6px rgba(0, 0, 0, 0.4);
+  --shadow-vertical-nav: 0 -2px 6px rgba(0, 0, 0, 0.6);
   --shadow-avatar: 0 2px 6px rgba(0, 0, 0, 0.5);
   --shadow-thumb: 0 2px 6px rgba(0, 0, 0, 0.5);
   --shadow-modal: 0 -4px 24px rgba(0, 0, 0, 0.6);

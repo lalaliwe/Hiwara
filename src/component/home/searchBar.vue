@@ -76,27 +76,6 @@ function toSearch() {
   padding: env(safe-area-inset-top, 0) env(safe-area-inset-right, 0) 0 env(safe-area-inset-left, 0);
   display: flex;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
-
-  // 大屏时顶栏颜色与竖栏保持一致
-  @include up(md) {
-    background-color: var(--color-bg-section);
-    color: var(--color-primary);
-
-    // 搜索框内文字颜色
-    .input span {
-      color: var(--color-text-muted);
-    }
-
-    // 搜索框阴影
-    .search .input {
-      box-shadow: var(--shadow-card);
-    }
-
-    // 头像阴影
-    .avatar img {
-      box-shadow: var(--shadow-avatar);
-    }
-  }
 }
 
 .search {
@@ -150,10 +129,5 @@ function toSearch() {
   padding: 0 16px;
   cursor: pointer;
   user-select: none;
-
-  // 大屏时白色背景上文字用绿色
-  @include up(md) {
-    color: var(--color-primary);
-  }
 }
 </style>

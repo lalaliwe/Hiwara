@@ -63,6 +63,7 @@ function clickItem() {
 </template>
 
 <style lang="scss" scoped>
+@use '@/assets/mixins' as *;
 .videoListCard {
   margin-right: 8px;
   cursor: pointer;
@@ -95,6 +96,15 @@ function clickItem() {
     overflow: hidden;
     text-overflow: ellipsis;
     color: var(--color-text-primary);
+  }
+
+  @include up(md) {
+    .preview .img {
+      width: 140px;
+    }
+    .title {
+      width: 140px;
+    }
   }
 }
 </style>
