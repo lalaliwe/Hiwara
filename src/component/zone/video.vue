@@ -160,6 +160,8 @@ async function getVideoList(): Promise<any> {
 </template>
 
 <style lang="scss" scoped>
+@use '../../assets/mixins' as *;
+
 .list-view {
   height: 100%;
   overflow-y: auto;
@@ -171,6 +173,23 @@ async function getVideoList(): Promise<any> {
   grid-template-columns: repeat(2, 1fr);
   gap: 10px;
   padding: 0 10px 0 10px;
+
+  @include up(md) {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  @include up(xl) {
+    grid-template-columns: repeat(6, 1fr);
+  }
+
+  @include up(xxl) {
+    grid-template-columns: repeat(8, 1fr);
+  }
+
+  >* {
+    content-visibility: auto;
+    contain-intrinsic-size: 0 180px;
+  }
 }
 
 .loading {
