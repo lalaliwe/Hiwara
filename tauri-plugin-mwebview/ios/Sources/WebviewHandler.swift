@@ -112,9 +112,8 @@ class WebviewHandler: NSObject {
     func setInitScript(script: String) {
         self.initScript = script
 
-        // 如果 WebView 已存在，立即将脚本添加到 userContentController
-        // 修复：此前在 createWebview 之后调用 setInitScript 导致首次加载未注入 CSS
         if let webView = webView {
+            // 添加 WKUserScript，在后续导航的 document_start 时注入
             let userScript = WKUserScript(
                 source: script,
                 injectionTime: .atDocumentStart,
@@ -122,6 +121,24 @@ class WebviewHandler: NSObject {
             )
             webView.configuration.userContentController.addUserScript(userScript)
             print("[MWebview] Init script added to existing WebView")
+
+            // 同时立即 eagerly evaluate，并等待 document.head 就绪
+            // 修复：此前仅靠 WKUserScript.atDocumentStart 注入，
+            // 但若页面已开始加载，脚本不会对当前导航生效
+            let wrappedScript = """
+            (function() {
+                function injectCSS() {
+                    if (document.head) {
+                        \(script)
+                    } else {
+                        setTimeout(injectCSS, 10);
+                    }
+                }
+                injectCSS();
+            })();
+            """
+            webView.evaluateJavaScript(wrappedScript, completionHandler: nil)
+            print("[MWebview] Init script eagerly evaluated with head-ready polling")
         }
     }
 

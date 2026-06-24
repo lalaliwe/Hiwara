@@ -45,7 +45,7 @@ interface DomainCSSConfig {
 
 const domainCSSConfig: Record<string, DomainCSSConfig> = {
   'www.iwara.tv': {
-    hideSelectors: ['.header__menu', 'footer'],
+    hideSelectors: ['.header__menu', 'footer', '.menu'],
     customCSS: `
       .header__logo{margin-left: 10px;}
       .header{pointer-events: none;}
@@ -231,6 +231,10 @@ const initDesktopWebview = async () => {
   } catch (error) {
     console.log('没有找到已存在的 webview')
   }
+
+  // 等待路由切换动画完成
+  await new Promise(resolve => setTimeout(resolve, 300))
+  console.log('路由动画完成，开始创建桌面端 WebView')
 
   try {
     const rect = webviewContainer.value.getBoundingClientRect()

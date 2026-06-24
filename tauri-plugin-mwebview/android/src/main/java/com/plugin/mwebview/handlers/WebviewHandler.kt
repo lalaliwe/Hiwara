@@ -248,7 +248,10 @@ class WebviewHandler(private val activity: Activity) {
             val args = invoke.parseArgs(InjectInitScriptArgs::class.java)
             val cssRules = args.cssRules ?: return invoke.reject("cssRules is required")
 
-            val script = """
+            // 构建注入 CSS 的脚本，增加 document.head 等待逻辑
+            // 修复：此前直接 document.head.appendChild(style)，
+            // 但 document.head 可能尚未就绪，导致静默失败
+            val rawScript = """
                 (function() {
                     var style = document.createElement('style');
                     style.type = 'text/css';
@@ -258,12 +261,26 @@ class WebviewHandler(private val activity: Activity) {
                 })();
             """.trimIndent()
 
-            // 暂存脚本，在 onPageStarted 时再次注入（兜底，防止 document.head 还不可用）
-            pendingInitScript = script
+            // 包装为带 head 等待的脚本
+            val script = """
+                (function() {
+                    function injectCSS() {
+                        if (document.head) {
+                            $rawScript
+                        } else {
+                            setTimeout(injectCSS, 10);
+                        }
+                    }
+                    injectCSS();
+                })();
+            """.trimIndent()
 
-            // 立即尝试注入（如果页面已有 DOM 则生效，否则由 onPageStarted 兜底）
+            // 暂存原始脚本（不含等待逻辑），在 onPageStarted 时注入（此时 head 保证可用）
+            pendingInitScript = rawScript
+
+            // 立即尝试注入（含 head 等待逻辑，即使 DOM 未就绪也能生效）
             webView?.evaluateJavascript(script, null)
-            android.util.Log.d("MWebview", "Init script saved + eager eval")
+            android.util.Log.d("MWebview", "Init script saved + eager eval with head-ready polling")
 
             val response = JSObject()
             response.put("success", true)

@@ -1,7 +1,19 @@
 <script setup lang="ts">
 import {
   Moon as iconMoon,
-  Theme as iconTheme
+  Theme as iconTheme,
+  VideoTwo as iconVideoTwo,
+  Pic as iconPic,
+  MusicList as iconMusicList,
+  Download as iconDownload,
+  Remind as iconRemind,
+  People as iconPeople,
+  Mail as iconMail,
+  SettingConfig as iconSetting,
+  Star as iconStar,
+  Financing as iconFinancing,
+  Help as iconHelp,
+  ShareOne as iconShareOne
 } from '@icon-park/vue-next';
 import { useRouter } from 'vue-router'
 import { ref, onMounted, onActivated, inject, watch, type Ref } from 'vue';
@@ -215,51 +227,51 @@ function handleUnimplemented() {
         <div class="usserFunction">
           <div class="btn" @click="routerGoTo('/favorites', { type: 'video' })">
             <div class="icon">
-              <font-awesome-icon icon="fa-solid fa-film" />
+              <iconVideoTwo theme="outline" size="22" />
             </div>
             <div class="text">{{ t('home.my.videoFavorites') }}</div>
           </div>
           <div class="btn" @click="routerGoTo('/favorites', { type: 'image' })">
             <div class="icon">
-              <font-awesome-icon icon="fa-solid fa-images" />
+              <iconPic theme="outline" size="22" />
             </div>
             <div class="text">{{ t('home.my.imageFavorites') }}</div>
           </div>
           <div class="btn" @click="handleUnimplemented">
             <div class="icon">
-              <font-awesome-icon icon="fa-solid fa-forward-fast" />
+              <iconMusicList theme="outline" size="22" />
             </div>
             <div class="text">{{ t('home.my.playlist') }}</div>
           </div>
           <div class="btn" @click="handleUnimplemented">
             <div class="icon">
-              <font-awesome-icon icon="fa-solid fa-download" />
+              <iconDownload theme="outline" size="22" />
             </div>
             <div class="text">{{ t('home.my.offlineCache') }}</div>
           </div>
           <div class="btn"
             @click="routerGoTo('/webview', { url: 'https://www.iwara.tv/notifications', title: t('home.my.notifications') })">
             <div class="icon">
-              <font-awesome-icon icon="fa-solid fa-bell" />
+              <iconRemind theme="outline" size="22" />
             </div>
             <div class="text">{{ t('home.my.notifications') }}</div>
           </div>
           <div class="btn" @click="routerGoTo('/friends', { type: 'friend' })">
             <div class="icon">
-              <font-awesome-icon icon="fa-solid fa-user-group" />
+              <iconPeople theme="outline" size="22" />
             </div>
             <div class="text">{{ t('home.my.friends') }}</div>
           </div>
           <div class="btn"
             @click="routerGoTo('/webview', { url: 'https://www.iwara.tv/messages', title: t('home.my.messages') })">
             <div class="icon">
-              <font-awesome-icon icon="fa-solid fa-envelope" />
+              <iconMail theme="outline" size="22" />
             </div>
             <div class="text">{{ t('home.my.messages') }}</div>
           </div>
           <div class="btn" @click="routerGoTo('/setup')">
             <div class="icon">
-              <font-awesome-icon icon="fa-solid fa-gear" />
+              <iconSetting theme="outline" size="22" />
             </div>
             <div class="text">{{ t('home.my.settings') }}</div>
           </div>
@@ -273,28 +285,28 @@ function handleUnimplemented() {
           <div class="btn"
             @click="routerGoTo('/webview', { url: 'https://www.iwara.tv/account/premium', title: t('home.my.premium') })">
             <div class="icon" style="color: #ff62cd;">
-              <font-awesome-icon icon="fa-solid fa-star" />
+              <iconStar theme="outline" size="22" fill="#ff62cd" />
             </div>
             <div class="text">{{ t('home.my.premium') }}</div>
           </div>
           <div class="btn"
             @click="routerGoTo('/webview', { url: 'https://www.iwara.tv/dashboard', title: t('home.my.wura') })">
             <div class="icon" style="color: #dda82b;">
-              <font-awesome-icon icon="fa-solid fa-coins" />
+              <iconFinancing theme="outline" size="22" fill="#dda82b" />
             </div>
             <div class="text">{{ t('home.my.wura') }}</div>
           </div>
           <div class="btn"
             @click="routerGoTo('/webview', { url: 'https://www.iwara.tv/page/faq', title: t('home.my.faq') })">
             <div class="icon">
-              <font-awesome-icon icon="fa-solid fa-circle-question" />
+              <iconHelp theme="outline" size="22" />
             </div>
             <div class="text">{{ t('home.my.faq') }}</div>
           </div>
           <div class="btn"
             @click="routerGoTo('/webview', { url: 'https://www.iwara.tv/page/links', title: t('home.my.links') })">
             <div class="icon">
-              <font-awesome-icon icon="fa-solid fa-share-nodes" />
+              <iconShareOne theme="outline" size="22" />
             </div>
             <div class="text">{{ t('home.my.links') }}</div>
           </div>

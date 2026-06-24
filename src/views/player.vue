@@ -630,6 +630,10 @@ onUnmounted(() => {
   @include down(md) {
     display: none;
   }
+
+  @media (orientation: portrait) {
+    display: none;
+  }
 }
 
 .view-side-content {
@@ -650,7 +654,9 @@ onUnmounted(() => {
   width: 100%;
 
   @include up(md) {
-    max-height: 66.67vh;
+    @media (orientation: landscape) {
+      max-height: 66.67vh;
+    }
   }
 }
 
@@ -660,7 +666,9 @@ onUnmounted(() => {
   display: block;
 
   @include up(md) {
-    max-height: 66.67vh;
+    @media (orientation: landscape) {
+      max-height: 66.67vh;
+    }
   }
 }
 

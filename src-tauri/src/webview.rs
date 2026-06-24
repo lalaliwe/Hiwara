@@ -29,11 +29,18 @@ pub async fn inject_webview_initialization_script(
         let script = format!(
             r#"
             (function() {{
-                var style = document.createElement('style');
-                style.type = 'text/css';
-                style.innerHTML = `{}`;
-                document.head.appendChild(style);
-                console.log('[WebView] Initialization CSS injected');
+                function injectCSS() {{
+                    if (document.head) {{
+                        var style = document.createElement('style');
+                        style.type = 'text/css';
+                        style.innerHTML = `{}`;
+                        document.head.appendChild(style);
+                        console.log('[WebView] Initialization CSS injected');
+                    }} else {{
+                        setTimeout(injectCSS, 10);
+                    }}
+                }}
+                injectCSS();
             }})();
             "#,
             css_rules.replace('`', "\\`")
