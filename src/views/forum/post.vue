@@ -25,6 +25,7 @@ const id = ref(route.query.id as string);
 const sectionId = ref(route.query.sectionId as string);
 
 const postListView = ref<InstanceType<typeof VInfiniteScroll>>();
+const postContentRef = ref<HTMLElement>();
 let postScrollTop = 0;
 
 // ========== 数据接口定义 ==========
@@ -213,8 +214,8 @@ const goToPublish = () => {
 
 // 页面激活时恢复滚动位置
 onActivated(() => {
-  if (postListView.value) {
-    postListView.value.$el.scrollTop = postScrollTop;
+  if (postContentRef.value) {
+    postContentRef.value.scrollTop = postScrollTop;
   }
   // 如果还没有数据，则加载
   if (posts.value.length === 0 && postState.value === 'loading') {
@@ -229,7 +230,7 @@ fetchPostData(0);
 <template>
   <div id="forumPostView">
     <ForumTopBar label1="帖子详情" :show-publish="true" @go-back="goBack" @publish="goToPublish" />
-    <div class="content" id="forumPostContent">
+    <div ref="postContentRef" class="content" id="forumPostContent" @scroll="handleScroll">
       <!-- 加载失败 -->
       <div v-if="postState === 'failed'" class="status-container" @click="handleErrorClick">
         <errorHuawu>{{ t('home.video.loadFailed') }}</errorHuawu>
@@ -243,8 +244,7 @@ fetchPostData(0);
         <loadingHuawu>{{ t('home.video.loading') }}</loadingHuawu>
       </div>
       <!-- 数据列表 -->
-      <v-infinite-scroll v-else color="#00796B" @load="handleScrollToEnd" :disabled="hasMore" ref="postListView"
-        @scroll="handleScroll">
+      <v-infinite-scroll v-else color="#00796B" @load="handleScrollToEnd" :disabled="hasMore" ref="postListView">
         <!-- 楼主（第一个帖子，带标题） -->
         <ForumPostItem v-if="thread && posts.length > 0" :post="posts[0] as PostItemData" :floor-number="0"
           :show-title="true" :title="thread.title" />

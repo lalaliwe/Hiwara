@@ -23,6 +23,7 @@ const route = useRoute();
 const sectionId = ref(route.query.sectionId as string);
 
 const forumListView = ref<InstanceType<typeof VInfiniteScroll>>();
+const forumContentRef = ref<HTMLElement>();
 let forumScrollTop = 0;
 
 // ========== 数据接口定义 ==========
@@ -232,8 +233,8 @@ const goBack = () => {
 
 // 页面激活时恢复滚动位置
 onActivated(() => {
-  if (forumListView.value) {
-    forumListView.value.$el.scrollTop = forumScrollTop;
+  if (forumContentRef.value) {
+    forumContentRef.value.scrollTop = forumScrollTop;
   }
   // 如果还没有数据，则加载
   if (threads.value.length === 0 && forumState.value === 'loading') {
@@ -248,7 +249,7 @@ fetchForumData(0);
 <template>
   <div id="forumView">
     <ForumTopBar :label1="label1Text" :label2="label2Text" :show-publish="true" @go-back="goBack" @publish="goToPublish" />
-    <div class="content" id="forumContent">
+    <div ref="forumContentRef" class="content" id="forumContent" @scroll="handleScroll">
       <!-- 加载失败 -->
       <div v-if="forumState === 'failed'" class="status-container" @click="handleErrorClick">
         <errorHuawu>{{ t('home.forum.listLoadFailed') }}</errorHuawu>
@@ -262,8 +263,7 @@ fetchForumData(0);
         <loadingHuawu>{{ t('home.video.loading') }}</loadingHuawu>
       </div>
       <!-- 数据列表 -->
-      <v-infinite-scroll v-else color="#00796B" @load="handleScrollToEnd" :disabled="hasMore" ref="forumListView"
-        @scroll="handleScroll">
+      <v-infinite-scroll v-else color="#00796B" @load="handleScrollToEnd" :disabled="hasMore" ref="forumListView">
         <ForumThreadItem v-for="thread in threads" :key="thread.id" :thread="thread" @click="goToThread(thread)" />
         <template v-slot:error="{ props }">
           <div class="load-more-failed">
