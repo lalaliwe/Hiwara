@@ -49,15 +49,26 @@ const props = defineProps<{
 const { t } = useI18n();
 const router = useRouter();
 
-/** 点击链接时通过 webview 打开 */
+/** 点击链接时处理导航 */
 function handleLinkClick(e: MouseEvent) {
   const target = e.target as HTMLElement;
   // 查找 <a> 标签或 .iwara-link 元素
   const link = target.closest('a') || target.closest('.iwara-link') as HTMLElement | null;
   if (!link) return;
 
+  // @ 提及 → 跳转到用户空间
+  if (link.classList.contains('mention-link')) {
+    e.preventDefault();
+    e.stopPropagation();
+    const href = (link as HTMLAnchorElement).getAttribute('href') || '';
+    const username = href.replace(/https?:\/\/[^/]+\/profile\//, '');
+    if (username) {
+      router.push({ path: `/zone/${username}` });
+    }
+    return;
+  }
+
   let url: string | null = null;
-  let isExternal = false;
 
   if (link.tagName === 'A') {
     const href = (link as HTMLAnchorElement).getAttribute('href');
@@ -67,12 +78,31 @@ function handleLinkClick(e: MouseEvent) {
     if (href === '' || href === '#' || href.startsWith('javascript:') || href.startsWith('mailto:')) return;
 
     url = href;
-    isExternal = true;
   } else if (link.classList.contains('iwara-link')) {
     // iwara 内部链接卡片
+    const type = link.getAttribute('data-type');
+    const id = link.getAttribute('data-id');
+    if (!type || !id) return;
+
+    e.preventDefault();
+    e.stopPropagation();
+
+    if (type === 'user') {
+      router.push({ path: `/zone/${id}` });
+      return;
+    }
+    if (type === 'video') {
+      router.push({ path: `/player/${id}` });
+      return;
+    }
+    if (type === 'image') {
+      router.push({ path: `/image/${id}` });
+      return;
+    }
+
+    // 其他类型（forum / playlist / rule / page / poll）通过 webview 打开
     url = link.getAttribute('data-href');
     if (!url) return;
-    isExternal = true;
   }
 
   if (!url) return;

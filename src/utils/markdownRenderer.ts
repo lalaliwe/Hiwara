@@ -3,6 +3,11 @@ import MarkdownIt from 'markdown-it';
 /**
  * Built-in internal link types on iwara.tv
  */
+// 规范化映射：非标准路径段 → 标准类型
+const IWARA_PATH_ALIAS: Record<string, string> = {
+  profile: 'user',
+};
+
 const IWARA_LINK_TYPES: Record<string, { icon: string; label: string }> = {
   user:     { icon: 'fa-solid fa-circle-user',   label: 'User' },
   video:    { icon: 'fa-solid fa-video',          label: 'Video' },
@@ -34,13 +39,21 @@ function parseIwaraLink(url: string): { type: string; id: string; slug?: string 
     const parts = parsed.pathname.replace(/\/+$/, '').split('/').filter(Boolean);
     if (parts.length === 0) return null;
 
-    const [type, ...rest] = parts;
-    const id = rest.join('/');
+    let [type, ...rest] = parts;
 
-    if (type in IWARA_LINK_TYPES && id) {
-      return { type, id, slug: parsed.search || undefined };
-    }
-    return null;
+    // 别名规范化（如 profile → user）
+    const alias = IWARA_PATH_ALIAS[type];
+    if (alias) type = alias;
+
+    if (!(type in IWARA_LINK_TYPES)) return null;
+
+    // id = 第一个路径段（用于内部路由），slug = 剩余部分（SEO）
+    const id = rest[0] || '';
+    const slug = rest.slice(1).join('/') || undefined;
+
+    if (!id) return null;
+
+    return { type, id, slug: slug || parsed.search?.slice(1) || undefined };
   } catch {
     return null;
   }
@@ -144,14 +157,18 @@ md.renderer.rules.link_open = function (tokens, idx, options, env, self) {
   }
 
   // 将 <a> 替换为包裹 span，保留原始 URL 在 data-href 中
-  token.type = 'iwara_link_open';
-  token.tag = 'span';
-  token.attrs = [
+  const attrs: [string, string][] = [
     ['class', `iwara-link iwara-link--${iwara.type}`],
     ['data-type', iwara.type],
     ['data-id', iwara.id],
     ['data-href', href],
   ];
+  if (iwara.slug) {
+    attrs.push(['data-slug', iwara.slug]);
+  }
+  token.type = 'iwara_link_open';
+  token.tag = 'span';
+  token.attrs = attrs;
 
   if (closeIdx !== -1) {
     tokens[closeIdx].type = 'iwara_link_close';
