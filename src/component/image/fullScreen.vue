@@ -90,8 +90,9 @@ const onSwiper = (swiper: SwiperType) => {
 
   // 获取按钮元素并添加事件监听
   setTimeout(() => {
-    prevButton = document.querySelector('.swiper-button-prev');
-    nextButton = document.querySelector('.swiper-button-next');
+    const container = swiper.el;
+    prevButton = container.querySelector('.swiper-button-prev');
+    nextButton = container.querySelector('.swiper-button-next');
 
     if (prevButton && nextButton) {
       // 为两个按钮添加鼠标事件监听

@@ -27,6 +27,8 @@ const router = useRouter();
 // 内容容器（用于 ResizeObserver 动态高度重算）
 const infoContentRef = ref<HTMLElement>();
 let contentResizeObserver: ResizeObserver | null = null;
+// 交叉观察器：组件从隐藏变为可见时重算高度
+let intersectionObserver: IntersectionObserver | null = null;
 
 // 插画信息展开状态（内部状态）
 const infoExpand = ref(false);
@@ -99,6 +101,9 @@ function handleResize() {
 
 onMounted(() => {
   calculateHeights();
+  // 下一帧重算一次，确保首次渲染完成后的尺寸正确
+  requestAnimationFrame(() => calculateHeights());
+
   if (titleRef.value) {
     titleRef.value.style.height = heights.value.titleCollapse + 'px';
     titleRef.value.style.whiteSpace = 'nowrap';
@@ -114,6 +119,20 @@ onMounted(() => {
     });
     contentResizeObserver.observe(infoContentRef.value);
   }
+
+  // 交叉观察器：组件从隐藏变为可见时重算高度
+  // 不受祖先 CSS display 层级限制（解决 view-side 在 portrait 下 display:none 的问题）
+  if (infoContentRef.value) {
+    intersectionObserver = new IntersectionObserver(
+      (entries) => {
+        if (entries[0]?.isIntersecting) {
+          requestAnimationFrame(() => calculateHeights());
+        }
+      },
+      { threshold: 0 }
+    );
+    intersectionObserver.observe(infoContentRef.value);
+  }
 })
 
 onUnmounted(() => {
@@ -123,6 +142,11 @@ onUnmounted(() => {
   if (contentResizeObserver) {
     contentResizeObserver.disconnect();
     contentResizeObserver = null;
+  }
+  // 断开 IntersectionObserver
+  if (intersectionObserver) {
+    intersectionObserver.disconnect();
+    intersectionObserver = null;
   }
 })
 
@@ -537,7 +561,7 @@ function detectDarkMode(): boolean {
 
 .title {
   margin: 5px 0;
-  padding: 0 15px 0 10px;
+  padding: 10px 15px 0 10px;
   text-overflow: ellipsis;
   overflow: hidden;
   font-size: 1.1rem;
