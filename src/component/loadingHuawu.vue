@@ -1,10 +1,71 @@
 <script setup lang="ts">
+import { ref, nextTick, onMounted, onUnmounted } from 'vue'
+import huawuLoadingPng from '../static/img/huawuLoading.png'
+
+const TOTAL_FRAMES = 33
+const ANIMATION_DURATION = 2500 // ms
+const FRAME_INTERVAL = ANIMATION_DURATION / TOTAL_FRAMES
+
+const isLinux = ref(false)
+const jsImgRef = ref<HTMLImageElement | null>(null)
+let rafId: number | null = null
+let startTime = 0
+
+function startJsAnimation() {
+  function animate(timestamp: number) {
+    if (!jsImgRef.value) {
+      rafId = requestAnimationFrame(animate)
+      return
+    }
+    if (!startTime) startTime = timestamp
+    const elapsed = timestamp - startTime
+    const frameIndex = Math.floor(elapsed / FRAME_INTERVAL) % TOTAL_FRAMES
+    const offset = (frameIndex / TOTAL_FRAMES) * 100
+    jsImgRef.value.style.transform = `translateY(-${offset}%)`
+    rafId = requestAnimationFrame(animate)
+  }
+  rafId = requestAnimationFrame(animate)
+}
+
+onMounted(async () => {
+  try {
+    const { getDeviceInfo } = await import('../plugins/deviceInfo')
+    const deviceInfo = await getDeviceInfo()
+    const osName = deviceInfo.osName.toLowerCase()
+    if (osName.includes('linux')) {
+      isLinux.value = true
+      await nextTick()
+      startJsAnimation()
+    }
+  } catch {
+    // 无法获取设备信息时，保持默认 CSS 动画
+  }
+})
+
+onUnmounted(() => {
+  if (rafId !== null) {
+    cancelAnimationFrame(rafId)
+    rafId = null
+  }
+})
 </script>
 
 <template>
   <div class="loading-huawu-container">
     <div class="animation">
-      <img src="../static/img/huawuLoading.png" alt="">
+      <img
+        v-if="!isLinux"
+        :src="huawuLoadingPng"
+        alt=""
+        class="sprite css-sprite"
+      >
+      <img
+        v-else
+        ref="jsImgRef"
+        :src="huawuLoadingPng"
+        alt=""
+        class="sprite js-sprite"
+      >
     </div>
     <div v-if="$slots.default" class="loading-text">
       <slot></slot><span class="dots"></span>
@@ -31,8 +92,14 @@
   overflow: hidden;
   width: 200px;
   aspect-ratio: 1086 / 724;
-  img {
+
+  .sprite {
+    display: block;
     width: 100%;
+    height: auto;
+  }
+
+  .css-sprite {
     animation: moveUp 2.5s steps(33, end) infinite;
   }
 }
@@ -42,7 +109,7 @@
     transform: translateY(0);
   }
   100% {
-    transform: translateY(calc(-100% / 33 * 33));
+    transform: translateY(-100%);
   }
 }
 
@@ -50,7 +117,7 @@
   font-family: 'AaXinRui85-2';
   color: var(--color-primary);
   // margin-top: 16px;
-  
+
   .dots::after {
     content: '';
     animation: dotsAnimation 1s infinite;
