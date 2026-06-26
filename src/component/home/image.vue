@@ -8,12 +8,14 @@ import { useI18n } from 'vue-i18n';
 import { Swiper, SwiperSlide } from 'swiper/vue';
 import type { Swiper as SwiperType } from 'swiper';
 import 'swiper/swiper-bundle.css';
+import { ai } from '../../core/store';
 import { getImageList as api_getImageList } from '../../core/api';
 import loadingHuawu from '../loadingHuawu.vue';
 import errorHuawu from '../errorHuawu.vue';
 import { showShortToast } from '../../core/toast';
 import type { VInfiniteScroll } from 'vuetify/components'
 
+const aiStore = ai();
 const { t } = useI18n();
 
 const tab = ref<'date' | 'trending' | 'popularity' | 'views' | 'likes'>('date');
@@ -178,7 +180,7 @@ async function getImageList(tabNum: number): Promise<any> {
   try {
     const sort = tabArray.value[tabNum].value;
     const date = dateFilter.value; // 使用全局时间筛选条件
-    const res = await api_getImageList(page[tabNum], sort, date);
+    const res = await api_getImageList(page[tabNum], sort, date, undefined, aiStore.value);
     console.log(`获取插画列表 - Tab:${tabNum}, Page:${page[tabNum]}, Sort:${sort}, Date:${date}`);
     // console.log(res);
     if (!res.ok)

@@ -3,13 +3,14 @@ import { onActivated, onMounted, ref, watch } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { useAutoStatusBar } from '../composables/useAutoStatusBar'
-import { uid as muid } from '../core/store';
+import { ai, uid as muid } from '../core/store';
 import { getMyselfInfo } from '../core/api';
 import following from '../component/friends/following.vue'
 import fans from '../component/friends/fans.vue'
 import friend from '../component/friends/friend.vue'
 import loadingHuawu from '../component/loadingHuawu.vue'
 
+const aiStore = ai();
 const { t } = useI18n();
 
 defineOptions({
@@ -45,7 +46,7 @@ async function initUid() {
 
   // 3. 从 API 获取当前用户信息
   try {
-    const res = await getMyselfInfo()
+    const res = await getMyselfInfo(aiStore.value)
     if (res.ok && res.data?.user?.id) {
       uid.value = res.data.user.id
       // 同步更新 store，避免后续重复请求

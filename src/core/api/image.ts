@@ -3,7 +3,7 @@ import { getAccessToken } from './auth';
 import { getSendRequestIwara, postSendRequestIwara, deleteSendRequestIwara } from './iwara';
 
 // 获取用户订阅插画列表
-export async function getSubscribeImageList(page: number): Promise<any> {
+export async function getSubscribeImageList(page: number, isAI: boolean): Promise<any> {
   const path = `${API_URL}/images`;
   const headers = {
     Authorization: `Bearer ${await getAccessToken()}`,
@@ -15,7 +15,7 @@ export async function getSubscribeImageList(page: number): Promise<any> {
     subscribed: true
   };
   try {
-    const response = await getSendRequestIwara(path, headers, query);
+    const response = await getSendRequestIwara(path, isAI, headers, query);
     return response;
   } catch (error) {
     console.error('Get subscribe image list failed:', error);
@@ -24,7 +24,7 @@ export async function getSubscribeImageList(page: number): Promise<any> {
 }
 
 // 获取用户收藏的插画列表
-export async function getFavoritesImageList(page: number): Promise<any> {
+export async function getFavoritesImageList(page: number, isAI: boolean): Promise<any> {
   const path = `${API_URL}/favorites/images`;
   const headers = {
     Authorization: `Bearer ${await getAccessToken()}`,
@@ -34,7 +34,7 @@ export async function getFavoritesImageList(page: number): Promise<any> {
     limit: 32,
   };
   try {
-    const response = await getSendRequestIwara(path, headers, query);
+    const response = await getSendRequestIwara(path, isAI, headers, query);
     return response;
   } catch (error) {
     console.error('Get favorites image list failed:', error);
@@ -43,7 +43,7 @@ export async function getFavoritesImageList(page: number): Promise<any> {
 }
 
 // 获取插画列表
-export async function getImageList(page: number, sort: string, date?: string, user?: string): Promise<any> {
+export async function getImageList(page: number, sort: string, isAI: boolean, date?: string, user?: string): Promise<any> {
   const path = `${API_URL}/images`;
   const headers = {
     Authorization: `Bearer ${await getAccessToken()}`,
@@ -57,7 +57,7 @@ export async function getImageList(page: number, sort: string, date?: string, us
     ...(user && { user })
   };
   try {
-    const response = await getSendRequestIwara(path, headers, query);
+    const response = await getSendRequestIwara(path, isAI, headers, query);
     return response;
   } catch (error) {
     console.error('Get image list failed:', error);
@@ -66,14 +66,14 @@ export async function getImageList(page: number, sort: string, date?: string, us
 }
 
 // 获取插画信息
-export async function getImageInfo(imageId: string): Promise<any> {
+export async function getImageInfo(imageId: string, isAI: boolean): Promise<any> {
   const path = `${API_URL}/image/${imageId}`;
   const headers = {
     Authorization: `Bearer ${await getAccessToken()}`,
   };
   try {
     console.log(path)
-    const response = await getSendRequestIwara(path, headers);
+    const response = await getSendRequestIwara(path, isAI, headers);
     return response;
   } catch (error) {
     console.error('Get image info failed:', error);
@@ -82,13 +82,13 @@ export async function getImageInfo(imageId: string): Promise<any> {
 }
 
 // 点赞插画
-export async function likeImage(imageId: string): Promise<any> {
+export async function likeImage(imageId: string, isAI: boolean): Promise<any> {
   const path = `${API_URL}/image/${imageId}/like`;
   const headers = {
     Authorization: `Bearer ${await getAccessToken()}`,
   };
   try {
-    const response = await postSendRequestIwara(path, headers);
+    const response = await postSendRequestIwara(path, isAI, headers);
     return response;
   } catch (error) {
     console.error('Like image failed:', error);
@@ -97,13 +97,13 @@ export async function likeImage(imageId: string): Promise<any> {
 }
 
 // 取消点赞插画
-export async function unlikeImage(imageId: string): Promise<any> {
+export async function unlikeImage(imageId: string, isAI: boolean): Promise<any> {
   const path = `${API_URL}/image/${imageId}/like`;
   const headers = {
     Authorization: `Bearer ${await getAccessToken()}`,
   };
   try {
-    const response = await deleteSendRequestIwara(path, headers);
+    const response = await deleteSendRequestIwara(path, isAI, headers);
     return response;
   } catch (error) {
     console.error('Unlike image failed:', error);
@@ -112,7 +112,7 @@ export async function unlikeImage(imageId: string): Promise<any> {
 }
 
 // 获取插画推荐：该用户的其他插画
-export async function getImageRecommendByUser(pid: string, uid: string): Promise<any> {
+export async function getImageRecommendByUser(pid: string, uid: string, isAI: boolean): Promise<any> {
   const path = `${API_URL}/images`;
   const headers = {
     Authorization: `Bearer ${await getAccessToken()}`,
@@ -124,7 +124,7 @@ export async function getImageRecommendByUser(pid: string, uid: string): Promise
     limit: 6
   };
   try {
-    const response = await getSendRequestIwara(path, headers, query);
+    const response = await getSendRequestIwara(path, isAI, headers, query);
     return response;
   } catch (error) {
     console.error('Get image recommend by user failed:', error);
@@ -133,13 +133,13 @@ export async function getImageRecommendByUser(pid: string, uid: string): Promise
 }
 
 // 获取插画推荐：更多插画
-export async function getImageRecommendByOther(pid: string): Promise<any> {
+export async function getImageRecommendByOther(pid: string, isAI: boolean): Promise<any> {
   const path = `${API_URL}/image/${pid}/related`;
   const headers = {
     Authorization: `Bearer ${await getAccessToken()}`,
   };
   try {
-    const response = await getSendRequestIwara(path, headers);
+    const response = await getSendRequestIwara(path, isAI, headers);
     return response;
   } catch (error) {
     console.error('Get image recommend by other failed:', error);
@@ -148,7 +148,7 @@ export async function getImageRecommendByOther(pid: string): Promise<any> {
 }
 
 // 获取插画评论
-export async function getImageComments(pid: string, page: number): Promise<any> {
+export async function getImageComments(pid: string, page: number, isAI: boolean): Promise<any> {
   const path = `${API_URL}/image/${pid}/comments`;
   const headers = {
     Authorization: `Bearer ${await getAccessToken()}`,
@@ -158,7 +158,7 @@ export async function getImageComments(pid: string, page: number): Promise<any> 
     limit: 32
   };
   try {
-    const response = await getSendRequestIwara(path, headers, query);
+    const response = await getSendRequestIwara(path, isAI, headers, query);
     return response;
   } catch (error) {
     console.error('Get image comments failed:', error);
@@ -167,7 +167,7 @@ export async function getImageComments(pid: string, page: number): Promise<any> 
 }
 
 // 获取插画评论回复
-export async function getImageCommentReplies(pid: string, commentId: string, page: number = 0, limit: number = 32): Promise<any> {
+export async function getImageCommentReplies(pid: string, commentId: string, page: number = 0, limit: number = 32, isAI: boolean): Promise<any> {
   const path = `${API_URL}/image/${pid}/comments`;
   const headers = {
     Authorization: `Bearer ${await getAccessToken()}`,
@@ -178,7 +178,7 @@ export async function getImageCommentReplies(pid: string, commentId: string, pag
     limit: limit
   };
   try {
-    const response = await getSendRequestIwara(path, headers, query);
+    const response = await getSendRequestIwara(path, isAI, headers, query);
     return response;
   } catch (error) {
     console.error('Get image comment replies failed:', error);
@@ -187,7 +187,7 @@ export async function getImageCommentReplies(pid: string, commentId: string, pag
 }
 
 // 发表插画评论
-export async function postImageComment(pid: string, body: string, parentId?: string): Promise<any> {
+export async function postImageComment(pid: string, body: string, isAI: boolean, parentId?: string): Promise<any> {
   const path = `${API_URL}/image/${pid}/comments`;
   const headers = {
     Authorization: `Bearer ${await getAccessToken()}`,
@@ -197,7 +197,7 @@ export async function postImageComment(pid: string, body: string, parentId?: str
     postBody.parentId = parentId;
   }
   try {
-    const response = await postSendRequestIwara(path, headers, postBody);
+    const response = await postSendRequestIwara(path, isAI, headers, postBody);
     return response;
   } catch (error) {
     console.error('Post image comment failed:', error);

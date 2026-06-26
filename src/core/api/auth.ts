@@ -37,7 +37,7 @@ export async function login(email: string, password: string): Promise<any> {
     password
   };
   try {
-    const response = await postSendRequestIwara(path, undefined, body);
+    const response = await postSendRequestIwara(path, false, undefined, body);
     return response;
   } catch (error) {
     console.error('Login failed:', error);
@@ -61,7 +61,7 @@ export async function getAccessToken(): Promise<any> {
   };
 
   try {
-    const response = await postSendRequestIwara(path, headers);
+    const response = await postSendRequestIwara(path, false, headers);
     store_token().set(response.data.accessToken);
     return response.data.accessToken;
   } catch (error) {

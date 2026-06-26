@@ -9,7 +9,7 @@ export async function getForumHome(): Promise<any> {
     Authorization: `Bearer ${await getAccessToken()}`,
   };
   try {
-    const response = await getSendRequestIwara(path, headers);
+    const response = await getSendRequestIwara(path, false, headers);
     return response;
   } catch (error) {
     console.error('Get subscribe image list failed:', error);
@@ -28,7 +28,7 @@ export async function getForumCategoryList(sectionId: string, page: number = 0, 
     limit: limit,
   };
   try {
-    const response = await getSendRequestIwara(path, headers, query);
+    const response = await getSendRequestIwara(path, false, headers, query);
     return response;
   } catch (error) {
     console.error('Get forum category list failed:', error);
@@ -43,7 +43,7 @@ export async function getForumPostDetail(sectionId: string, id: string): Promise
     Authorization: `Bearer ${await getAccessToken()}`,
   };
   try {
-    const response = await getSendRequestIwara(path, headers);
+    const response = await getSendRequestIwara(path, false, headers);
     return response;
   } catch (error) {
     console.error('Get forum post detail failed:', error);
@@ -62,7 +62,7 @@ export async function getForumPostReplies(sectionId: string, id: string, page: n
     limit: limit,
   };
   try {
-    const response = await getSendRequestIwara(path, headers, query);
+    const response = await getSendRequestIwara(path, false, headers, query);
     return response;
   } catch (error) {
     console.error('Get forum post replies failed:', error);
@@ -81,7 +81,7 @@ export async function replyForumPost(id: string, content: string): Promise<any> 
     rulesAgreement: true
   };
   try {
-    const response = await postSendRequestIwara(path, headers, body);
+    const response = await postSendRequestIwara(path, false, headers, body);
     return response;
   } catch (error) {
     console.error('Reply forum post failed:', error);
@@ -102,7 +102,7 @@ export async function createForumThread(section: string, title: string, body: st
     rulesAgreement: true
   };
   try {
-    const response = await postSendRequestIwara(path, headers, bodyData);
+    const response = await postSendRequestIwara(path, false, headers, bodyData);
     return response;
   } catch (error) {
     console.error('Create forum thread failed:', error);

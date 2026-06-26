@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n';
 import { useRouter } from 'vue-router';
+import { ai } from '../../core/store';
+
+const aiStore = ai();
 import ForumAvatar from './ForumAvatar.vue';
 import type { AvatarUser } from './ForumAvatar.vue';
 import { renderForumBody } from '../../utils/markdownRenderer';
@@ -92,11 +95,11 @@ function handleLinkClick(e: MouseEvent) {
       return;
     }
     if (type === 'video') {
-      router.push({ path: `/player/${id}` });
+      router.push({ path: `/player/${id}`, query: { isAI: aiStore.value ? 'true' : 'false' } });
       return;
     }
     if (type === 'image') {
-      router.push({ path: `/image/${id}` });
+      router.push({ path: `/image/${id}`, query: { isAI: aiStore.value ? 'true' : 'false' } });
       return;
     }
 

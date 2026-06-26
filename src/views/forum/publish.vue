@@ -3,6 +3,7 @@ import { ref, computed, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import { useAutoStatusBar } from '../../composables/useAutoStatusBar';
+import { ai } from '../../core/store';
 import { createForumThread, getForumHome } from '../../core/api';
 import { showShortToast } from '../../core/toast';
 import ForumSyntaxGuide from '../../component/ForumSyntaxGuide.vue';
@@ -11,6 +12,7 @@ defineOptions({
   name: 'ForumPublish'
 })
 
+const aiStore = ai();
 const { t } = useI18n();
 const router = useRouter();
 
@@ -104,7 +106,7 @@ const selectedSectionLabel = computed(() => {
 async function fetchSections() {
   loadingSections.value = true;
   try {
-    const res = await getForumHome();
+    const res = await getForumHome(aiStore.value);
     const data: ForumSection[] = res?.data || res || [];
     // 过滤掉 locked 的版块
     sections.value = data.filter((s: ForumSection) => !s.locked);
@@ -142,7 +144,7 @@ async function handlePublish() {
 
   sending.value = true;
   try {
-    const res = await createForumThread(selectedSection.value, title.value, body.value);
+    const res = await createForumThread(selectedSection.value, title.value, body.value, aiStore.value);
     if (res?.data?.id) {
       showShortToast('发帖成功');
       // 跳转到帖子详情页

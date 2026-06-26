@@ -7,6 +7,7 @@ import { useI18n } from 'vue-i18n';
 import { Swiper, SwiperSlide } from 'swiper/vue';
 import type { Swiper as SwiperType } from 'swiper';
 import 'swiper/swiper-bundle.css';
+import { ai } from '../../core/store';
 import {
   getSubscribeVideoList as api_getSubscribeVideoList,
   getSubscribeImageList as api_getSubscribeImageList
@@ -16,6 +17,7 @@ import errorHuawu from '../errorHuawu.vue';
 import { showShortToast } from '../../core/toast';
 import type { VInfiniteScroll } from 'vuetify/components'
 
+const aiStore = ai();
 const { t } = useI18n();
 
 const videoListView = ref<InstanceType<typeof VInfiniteScroll>>();
@@ -205,7 +207,7 @@ async function imageListHandleScrollToEnd({ done }: any) {
 // 获取视频列表
 async function getSubscribeVideoList(): Promise<any> {
   try {
-    const res = await api_getSubscribeVideoList(videoListPage);
+    const res = await api_getSubscribeVideoList(videoListPage, aiStore.value);
     // console.log(res);
     if (!res.ok)
       throw new Error(`状态码：${res.status}, 错误信息：${res.statusText}`);
@@ -241,7 +243,7 @@ async function getSubscribeVideoList(): Promise<any> {
 // 获取插画列表
 async function getSubscribeImageList(): Promise<any> {
   try {
-    const res = await api_getSubscribeImageList(imageListPage);
+    const res = await api_getSubscribeImageList(imageListPage, aiStore.value);
     // console.log(res);
     if (!res.ok)
       throw new Error(`状态码：${res.status}, 错误信息：${res.statusText}`);

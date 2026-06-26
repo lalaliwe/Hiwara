@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import { ref, onMounted, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
+import { ai } from '../../core/store';
 import { getImageIwara } from '../../core/api';
 import notImg from '../../static/img/not-img.jpg'
 import iwaraSVG from '../../assets/svg/iwara.svg'
 
+const aiStore = ai();
 const { t } = useI18n();
 
 interface ImageFile {
@@ -39,7 +41,7 @@ const isServerUrl = (url: string): boolean => {
 const processImageFile = async (file: ImageFile): Promise<string> => {
   try {
     const url = `https://i.iwara.tv/image/large/${file.id}/${file.name}`;
-    return await getImageIwara(url);
+    return await getImageIwara(url, aiStore.value);
   } catch (error) {
     console.error('Failed to load image:', file, error);
     return '';

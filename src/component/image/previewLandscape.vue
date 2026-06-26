@@ -3,11 +3,13 @@ import { ref, watch, computed, onUnmounted } from 'vue';
 import { Swiper, SwiperSlide } from 'swiper/vue';
 import { Navigation } from 'swiper/modules';
 import type { Swiper as SwiperType } from 'swiper';
+import { ai } from '../../core/store';
 import { getImageIwara } from '../../core/api';
 import placeholderImg from '../../static/img/placeholder.png'
 import notImg from '../../static/img/not-img.jpg'
 import iwaraSVG from '../../assets/svg/iwara.svg'
 
+const aiStore = ai();
 import 'swiper/swiper-bundle.css';
 
 interface ImageFile {
@@ -42,7 +44,7 @@ const isServerUrl = (url: string): boolean => {
 const processImageFile = async (file: ImageFile): Promise<string> => {
   try {
     const url = `https://i.iwara.tv/image/large/${file.id}/${file.name}`;
-    return await getImageIwara(url);
+    return await getImageIwara(url, aiStore.value);
   } catch (error) {
     console.error('Failed to load image:', file, error);
     return '';

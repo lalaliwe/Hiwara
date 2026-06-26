@@ -10,7 +10,7 @@ import { showShortToast } from '../../core/toast';
 
 const { t } = useI18n();
 
-const props = defineProps(['pid', 'uid']);
+const props = defineProps(['pid', 'uid', 'isAI']);
 
 interface ListItem {
   id: string;
@@ -30,7 +30,7 @@ getImageRecommendByUser()
 getImageRecommendByOther()
 async function getImageRecommendByUser() {
   try {
-    const res = await api_getImageRecommendByUser(props.pid, props.uid);
+    const res = await api_getImageRecommendByUser(props.pid, props.uid, props.isAI);
     console.log(res);
     if (!res.ok)
       throw new Error(`状态码：${res.status}, 错误信息：${res.statusText}`);
@@ -58,7 +58,7 @@ async function getImageRecommendByUser() {
 }
 async function getImageRecommendByOther() {
   try {
-    const res = await api_getImageRecommendByOther(props.pid);
+    const res = await api_getImageRecommendByOther(props.pid, props.isAI);
     console.log(res);
     if (!res.ok)
       throw new Error(`状态码：${res.status}, 错误信息：${res.statusText}`);
@@ -93,7 +93,7 @@ async function getImageRecommendByOther() {
         该作者其他插画
       </div>
       <div class="lists">
-        <cardButton v-for="(item, index) in authorOtherVideoList" :key="item.id" type="image" :data="{
+        <cardButton v-for="(item, index) in authorOtherVideoList" :key="item.id" type="image" :isAI="props.isAI" :data="{
           id: item.id,
           title: item.title,
           img: item.img,
@@ -111,7 +111,7 @@ async function getImageRecommendByOther() {
         更多推荐
       </div>
       <div class="lists">
-        <cardButton v-for="(item, index) in recommendVideoList" :key="item.id" type="image" :data="{
+        <cardButton v-for="(item, index) in recommendVideoList" :key="item.id" type="image" :isAI="props.isAI" :data="{
           id: item.id,
           title: item.title,
           img: item.img,

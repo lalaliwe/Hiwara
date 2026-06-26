@@ -2,12 +2,14 @@
 import { onActivated, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import cardButton from '../cardButton.vue';
+import { ai } from '../../core/store';
 import { search } from '../../core/api/video';
 import loadingHuawu from '../loadingHuawu.vue';
 import errorHuawu from '../errorHuawu.vue';
 import { showShortToast } from '../../core/toast';
 import type { VInfiniteScroll } from 'vuetify/components'
 
+const aiStore = ai();
 const { t } = useI18n();
 
 const props = defineProps<{
@@ -43,7 +45,7 @@ const loadMoreImageData = async ({ done }: any = { done: () => { } }) => {
   imageIsLoading.value = true;
 
   try {
-    const res = await search(props.keyword, imagePage.value, 'images');
+    const res = await search(props.keyword, imagePage.value, 'images', aiStore.value);
     console.log('插画搜索 API 返回值:', res);
     if (!res.ok) throw new Error(`状态码：${res.status}, 错误信息：${res.statusText}`);
 

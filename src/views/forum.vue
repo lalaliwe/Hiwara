@@ -3,6 +3,7 @@ import { useRouter, useRoute } from 'vue-router';
 import { ref, computed, onActivated } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useAutoStatusBar } from '../composables/useAutoStatusBar';
+import { ai } from '../core/store';
 import { getForumCategoryList } from '../core/api';
 import { showShortToast } from '../core/toast';
 import loadingHuawu from '../component/loadingHuawu.vue';
@@ -16,6 +17,7 @@ defineOptions({
   name: 'Forum'
 })
 
+const aiStore = ai();
 const { t } = useI18n();
 const router = useRouter();
 const route = useRoute();
@@ -149,7 +151,7 @@ async function fetchForumData(page: number = 0) {
   }
 
   try {
-    const res = await getForumCategoryList(sectionId.value, page, pageLimit.value);
+    const res = await getForumCategoryList(sectionId.value, aiStore.value, page, pageLimit.value);
     const data = res?.data;
 
     if (!data || !data.threads || data.threads.length === 0) {

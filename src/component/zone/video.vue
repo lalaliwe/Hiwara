@@ -2,11 +2,13 @@
 import cardButton from '../../component/cardButton.vue';
 import { ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
+import { ai } from '../../core/store';
 import { getVideoList as api_getVideoList } from '../../core/api';
 import loadingHuawu from '../loadingHuawu.vue';
 import errorHuawu from '../errorHuawu.vue';
 import { showShortToast } from '../../core/toast';
 
+const aiStore = ai();
 const { t } = useI18n();
 
 defineOptions({
@@ -82,7 +84,7 @@ async function videoListHandleScrollToEnd({ done }: any) {
 // 获取视频列表
 async function getVideoList(): Promise<any> {
   try {
-    const res = await api_getVideoList(videoListPage, 'date', undefined, props.uid);
+    const res = await api_getVideoList(videoListPage, 'date', undefined, props.uid, aiStore.value);
     if (!res.ok)
       throw new Error(`状态码：${res.status}, 错误信息：${res.statusText}`);
     if (res.data.results && res.data.results.length > 0) {

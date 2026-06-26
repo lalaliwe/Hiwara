@@ -18,6 +18,7 @@ import {
 import { useRouter } from 'vue-router'
 import { ref, onMounted, onActivated, inject, watch, type Ref } from 'vue';
 import { useI18n } from 'vue-i18n';
+import { ai } from '../../core/store';
 import {
   getImageIwara,
   getMyselfInfo,
@@ -27,6 +28,7 @@ import {
 import { getVideoHistoryList } from '../../core/database'
 import { showShortToast } from '../../core/toast';
 import HistoryItem from './HistoryItem.vue';
+const aiStore = ai();
 import defaultAvatarImg from '../../static/img/avatar-default.jpg';
 import avatarPlaceholderImg from '../../static/img/avatar-placeholder.png';
 import avatarErrorImg from '../../static/img/avatar-error.png';
@@ -83,7 +85,7 @@ if (isTab) {
 
 async function getUserInfo() {
   try {
-    const userInfoRes = await getMyselfInfo();
+    const userInfoRes = await getMyselfInfo(aiStore.value);
     if (!userInfoRes.ok)
       throw new Error(userInfoRes.message);
     nickname.value = userInfoRes.data.user.name;
@@ -101,7 +103,7 @@ async function getUserInfo() {
   }
   async function getFollowersNum(uid: string) {
     try {
-      const res = await getUserFollowers(uid);
+      const res = await getUserFollowers(uid, aiStore.value);
       if (!res.ok)
         throw new Error(res.message);
       followNum.value = res.data.count;
@@ -111,7 +113,7 @@ async function getUserInfo() {
   }
   async function getFansNum(uid: string) {
     try {
-      const res = await getUserFans(uid);
+      const res = await getUserFans(uid, aiStore.value);
       if (!res.ok)
         throw new Error(res.message);
       fansNum.value = res.data.count;
@@ -129,7 +131,7 @@ async function loadAvatar() {
   } else {
     try {
       // avatar 不为空，通过 API 获取
-      avatarUrl.value = await getImageIwara(avatar.value);
+      avatarUrl.value = await getImageIwara(avatar.value, aiStore.value);
     } catch (error) {
       console.error('Failed to load avatar:', error);
       // 加载失败时使用错误头像

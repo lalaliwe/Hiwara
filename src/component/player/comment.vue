@@ -1,11 +1,13 @@
 <script setup lang="ts">
 import { onActivated, ref, watch, nextTick } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { ai } from '../../core/store';
 import { getVideoComments, getVideoCommentReplies, getImageIwara, postVideoComment } from '../../core/api'
 import errorHuawu from '../errorHuawu.vue'
 import loadingHuawu from '../loadingHuawu.vue'
 import { showShortToast } from '../../core/toast'
 
+const aiStore = ai();
 const { t } = useI18n();
 import defaultAvatarImg from '../../static/img/avatar-default.jpg'
 import avatarPlaceholderImg from '../../static/img/avatar-placeholder.png'
@@ -83,7 +85,7 @@ async function loadUserAvatar(user: CommentUser): Promise<string> {
       // 先拼接头像URL
       const avatarImageUrl = `https://i.iwara.tv/image/avatar/${user.avatar.id}/${user.avatar.name}`
       // 通过 API 获取图片数据
-      avatarUrl = await getImageIwara(avatarImageUrl)
+      avatarUrl = await getImageIwara(avatarImageUrl, aiStore.value)
     }
   } catch (error) {
     console.error('Failed to load avatar:', error)
@@ -206,7 +208,7 @@ async function getCommentList(): Promise<any> {
   }
 
   try {
-    const res = await getVideoComments(props.vid, commentPage);
+    const res = await getVideoComments(props.vid, commentPage, aiStore.value);
     if (res.ok) {
       if (res.data.results && res.data.results.length > 0) {
         const newComments = res.data.results.map((item: any) => {
@@ -294,7 +296,7 @@ async function toggleReplies(comment: Comment) {
   // 加载回复
   repliesLoading.value[id] = true
   try {
-    const res = await getVideoCommentReplies(props.vid, id, 0, 50)
+    const res = await getVideoCommentReplies(props.vid, id, 0, 50, aiStore.value)
     if (res.ok && res.data.results) {
       const replies = res.data.results.map((item: any) => ({
         id: item.id,
@@ -467,7 +469,7 @@ onActivated(() => {
     <!-- 评论输入组件 -->
     <CommentInput
       :content-id="props.vid"
-      :post-comment="postVideoComment"
+      :post-comment="(vid: string, body: string, parentId?: string) => postVideoComment(vid, body, parentId, aiStore.value)"
       :reply-to="replyTarget"
       @posted="handleCommentPosted"
       @cancel-reply="handleCancelReply"

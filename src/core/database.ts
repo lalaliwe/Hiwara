@@ -11,6 +11,36 @@ function generateUUID(): string {
   });
 }
 
+/**
+ * 通用数据库迁移：检查表的现有列，补充缺失的列
+ * @param tableName 表名
+ * @param columns 期望的列定义 Record<列名, SQL类型定义>
+ */
+async function migrateTable(tableName: string, columns: Record<string, string>): Promise<void> {
+  const result: Array<{ name: string }> = await sqlDB.select(
+    `SELECT name FROM sqlite_master WHERE type='table' AND name=?`, [tableName]
+  );
+  if (result.length === 0) return; // 表不存在，由上层 CREATE TABLE 处理
+
+  // 获取现有列
+  const existingColumns: Array<{ name: string }> = await sqlDB.select(
+    `PRAGMA table_info(${tableName})`
+  );
+  const existingNames = new Set(existingColumns.map((c: any) => c.name));
+
+  // 逐个补充缺失的列
+  for (const [colName, colDef] of Object.entries(columns)) {
+    if (!existingNames.has(colName)) {
+      try {
+        await sqlDB.execute(`ALTER TABLE ${tableName} ADD COLUMN ${colDef}`);
+        console.log(`表 ${tableName} 添加列 ${colName} 成功`);
+      } catch (e: any) {
+        console.warn(`表 ${tableName} 添加列 ${colName} 失败:`, e);
+      }
+    }
+  }
+}
+
 // 初始化数据库
 export function initDatabase(): Promise<void> {
   return new Promise(async (resolve, reject) => {
@@ -29,6 +59,7 @@ export function initDatabase(): Promise<void> {
           token TEXT
         );`);
       }
+
       // 独立检查并创建设置表
       const setupResult: Array<{ name: string }> = await sqlDB.select(
         `SELECT name FROM sqlite_master WHERE type='table' AND name='setup'`
@@ -71,9 +102,12 @@ export function initDatabase(): Promise<void> {
           cover_url TEXT,
           long_num INTEGER,
           create_time INTEGER,
-          access_time INTEGER
+          access_time INTEGER,
+          ai BOOLEAN DEFAULT 0
         );`);
         console.log('视频历史表创建成功');
+      } else {
+        await migrateTable('video_history', { ai: 'ai BOOLEAN DEFAULT 0' });
       }
 
       // 独立检查并创建插画历史表
@@ -88,9 +122,12 @@ export function initDatabase(): Promise<void> {
           cover_url TEXT,
           long_num INTEGER,
           create_time INTEGER,
-          access_time INTEGER
+          access_time INTEGER,
+          ai BOOLEAN DEFAULT 0
         );`);
         console.log('插画历史表创建成功');
+      } else {
+        await migrateTable('image_history', { ai: 'ai BOOLEAN DEFAULT 0' });
       }
 
       // 独立检查并创建历史搜索表
@@ -297,7 +334,8 @@ export function insertVideoHistory(
   author: string,
   coverUrl: string,
   longNum: number,
-  createTime: number
+  createTime: number,
+  ai: boolean = false
 ): Promise<void> {
   return new Promise(async (resolve, reject) => {
     try {
@@ -312,15 +350,15 @@ export function insertVideoHistory(
       // 如果已存在，更新所有字段（access_time排到最前，其他字段可能变化）
       if (existingRecord.length > 0) {
         await sqlDB.execute(
-          `UPDATE video_history SET title = ?, author = ?, cover_url = ?, long_num = ?, create_time = ?, access_time = ? WHERE id = ?`,
-          [title, author, coverUrl, longNum, createTime, accessTime, id]
+          `UPDATE video_history SET title = ?, author = ?, cover_url = ?, long_num = ?, create_time = ?, access_time = ?, ai = ? WHERE id = ?`,
+          [title, author, coverUrl, longNum, createTime, accessTime, ai, id]
         );
         console.log('视频历史记录已更新:', id);
       } else {
         // 否则插入新记录
         await sqlDB.execute(
-          `INSERT INTO video_history (id, title, author, cover_url, long_num, create_time, access_time) VALUES (?, ?, ?, ?, ?, ?, ?)`,
-          [id, title, author, coverUrl, longNum, createTime, accessTime]
+          `INSERT INTO video_history (id, title, author, cover_url, long_num, create_time, access_time, ai) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+          [id, title, author, coverUrl, longNum, createTime, accessTime, ai]
         );
         console.log('视频历史记录已添加:', id);
       }
@@ -339,7 +377,8 @@ export function insertImageHistory(
   author: string,
   coverUrl: string,
   longNum: number,
-  createTime: number
+  createTime: number,
+  ai: boolean = false
 ): Promise<void> {
   return new Promise(async (resolve, reject) => {
     try {
@@ -354,15 +393,15 @@ export function insertImageHistory(
       // 如果已存在，更新所有字段（access_time排到最前，其他字段可能变化）
       if (existingRecord.length > 0) {
         await sqlDB.execute(
-          `UPDATE image_history SET title = ?, author = ?, cover_url = ?, long_num = ?, create_time = ?, access_time = ? WHERE id = ?`,
-          [title, author, coverUrl, longNum, createTime, accessTime, id]
+          `UPDATE image_history SET title = ?, author = ?, cover_url = ?, long_num = ?, create_time = ?, access_time = ?, ai = ? WHERE id = ?`,
+          [title, author, coverUrl, longNum, createTime, accessTime, ai, id]
         );
         console.log('插画历史记录已更新:', id);
       } else {
         // 否则插入新记录
         await sqlDB.execute(
-          `INSERT INTO image_history (id, title, author, cover_url, long_num, create_time, access_time) VALUES (?, ?, ?, ?, ?, ?, ?)`,
-          [id, title, author, coverUrl, longNum, createTime, accessTime]
+          `INSERT INTO image_history (id, title, author, cover_url, long_num, create_time, access_time, ai) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+          [id, title, author, coverUrl, longNum, createTime, accessTime, ai]
         );
         console.log('插画历史记录已添加:', id);
       }
@@ -380,9 +419,9 @@ export function getVideoHistoryList(page: number, pageSize: number = 15): Promis
     try {
       const offset = page * pageSize;
       const result: Array<any> = await sqlDB.select(
-        `SELECT id, title, author, cover_url, long_num, create_time, access_time 
-         FROM video_history 
-         ORDER BY access_time DESC 
+        `SELECT id, title, author, cover_url, long_num, create_time, access_time, ai
+         FROM video_history
+         ORDER BY access_time DESC
          LIMIT ? OFFSET ?`,
         [pageSize, offset]
       );
@@ -396,6 +435,7 @@ export function getVideoHistoryList(page: number, pageSize: number = 15): Promis
         longNum: item.long_num ? item.long_num.toString() : '', // 视频时长
         createTime: item.create_time ? new Date(item.create_time).toISOString().split('T')[0] : '', // 作品发布时间
         isR18: false, // 数据库中未存储此字段，默认为false
+        ai: item.ai ? true : false, // 是否为AI站
         lastWatchDate: new Date(item.access_time).toISOString().split('T')[0],
         accessTime: item.access_time // 保留原始时间戳用于显示完整时间
       }));
@@ -413,9 +453,9 @@ export function getImageHistoryList(page: number, pageSize: number = 15): Promis
     try {
       const offset = page * pageSize;
       const result: Array<any> = await sqlDB.select(
-        `SELECT id, title, author, cover_url, long_num, create_time, access_time 
-         FROM image_history 
-         ORDER BY access_time DESC 
+        `SELECT id, title, author, cover_url, long_num, create_time, access_time, ai
+         FROM image_history
+         ORDER BY access_time DESC
          LIMIT ? OFFSET ?`,
         [pageSize, offset]
       );
@@ -429,6 +469,7 @@ export function getImageHistoryList(page: number, pageSize: number = 15): Promis
         longNum: item.long_num ? item.long_num.toString() : '', // 插画张数
         createTime: item.create_time ? new Date(item.create_time).toISOString().split('T')[0] : '', // 作品发布时间
         isR18: false, // 数据库中未存储此字段，默认为false
+        ai: item.ai ? true : false, // 是否为AI站
         lastWatchDate: new Date(item.access_time).toISOString().split('T')[0],
         accessTime: item.access_time // 保留原始时间戳用于显示完整时间
       }));

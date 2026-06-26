@@ -12,8 +12,9 @@ import {
   getLastLoginAuth,
   updateUserInfo
 } from '../core/database'; // 导入数据库登录函数
-import { isLogin, uid, uname } from '../core/store';
+import { ai, isLogin, uid, uname } from '../core/store';
 
+const aiStore = ai();
 const { t } = useI18n();
 const router = useRouter();
 
@@ -86,7 +87,7 @@ async function login() {
         if (result.data && result.data.token) {
           // 在数据库中记录登录用户
           await db_login(username.value, password.value, result.data.token);
-          getMyselfInfo().then(async (res) => {
+          getMyselfInfo(aiStore.value).then(async (res) => {
             if (res.ok) {
               const userId = res.data.user.id;
               const userName = res.data.user.username;

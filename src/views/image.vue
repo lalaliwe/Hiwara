@@ -26,6 +26,9 @@ defineOptions({
 const router = useRouter();
 const route = useRoute();
 
+// 从路由查询参数获取 isAI（由前一个页面传入），不存在时默认为 false
+const isAI = ref(route.query.isAI === 'true');
+
 // 插画图片数据
 interface ImageFile {
   id: string;
@@ -180,7 +183,7 @@ onUnmounted(() => {
 getImageInfo();
 async function getImageInfo(): Promise<void> {
   try {
-    const res = await api_getImageInfo(pid.value as string);
+    const res = await api_getImageInfo(pid.value as string, isAI.value);
     console.log(res);
     if (!res.ok)
       throw new Error(`状态码：${res.status}, 错误信息：${res.statusText}`);
@@ -231,7 +234,8 @@ async function getImageInfo(): Promise<void> {
         imageInfo.user.name,
         coverUrl,
         illustrationImages.value.length, // 插画张数
-        createTimeTimestamp // 作品发布时间
+        createTimeTimestamp, // 作品发布时间
+        isAI.value // 是否为AI站
       );
       console.log('插画历史记录已添加:', pid.value);
     } catch (error) {
@@ -314,7 +318,7 @@ const handleFollow = (isFollowed: boolean) => {
             :is-follow="isFollow" :is-like="isLike" @commentTrigger="handleCommentTrigger" @like="handleLike"
             @follow="handleFollow" />
           <!-- 第三部分：推荐列表（已拆分为子组件） -->
-          <RecommendList :pid="pid" :uid="uid" />
+          <RecommendList :pid="pid" :uid="uid" :isAI="isAI" />
         </div>
       </div>
     </div>
@@ -327,7 +331,7 @@ const handleFollow = (isFollowed: boolean) => {
           :is-follow="isFollow" :is-like="isLike" @commentTrigger="handleCommentTrigger" @like="handleLike"
           @follow="handleFollow" />
         <!-- 第三部分：推荐列表（已拆分为子组件） -->
-        <RecommendList :pid="pid" :uid="uid" />
+        <RecommendList :pid="pid" :uid="uid" :isAI="isAI" />
       </div>
     </div>
     <comment class="drawer" :pid="pid" :style="{ transform: commentVisible ? 'translateX(0)' : 'translateX(100%)' }"

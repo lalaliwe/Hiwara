@@ -5,8 +5,10 @@ import iwaraSVG from '../assets/svg/iwara.svg'
 import { computed, type PropType, ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
+import { ai } from '../core/store';
 import { getImageIwara } from '../core/api';
 
+const aiStore = ai();
 const router = useRouter();
 const { t, locale } = useI18n()
 
@@ -26,6 +28,7 @@ interface CardData {
 const props = defineProps({
   type: { type: String, default: 'video' },
   data: { type: Object as PropType<CardData>, required: true },
+  isAI: { type: Boolean, default: undefined }, // 由父组件传入时覆盖 store 值
 });
 
 // 检测 CJK 语言（使用 10^4 进制大数单位）
@@ -208,7 +211,7 @@ onMounted(async () => {
   if (props.data.img && props.data.img !== 'file-loss') {
     // 使用 API 获取图片，避免直接从网页获取导致的 403 错误
     try {
-      displayImg.value = await getImageIwara(props.data.img);
+      displayImg.value = await getImageIwara(props.data.img, aiStore.value);
     } catch (error) {
       // console.error('Failed to load image via API:', error);
       // 如果 API 失败，尝试回退到直接 URL（可选，或者保持占位图/错误图）
@@ -225,10 +228,12 @@ async function clickCard() {
     console.error('缺少id');
     return;
   }
+  const resolvedIsAI = props.isAI !== undefined ? props.isAI : aiStore.value;
+  const queryIsAI = resolvedIsAI ? 'true' : 'false';
   if (props.type === 'video') {
-    router.push({ path: `/player/${props.data.id}/${Math.random().toString(36).substring(2, 8)}` });
+    router.push({ path: `/player/${props.data.id}/${Math.random().toString(36).substring(2, 8)}`, query: { isAI: queryIsAI } });
   } else if (props.type === 'image') {
-    router.push({ path: `/image/${props.data.id}` });
+    router.push({ path: `/image/${props.data.id}`, query: { isAI: queryIsAI } });
   }
 }
 </script>

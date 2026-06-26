@@ -29,6 +29,7 @@ interface ListItem {
 const props = defineProps<{
   vid: string;
   uid: string;
+  isAI: boolean;
 }>();
 
 const authorOtherVideoList = ref<ListItem[]>([]);
@@ -42,7 +43,7 @@ async function loadAuthorOtherVideos() {
 
   isLoadingAuthorVideos.value = true;
   try {
-    const response = await getVideoRecommendByUser(props.vid, props.uid);
+    const response = await getVideoRecommendByUser(props.vid, props.uid, props.isAI);
     if (response.ok && response.data.results) {
       authorOtherVideoList.value = await Promise.all(response.data.results.map(async (item: any) => ({
         id: item.id,
@@ -71,7 +72,7 @@ async function loadRecommendVideos() {
 
   isLoadingRecommendVideos.value = true;
   try {
-    const response = await getVideoRecommendByOther(props.vid);
+    const response = await getVideoRecommendByOther(props.vid, props.isAI);
     if (response.ok && response.data.results) {
       recommendVideoList.value = await Promise.all(response.data.results.map(async (item: any) => ({
         id: item.id,
@@ -112,7 +113,7 @@ watch(() => props.uid, (newUid) => {
       {{ t('player.authorOtherVideos') }}
     </div>
     <div class="lists" v-if="!isLoadingAuthorVideos && authorOtherVideoList.length > 0">
-      <cardButton v-for="(item, index) in authorOtherVideoList" :key="item.id" type="video" :data="{
+      <cardButton v-for="(item, index) in authorOtherVideoList" :key="item.id" type="video" :isAI="props.isAI" :data="{
         id: item.id,
         title: item.title,
         img: item.img,
@@ -128,7 +129,7 @@ watch(() => props.uid, (newUid) => {
       {{ t('player.moreRecommend') }}
     </div>
     <div class="lists" v-if="!isLoadingRecommendVideos && recommendVideoList.length > 0">
-      <cardButton v-for="(item, index) in recommendVideoList" :key="item.id" type="video" :data="{
+      <cardButton v-for="(item, index) in recommendVideoList" :key="item.id" type="video" :isAI="props.isAI" :data="{
         id: item.id,
         title: item.title,
         img: item.img,

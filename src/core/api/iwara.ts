@@ -1,5 +1,4 @@
 import { invoke } from '@tauri-apps/api/core';
-import { ai } from '../store';
 
 const referersArr = [
   'https://www.iwara.tv/',
@@ -8,13 +7,12 @@ const referersArr = [
 const xSiteArr = ['www.iwara.tv', 'www.iwara.ai'];
 
 /**
- * 根据 ai store 的值动态获取 referer 和 xSite
- * ai = false → iwara.tv (索引0)
- * ai = true  → iwara.ai (索引1)
+ * 根据 isAI 参数动态获取 referer 和 xSite
+ * isAI = false → iwara.tv (索引0)
+ * isAI = true  → iwara.ai (索引1)
  */
-function getRefererAndSite(): { referer: string; xSite: string } {
-  const aiStore = ai();
-  const index = aiStore.value ? 1 : 0;
+function getRefererAndSite(isAI: boolean): { referer: string; xSite: string } {
+  const index = isAI ? 1 : 0;
   return {
     referer: referersArr[index],
     xSite: xSiteArr[index],
@@ -22,7 +20,7 @@ function getRefererAndSite(): { referer: string; xSite: string } {
 }
 
 // 发送GET请求(iwara)
-export async function getSendRequestIwara(url: string, headers?: any, query?: any) {
+export async function getSendRequestIwara(url: string, isAI: boolean, headers?: any, query?: any) {
   try {
     // 构建查询字符串
     let finalUrl = url;
@@ -41,11 +39,12 @@ export async function getSendRequestIwara(url: string, headers?: any, query?: an
 
     console.log(finalUrl);
     // 合并默认头信息和用户传入的头信息
+    const { referer, xSite } = getRefererAndSite(isAI);
     const requestHeaders: Record<string, string> = {
       'Content-Type': 'application/json',
       'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-      'Referer': getRefererAndSite().referer,
-      'X-Site': getRefererAndSite().xSite,
+      'Referer': referer,
+      'X-Site': xSite,
       'Accept-Encoding': 'gzip, deflate, br', // 支持压缩编码
       ...(headers || {}),
     };
@@ -92,14 +91,15 @@ export async function getSendRequestIwara(url: string, headers?: any, query?: an
 }
 
 // 发送POST请求(iwara) 
-export async function postSendRequestIwara(url: string, headers?: any, body?: any) {
+export async function postSendRequestIwara(url: string, isAI: boolean, headers?: any, body?: any) {
   try {
     // 合并默认头信息和用户传入的头信息
+    const { referer, xSite } = getRefererAndSite(isAI);
     const requestHeaders: Record<string, string> = {
       'Content-Type': 'application/json',
       'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-      'Referer': getRefererAndSite().referer,
-      'X-Site': getRefererAndSite().xSite,
+      'Referer': referer,
+      'X-Site': xSite,
       'Accept-Encoding': 'gzip, deflate, br', // 支持压缩编码
       ...(headers || {}),
     };
@@ -147,14 +147,15 @@ export async function postSendRequestIwara(url: string, headers?: any, body?: an
 }
 
 // 发送DELETE请求(iwara) 
-export async function deleteSendRequestIwara(url: string, headers?: any) {
+export async function deleteSendRequestIwara(url: string, isAI: boolean, headers?: any) {
   try {
     // 合并默认头信息和用户传入的头信息
+    const { referer, xSite } = getRefererAndSite(isAI);
     const requestHeaders: Record<string, string> = {
       'Content-Type': 'application/json',
       'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-      'Referer': getRefererAndSite().referer,
-      'X-Site': getRefererAndSite().xSite,
+      'Referer': referer,
+      'X-Site': xSite,
       'Accept-Encoding': 'gzip, deflate, br', // 支持压缩编码
       ...(headers || {}),
     };
@@ -201,7 +202,7 @@ export async function deleteSendRequestIwara(url: string, headers?: any) {
 }
 
 // 带超时的图片请求(iwara)
-export async function getImageIwara(url: string, timeout: number = 15000): Promise<string> {
+export async function getImageIwara(url: string, isAI: boolean, timeout: number = 15000): Promise<string> {
   try {
     // 构建一个超时 Promise
     const timeoutPromise = new Promise<never>((_, reject) => {
@@ -210,11 +211,12 @@ export async function getImageIwara(url: string, timeout: number = 15000): Promi
 
     // 实际的图片请求
     const fetchImagePromise = (async (): Promise<string> => {
+      const { referer, xSite } = getRefererAndSite(isAI);
       // 构建请求头
       const headers: Record<string, string> = {
         'Accept': 'image/webp,image/apng,image/*,*/*;q=0.8',
-        'Referer': getRefererAndSite().referer,
-        'X-Site': getRefererAndSite().xSite,
+        'Referer': referer,
+        'X-Site': xSite,
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
       };
       // 使用我们创建的自定义网络请求命令获取二进制数据，模拟浏览器请求

@@ -17,12 +17,13 @@ import {
   getImageIwara
 } from '../core/api'
 import { showShortToast } from '../core/toast';
-import { uid as muid, uname as muname } from '../core/store';
+import { ai, uid as muid, uname as muname } from '../core/store';
 import iwaraSVG from '../assets/svg/iwara.svg'
 import kivotosPng from '../static/img/kivotos.png'
 import loadingHuawu from '../component/loadingHuawu.vue';
 import errorHuawu from '../component/errorHuawu.vue';
 
+const aiStore = ai();
 const { t } = useI18n();
 
 defineOptions({
@@ -376,7 +377,7 @@ async function getData() {
   async function loadHeaderBackground(header: any) {
     try {
       const headerUrl = `https://i.iwara.tv/image/profileHeader/${header.id}/${header.name}`;
-      const bgImageUrl = await getImageIwara(headerUrl);
+      const bgImageUrl = await getImageIwara(headerUrl, aiStore.value);
       zoneBgStyle.value = `background-image: url('${bgImageUrl}'); background-size: cover; background-position: center; background-repeat: no-repeat;`;
       headerLoaded.value = true;
     } catch (error) {

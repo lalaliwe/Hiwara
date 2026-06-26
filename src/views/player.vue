@@ -32,6 +32,9 @@ defineOptions({
 const router = useRouter();
 const route = useRoute();
 
+// 从路由查询参数获取 isAI（由前一个页面传入），不存在时默认为 false
+const isAI = ref(route.query.isAI === 'true');
+
 const tab = ref('info');  // 当前选中的tab
 const tab2 = ref('recommend');  // 当前选中的tab
 const id = ref(route.params.id);  // 视频id
@@ -148,7 +151,7 @@ useAutoStatusBar({ cssVar: '--color-primary-90' })
 const fetchVideoInfo = async () => {
   videoInfoState.value = 'loading'; // 开始加载
   try {
-    const res = await api_getVideoInfo(id.value as string);
+    const res = await api_getVideoInfo(id.value as string, isAI.value);
     // console.log(res);
     if (res.ok) {
       const data = res.data;
@@ -206,7 +209,8 @@ const fetchVideoInfo = async () => {
           data.user?.name || '',
           poster.value,
           data.file?.duration || 0, // 视频时长（秒）
-          createTimeTimestamp // 作品发布时间
+          createTimeTimestamp, // 作品发布时间
+          isAI.value // 是否为AI站
         );
         console.log('视频历史记录已添加:', data.id);
       } catch (error) {
@@ -227,7 +231,7 @@ fetchVideoInfo();
 // 获取视频文件
 async function fetchVideoFile(url: string, filename: string) {
   try {
-    const res = await api_getVideoFileSQ(url, filename)
+    const res = await api_getVideoFileSQ(url, filename, isAI.value)
     // console.log(res);
     // 补全逻辑：解析并存储视频文件信息
     if (res.ok && res.data && Array.isArray(res.data)) {
@@ -345,7 +349,7 @@ const refreshVideoFile = async () => {
 
   for (let attempt = 0; attempt < maxRetries; attempt++) {
     try {
-      const res = await api_getVideoInfo(id.value as string)
+      const res = await api_getVideoInfo(id.value as string, isAI.value)
       if (!res.ok || !res.data?.fileUrl) continue
 
       let extension = '.mp4'
@@ -357,7 +361,7 @@ const refreshVideoFile = async () => {
       }
       const filename = `Iwara - ${res.data.title} [${res.data.id}]${extension}`
 
-      const fileRes = await api_getVideoFileSQ(res.data.fileUrl, filename)
+      const fileRes = await api_getVideoFileSQ(res.data.fileUrl, filename, isAI.value)
       if (!fileRes.ok || !fileRes.data || !Array.isArray(fileRes.data)) continue
 
       // 在返回数据中找当前清晰度对应的文件
@@ -593,7 +597,7 @@ onUnmounted(() => {
           <swiper class="tabs-window" :slides-per-view="1" :space-between="0" @swiper="onSwiper2"
             @slide-change="onSlideChange2">
             <swiper-slide>
-              <recommend :vid="id as string" :uid="uid" @data-loaded="onSideDataLoaded" />
+              <recommend :vid="id as string" :uid="uid" :isAI="isAI" @data-loaded="onSideDataLoaded" />
             </swiper-slide>
             <swiper-slide>
               <commentView :vid="id as string" />

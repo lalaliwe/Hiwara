@@ -1,11 +1,13 @@
 <script setup lang="ts">
 import { ref, computed, onActivated, onDeactivated } from 'vue';
+import { ai } from '../../core/store';
 import { getFavoritesImageList } from '../../core/api';
 import { showShortToast } from '../../core/toast';
 import MediaItem from '../MediaItem.vue';
 import loadingHuawu from '../loadingHuawu.vue';
 import errorHuawu from '../errorHuawu.vue';
 
+const aiStore = ai();
 // 定义列表项接口
 interface ListItem {
   id: string;
@@ -41,7 +43,7 @@ const loadMoreImageData = async ({ done }: any = { done: () => { } }) => {
   imageIsLoading.value = true;
 
   try {
-    const res = await getFavoritesImageList(imagePage.value);
+    const res = await getFavoritesImageList(imagePage.value, aiStore.value);
 
     if (!res.ok) {
       throw new Error(`状态码：${res.status}, 错误信息：${res.statusText}`);

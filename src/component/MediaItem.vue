@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
+import { ai } from '../core/store';
 import { getImageIwara } from '../core/api';
 import notImg from '../static/img/not-img.jpg';
 import iwaraSVG from '../assets/svg/iwara.svg';
 
+const aiStore = ai();
 const router = useRouter();
 
 // 定义列表项接口
@@ -72,10 +74,11 @@ function clickItem() {
     console.error('缺少id');
     return;
   }
+  const queryIsAI = (props.item as any).ai !== undefined ? ((props.item as any).ai ? 'true' : 'false') : (aiStore.value ? 'true' : 'false');
   if (props.type === 'video') {
-    router.push({ path: `/player/${props.item.id}/${Math.random().toString(36).substring(2, 8)}` });
+    router.push({ path: `/player/${props.item.id}/${Math.random().toString(36).substring(2, 8)}`, query: { isAI: queryIsAI } });
   } else if (props.type === 'image') {
-    router.push({ path: `/image/${props.item.id}` });
+    router.push({ path: `/image/${props.item.id}`, query: { isAI: queryIsAI } });
   }
 }
 
@@ -83,7 +86,7 @@ onMounted(async () => {
   if (props.item.img) {
     // 使用 API 获取图片，避免直接从网页获取导致的 403 错误
     try {
-      displayImg.value = await getImageIwara(props.item.img);
+      displayImg.value = await getImageIwara(props.item.img, aiStore.value);
     } catch (error) {
       console.error(`${props.type === 'video' ? '视频' : '插画'}封面加载失败:`, props.item.id, error);
       displayImg.value = notImg;

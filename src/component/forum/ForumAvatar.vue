@@ -3,6 +3,7 @@ import { ref } from 'vue';
 import defaultAvatarImg from '../../static/img/avatar-default.jpg';
 import avatarPlaceholderImg from '../../static/img/avatar-placeholder.png';
 import avatarErrorImg from '../../static/img/avatar-error.png';
+import { ai } from '../../core/store';
 import { getImageIwara } from '../../core/api';
 
 export interface AvatarUser {
@@ -18,6 +19,7 @@ const props = defineProps<{
   user: AvatarUser
 }>()
 
+const aiStore = ai();
 const avatarUrl = ref<string>(avatarPlaceholderImg);
 
 async function loadAvatar() {
@@ -32,7 +34,7 @@ async function loadAvatar() {
       avatarUrl.value = defaultAvatarImg;
     } else {
       const avatarImageUrl = `https://i.iwara.tv/image/avatar/${user.avatar.id}/${user.avatar.name}`;
-      avatarUrl.value = await getImageIwara(avatarImageUrl);
+      avatarUrl.value = await getImageIwara(avatarImageUrl, aiStore.value);
     }
   } catch (error) {
     console.error('Failed to load avatar:', error);

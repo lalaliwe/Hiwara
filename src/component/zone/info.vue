@@ -2,9 +2,11 @@
 import { ref, onMounted, onUnmounted, watch, nextTick } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
+import { ai } from '../../core/store';
 import { getImageIwara, followUser, unfollowUser } from '../../core/api'
 import { showShortToast } from '../../core/toast'
 
+const aiStore = ai();
 const { t } = useI18n();
 import defaultAvatarImg from '../../static/img/avatar-default.jpg';
 import avatarPlaceholderImg from '../../static/img/avatar-placeholder.png';
@@ -106,7 +108,7 @@ async function loadAvatar() {
   } else {
     try {
       // avatar 不为空，通过 API 获取
-      avatarUrl.value = await getImageIwara(props.avatar);
+      avatarUrl.value = await getImageIwara(props.avatar, aiStore.value);
     } catch (error) {
       console.error('Failed to load avatar:', error);
       // 加载失败时使用错误头像
@@ -141,7 +143,7 @@ async function handleFollow(follow: boolean) {
     if (follow) {
       // 关注用户
       emit('follow', true);
-      const res = await followUser(props.uid);
+      const res = await followUser(props.uid, aiStore.value);
       if (res.ok && res.status === 201) {
         console.log('关注成功');
         showShortToast(t('common.followed'));
@@ -153,7 +155,7 @@ async function handleFollow(follow: boolean) {
     } else {
       // 取消关注
       emit('follow', false);
-      const res = await unfollowUser(props.uid);
+      const res = await unfollowUser(props.uid, aiStore.value);
       if (res.ok && res.status === 204) {
         console.log('取消关注成功');
         showShortToast(t('common.unfollowed'));

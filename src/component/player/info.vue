@@ -10,6 +10,7 @@ import {
 import defaultAvatarImg from '../../static/img/avatar-default.jpg';
 import avatarPlaceholderImg from '../../static/img/avatar-placeholder.png';
 import avatarErrorImg from '../../static/img/avatar-error.png';
+import { ai } from '../../core/store';
 import {
   getImageIwara,
   likeVideo,
@@ -21,6 +22,7 @@ import recommend from './recommend.vue';
 import { showShortToast } from '../../core/toast';
 import { useRouter } from 'vue-router';
 
+const aiStore = ai();
 const { t } = useI18n();
 
 const router = useRouter();
@@ -222,7 +224,7 @@ async function loadAvatar() {
   } else {
     try {
       // avatar 不为空，通过 API 获取
-      avatarUrl.value = await getImageIwara(props.avatar);
+      avatarUrl.value = await getImageIwara(props.avatar, aiStore.value);
     } catch (error) {
       console.error('Failed to load avatar:', error);
       // 加载失败时使用默认头像
@@ -244,7 +246,7 @@ function clickFollow() {
   isFollowing.value = true;
   if (props.isFollow) {
     emit('follow', false);
-    unfollowUser(props.uid).then((res) => {
+    unfollowUser(props.uid, aiStore.value).then((res) => {
       if (res.ok && res.status === 204) {
         console.log('取消关注成功');
         showShortToast(t('common.unfollowed'));
@@ -262,7 +264,7 @@ function clickFollow() {
     })
   } else {
     emit('follow', true);
-    followUser(props.uid).then((res) => {
+    followUser(props.uid, aiStore.value).then((res) => {
       if (res.ok && res.status === 201) {
         console.log('关注成功');
         showShortToast(t('common.followed'));
@@ -287,7 +289,7 @@ function clickLike() {
   isLiking.value = true;
   if (props.isLike) {
     emit('like', false);
-    unlikeVideo(props.vid).then((res) => {
+    unlikeVideo(props.vid, aiStore.value).then((res) => {
       if (res.ok && res.status === 204) {
         console.log('取消点赞成功');
         showShortToast(t('common.unliked'));
@@ -305,7 +307,7 @@ function clickLike() {
     })
   } else {
     emit('like', true);
-    likeVideo(props.vid).then((res) => {
+    likeVideo(props.vid, aiStore.value).then((res) => {
       if (res.ok && res.status === 201) {
         console.log('点赞成功');
         showShortToast(t('common.liked'));

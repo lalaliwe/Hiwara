@@ -3,6 +3,7 @@ import { useRouter, useRoute } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import { ref, onActivated } from 'vue';
 import { useAutoStatusBar } from '../../composables/useAutoStatusBar';
+import { ai } from '../../core/store';
 import { getForumPostReplies, getMyselfInfo } from '../../core/api';
 import { showShortToast } from '../../core/toast';
 import loadingHuawu from '../../component/loadingHuawu.vue';
@@ -17,6 +18,7 @@ defineOptions({
   name: 'ForumPost'
 })
 
+const aiStore = ai();
 const { t } = useI18n();
 const router = useRouter();
 const route = useRoute();
@@ -101,7 +103,7 @@ async function fetchPostData(page: number = 0) {
   }
 
   try {
-    const res = await getForumPostReplies(sectionId.value, id.value, page, pageLimit.value);
+    const res = await getForumPostReplies(sectionId.value, id.value, aiStore.value, page, pageLimit.value);
     const data: ForumPostResponse = res?.data;
 
     if (!data) {
@@ -171,7 +173,7 @@ function handleScroll(e: Event): void {
 async function handlePosted(reply: any) {
   if (!reply) return;
   try {
-    const userInfoRes = await getMyselfInfo();
+    const userInfoRes = await getMyselfInfo(aiStore.value);
     if (userInfoRes?.ok && userInfoRes.data?.user) {
       const myself = userInfoRes.data.user;
       reply.user = {

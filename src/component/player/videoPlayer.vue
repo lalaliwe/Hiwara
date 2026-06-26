@@ -12,9 +12,10 @@ import {
 import controlFullscreen from './controlFullscreen.vue';
 import control from './control.vue';
 import { getImageIwara } from '../../core/api';
-import { setupStore } from '../../core/store';
+import { ai, setupStore } from '../../core/store';
 
 // 获取 store 实例
+const aiStore = ai();
 const setup = setupStore();
 const { t } = useI18n();
 
@@ -48,7 +49,7 @@ watch(() => props.poster, async (newPoster) => {
         URL.revokeObjectURL(localPosterUrl.value);
       }
       // 使用 getImageIwara 获取图片
-      const blobUrl = await getImageIwara(newPoster);
+      const blobUrl = await getImageIwara(newPoster, aiStore.value);
       localPosterUrl.value = blobUrl;
     } catch (error) {
       console.error('Failed to load poster:', error);

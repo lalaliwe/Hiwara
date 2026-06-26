@@ -4,7 +4,7 @@ import { getSendRequestIwara, postSendRequestIwara, deleteSendRequestIwara } fro
 import { sha1 } from '../crypto';
 
 // 获取用户订阅视频列表
-export async function getSubscribeVideoList(page: number): Promise<any> {
+export async function getSubscribeVideoList(page: number, isAI: boolean): Promise<any> {
   const path = `${API_URL}/videos`;
   const headers = {
     Authorization: `Bearer ${await getAccessToken()}`,
@@ -16,7 +16,7 @@ export async function getSubscribeVideoList(page: number): Promise<any> {
     subscribed: true
   };
   try {
-    const response = await getSendRequestIwara(path, headers, query);
+    const response = await getSendRequestIwara(path, isAI, headers, query);
     return response;
   } catch (error) {
     console.error('Get subscribe video list failed:', error);
@@ -25,7 +25,7 @@ export async function getSubscribeVideoList(page: number): Promise<any> {
 }
 
 // 获取用户收藏视频列表
-export async function getFavoritesVideoList(page: number): Promise<any> {
+export async function getFavoritesVideoList(page: number, isAI: boolean): Promise<any> {
   const path = `${API_URL}/favorites/videos`;
   const headers = {
     Authorization: `Bearer ${await getAccessToken()}`,
@@ -35,7 +35,7 @@ export async function getFavoritesVideoList(page: number): Promise<any> {
     limit: 32,
   };
   try {
-    const response = await getSendRequestIwara(path, headers, query);
+    const response = await getSendRequestIwara(path, isAI, headers, query);
     return response;
   } catch (error) {
     console.error('Get favorites video list failed:', error);
@@ -44,7 +44,7 @@ export async function getFavoritesVideoList(page: number): Promise<any> {
 }
 
 // 获取视频列表
-export async function getVideoList(page: number, sort: string, date?: string, user?: string): Promise<any> {
+export async function getVideoList(page: number, sort: string, isAI: boolean, date?: string, user?: string): Promise<any> {
   const path = `${API_URL}/videos`;
   const headers = {
     Authorization: `Bearer ${await getAccessToken()}`,
@@ -58,7 +58,7 @@ export async function getVideoList(page: number, sort: string, date?: string, us
     ...(user && { user })
   };
   try {
-    const response = await getSendRequestIwara(path, headers, query);
+    const response = await getSendRequestIwara(path, isAI, headers, query);
     return response;
   } catch (error) {
     console.error('Get video list failed:', error);
@@ -67,13 +67,13 @@ export async function getVideoList(page: number, sort: string, date?: string, us
 }
 
 // 获取视频信息
-export async function getVideoInfo(videoId: string): Promise<any> {
+export async function getVideoInfo(videoId: string, isAI: boolean): Promise<any> {
   const path = `${API_URL}/video/${videoId}`;
   const headers = {
     Authorization: `Bearer ${await getAccessToken()}`,
   };
   try {
-    const response = await getSendRequestIwara(path, headers);
+    const response = await getSendRequestIwara(path, isAI, headers);
     return response;
   } catch (error) {
     console.error('Get video info failed:', error);
@@ -82,7 +82,7 @@ export async function getVideoInfo(videoId: string): Promise<any> {
 }
 
 // 获取视频文件信息
-export async function getVideoFileSQ(url: string, download: string): Promise<any> {
+export async function getVideoFileSQ(url: string, download: string, isAI: boolean): Promise<any> {
   // 示例url：https://filesq.iwara.tv/file/703f6909-71cd-4562-90d8-d03641ad4706?expires=1776910833478&hash=bfaa8a6c942a9553af1c976dc56b1585fc119ad522e7fc8970a1f18a50823b09
   const urlObj = new URL(url);
   const id = urlObj.pathname.split('/').pop();
@@ -94,7 +94,7 @@ export async function getVideoFileSQ(url: string, download: string): Promise<any
   };
   const path = download ? `${url}${url.includes('?') ? '&' : '?'}download=${encodeURIComponent(download)}` : url;
   try {
-    const response = await getSendRequestIwara(path, headers);
+    const response = await getSendRequestIwara(path, isAI, headers);
     return response;
   } catch (error) {
     console.error('Get video file info failed:', error);
@@ -103,13 +103,13 @@ export async function getVideoFileSQ(url: string, download: string): Promise<any
 }
 
 // 点赞视频
-export async function likeVideo(videoId: string): Promise<any> {
+export async function likeVideo(videoId: string, isAI: boolean): Promise<any> {
   const path = `${API_URL}/video/${videoId}/like`;
   const headers = {
     Authorization: `Bearer ${await getAccessToken()}`,
   };
   try {
-    const response = await postSendRequestIwara(path, headers);
+    const response = await postSendRequestIwara(path, isAI, headers);
     return response;
   } catch (error) {
     console.error('Like video failed:', error);
@@ -118,13 +118,13 @@ export async function likeVideo(videoId: string): Promise<any> {
 }
 
 // 取消点赞视频
-export async function unlikeVideo(videoId: string): Promise<any> {
+export async function unlikeVideo(videoId: string, isAI: boolean): Promise<any> {
   const path = `${API_URL}/video/${videoId}/like`;
   const headers = {
     Authorization: `Bearer ${await getAccessToken()}`,
   };
   try {
-    const response = await deleteSendRequestIwara(path, headers);
+    const response = await deleteSendRequestIwara(path, isAI, headers);
     return response;
   } catch (error) {
     console.error('Unlike video failed:', error);
@@ -133,7 +133,7 @@ export async function unlikeVideo(videoId: string): Promise<any> {
 }
 
 // 获取视频推荐：该用户的其他视频
-export async function getVideoRecommendByUser(vid: string, uid: string): Promise<any> {
+export async function getVideoRecommendByUser(vid: string, uid: string, isAI: boolean): Promise<any> {
   const path = `${API_URL}/videos`;
   const headers = {
     Authorization: `Bearer ${await getAccessToken()}`,
@@ -145,7 +145,7 @@ export async function getVideoRecommendByUser(vid: string, uid: string): Promise
     limit: 6
   };
   try {
-    const response = await getSendRequestIwara(path, headers, query);
+    const response = await getSendRequestIwara(path, isAI, headers, query);
     return response;
   } catch (error) {
     console.error('Get video recommend by user failed:', error);
@@ -154,13 +154,13 @@ export async function getVideoRecommendByUser(vid: string, uid: string): Promise
 }
 
 // 获取视频推荐：更多视频
-export async function getVideoRecommendByOther(vid: string): Promise<any> {
+export async function getVideoRecommendByOther(vid: string, isAI: boolean): Promise<any> {
   const path = `${API_URL}/video/${vid}/related`;
   const headers = {
     Authorization: `Bearer ${await getAccessToken()}`,
   };
   try {
-    const response = await getSendRequestIwara(path, headers);
+    const response = await getSendRequestIwara(path, isAI, headers);
     return response;
   } catch (error) {
     console.error('Get video recommend by other failed:', error);
@@ -169,7 +169,7 @@ export async function getVideoRecommendByOther(vid: string): Promise<any> {
 }
 
 // 获取视频评论
-export async function getVideoComments(vid: string, page: number): Promise<any> {
+export async function getVideoComments(vid: string, page: number, isAI: boolean): Promise<any> {
   const path = `${API_URL}/video/${vid}/comments`;
   const headers = {
     Authorization: `Bearer ${await getAccessToken()}`,
@@ -179,7 +179,7 @@ export async function getVideoComments(vid: string, page: number): Promise<any> 
     limit: 32
   };
   try {
-    const response = await getSendRequestIwara(path, headers, query);
+    const response = await getSendRequestIwara(path, isAI, headers, query);
     return response;
   } catch (error) {
     console.error('Get video comments failed:', error);
@@ -188,7 +188,7 @@ export async function getVideoComments(vid: string, page: number): Promise<any> 
 }
 
 // 获取视频评论的回复（使用 parent 参数过滤）
-export async function getVideoCommentReplies(vid: string, commentId: string, page: number = 0, limit: number = 32): Promise<any> {
+export async function getVideoCommentReplies(vid: string, commentId: string, page: number = 0, limit: number = 32, isAI: boolean): Promise<any> {
   const path = `${API_URL}/video/${vid}/comments`;
   const headers = {
     Authorization: `Bearer ${await getAccessToken()}`,
@@ -199,7 +199,7 @@ export async function getVideoCommentReplies(vid: string, commentId: string, pag
     limit: limit
   };
   try {
-    const response = await getSendRequestIwara(path, headers, query);
+    const response = await getSendRequestIwara(path, isAI, headers, query);
     return response;
   } catch (error) {
     console.error('Get video comment replies failed:', error);
@@ -208,7 +208,7 @@ export async function getVideoCommentReplies(vid: string, commentId: string, pag
 }
 
 // 发表视频评论
-export async function postVideoComment(vid: string, body: string, parentId?: string): Promise<any> {
+export async function postVideoComment(vid: string, body: string, isAI: boolean, parentId?: string): Promise<any> {
   const path = `${API_URL}/video/${vid}/comments`;
   const headers = {
     Authorization: `Bearer ${await getAccessToken()}`,
@@ -221,7 +221,7 @@ export async function postVideoComment(vid: string, body: string, parentId?: str
     postBody.parentId = parentId;
   }
   try {
-    const response = await postSendRequestIwara(path, headers, postBody);
+    const response = await postSendRequestIwara(path, isAI, headers, postBody);
     return response;
   } catch (error) {
     console.error('Post video comment failed:', error);
@@ -230,7 +230,7 @@ export async function postVideoComment(vid: string, body: string, parentId?: str
 }
 
 // 搜索
-export async function search(text: string, page: number, type: 'videos' | 'images' | 'users'): Promise<any> {
+export async function search(text: string, page: number, type: 'videos' | 'images' | 'users', isAI: boolean): Promise<any> {
   const path = `${API_URL}/search`;
   const headers = {
     Authorization: `Bearer ${await getAccessToken()}`,
@@ -242,7 +242,7 @@ export async function search(text: string, page: number, type: 'videos' | 'image
     sort: 'relevance'
   };
   try {
-    const response = await getSendRequestIwara(path, headers, query);
+    const response = await getSendRequestIwara(path, isAI, headers, query);
     return response;
   } catch (error) {
     console.error('Search failed:', error);

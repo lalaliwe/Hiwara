@@ -1,11 +1,13 @@
 <script setup lang="ts">
 import { ref, computed, onActivated, onDeactivated } from 'vue';
+import { ai } from '../../core/store';
 import { getFavoritesVideoList } from '../../core/api';
 import { showShortToast } from '../../core/toast';
 import MediaItem from '../MediaItem.vue';
 import loadingHuawu from '../loadingHuawu.vue';
 import errorHuawu from '../errorHuawu.vue';
 
+const aiStore = ai();
 // 定义列表项接口
 interface ListItem {
   id: string;
@@ -41,7 +43,7 @@ const loadMoreVideoData = async ({ done }: any = { done: () => { } }) => {
   videoIsLoading.value = true;
 
   try {
-    const res = await getFavoritesVideoList(videoPage.value);
+    const res = await getFavoritesVideoList(videoPage.value, aiStore.value);
 
     if (!res.ok) {
       throw new Error(`状态码：${res.status}, 错误信息：${res.statusText}`);

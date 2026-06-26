@@ -9,7 +9,7 @@ export async function getMyselfInfo(): Promise<any> {
     Authorization: `Bearer ${await getAccessToken()}`,
   };
   try {
-    const response = await getSendRequestIwara(path, headers);
+    const response = await getSendRequestIwara(path, false, headers);
     return response;
   } catch (error) {
     console.error('Get myself info failed:', error);
@@ -24,7 +24,7 @@ export async function getUserInfo(username: string): Promise<any> {
     Authorization: `Bearer ${await getAccessToken()}`,
   };
   try {
-    const response = await getSendRequestIwara(path, headers);
+    const response = await getSendRequestIwara(path, false, headers);
     return response;
   } catch (error) {
     console.error('Get user info failed:', error);
@@ -40,7 +40,7 @@ export async function getUserFollowers(uid: string, page: number = 0): Promise<a
   };
   const query = { page: page };
   try {
-    const response = await getSendRequestIwara(path, headers, query);
+    const response = await getSendRequestIwara(path, false, headers, query);
     return response;
   } catch (error) {
     console.error('Get user followers failed:', error);
@@ -56,7 +56,7 @@ export async function getUserFans(uid: string, page: number = 0): Promise<any> {
   };
   const query = { page: page };
   try {
-    const response = await getSendRequestIwara(path, headers, query);
+    const response = await getSendRequestIwara(path, false, headers, query);
     return response;
   } catch (error) {
     console.error('Get user fans failed:', error);
@@ -71,7 +71,7 @@ export async function followUser(uid: string): Promise<any> {
     Authorization: `Bearer ${await getAccessToken()}`,
   };
   try {
-    const response = await postSendRequestIwara(path, headers);
+    const response = await postSendRequestIwara(path, false, headers);
     return response;
   } catch (error) {
     console.error('Follow user failed:', error);
@@ -86,7 +86,7 @@ export async function unfollowUser(uid: string): Promise<any> {
     Authorization: `Bearer ${await getAccessToken()}`,
   };
   try {
-    const response = await deleteSendRequestIwara(path, headers);
+    const response = await deleteSendRequestIwara(path, false, headers);
     return response;
   } catch (error) {
     console.error('Unfollow user failed:', error);
@@ -103,7 +103,7 @@ export async function getFriendsList(uid: string, page: number): Promise<any> {
   };
   const query = { page: page };
   try {
-    const response = await getSendRequestIwara(path, headers, query);
+    const response = await getSendRequestIwara(path, false, headers, query);
     return response;
   } catch (error) {
     console.error('Get friends list failed:', error);

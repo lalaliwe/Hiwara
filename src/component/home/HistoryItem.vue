@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
+import { ai } from '../../core/store';
 import { getImageIwara } from '../../core/api';
 import notImg from '../../static/img/not-img.jpg';
 import iwaraSVG from '../../assets/svg/iwara.svg';
 
+const aiStore = ai();
 const router = useRouter();
 
 interface HistoryItemProps {
@@ -23,7 +25,7 @@ onMounted(async () => {
   if (props.item.img) {
     try {
       console.log('加载历史记录封面:', props.item.id);
-      displayImg.value = await getImageIwara(props.item.img);
+      displayImg.value = await getImageIwara(props.item.img, aiStore.value);
       console.log('历史记录封面加载成功:', props.item.id);
     } catch (error) {
       console.error('历史记录封面加载失败:', props.item.id, error);
@@ -38,7 +40,8 @@ function clickItem() {
     console.error('缺少id');
     return;
   }
-  router.push({ path: `/player/${props.item.id}/${Math.random().toString(36).substring(2, 8)}` });
+  const queryIsAI = aiStore.value ? 'true' : 'false';
+  router.push({ path: `/player/${props.item.id}/${Math.random().toString(36).substring(2, 8)}`, query: { isAI: queryIsAI } });
 }
 </script>
 

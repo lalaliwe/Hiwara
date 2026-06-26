@@ -1,11 +1,13 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
+import { ai } from '../../core/store';
 import { getImageIwara, followUser, unfollowUser } from '../../core/api'
 import iwaraSVG from '../../assets/svg/iwara.svg'
 import defaultAvatarImg from '../../static/img/avatar-default.jpg'
 import { showShortToast } from '../../core/toast'
 import { useRouter } from 'vue-router';
 
+const aiStore = ai();
 const router = useRouter();
 
 interface ListItem {
@@ -42,7 +44,7 @@ async function loadAvatar() {
   }
 
   try {
-    const realAvatarUrl = await getImageIwara(props.item.avatar)
+    const realAvatarUrl = await getImageIwara(props.item.avatar, aiStore.value)
     displayAvatar.value = realAvatarUrl
   } catch (error) {
     console.error('Failed to load avatar:', error)
@@ -62,7 +64,7 @@ async function toggleFollow() {
 
   try {
     if (shouldFollow) {
-      const res = await followUser(props.item.uid)
+      const res = await followUser(props.item.uid, aiStore.value)
       if (res.ok && res.status === 201) {
         console.log('关注成功')
         showShortToast('已关注')
@@ -72,7 +74,7 @@ async function toggleFollow() {
         props.item.following = !shouldFollow
       }
     } else {
-      const res = await unfollowUser(props.item.uid)
+      const res = await unfollowUser(props.item.uid, aiStore.value)
       if (res.ok && res.status === 204) {
         console.log('取消关注成功')
         showShortToast('已取消关注')
