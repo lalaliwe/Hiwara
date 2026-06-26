@@ -1,0 +1,12 @@
+node_modules/
+src-tauri/target/
+.git/
+.vscode/
+edit/
+discarded/
+doc/
+test/
+*.md
+*.psd
+*.ai
+*.xmind

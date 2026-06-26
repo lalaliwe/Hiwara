@@ -195,6 +195,60 @@ npm run tauri android build -- --apk --split-per-abi
 sudo apt remove -y libwebkit2gtk-4.1-dev libxdo-dev libayatana-appindicator3-dev
 ```
 
+#### Docker 打包（推荐） | Docker packaging（recommended）
+
+Docker 打包脚本 [`package_app_linux_docker.sh`](package_app_linux_docker.sh) 在隔离环境中构建，无需安装本地系统依赖，支持多架构一键打包。
+The [`package_app_linux_docker.sh`](package_app_linux_docker.sh) script builds in an isolated environment without local system dependencies, supporting multi-architecture one-click packaging.
+
+**支持的架构 | Supported architectures：**
+
+| 架构 | Dockerfile | 构建方式 | Build type | 输出目录 | Output dir |
+|------|-----------|---------|------------|---------|------------|
+| x86_64 | [`docker/Dockerfile.x64`](docker/Dockerfile.x64) | 原生编译 | Native | `docker/release/x64/` |
+| ARM64 | [`docker/Dockerfile.arm64`](docker/Dockerfile.arm64) | 交叉编译 | Cross-compile | `docker/release/arm64/` |
+| RISC-V 64 | [`docker/Dockerfile.riscv64`](docker/Dockerfile.riscv64) | 交叉编译 | Cross-compile | `docker/release/riscv64/` |
+
+**基本使用 | Basic usage：**
+
+```bash
+# x64 + ARM64 all formats (default)
+./package_app_linux_docker.sh
+
+# Specify architectures and bundle formats
+./package_app_linux_docker.sh --arch x64 arm64 --bundle deb rpm
+
+# Build only x64 deb package
+./package_app_linux_docker.sh --arch x64 --bundle deb
+
+# Build only RISC-V 64
+./package_app_linux_docker.sh --arch riscv64
+```
+
+**离线构建（不连 Docker Hub）| Offline build (no Docker Hub)：**
+
+基础镜像通过 `debootstrap` 从 USTC 镜像本地构建，无需从 Docker Hub 拉取。
+The base image is built locally via `debootstrap` from USTC mirror, no Docker Hub required.
+
+```bash
+# First run: automatically builds the local base image
+./package_app_linux_docker.sh --local-base
+
+# Force rebuild all images (including base image)
+./package_app_linux_docker.sh --local-base -f
+```
+
+**基础镜像来源优先级 | Base image priority：**
+
+1. 本地已有 `debian:trixie-slim` → 直接使用
+   Local `debian:trixie-slim` exists → use directly
+2. `--local-base` → 通过 `debootstrap` 从 USTC 构建
+   `--local-base` → build via `debootstrap` from USTC mirror
+3. 以上都不满足 → 从 Docker Hub 拉取
+   Otherwise → pull from Docker Hub
+
+> 依赖详见 [`docker/setup-docker-base.sh`](docker/setup-docker-base.sh) 和 Dockerfile 中的 apt 安装步骤。
+> See [`docker/setup-docker-base.sh`](docker/setup-docker-base.sh) and the apt install steps in the Dockerfiles for details.
+
 #### 手动打包 | Manual packaging
 
 **安装 Linux 构建依赖 | Install build dependencies：**

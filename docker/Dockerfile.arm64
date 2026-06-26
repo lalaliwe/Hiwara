@@ -1,0 +1,93 @@
+# ============================================================
+# Dockerfile.arm64 - 交叉编译 ARM64 (deb + rpm + appimage)
+# 使用 debian:trixie 基础镜像（与宿主系统一致）
+# 构建: docker build -t hiwara-builder-arm64 -f Dockerfile.arm64 .
+# 提取: docker run --rm -v $(pwd)/dist-arm64:/output hiwara-builder-arm64
+# ============================================================
+FROM debian:trixie-slim
+
+# 从独立配置文件复制 APT 镜像源配置（修改镜像源无需改 Dockerfile）
+# 同时移除基础镜像中残留的旧格式 sources.list
+COPY docker/config/debian-sources.sources /etc/apt/sources.list.d/debian.sources
+RUN rm -f /etc/apt/sources.list
+
+# 安装基础构建工具（arm64 交叉编译环境只需打包，不需要 x64 运行库）
+RUN apt update && apt install -y \
+    build-essential curl wget file \
+    && rm -rf /var/lib/apt/lists/*
+
+# 安装 Node.js 25（开发环境用 26，打包用 25 更稳定）
+RUN curl -fsSL https://deb.nodesource.com/setup_25.x | bash - && \
+    apt install -y nodejs && \
+    rm -rf /var/lib/apt/lists/*
+
+# 安装 Rust（可用 --build-arg 切换镜像源）
+ARG RUSTUP_DIST_SERVER=https://mirrors.tuna.tsinghua.edu.cn/rustup/rustup
+ARG RUSTUP_UPDATE_ROOT=https://mirrors.tuna.tsinghua.edu.cn/rustup/rustup
+ENV RUSTUP_DIST_SERVER=$RUSTUP_DIST_SERVER
+ENV RUSTUP_UPDATE_ROOT=$RUSTUP_UPDATE_ROOT
+RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y && \
+    . "$HOME/.cargo/env" && \
+    rustup target add aarch64-unknown-linux-gnu
+ENV PATH="/root/.cargo/bin:${PATH}"
+ENV CARGO_HOME="/root/.cargo"
+ENV RUSTUP_HOME="/root/.rustup"
+
+# 启用 ARM64 架构并安装交叉编译工具链及 arm64 库
+RUN dpkg --add-architecture arm64 && \
+    apt update && \
+    apt -o DPkg::options::="--force-overwrite" install -y \
+      gcc-aarch64-linux-gnu g++-aarch64-linux-gnu \
+      libwebkit2gtk-4.1-dev:arm64 \
+      libxdo-dev:arm64 \
+      libssl-dev:arm64 \
+      libayatana-appindicator3-dev:arm64 \
+      librsvg2-dev:arm64 \
+      rpm \
+    && rm -rf /var/lib/apt/lists/*
+
+# 交叉编译环境变量
+ENV CC_aarch64_unknown_linux_gnu=aarch64-linux-gnu-gcc
+ENV CARGO_TARGET_AARCH64_UNKNOWN_LINUX_GNU_LINKER=aarch64-linux-gnu-gcc
+ENV PKG_CONFIG_ALLOW_CROSS=1
+ENV PKG_CONFIG_PATH=/usr/lib/aarch64-linux-gnu/pkgconfig
+
+WORKDIR /app
+
+# 先复制依赖文件（利用 Docker 层缓存）
+COPY package.json package-lock.json ./
+COPY src-tauri/Cargo.toml src-tauri/Cargo.lock ./src-tauri/
+
+# 复制本地插件（路径依赖）
+COPY tauri-plugin-device ./tauri-plugin-device
+COPY tauri-plugin-mwebview ./tauri-plugin-mwebview
+
+# 安装 npm 依赖
+RUN npm ci
+
+# 复制全部源码
+COPY . .
+
+# Cargo 镜像配置（放在最后，改配置只影响编译层，不影响 npm ci/apt 等前置缓存）
+COPY docker/config/cargo-config.toml "$CARGO_HOME/config.toml"
+
+# 选择要打包的格式（通过 --build-arg BUNDLES 传入）
+ARG BUNDLES="deb rpm appimage"
+RUN . "$HOME/.cargo/env" && \
+    for bundle in $BUNDLES; do \
+        echo "Building: $bundle"; \
+        npx tauri build --target aarch64-unknown-linux-gnu --bundles "$bundle" || \
+        echo "[!] $bundle 打包失败，继续下一个..."; \
+    done
+
+# 仅复制包文件到 /build-output（排除解压目录）并清理构建缓存
+RUN mkdir -p /build-output && \
+    for dir in deb rpm appimage; do \
+        find src-tauri/target/aarch64-unknown-linux-gnu/release/bundle/$dir -type f \( -name '*.deb' -o -name '*.rpm' -o -name '*.AppImage' \) -exec cp -v {} /build-output/ \; 2>/dev/null || \
+        find src-tauri/target/release/bundle/$dir -type f \( -name '*.deb' -o -name '*.rpm' -o -name '*.AppImage' \) -exec cp -v {} /build-output/ \; 2>/dev/null || true; \
+    done && \
+    rm -rf src-tauri/target && \
+    echo "=== 产物列表 ===" && ls -lh /build-output/
+
+# 运行时将产物复制到挂载的 /output 目录
+CMD mkdir -p /output && cp -r /build-output/* /output/ && ls -lh /output/
