@@ -1,6 +1,7 @@
 # ============================================================
 # Dockerfile.x64 - 构建 x86_64 (deb + rpm + appimage)
 # 使用 debian:trixie 基础镜像（与 ARM64 保持一致）
+# 输出: hiwara_{version}_linux_x64.{deb,rpm,AppImage}
 # 构建: docker build -t hiwara-builder-x64 -f Dockerfile.x64 .
 # 提取: docker run --rm -v $(pwd)/dist-x64:/output hiwara-builder-x64
 # ============================================================
@@ -69,11 +70,20 @@ RUN . "$HOME/.cargo/env" && \
         echo "[!] $bundle 打包失败，继续下一个..."; \
     done
 
-# 仅复制包文件到 /build-output（排除解压目录）并清理构建缓存
-RUN mkdir -p /build-output && \
+# 读取版本号并重命名产物
+RUN VERSION=$(grep '"version"' src-tauri/tauri.conf.json | head -1 | sed 's/.*"version": *"\([^"]*\)".*/\1/') && \
+    mkdir -p /build-output && \
     for dir in deb rpm appimage; do \
-        find src-tauri/target/x86_64-unknown-linux-gnu/release/bundle/$dir -type f \( -name '*.deb' -o -name '*.rpm' -o -name '*.AppImage' \) -exec cp -v {} /build-output/ \; 2>/dev/null || \
-        find src-tauri/target/release/bundle/$dir -type f \( -name '*.deb' -o -name '*.rpm' -o -name '*.AppImage' \) -exec cp -v {} /build-output/ \; 2>/dev/null || true; \
+        for f in $(find src-tauri/target/x86_64-unknown-linux-gnu/release/bundle/$dir -type f \( -name '*.deb' -o -name '*.rpm' -o -name '*.AppImage' \) 2>/dev/null); do \
+            ext="${f##*.}"; \
+            if [ "$ext" = "deb" ]; then \
+                cp "$f" "/build-output/hiwara_${VERSION}_linux_x64.deb"; \
+            elif [ "$ext" = "rpm" ]; then \
+                cp "$f" "/build-output/hiwara_${VERSION}_linux_x64.rpm"; \
+            elif [ "$ext" = "AppImage" ]; then \
+                cp "$f" "/build-output/hiwara_${VERSION}_linux_x64.AppImage"; \
+            fi; \
+        done; \
     done && \
     rm -rf src-tauri/target && \
     echo "=== 产物列表 ===" && ls -lh /build-output/

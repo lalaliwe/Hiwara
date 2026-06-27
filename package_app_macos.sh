@@ -5,6 +5,8 @@
 # 支持架构: x86_64 (Intel), aarch64 (Apple Silicon)
 # 支持格式: dmg (Tauri 默认同时生成 .app)
 # 功能: 各架构独立打包 + Universal Binary (lipo) 合并
+# 输出目录: release/
+# 输出文件: hiwara_{version}_mac_{arch}.dmg
 # 配置: 通过 package_app_macos.env 控制签名和公证
 # 配置文档: doc/macos-packaging-config.md
 # ============================================================
@@ -34,14 +36,21 @@ fi
 : ${APPLE_ID:=""}
 : ${APPLE_APP_SPECIFIC_PASSWORD:=""}
 
+# 输出目录
+RELEASE_DIR="release"
+mkdir -p "$RELEASE_DIR"
+
+# 从 tauri.conf.json 读取版本号
+VERSION=$(grep '"version"' src-tauri/tauri.conf.json | head -1 | sed 's/.*"version": *"\([^"]*\)".*/\1/')
+
 # ============================================================
 # 架构与打包格式定义
 # ============================================================
 
-# 架构列表
+# 架构列表: (target_triple, short_name)
 ARCHITECTURES=(
-    "x86_64-apple-darwin"    # Intel Mac (64-bit)
-    "aarch64-apple-darwin"   # Apple Silicon (M 系列)
+    "x86_64-apple-darwin:x64"    # Intel Mac (64-bit)
+    "aarch64-apple-darwin:arm64" # Apple Silicon (M 系列)
 )
 
 # 打包格式说明：
@@ -75,7 +84,8 @@ echo "========================================"
 echo "检查并安装缺失的 Rust target..."
 echo "========================================"
 
-for arch in "${ARCHITECTURES[@]}"; do
+for entry in "${ARCHITECTURES[@]}"; do
+    arch="${entry%%:*}"
     if rustup target list --installed 2>/dev/null | grep -q "^$arch$"; then
         echo "[✓] $arch 已安装"
     else
@@ -88,7 +98,7 @@ done
 set +e  # 后续构建步骤使用错误容忍模式
 
 # ============================================================
-# 第三步：逐架构构建 .app
+# 第三步：逐架构构建 .app + 创建各架构 DMG
 # ============================================================
 echo ""
 echo "========================================"
@@ -97,19 +107,38 @@ echo "========================================"
 
 declare -A BUILD_RESULTS  # 存储构建结果
 
-for arch in "${ARCHITECTURES[@]}"; do
+for entry in "${ARCHITECTURES[@]}"; do
+    arch="${entry%%:*}"
+    short="${entry##*:}"
+
     echo ""
     echo "========================================"
-    echo "构建: $arch"
+    echo "构建: $arch  ($short)"
     echo "========================================"
 
-    # 只构建 .app（不传 --bundles，避免触发 Tauri 内置的 bundle_dmg.sh bug）
-    # Universal DMG 会在后续步骤中用 hdiutil 直接创建
+    # 只构建 .app
     npx tauri build --target "$arch"
     
     if [[ $? -eq 0 ]]; then
         echo "[✓] $arch 构建成功"
         BUILD_RESULTS[$arch]="success"
+
+        # 创建各架构 DMG → release/
+        APP_PATH="src-tauri/target/$arch/release/bundle/macos/Hiwara.app"
+        DMG_PATH="$RELEASE_DIR/hiwara_${VERSION}_mac_${short}.dmg"
+
+        if [[ -d "$APP_PATH" ]]; then
+            echo "创建 DMG: $DMG_PATH"
+            hdiutil create -volname "Hiwara" \
+                -srcfolder "$APP_PATH" \
+                -ov -format UDZO \
+                "$DMG_PATH"
+            if [[ $? -eq 0 ]]; then
+                echo "[✓] $DMG_PATH 创建成功 ($(du -h "$DMG_PATH" | cut -f1))"
+            else
+                echo "[!] $DMG_PATH 创建失败"
+            fi
+        fi
     else
         echo "[!] $arch 构建失败（继续执行后续步骤）"
         BUILD_RESULTS[$arch]="failed"
@@ -124,7 +153,10 @@ echo "========================================"
 echo "Codesigning 处理..."
 echo "========================================"
 
-for arch in "${ARCHITECTURES[@]}"; do
+for entry in "${ARCHITECTURES[@]}"; do
+    arch="${entry%%:*}"
+    short="${entry##*:}"
+
     if [[ "${BUILD_RESULTS[$arch]}" != "success" ]]; then
         echo "[!] 跳过 $arch 签名（构建失败）"
         continue
@@ -137,7 +169,6 @@ for arch in "${ARCHITECTURES[@]}"; do
     fi
     
     if [[ "$ENABLE_CODESIGNING" == "true" && -n "$APPLE_SIGNING_IDENTITY" ]]; then
-        # 使用 Apple Developer 证书签名（用于分发）
         echo "签名: $APP_PATH"
         echo "签名身份: $APPLE_SIGNING_IDENTITY"
         codesign --force --options runtime \
@@ -150,7 +181,6 @@ for arch in "${ARCHITECTURES[@]}"; do
             echo "[✗] $arch 正式签名失败"
         fi
     else
-        # 默认：显式 ad-hoc 自签名（覆盖 Tauri 默认签名，确保一致性）
         echo "自签名: $APP_PATH"
         codesign --force --deep -s - "$APP_PATH"
         if [[ $? -eq 0 ]]; then
@@ -162,7 +192,7 @@ for arch in "${ARCHITECTURES[@]}"; do
 done
 
 # ============================================================
-# 第五步：创建 Universal Binary
+# 第五步：创建 Universal Binary + Universal DMG
 # ============================================================
 echo ""
 echo "========================================"
@@ -175,6 +205,8 @@ UNIVERSAL_DIR="src-tauri/target/universal"
 
 INTEL_APP="$INTEL_DIR/bundle/macos/Hiwara.app"
 ARM_APP="$ARM_DIR/bundle/macos/Hiwara.app"
+
+UNIVERSAL_DMG="$RELEASE_DIR/hiwara_${VERSION}_mac_universal.dmg"
 
 # 检查两个架构的构建是否都成功
 if [[ ! -d "$INTEL_APP" || ! -d "$ARM_APP" ]]; then
@@ -236,9 +268,8 @@ else
         fi
     fi
     
-    # 5. 创建 Universal DMG
-    echo "创建 Universal DMG..."
-    UNIVERSAL_DMG="$UNIVERSAL_DIR/Hiwara-universal.dmg"
+    # 5. 创建 Universal DMG → release/
+    echo "创建 Universal DMG... $UNIVERSAL_DMG"
     
     hdiutil create -volname "Hiwara" \
         -srcfolder "$UNIVERSAL_DIR/Hiwara.app" \
@@ -246,7 +277,7 @@ else
         "$UNIVERSAL_DMG"
     
     if [[ $? -eq 0 ]]; then
-        echo "[✓] Universal DMG 创建成功: $UNIVERSAL_DMG"
+        echo "[✓] Universal DMG 创建成功: $UNIVERSAL_DMG ($(du -h "$UNIVERSAL_DMG" | cut -f1))"
         
         # 可选：公证 Universal DMG
         if [[ "$ENABLE_NOTARIZATION" == "true" && "$ENABLE_CODESIGNING" == "true" ]]; then
@@ -289,17 +320,19 @@ echo "构建结果摘要"
 echo "========================================"
 
 echo ""
-echo "--- 各架构 .app ---"
-for arch in "${ARCHITECTURES[@]}"; do
+echo "--- 各架构 DMG ---"
+for entry in "${ARCHITECTURES[@]}"; do
+    arch="${entry%%:*}"
+    short="${entry##*:}"
     RESULT="${BUILD_RESULTS[$arch]}"
-    APP_PATH="src-tauri/target/$arch/release/bundle/macos/Hiwara.app"
-    if [[ -d "$APP_PATH" ]]; then
-        SIZE=$(du -sh "$APP_PATH" | cut -f1)
-        echo "  [✓] $arch — $APP_PATH ($SIZE)"
+    DMG_FILE="$RELEASE_DIR/hiwara_${VERSION}_mac_${short}.dmg"
+    if [[ -f "$DMG_FILE" ]]; then
+        SIZE=$(du -h "$DMG_FILE" | cut -f1)
+        echo "  [✓] $short — $DMG_FILE ($SIZE)"
     elif [[ "$RESULT" == "success" ]]; then
-        echo "  [!] $arch — 构建成功，但 .app 未找到"
+        echo "  [!] $short — 构建成功，但 DMG 未找到"
     else
-        echo "  [✗] $arch — 构建失败"
+        echo "  [✗] $short — 构建失败"
     fi
 done
 
@@ -309,10 +342,6 @@ if [[ "$UNIVERSAL_BUILD_FAILED" == false ]]; then
     if [[ -f "$UNIVERSAL_DMG" ]]; then
         SIZE=$(du -h "$UNIVERSAL_DMG" | cut -f1)
         echo "  [✓] Universal DMG — $UNIVERSAL_DMG ($SIZE)"
-    fi
-    if [[ -d "$UNIVERSAL_DIR/Hiwara.app" ]]; then
-        SIZE=$(du -sh "$UNIVERSAL_DIR/Hiwara.app" | cut -f1)
-        echo "  [✓] Universal App — $UNIVERSAL_DIR/Hiwara.app ($SIZE)"
     fi
 else
     echo "  [✗] Universal Binary 创建失败（缺少架构产物）"

@@ -32,3 +32,5 @@ docker/logs/
 
 # Tauri Android keystore (contains sensitive credentials)
 src-tauri/gen/android/keystore.properties
+
+release

@@ -3,6 +3,8 @@
 # Docker 构建多架构 (deb / rpm / appimage)
 # 支持: x86_64 / ARM64 / RISC-V 64
 # 使用本地 debootstrap 构建基础镜像，无需 Docker Hub
+# 输出目录: release/
+# 输出文件: hiwara_{version}_linux_{arch}.{deb,rpm,AppImage}
 #
 # 使用方式:
 #   ./package_app_linux_docker.sh                             # x64 + ARM64 + RISC-V 64, 全部格式
@@ -27,7 +29,7 @@
 
 set -e
 
-OUTPUT_DIR="docker/release"
+DOCKER_OUTPUT_DIR="docker/release"
 LOG_DIR="docker/logs"
 BUILD_X64=false
 BUILD_ARM64=false
@@ -35,6 +37,21 @@ BUILD_RISCV64=false
 BUNDLES=()
 FORCE_ALL=false
 USE_LOCAL_BASE=false
+
+# 统一输出目录
+RELEASE_DIR="release"
+
+# 从 tauri.conf.json 读取版本号
+VERSION=$(grep '"version"' src-tauri/tauri.conf.json | head -1 | sed 's/.*"version": *"\([^"]*\)".*/\1/')
+
+# 格式→扩展名映射
+declare -A EXT_MAP
+EXT_MAP["deb"]=".deb"
+EXT_MAP["rpm"]=".rpm"
+EXT_MAP["appimage"]=".AppImage"
+
+# 确保输出目录存在
+mkdir -p "$RELEASE_DIR"
 
 # 解析命名参数
 while [ $# -gt 0 ]; do
@@ -93,6 +110,8 @@ fi
 BUNDLES_STR="${BUNDLES[*]}"
 echo "[i] 架构: $([ "$BUILD_X64" = true ] && echo 'x64 ')$([ "$BUILD_ARM64" = true ] && echo 'ARM64 ')$([ "$BUILD_RISCV64" = true ] && echo 'RISC-V64')"
 echo "[i] 格式: ${BUNDLES[*]}"
+echo "[i] 版本: $VERSION"
+echo "[i] 输出: $RELEASE_DIR/"
 
 # ============================================================
 # 确保本地基础镜像存在（绕过 Docker Hub）
@@ -140,8 +159,9 @@ highlight_log() {
 # ============================================================
 run_build() {
     local name=$1
-    local arch_dir=$2
-    shift 2
+    local arch_dir=$2      # 例如 x64, arm64, riscv64
+    local short_arch=$3
+    shift 3
 
     local log_dir="$LOG_DIR/$arch_dir"
     mkdir -p "$log_dir"
@@ -153,14 +173,13 @@ run_build() {
     echo "日志: $log_file"
     echo "========================================"
 
-    mkdir -p "$OUTPUT_DIR/$arch_dir"
+    mkdir -p "$DOCKER_OUTPUT_DIR/$arch_dir"
 
     if [ "$USE_LOCAL_BASE" = true ]; then
         ensure_local_base_image
     fi
 
     set +e
-    # 先 tee 写入纯文本日志，再 highlight 给终端加颜色
     if command -v unbuffer &>/dev/null; then
         unbuffer "$@" 2>&1 | tee "$log_file" | highlight_log
     else
@@ -174,8 +193,21 @@ run_build() {
         return 1
     fi
 
-    echo "[✓] $name → $OUTPUT_DIR/$arch_dir/"
-    ls -lh "$OUTPUT_DIR/$arch_dir/" 2>/dev/null
+    # 重命名产物并复制到 release/ 目录
+    echo ""
+    echo "--- 重命名产物 → $RELEASE_DIR/ ---"
+    for bundle in "${BUNDLES[@]}"; do
+        local ext="${EXT_MAP[$bundle]}"
+        for f in "$DOCKER_OUTPUT_DIR/$arch_dir"/*"$ext"; do
+            if [ -f "$f" ]; then
+                local new_name="hiwara_${VERSION}_linux_${short_arch}${ext}"
+                cp "$f" "$RELEASE_DIR/$new_name"
+                echo "[✓] $RELEASE_DIR/$new_name ($(du -h "$RELEASE_DIR/$new_name" | cut -f1))"
+            fi
+        done
+    done
+
+    echo "[✓] $name 完成"
 }
 
 # 从配置文件读取构建参数
@@ -183,7 +215,6 @@ read_build_args() {
     local args=""
     if [ -f docker/config/rustup-env ]; then
         while IFS='=' read -r key value; do
-            # 跳过注释和空行
             [[ "$key" =~ ^#.*$ || -z "$key" ]] && continue
             args="$args --build-arg $key=$value"
         done < docker/config/rustup-env
@@ -199,7 +230,7 @@ build_x64() {
     docker build $BUILD_ARGS --build-arg "BUNDLES=$BUNDLES_STR" \
         -t hiwara-builder-x64 -f docker/Dockerfile.x64 .
     docker run --rm --user "$(id -u):$(id -g)" \
-        -v "$(pwd)/$OUTPUT_DIR/x64:/output" hiwara-builder-x64
+        -v "$(pwd)/$DOCKER_OUTPUT_DIR/x64:/output" hiwara-builder-x64
 }
 
 # ============================================================
@@ -209,7 +240,7 @@ build_arm64() {
     docker build $BUILD_ARGS --build-arg "BUNDLES=$BUNDLES_STR" \
         -t hiwara-builder-arm64 -f docker/Dockerfile.arm64 .
     docker run --rm --user "$(id -u):$(id -g)" \
-        -v "$(pwd)/$OUTPUT_DIR/arm64:/output" hiwara-builder-arm64
+        -v "$(pwd)/$DOCKER_OUTPUT_DIR/arm64:/output" hiwara-builder-arm64
 }
 
 # ============================================================
@@ -219,7 +250,7 @@ build_riscv64() {
     docker build $BUILD_ARGS --build-arg "BUNDLES=$BUNDLES_STR" \
         -t hiwara-builder-riscv64 -f docker/Dockerfile.riscv64 .
     docker run --rm --user "$(id -u):$(id -g)" \
-        -v "$(pwd)/$OUTPUT_DIR/riscv64:/output" hiwara-builder-riscv64
+        -v "$(pwd)/$DOCKER_OUTPUT_DIR/riscv64:/output" hiwara-builder-riscv64
 }
 
 # ============================================================
@@ -227,20 +258,19 @@ build_riscv64() {
 # ============================================================
 FAILED=0
 if [ "$BUILD_X64" = true ]; then
-    run_build "x86_64" "x64" build_x64 || FAILED=1
+    run_build "x86_64" "x64" "x64" build_x64 || FAILED=1
 fi
 if [ "$BUILD_ARM64" = true ]; then
-    run_build "ARM64" "arm64" build_arm64 || FAILED=1
+    run_build "ARM64" "arm64" "arm64" build_arm64 || FAILED=1
 fi
 if [ "$BUILD_RISCV64" = true ]; then
-    run_build "RISC-V 64" "riscv64" build_riscv64 || FAILED=1
+    run_build "RISC-V 64" "riscv64" "riscv64" build_riscv64 || FAILED=1
 fi
 
 echo ""
 echo "========================================"
 echo "全部完成！"
-[ "$BUILD_X64" = true ] && echo "x64:       $OUTPUT_DIR/x64/"
-[ "$BUILD_ARM64" = true ] && echo "ARM64:     $OUTPUT_DIR/arm64/"
-[ "$BUILD_RISCV64" = true ] && echo "RISC-V 64: $OUTPUT_DIR/riscv64/"
+echo "输出目录: $RELEASE_DIR/"
+ls -lh "$RELEASE_DIR"/hiwara_${VERSION}_linux_* 2>/dev/null || echo "(无)"
 echo "========================================"
 [ "$FAILED" = 1 ] && exit 1
