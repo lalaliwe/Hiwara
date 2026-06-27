@@ -87,7 +87,7 @@ async function login() {
         if (result.data && result.data.token) {
           // 在数据库中记录登录用户
           await db_login(username.value, password.value, result.data.token);
-          getMyselfInfo(aiStore.value).then(async (res) => {
+          getMyselfInfo().then(async (res) => {
             if (res.ok) {
               const userId = res.data.user.id;
               const userName = res.data.user.username;

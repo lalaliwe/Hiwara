@@ -85,7 +85,7 @@ if (isTab) {
 
 async function getUserInfo() {
   try {
-    const userInfoRes = await getMyselfInfo(aiStore.value);
+    const userInfoRes = await getMyselfInfo();
     if (!userInfoRes.ok)
       throw new Error(userInfoRes.message);
     nickname.value = userInfoRes.data.user.name;
@@ -103,7 +103,7 @@ async function getUserInfo() {
   }
   async function getFollowersNum(uid: string) {
     try {
-      const res = await getUserFollowers(uid, aiStore.value);
+      const res = await getUserFollowers(uid);
       if (!res.ok)
         throw new Error(res.message);
       followNum.value = res.data.count;
@@ -113,7 +113,7 @@ async function getUserInfo() {
   }
   async function getFansNum(uid: string) {
     try {
-      const res = await getUserFans(uid, aiStore.value);
+      const res = await getUserFans(uid);
       if (!res.ok)
         throw new Error(res.message);
       fansNum.value = res.data.count;

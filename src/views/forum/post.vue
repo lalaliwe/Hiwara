@@ -103,7 +103,7 @@ async function fetchPostData(page: number = 0) {
   }
 
   try {
-    const res = await getForumPostReplies(sectionId.value, id.value, aiStore.value, page, pageLimit.value);
+    const res = await getForumPostReplies(sectionId.value, id.value, page, pageLimit.value);
     const data: ForumPostResponse = res?.data;
 
     if (!data) {
@@ -173,7 +173,7 @@ function handleScroll(e: Event): void {
 async function handlePosted(reply: any) {
   if (!reply) return;
   try {
-    const userInfoRes = await getMyselfInfo(aiStore.value);
+    const userInfoRes = await getMyselfInfo();
     if (userInfoRes?.ok && userInfoRes.data?.user) {
       const myself = userInfoRes.data.user;
       reply.user = {

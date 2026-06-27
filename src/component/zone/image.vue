@@ -84,7 +84,7 @@ async function imageListHandleScrollToEnd({ done }: any) {
 // 获取插画列表
 async function getImageList(): Promise<any> {
   try {
-    const res = await api_getImageList(imageListPage, 'date', undefined, props.uid, aiStore.value);
+    const res = await api_getImageList(imageListPage, 'date', aiStore.value, undefined, props.uid);
     if (!res.ok)
       throw new Error(`状态码：${res.status}, 错误信息：${res.statusText}`);
     if (res.data.results && res.data.results.length > 0) {

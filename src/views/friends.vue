@@ -46,7 +46,7 @@ async function initUid() {
 
   // 3. 从 API 获取当前用户信息
   try {
-    const res = await getMyselfInfo(aiStore.value)
+    const res = await getMyselfInfo()
     if (res.ok && res.data?.user?.id) {
       uid.value = res.data.user.id
       // 同步更新 store，避免后续重复请求

@@ -246,7 +246,7 @@ function clickFollow() {
   isFollowing.value = true;
   if (props.isFollow) {
     emit('follow', false);
-    unfollowUser(props.uid, aiStore.value).then((res) => {
+    unfollowUser(props.uid).then((res) => {
       if (res.ok && res.status === 204) {
         console.log('取消关注成功');
         showShortToast(t('common.unfollowed'));
@@ -264,7 +264,7 @@ function clickFollow() {
     })
   } else {
     emit('follow', true);
-    followUser(props.uid, aiStore.value).then((res) => {
+    followUser(props.uid).then((res) => {
       if (res.ok && res.status === 201) {
         console.log('关注成功');
         showShortToast(t('common.followed'));
@@ -469,7 +469,7 @@ function detectDarkMode(): boolean {
             t('player.downloadLink') }}
         </div>
       </div>
-      <recommend :vid="vid" :uid="uid" />
+      <recommend :vid="vid" :uid="uid" :isAI="aiStore.value" />
     </div>
   </div>
 </template>

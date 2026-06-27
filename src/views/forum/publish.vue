@@ -106,7 +106,7 @@ const selectedSectionLabel = computed(() => {
 async function fetchSections() {
   loadingSections.value = true;
   try {
-    const res = await getForumHome(aiStore.value);
+    const res = await getForumHome();
     const data: ForumSection[] = res?.data || res || [];
     // 过滤掉 locked 的版块
     sections.value = data.filter((s: ForumSection) => !s.locked);
@@ -144,7 +144,7 @@ async function handlePublish() {
 
   sending.value = true;
   try {
-    const res = await createForumThread(selectedSection.value, title.value, body.value, aiStore.value);
+    const res = await createForumThread(selectedSection.value, title.value, body.value);
     if (res?.data?.id) {
       showShortToast('发帖成功');
       // 跳转到帖子详情页

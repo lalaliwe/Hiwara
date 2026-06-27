@@ -143,7 +143,7 @@ async function handleFollow(follow: boolean) {
     if (follow) {
       // 关注用户
       emit('follow', true);
-      const res = await followUser(props.uid, aiStore.value);
+      const res = await followUser(props.uid);
       if (res.ok && res.status === 201) {
         console.log('关注成功');
         showShortToast(t('common.followed'));
@@ -155,7 +155,7 @@ async function handleFollow(follow: boolean) {
     } else {
       // 取消关注
       emit('follow', false);
-      const res = await unfollowUser(props.uid, aiStore.value);
+      const res = await unfollowUser(props.uid);
       if (res.ok && res.status === 204) {
         console.log('取消关注成功');
         showShortToast(t('common.unfollowed'));

@@ -151,7 +151,7 @@ async function fetchForumData(page: number = 0) {
   }
 
   try {
-    const res = await getForumCategoryList(sectionId.value, aiStore.value, page, pageLimit.value);
+    const res = await getForumCategoryList(sectionId.value, page, pageLimit.value);
     const data = res?.data;
 
     if (!data || !data.threads || data.threads.length === 0) {

@@ -524,7 +524,7 @@ onUnmounted(() => {
       <!-- 评论输入组件 -->
       <CommentInput
         :content-id="props.pid"
-        :post-comment="(pid: string, body: string, parentId?: string) => postImageComment(pid, body, parentId, aiStore.value)"
+        :post-comment="(pid: string, body: string, parentId?: string) => postImageComment(pid, body, aiStore.value, parentId)"
         :reply-to="replyTarget"
         @posted="handleCommentPosted"
         @cancel-reply="handleCancelReply"

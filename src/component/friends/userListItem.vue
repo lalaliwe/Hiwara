@@ -64,7 +64,7 @@ async function toggleFollow() {
 
   try {
     if (shouldFollow) {
-      const res = await followUser(props.item.uid, aiStore.value)
+      const res = await followUser(props.item.uid)
       if (res.ok && res.status === 201) {
         console.log('关注成功')
         showShortToast('已关注')
@@ -74,7 +74,7 @@ async function toggleFollow() {
         props.item.following = !shouldFollow
       }
     } else {
-      const res = await unfollowUser(props.item.uid, aiStore.value)
+      const res = await unfollowUser(props.item.uid)
       if (res.ok && res.status === 204) {
         console.log('取消关注成功')
         showShortToast('已取消关注')

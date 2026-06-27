@@ -6,6 +6,8 @@ import loadingHuawu from '../loadingHuawu.vue'
 import errorHuawu from '../errorHuawu.vue'
 import userListItem from './userListItem.vue'
 
+const aiStore = ai();
+
 interface ListItem {
   uid: string,
   username: string,
@@ -43,7 +45,7 @@ async function getList(): Promise<any> {
       throw new Error('用户 ID 为空，无法获取好友列表')
     }
     // console.log('获取好友列表，uid:', props.uid, 'page:', page)
-    const res = await getFriendsList(props.uid, page, aiStore.value)
+    const res = await getFriendsList(props.uid, page)
 
     if (!res.ok) {
       throw new Error(`状态码：${res.status}, 错误信息：${res.statusText}`)

@@ -180,7 +180,7 @@ async function getImageList(tabNum: number): Promise<any> {
   try {
     const sort = tabArray.value[tabNum].value;
     const date = dateFilter.value; // 使用全局时间筛选条件
-    const res = await api_getImageList(page[tabNum], sort, date, undefined, aiStore.value);
+    const res = await api_getImageList(page[tabNum], sort, aiStore.value, date, undefined);
     console.log(`获取插画列表 - Tab:${tabNum}, Page:${page[tabNum]}, Sort:${sort}, Date:${date}`);
     // console.log(res);
     if (!res.ok)

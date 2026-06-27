@@ -469,7 +469,7 @@ onActivated(() => {
     <!-- 评论输入组件 -->
     <CommentInput
       :content-id="props.vid"
-      :post-comment="(vid: string, body: string, parentId?: string) => postVideoComment(vid, body, parentId, aiStore.value)"
+      :post-comment="(vid: string, body: string, parentId?: string) => postVideoComment(vid, body, aiStore.value, parentId)"
       :reply-to="replyTarget"
       @posted="handleCommentPosted"
       @cancel-reply="handleCancelReply"
