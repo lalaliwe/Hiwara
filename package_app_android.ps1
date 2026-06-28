@@ -31,30 +31,37 @@ Write-Host "========================================"
 Write-Host "重命名 APK 文件到 $releaseDir/ ..."
 Write-Host "========================================"
 
-# ABI → 简称映射
+# ABI → 简称映射（键为实际输出目录名，按长度降序排列以防子串误匹配）
 $abiMap = @{
-    "arm64-v8a"    = "arm64"
-    "armeabi-v7a"  = "arm32"
-    "x86_64"       = "x64"
-    "x86"          = "x86"
+    "x86_64"  = "x64"
+    "arm64"   = "arm64"
+    "x86"     = "x86"
+    "arm"     = "arm32"
 }
 
 $apkDir = "src-tauri/gen/android/app/build/outputs/apk"
 
-# 查找所有 split APK
-$apks = Get-ChildItem -Path $apkDir -Recurse -Filter "*.apk" -ErrorAction SilentlyContinue
+# 查找所有 release APK（排除 debug）
+$apks = Get-ChildItem -Path $apkDir -Recurse -Filter "*.apk" -ErrorAction SilentlyContinue `
+    | Where-Object { $_.FullName -notmatch "\\debug\\" }
 
 $successCount = 0
 foreach ($apk in $apks) {
+    $matched = $false
     foreach ($abi in $abiMap.Keys) {
-        if ($apk.FullName -match $abi) {
+        # 匹配路径中的目录名（例如 ...\arm64\release\...）
+        if ($apk.Directory.FullName -match "\\$abi\\") {
             $shortArch = $abiMap[$abi]
             $outputPath = "$releaseDir/hiwara_${version}_android_${shortArch}.apk"
             Copy-Item $apk.FullName $outputPath -Force
             Write-Host "[✓] $outputPath ($([math]::Round((Get-Item $outputPath).Length / 1MB, 2)) MB)"
             $successCount++
+            $matched = $true
             break
         }
+    }
+    if (-not $matched) {
+        Write-Host "[!] 未能识别 ABI: $($apk.FullName)"
     }
 }
 

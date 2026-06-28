@@ -34,6 +34,11 @@
     "resources": [
       "../public/fonts/*"
     ],
+    "windows": {
+      "nsis": {
+        "installerIcon": "icons/installer.ico"
+      }
+    },
     "android": {
       "autoIncrementVersionCode": false,
       "minSdkVersion": 24,

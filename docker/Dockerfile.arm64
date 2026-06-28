@@ -44,6 +44,7 @@ RUN dpkg --add-architecture arm64 && \
       libssl-dev:arm64 \
       libayatana-appindicator3-dev:arm64 \
       librsvg2-dev:arm64 \
+      xdg-utils \
       rpm \
     && rm -rf /var/lib/apt/lists/*
 

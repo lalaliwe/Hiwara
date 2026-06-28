@@ -4,7 +4,90 @@
 # 底层调用 package_app_linux_docker.sh
 # 输出目录: release/
 # 输出文件: hiwara_{version}_linux_{arch}.{deb,rpm,AppImage}
+#
+# 使用方式:
+#   .\package_app_wsl_docker.ps1                                          # x64 + ARM64 + RISC-V 64, 全部格式
+#   .\package_app_wsl_docker.ps1 -F                                       # 强制重建本地基础镜像
+#   .\package_app_wsl_docker.ps1 -P                                       # 改为从 Docker Hub 拉取基础镜像
+#   .\package_app_wsl_docker.ps1 -P -F                                    # 强制从 Docker Hub 重新拉取
+#   .\package_app_wsl_docker.ps1 -A x64,arm64                             # 指定架构
+#   .\package_app_wsl_docker.ps1 -A x64                                   # 仅 x64
+#   .\package_app_wsl_docker.ps1 -A arm64                                 # 仅 ARM64
+#   .\package_app_wsl_docker.ps1 -A riscv64                               # 仅 RISC-V 64
+#   .\package_app_wsl_docker.ps1 -A x64,arm64,riscv64                     # 全部架构
+#   .\package_app_wsl_docker.ps1 -B deb,rpm                               # 指定格式
+#   .\package_app_wsl_docker.ps1 -B deb                                   # 仅 deb
+#   .\package_app_wsl_docker.ps1 -B appimage                              # 仅 appimage
+#   .\package_app_wsl_docker.ps1 -A x64,arm64 -B deb,rpm                  # 组合使用
+#   .\package_app_wsl_docker.ps1 -Arch x64,arm64 -Bundle deb,rpm          # 全名参数
+#   .\package_app_wsl_docker.ps1 -H                                       # 显示帮助
+#
+# 参数（不区分大小写，全名和短别名均可）:
+#   -Arch / -A       指定目标架构 (x64, arm64, riscv64)，逗号分隔，默认全部
+#   -Bundle / -B     指定打包格式 (deb, rpm, appimage)，逗号分隔，默认全部
+#   -ForceAll / -F   强制重建/重新拉取基础镜像
+#   -Pull / -P       从 Docker Hub 拉取基础镜像
+#   -LocalBase / -L  使用本地 TUNA 镜像源构建（默认行为）
+#   -Help / -H       显示帮助信息
 # ============================================================
+
+param(
+    [Alias("A")]
+    [Parameter(Mandatory = $false, HelpMessage = "指定目标架构，可用值: x64, arm64, riscv64。可传多个，用逗号分隔。默认全部构建")]
+    [ValidateSet("x64", "arm64", "riscv64")]
+    [string[]]$Arch,
+
+    [Alias("B")]
+    [Parameter(Mandatory = $false, HelpMessage = "指定打包格式，可用值: deb, rpm, appimage。可传多个，用逗号分隔。默认全部格式")]
+    [ValidateSet("deb", "rpm", "appimage")]
+    [string[]]$Bundle,
+
+    [Alias("F")]
+    [Parameter(Mandatory = $false, HelpMessage = "强制重建/重新拉取基础镜像（等价于 -F）")]
+    [switch]$ForceAll,
+
+    [Alias("P")]
+    [Parameter(Mandatory = $false, HelpMessage = "从 Docker Hub 拉取基础镜像（默认从 TUNA 镜像源本地构建）")]
+    [switch]$Pull,
+
+    [Alias("L")]
+    [Parameter(Mandatory = $false, HelpMessage = "使用本地 TUNA 镜像源构建基础镜像（默认行为）")]
+    [switch]$LocalBase,
+
+    [Alias("H")]
+    [Parameter(Mandatory = $false, HelpMessage = "显示帮助信息")]
+    [switch]$Help
+)
+
+# ============================================================
+# 帮助信息
+# ============================================================
+if ($Help) {
+    Write-Host "========================================"
+    Write-Host "WSL Docker 打包脚本 - 帮助"
+    Write-Host "========================================"
+    Write-Host ""
+    Write-Host "通过 WSL 中的 Docker 构建 Linux 多架构包"
+    Write-Host "底层调用 package_app_linux_docker.sh"
+    Write-Host ""
+    Write-Host "参数说明（不区分大小写，全名和短别名均可）:"
+    Write-Host "  -Arch / -A       指定目标架构 (x64, arm64, riscv64)，多个用逗号分隔"
+    Write-Host "                    默认: 全部构建"
+    Write-Host "  -Bundle / -B     指定打包格式 (deb, rpm, appimage)，多个用逗号分隔"
+    Write-Host "                    默认: 全部格式"
+    Write-Host "  -ForceAll / -F   强制重建/重新拉取基础镜像"
+    Write-Host "  -Pull / -P       从 Docker Hub 拉取基础镜像"
+    Write-Host "  -LocalBase / -L  使用本地 TUNA 镜像源构建基础镜像（默认行为）"
+    Write-Host "  -Help / -H       显示此帮助信息"
+    Write-Host ""
+    Write-Host "使用示例:"
+    Write-Host "  .\package_app_wsl_docker.ps1                         # 全部构建"
+    Write-Host "  .\package_app_wsl_docker.ps1 -A x64,arm64            # 指定架构（短别名）"
+    Write-Host "  .\package_app_wsl_docker.ps1 -Arch x64 -Bundle deb   # 组合使用（全名）"
+    Write-Host "  .\package_app_wsl_docker.ps1 -P -F                   # 强制从 Hub 拉取"
+    Write-Host "========================================"
+    exit 0
+}
 
 Write-Host "========================================"
 Write-Host "WSL Docker 打包脚本"
@@ -82,18 +165,43 @@ if ($pathCheck -ne "OK") {
 wsl bash -c "mkdir -p '$wslProjectPath/release'" 2>$null
 
 # ============================================================
-# 第四步：收集参数并传递给 shell 脚本
+# 第四步：根据声明参数构建传递给 shell 脚本的参数
 # ============================================================
-$scriptArgs = ""
-foreach ($arg in $MyInvocation.UnboundArguments) {
-    $scriptArgs += "`"$arg`" "
-}
-$scriptArgs = $scriptArgs.Trim()
+$scriptArgs = @()
 
-if ([string]::IsNullOrWhiteSpace($scriptArgs)) {
-    Write-Host "[i] 无自定义参数，将构建所有架构 (x64 + arm64 + riscv64)"
+# 架构参数
+if ($Arch -and $Arch.Count -gt 0) {
+    $scriptArgs += "--arch"
+    $scriptArgs += $Arch
+}
+
+# 格式参数
+if ($Bundle -and $Bundle.Count -gt 0) {
+    $scriptArgs += "--bundle"
+    $scriptArgs += $Bundle
+}
+
+# 基础镜像来源
+if ($Pull) {
+    $scriptArgs += "--pull"
+}
+if ($LocalBase) {
+    $scriptArgs += "--local-base"
+}
+
+# 强制重建
+if ($ForceAll) {
+    $scriptArgs += "-F"
+}
+
+$scriptArgsStr = [string]::Join(" ", ($scriptArgs | ForEach-Object {
+    if ($_ -match "[\s""]") { "`"$_`"" } else { $_ }
+}))
+
+if ([string]::IsNullOrWhiteSpace($scriptArgsStr)) {
+    Write-Host "[i] 无自定义参数，将构建所有架构 (x64 + arm64 + riscv64) 和所有格式 (deb + rpm + AppImage)"
 } else {
-    Write-Host "[i] 传递参数: $scriptArgs"
+    Write-Host "[i] 传递参数: $scriptArgsStr"
 }
 
 # ============================================================
@@ -106,7 +214,7 @@ Write-Host "========================================"
 Write-Host ""
 
 # 构建要执行的命令
-$buildCommand = "cd '$wslProjectPath' && bash package_app_linux_docker.sh $scriptArgs"
+$buildCommand = "cd '$wslProjectPath' && bash package_app_linux_docker.sh $scriptArgsStr"
 Write-Host "[i] 执行: wsl bash -c '$buildCommand'"
 Write-Host ""
 

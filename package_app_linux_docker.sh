@@ -2,13 +2,15 @@
 # ============================================================
 # Docker 构建多架构 (deb / rpm / appimage)
 # 支持: x86_64 / ARM64 / RISC-V 64
-# 使用本地 debootstrap 构建基础镜像，无需 Docker Hub
+# 默认从 TUNA 镜像源本地构建基础镜像（debootstrap），无需 Docker Hub
 # 输出目录: release/
 # 输出文件: hiwara_{version}_linux_{arch}.{deb,rpm,AppImage}
 #
 # 使用方式:
 #   ./package_app_linux_docker.sh                             # x64 + ARM64 + RISC-V 64, 全部格式
-#   ./package_app_linux_docker.sh -F                          # 强制重建基础镜像（含 debootstrap）
+#   ./package_app_linux_docker.sh -F                          # 强制重建本地基础镜像（含 debootstrap）
+#   ./package_app_linux_docker.sh --pull                      # 改为从 Docker Hub 拉取基础镜像
+#   ./package_app_linux_docker.sh --pull -F                   # 强制从 Docker Hub 重新拉取
 #   ./package_app_linux_docker.sh --arch x64 arm64            # 两个架构
 #   ./package_app_linux_docker.sh --arch x64                  # 仅 x64
 #   ./package_app_linux_docker.sh --arch arm64                # 仅 ARM64
@@ -18,13 +20,11 @@
 #   ./package_app_linux_docker.sh --bundle deb                # 仅 deb
 #   ./package_app_linux_docker.sh --bundle appimage           # 仅 appimage
 #   ./package_app_linux_docker.sh --arch x64 arm64 --bundle deb rpm  # 组合使用
-#   ./package_app_linux_docker.sh --local-base                # 基础镜像从 USTC 本地构建，不连 Docker Hub
-#   ./package_app_linux_docker.sh --local-base -F             # 从 USTC 重建基础镜像 + 全部构建
 #
 # 基础镜像来源优先级:
 #   1. 本地已有 debian:trixie-slim → 直接使用
-#   2. --local-base               → 通过 debootstrap 从 USTC 构建
-#   3. 以上都不满足               → 从 Docker Hub 拉取
+#   2. 默认（或 --local-base）       → 通过 debootstrap 从 TUNA 镜像源构建
+#   3. --pull                       → 从 Docker Hub 拉取
 # ============================================================
 
 set -e
@@ -36,7 +36,8 @@ BUILD_ARM64=false
 BUILD_RISCV64=false
 BUNDLES=()
 FORCE_ALL=false
-USE_LOCAL_BASE=false
+USE_LOCAL_BASE=true
+USE_DOCKER_HUB=false
 
 # 统一输出目录
 RELEASE_DIR="release"
@@ -62,6 +63,12 @@ while [ $# -gt 0 ]; do
             ;;
         --local-base)
             USE_LOCAL_BASE=true
+            USE_DOCKER_HUB=false
+            shift
+            ;;
+        --pull)
+            USE_DOCKER_HUB=true
+            USE_LOCAL_BASE=false
             shift
             ;;
         --arch)
@@ -87,11 +94,11 @@ while [ $# -gt 0 ]; do
             done
             ;;
         -h|--help)
-            sed -n '3,25p' "$0"
+            sed -n '3,28p' "$0"
             exit 0
             ;;
         *)
-            echo "[!] 未知参数: $1 (使用 --arch x64|arm64|riscv64, --bundle, --local-base, -F, 或 -h)"
+            echo "[!] 未知参数: $1 (使用 --arch x64|arm64|riscv64, --bundle, --pull, --local-base, -F, 或 -h)"
             exit 1
             ;;
     esac
@@ -114,26 +121,43 @@ echo "[i] 版本: $VERSION"
 echo "[i] 输出: $RELEASE_DIR/"
 
 # ============================================================
-# 确保本地基础镜像存在（绕过 Docker Hub）
-# 当 FORCE_ALL=true 时强制重建
+# 确保基础镜像存在
+# 默认: 从 TUNA 镜像源本地构建（debootstrap），无需 Docker Hub
+# --pull: 从 Docker Hub 拉取
+# -F: 强制重建/重新拉取
 # ============================================================
-ensure_local_base_image() {
+ensure_base_image() {
     if docker image inspect debian:trixie-slim >/dev/null 2>&1; then
         if [ "$FORCE_ALL" = true ]; then
-            echo "[i] 强制重建本地基础镜像..."
+            if [ "$USE_DOCKER_HUB" = true ]; then
+                echo "[i] 强制从 Docker Hub 重新拉取基础镜像..."
+                docker pull debian:trixie-slim
+                return $?
+            else
+                echo "[i] 强制重建本地基础镜像..."
+            fi
         else
             echo "[i] 本地基础镜像 debian:trixie-slim 已存在"
             return 0
         fi
     else
-        echo "[i] 本地基础镜像不存在，通过 debootstrap 构建..."
+        if [ "$USE_DOCKER_HUB" = true ]; then
+            echo "[i] 本地基础镜像不存在，从 Docker Hub 拉取..."
+            docker pull debian:trixie-slim
+            return $?
+        else
+            echo "[i] 本地基础镜像不存在，通过 debootstrap 从 TUNA 镜像源构建..."
+        fi
     fi
 
-    if [ -f ./docker/setup-docker-base.sh ]; then
+    if [ "$USE_DOCKER_HUB" = true ]; then
+        echo "[i] 从 Docker Hub 拉取 debian:trixie-slim..."
+        docker pull debian:trixie-slim
+    elif [ -f ./docker/setup-docker-base.sh ]; then
         bash ./docker/setup-docker-base.sh
     else
-        echo "[!] setup-docker-base.sh 不存在，将使用 Docker Hub 拉取"
-        return 1
+        echo "[!] setup-docker-base.sh 不存在，回退到 Docker Hub 拉取"
+        docker pull debian:trixie-slim
     fi
 }
 
@@ -175,9 +199,7 @@ run_build() {
 
     mkdir -p "$DOCKER_OUTPUT_DIR/$arch_dir"
 
-    if [ "$USE_LOCAL_BASE" = true ]; then
-        ensure_local_base_image
-    fi
+    ensure_base_image
 
     set +e
     if command -v unbuffer &>/dev/null; then
