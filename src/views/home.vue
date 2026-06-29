@@ -9,7 +9,7 @@ import homeMy from '../component/home/my.vue';
 import { ref, nextTick, onMounted, onBeforeUnmount, onActivated, provide, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 // import { on } from 'hammerjs';
-import { lockPortrait } from '../plugins/useOrientation'
+import { lockPortraitOnMobile } from '../plugins/useOrientation'
 import { useAutoStatusBar } from '../composables/useAutoStatusBar'
 import { showShortToast } from '../core/toast';
 import { moveTaskToBack } from '../plugins/appControl';
@@ -36,8 +36,8 @@ const DOUBLE_BACK_PRESS_TIMEOUT = 2000; // 2秒内再次按下返回键则退出
 // 自动状态栏文字颜色自适应（根据 --color-primary-90 亮度判断）
 useAutoStatusBar({ cssVar: '--color-primary-90' })
 
-// 固定竖屏
-lockPortrait()
+// 固定竖屏（平板 ≥720px 不锁定，允许自由旋转）
+lockPortraitOnMobile()
 
 onMounted(() => {
   // 监听来自App.vue的返回键事件

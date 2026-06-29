@@ -2,7 +2,7 @@
 import { ref, watch, onMounted, onUnmounted, computed } from 'vue'
 import Hammer from 'hammerjs'
 import { exitImmersive } from '../../plugins/immersive'
-import { lockPortrait } from '../../plugins/useOrientation'
+import { lockPortraitOnMobile } from '../../plugins/useOrientation'
 import { getNetworkInfo, getBatteryInfo } from '../../plugins/deviceInfo'
 import customRange from './customRange.vue'
 
@@ -183,7 +183,7 @@ const handleExitFullscreen = async () => {
     if (document.fullscreenElement) {
       await document.exitFullscreen()
       exitImmersive()
-      lockPortrait()
+      lockPortraitOnMobile()
     }
   } catch (err) {
     console.error('退出全屏失败:', err)

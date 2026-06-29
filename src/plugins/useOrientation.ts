@@ -57,3 +57,25 @@ export const unlockOrientation = async (): Promise<boolean> => {
     return false;
   }
 };
+
+// 与 _mixins.scss 中 $breakpoints.md 保持一致的平板断点值
+const TABLET_BREAKPOINT = 720;
+
+/**
+ * 判断当前设备是否为平板（屏幕宽度 ≥ 720px）
+ * 用于区分手机与平板，平板不锁定竖屏，允许自由旋转
+ */
+export const isTablet = (): boolean => {
+  return window.innerWidth >= TABLET_BREAKPOINT;
+};
+
+/**
+ * 仅在手机上锁定竖屏，平板（≥720px）则恢复自由旋转
+ * 适用于主页等非全屏场景
+ */
+export const lockPortraitOnMobile = async (): Promise<boolean> => {
+  if (isTablet()) {
+    return unlockOrientation();
+  }
+  return lockPortrait();
+};

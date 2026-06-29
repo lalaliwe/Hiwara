@@ -51,3 +51,23 @@ $breakpoints: (
     @error "未知断点，可选值: #{map.keys($breakpoints)}";
   }
 }
+
+/// 仅在手机竖屏（< md）时生效，平板不受此限制
+/// 用于需要在手机端锁定竖屏布局的场景
+@mixin portrait-mobile-only {
+  @include down(md) {
+    @media (orientation: portrait) {
+      @content;
+    }
+  }
+}
+
+/// 仅在平板横屏（≥ md）时生效
+/// 用于平板横屏下的专属布局优化
+@mixin landscape-tablet {
+  @include up(md) {
+    @media (orientation: landscape) {
+      @content;
+    }
+  }
+}

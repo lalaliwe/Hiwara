@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted, inject, watch, nextTick } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { lockPortrait, lockLandscape } from '../../plugins/useOrientation'
+import { lockPortraitOnMobile, lockLandscape } from '../../plugins/useOrientation'
 import { enterImmersive, exitImmersive } from '../../plugins/immersive'
 import {
   setScreenBrightness,
@@ -239,7 +239,7 @@ const exitFullscreen = async () => {
     if (document.fullscreenElement) {
       await document.exitFullscreen();
       exitImmersive();
-      lockPortrait();
+      lockPortraitOnMobile();
     }
   } catch (err) {
     console.error('退出全屏失败:', err);
