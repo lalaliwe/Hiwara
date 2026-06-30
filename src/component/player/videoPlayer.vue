@@ -28,6 +28,9 @@ const props = defineProps<{
   videoFiles?: Array<{ id: string; name: string; server: string; type: string; view: string; download: string }> // 视频文件列表
   currentDefinitionIndex?: number // 当前选中的清晰度索引
   isRefreshingServer?: boolean // 是否正在切换服务器
+  isLike?: boolean // 是否已点赞
+  vid?: string // 视频ID
+  likeNum?: number // 点赞数
 }>()
 
 // 定义 emits
@@ -35,6 +38,7 @@ const emit = defineEmits<{
   (e: 'refreshServer'): void // 刷新服务器列表
   (e: 'definition-change', index: number): void // 切换清晰度
   (e: 'ended'): void // 视频播放结束
+  (e: 'like', isLiked: boolean): void // 点赞状态变化
 }>()
 
 const localPosterUrl = ref<string>(''); // 本地存储的poster URL
@@ -528,7 +532,8 @@ defineExpose({ replay });
       @progress-change="onProgressChange" @progress-change-end="onProgressChangeEnd" @gesture="handleGestureEvent"
       :is-refreshing-server="props.isRefreshingServer" @refresh-server="handleRefreshServer"
       @definition-change="handleDefinitionChange" @replay="replay"
-      :video-ended="videoEnded" />
+      :video-ended="videoEnded" :is-like="props.isLike" :vid="props.vid" :like-num="props.likeNum"
+      @like="(val: boolean) => emit('like', val)" />
     <control v-else :is-playing="isPlaying" :progress="displayProgress" :buffered="buffered" :current-time="currentTime"
       :total-time="totalTime" :metadataLoaded="metadataLoaded" @toggle-play="togglePlay" @progress-change="onProgressChange"
       @progress-change-end="onProgressChangeEnd" @enter-fullscreen="enterFullscreen" @go-back="goBack" @go-home="goHome"

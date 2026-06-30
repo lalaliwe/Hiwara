@@ -369,9 +369,9 @@ hdiutil create -volname "Hiwara" -srcfolder Hiwara.app -ov -format UDZO Hiwara-u
 * ✅ 登录 | Login
 * ✅ 订阅列表 | Subscriptions
 * ✅ 视频列表 | Video list
-* ✅ 图片列表 | Image list
+* ✅ 插画列表 | Image list
 * ✅ 视频播放 | Video playback
-* ✅ 图片查看 | Image viewer
+* ✅ 插画查看 | Image viewer
 * ✅ 个人主页 | User profile
 * ✅ 空间查看 | Space view
 * ✅ 搜索 | Search
@@ -382,8 +382,8 @@ hdiutil create -volname "Hiwara" -srcfolder Hiwara.app -ov -format UDZO Hiwara-u
 * ✅ 关注列表 | Following list
 * ✅ 粉丝列表 | Followers list
 * ✅ 设置 | Settings
-* ⬜ 桌面端适配 | Desktop adaptation
-* ⬜ 平板电脑适配 | Tablet adaptation
+* ✅ 桌面端适配 | Desktop adaptation
+* ✅ 平板电脑适配 | Tablet adaptation
 * ✅ 暗黑模式 | Dark mode
 * ⬜ 离线缓存及下载 | Offline caching and downloading
 * ✅ 论坛浏览 | Forum browsing

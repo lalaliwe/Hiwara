@@ -19,4 +19,5 @@ permissions = [
     "allow-get-screen-brightness",
     "allow-set-volume",
     "allow-get-volume",
+    "allow-pick-folder",
 ]

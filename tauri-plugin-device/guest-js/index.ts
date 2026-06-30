@@ -155,3 +155,23 @@ export async function setVolume(volume: number): Promise<SetVolumeResponse> {
 export async function getVolume(): Promise<GetVolumeResponse> {
   return await invoke('plugin:device|get_volume');
 }
+
+export interface PickFolderRequest {
+  initialPath?: string;
+}
+
+export interface PickFolderResponse {
+  path?: string;
+}
+
+/**
+ * 打开系统目录选择器
+ * Android 使用 SAF (Storage Access Framework)，桌面端由 @tauri-apps/plugin-dialog 处理
+ * @param initialPath 初始路径，SAF 会尝试定位到该目录
+ * @returns 选择的目录路径，取消返回 undefined
+ */
+export async function pickFolder(initialPath?: string): Promise<PickFolderResponse> {
+  return await invoke('plugin:device|pick_folder', {
+    payload: { initialPath }
+  });
+}

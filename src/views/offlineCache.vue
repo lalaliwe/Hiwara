@@ -1,8 +1,11 @@
 <script setup lang="ts">
-import { useRouter, useRoute } from 'vue-router';
-import { ref, onActivated } from 'vue';
+import { useRouter } from 'vue-router';
+import { ref, onActivated, onDeactivated } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useAutoStatusBar } from '../composables/useAutoStatusBar'
+import { getDownloadCacheList, deleteDownloadCache, updateDownloadProgress } from '../core/database'
+import { listen } from '@tauri-apps/api/event'
+import { showShortToast } from '../core/toast'
 
 const { t } = useI18n();
 
@@ -11,7 +14,6 @@ defineOptions({
 })
 
 const router = useRouter();
-const route = useRoute();
 
 // 自动状态栏文字颜色自适应（根据 --color-primary-90 亮度判断）
 useAutoStatusBar({ cssVar: '--color-primary-90' })
@@ -31,113 +33,134 @@ interface CacheItem {
   likeNum: string;
   longNum: string;
   isR18: boolean;
-  cacheProgress: number; // 缓存进度百分比
-  cacheDate: string; // 缓存日期
+  ai: boolean;
+  progress: number;
+  status: string;
+  cacheDate: string;
+  filePath: string;
 }
 
-// 内部维护缓存数据
 const videoCache = ref<CacheItem[]>([]);
-const page = ref(1);
+const page = ref(0);
 const pageSize = 15;
 const isLoading = ref(false);
 const hasFinished = ref(false);
 
-// 生成缓存测试数据，包含随机日期和进度
-const generateTestData = (pageNum: number) => {
-  // 如果是第一页，清空现有数据
-  if (pageNum === 1) {
-    videoCache.value = [];
-  }
+// 从数据库加载缓存列表
+const loadCacheList = async (pageNum: number) => {
+  if (isLoading.value || hasFinished.value) return
+  isLoading.value = true
 
-  // 生成最近几天的日期
-  const dates = [];
-  const today = new Date();
-  for (let i = 0; i < 5; i++) {
-    const date = new Date();
-    date.setDate(today.getDate() - i);
-    dates.push(date.toISOString().split('T')[0]);
+  try {
+    const res = await getDownloadCacheList(pageNum, pageSize)
+    if (pageNum === 0) {
+      videoCache.value = res
+    } else {
+      videoCache.value = [...videoCache.value, ...res]
+    }
+    if (res.length < pageSize) {
+      hasFinished.value = true
+    }
+    page.value = pageNum
+  } catch (error) {
+    console.error('加载缓存列表失败:', error)
+    showShortToast(t('offlineCache.loadFailed'))
+  } finally {
+    isLoading.value = false
   }
-
-  // 生成视频缓存数据
-  for (let i = 0; i < pageSize; i++) {
-    const itemId = (pageNum - 1) * pageSize + i;
-    const randomDate = dates[Math.floor(Math.random() * dates.length)];
-    videoCache.value.push({
-      id: `video_${itemId}`,
-      title: `视频缓存${itemId}`,
-      img: 'https://picsum.photos/200/300',
-      author: '作者',
-      time: '2023-01-01',
-      viewNum: '1000',
-      likeNum: '100',
-      longNum: '10:00',
-      isR18: true,
-      cacheProgress: Math.floor(Math.random() * 100), // 随机缓存进度
-      cacheDate: randomDate
-    });
-  }
-};
+}
 
 // 加载更多数据
 const loadMoreData = async () => {
-  if (isLoading.value || hasFinished.value) {
-    return Promise.resolve();
+  return loadCacheList(page.value + 1)
+}
+
+// 删除缓存
+const removeCache = async (id: string) => {
+  try {
+    await deleteDownloadCache(id)
+    videoCache.value = videoCache.value.filter(item => item.id !== id)
+    showShortToast(t('offlineCache.deleteSuccess'))
+  } catch (error) {
+    console.error('删除缓存失败:', error)
+    showShortToast(t('offlineCache.deleteFailed'))
   }
+}
 
-  isLoading.value = true;
-
-  // 模拟异步加载
-  await new Promise(resolve => setTimeout(resolve, 1000));
-
-  // 增加页码并生成新数据
-  page.value++;
-  generateTestData(page.value);
-
-  // 模拟加载完所有数据（这里假设最多加载5页）
-  if (page.value >= 5) {
-    hasFinished.value = true;
-  }
-
-  isLoading.value = false;
-
-  return Promise.resolve();
-};
+// 播放缓存视频
+const playCacheVideo = (item: CacheItem) => {
+  router.push(`/player/${item.id}`)
+}
 
 // 按日期分组数据
 const groupByDate = (items: CacheItem[]) => {
-  const grouped: Record<string, CacheItem[]> = {};
+  const grouped: Record<string, CacheItem[]> = {}
+  const today = new Date().toISOString().split('T')[0]
 
-  // 按日期排序
-  items.sort((a, b) => new Date(b.cacheDate).getTime() - new Date(a.cacheDate).getTime());
-
-  // 按日期分组
   items.forEach(item => {
-    if (!grouped[item.cacheDate]) {
-      grouped[item.cacheDate] = [];
+    const date = item.cacheDate || today
+    if (!grouped[date]) {
+      grouped[date] = []
     }
-    grouped[item.cacheDate].push(item);
-  });
+    grouped[date].push(item)
+  })
 
-  return grouped;
-};
-
-// 生成测试数据
-generateTestData(1);
-
-const videoListView = ref();
-let videoScrollTop = 0;
-
-// 处理滚动事件
-function handleVideoScroll(event: Event): void {
-  videoScrollTop = (event.target as HTMLElement).scrollTop;
+  return grouped
 }
 
-// 页面激活时恢复滚动位置
+const videoListView = ref()
+let videoScrollTop = 0
+let unlistenProgress: (() => void) | null = null
+
+function handleVideoScroll(event: Event): void {
+  videoScrollTop = (event.target as HTMLElement).scrollTop
+}
+
+// 监听下载进度，实时更新列表
+async function setupProgressListener() {
+  unlistenProgress = await listen<{ downloaded: number; total: number; percentage: number }>(
+    'download-progress',
+    (event) => {
+      videoCache.value = videoCache.value.map(item => {
+        // 正在下载的项更新进度
+        if (item.status === 'downloading') {
+          return { ...item, progress: event.payload.percentage }
+        }
+        return item
+      })
+      // 每10%同步一次数据库（避免频繁写入）
+      if (event.payload.percentage % 10 === 0 || event.payload.percentage === 100) {
+        // 找到第一个正在下载的项
+        const downloading = videoCache.value.find(item => item.status === 'downloading')
+        if (downloading) {
+          updateDownloadProgress(
+            downloading.id,
+            event.payload.percentage,
+            event.payload.percentage >= 100 ? 'completed' : 'downloading'
+          )
+        }
+      }
+    }
+  )
+}
+
 onActivated(() => {
+  // 每次激活时重新加载
+  page.value = 0
+  hasFinished.value = false
+  setupProgressListener()
+  loadCacheList(0)
   if (videoListView.value && typeof videoListView.value.scrollTo === 'function') {
-    videoListView.value.scrollTo({ top: videoScrollTop });
+    videoListView.value.scrollTo({ top: videoScrollTop })
   }
-});
+})
+
+onDeactivated(() => {
+  if (unlistenProgress) {
+    unlistenProgress()
+    unlistenProgress = null
+  }
+})
 </script>
 
 <template>
@@ -153,44 +176,58 @@ onActivated(() => {
       </div>
     </div>
     <div class="list" ref="videoListView" @scroll="handleVideoScroll">
-      <v-infinite-scroll color="#00796B" :on-load="loadMoreData" :has-more="!hasFinished">
-        <div v-for="(groupItems, date) in groupByDate(videoCache)" :key="date" class="date-group">
-          <div class="date-header">{{ date === new Date().toISOString().split('T')[0] ? t('offlineCache.today') : date }}</div>
-          <v-list lines="two" class="pa-0">
-            <v-list-item v-for="(item, index) in groupItems" :key="index" class="list-item">
-              <!-- 左侧：预览图 -->
-              <template v-slot:prepend>
-                <v-img :src="item.img" :alt="item.title" aspect-ratio="4/3" width="106.7" height="80" cover
-                  class="rounded"></v-img>
-              </template>
-              <!-- 中间：标题和信息 -->
-              <div class="list-content">
-                <div class="list-title">
-                  {{ item.title }}
-                </div>
-                <div class="list-subtitle">
-                  {{ item.author }} • {{ item.time }}
-                </div>
-                <div class="list-stats">
-                  {{ item.viewNum }}{{ t('offlineCache.views') }} • {{ item.likeNum }}{{ t('offlineCache.likes') }} • {{ item.longNum }}
-                </div>
-                <!-- 缓存进度条 -->
-                <div class="cache-progress-container">
-                  <v-progress-linear 
-                    :model-value="item.cacheProgress" 
-                    color="#00796B" 
-                    height="4"
-                    rounded
-                  ></v-progress-linear>
-                  <div class="cache-progress-text">
-                    {{ item.cacheProgress === 100 ? t('offlineCache.cacheComplete') : item.cacheProgress + '%' }}
+      <template v-if="videoCache.length > 0">
+        <v-infinite-scroll color="#00796B" :on-load="loadMoreData" :has-more="!hasFinished">
+          <div v-for="(groupItems, date) in groupByDate(videoCache)" :key="date" class="date-group">
+            <div class="date-header">{{ date === new Date().toISOString().split('T')[0] ? t('offlineCache.today') : date }}</div>
+            <v-list lines="two" class="pa-0">
+              <v-list-item v-for="item in groupItems" :key="item.id" class="list-item" @click="playCacheVideo(item)">
+                <template v-slot:prepend>
+                  <v-img :src="item.img || ''" :alt="item.title" aspect-ratio="4/3" width="106.7" height="80" cover
+                    class="rounded"></v-img>
+                </template>
+                <div class="list-content">
+                  <div class="list-title">{{ item.title }}</div>
+                  <div class="list-subtitle">{{ item.author }}</div>
+                  <div class="list-stats">
+                    {{ item.viewNum }}{{ t('offlineCache.views') }} •
+                    {{ item.likeNum }}{{ t('offlineCache.likes') }} •
+                    {{ item.longNum }}
+                  </div>
+                  <div class="cache-progress-container">
+                    <v-progress-linear
+                      :model-value="item.status === 'completed' ? 100 : item.progress"
+                      :color="item.status === 'failed' ? '#FF3D00' : '#00796B'"
+                      height="4"
+                      rounded
+                    ></v-progress-linear>
+                    <div class="cache-progress-text">
+                      <template v-if="item.status === 'completed'">
+                        <span class="status-completed">{{ t('offlineCache.cacheComplete') }}</span>
+                        <span class="delete-btn" @click.stop="removeCache(item.id)">
+                          <font-awesome-icon icon="fa-solid fa-trash-can" />
+                        </span>
+                      </template>
+                      <template v-else-if="item.status === 'failed'">
+                        <span class="status-failed">{{ t('offlineCache.cacheFailed') }}</span>
+                      </template>
+                      <template v-else>
+                        {{ item.progress }}%
+                      </template>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </v-list-item>
-          </v-list>
+              </v-list-item>
+            </v-list>
+          </div>
+        </v-infinite-scroll>
+      </template>
+      <template v-else>
+        <div class="empty-state">
+          <font-awesome-icon icon="fa-solid fa-download" class="empty-icon" />
+          <div class="empty-text">{{ t('offlineCache.noCache') }}</div>
         </div>
-      </v-infinite-scroll>
+      </template>
     </div>
   </div>
 </template>
@@ -259,6 +296,7 @@ onActivated(() => {
     border-bottom: 1px solid var(--color-border-light);
     padding: 8px 16px;
     background-color: var(--color-bg-card);
+    cursor: pointer;
 
     .list-content {
       flex: 1;
@@ -300,9 +338,49 @@ onActivated(() => {
           color: var(--color-text-muted);
           text-align: right;
           margin-top: 4px;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+
+          .status-completed {
+            color: #00796B;
+          }
+
+          .status-failed {
+            color: #FF3D00;
+          }
+
+          .delete-btn {
+            cursor: pointer;
+            padding: 2px 6px;
+            color: var(--color-text-muted-light);
+
+            &:hover {
+              color: #FF3D00;
+            }
+          }
         }
       }
     }
+  }
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 60vh;
+  color: var(--color-text-muted-light);
+
+  .empty-icon {
+    font-size: 3rem;
+    margin-bottom: 16px;
+    opacity: 0.4;
+  }
+
+  .empty-text {
+    font-size: 0.9rem;
   }
 }
 </style>

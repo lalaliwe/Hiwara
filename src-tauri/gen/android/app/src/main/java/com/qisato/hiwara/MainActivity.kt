@@ -2,10 +2,8 @@ package com.qisato.hiwara
 
 import android.os.Bundle
 import android.view.View
-import androidx.activity.enableEdgeToEdge
-import androidx.core.view.WindowInsetsControllerCompat
 import android.webkit.WebView
-import android.graphics.Color
+import androidx.activity.enableEdgeToEdge
 
 class MainActivity : TauriActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {

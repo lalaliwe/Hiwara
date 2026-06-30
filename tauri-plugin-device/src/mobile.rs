@@ -150,4 +150,11 @@ impl<R: Runtime> Device<R> {
       .run_mobile_plugin("getVolume", ())
       .map_err(Into::into)
   }
+
+  pub fn pick_folder(&self, payload: PickFolderRequest) -> crate::Result<PickFolderResponse> {
+    self
+      .0
+      .run_mobile_plugin("pickFolder", payload)
+      .map_err(Into::into)
+  }
 }

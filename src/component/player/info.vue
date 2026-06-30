@@ -20,6 +20,11 @@ import {
 } from '../../core/api';
 import recommend from './recommend.vue';
 import { showShortToast } from '../../core/toast';
+import { upsertDownloadCache, updateDownloadProgress } from '../../core/database'
+import { buildAria2Filename } from '../../core/api'
+import { listen } from '@tauri-apps/api/event'
+import { invoke } from '@tauri-apps/api/core'
+import { setupStore } from '../../core/store'
 import { useRouter } from 'vue-router';
 
 const aiStore = ai();
@@ -330,8 +335,68 @@ function toZone() {
     path: `/zone/${props.username}`,
   });
 }
-function downloadVideo() {
-  showShortToast('功能未开放');
+// 下载缓存（缓存视频文件到本机，通过 Rust 后端下载）
+const isDownloading = ref(false)
+let unlisten: (() => void) | null = null
+
+async function downloadVideo() {
+  if (isDownloading.value) return
+  if (!props.download) {
+    showShortToast(t('common.fetchDownloadFailed'))
+    return
+  }
+
+  isDownloading.value = true
+
+  const filename = buildAria2Filename(props.title, props.vid, props.username, '.mp4')
+  const setup = setupStore()
+  const saveDir = setup.videoSavePath || ''
+  const filePath = saveDir ? `${saveDir}/${filename}` : filename
+
+  try {
+    // 记录到数据库
+    await upsertDownloadCache(
+      props.vid,
+      props.title,
+      props.authorname,
+      '',
+      0,
+      props.playNum,
+      props.likeNum,
+      false,
+      aiStore.value,
+      props.download
+    )
+
+    // 监听 Rust 下载进度
+    unlisten = await listen<{ downloaded: number; total: number; percentage: number }>(
+      'download-progress',
+      (event) => {
+        updateDownloadProgress(props.vid, event.payload.percentage, 'downloading')
+      }
+    )
+
+    showShortToast(t('player.cacheStart'))
+
+    // 调用 Rust 命令下载文件到本地
+    await invoke('download_video', {
+      url: props.download,
+      filePath: filePath,
+    })
+
+    await updateDownloadProgress(props.vid, 100, 'completed', filename)
+    showShortToast(t('player.cacheComplete'))
+  } catch (error) {
+    console.error('缓存失败:', error)
+    await updateDownloadProgress(props.vid, 0, 'failed')
+    showShortToast(t('player.cacheFailed'))
+  } finally {
+    isDownloading.value = false
+    if (unlisten) {
+      unlisten()
+      unlisten = null
+    }
+  }
 }
 
 // 暗色模式响应式检测

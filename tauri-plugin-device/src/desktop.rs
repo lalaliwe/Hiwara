@@ -251,4 +251,9 @@ impl<R: Runtime> Device<R> {
     // Desktop: return default
     Ok(GetVolumeResponse { volume: 1.0, max_volume: 1.0 })
   }
+
+  pub fn pick_folder(&self, _payload: PickFolderRequest) -> crate::Result<PickFolderResponse> {
+    // Desktop: 由前端 @tauri-apps/plugin-dialog 处理
+    Ok(PickFolderResponse { path: None })
+  }
 }

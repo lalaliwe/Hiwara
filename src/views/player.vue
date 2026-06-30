@@ -378,11 +378,12 @@ const refreshVideoFile = async () => {
         }
 
         if (newServer !== originalServer) {
-          // 找到不同服务器 → 只更新当前清晰度的 view URL 和 server 名
-          const newUrl = `https:${matchedItem.src.view}`
+          // 找到不同服务器 → 更新当前清晰度的 view/download URL 和 server 名
+          const newViewUrl = `https:${matchedItem.src.view}`
+          const newDownloadUrl = `https:${matchedItem.src.download}`
           videoFile.value = videoFile.value.map((file, index) => {
             if (index === videoSelect.value) {
-              return { ...file, view: newUrl, server: newServer }
+              return { ...file, view: newViewUrl, download: newDownloadUrl, server: newServer }
             }
             return file
           })
@@ -501,7 +502,8 @@ onUnmounted(() => {
       <div class="video-player-wrapper">
         <videoPlayer class="video-player" :poster="poster" :src="currentVideoSrc" :title="title" :server="currentServer"
           :video-files="videoFile" :current-definition-index="videoSelect" :is-refreshing-server="isRefreshingServer"
-          @refresh-server="refreshVideoFile" @definition-change="selectDefinition" />
+          :is-like="isLike" :vid="id as string" :like-num="likeNum"
+          @refresh-server="refreshVideoFile" @definition-change="selectDefinition" @like="likeTrigger" />
       </div>
 
       <!-- 加载中 -->

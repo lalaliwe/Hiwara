@@ -128,3 +128,11 @@ pub(crate) async fn get_volume<R: Runtime>(
 ) -> Result<GetVolumeResponse> {
     app.device().get_volume()
 }
+
+#[command]
+pub(crate) async fn pick_folder<R: Runtime>(
+    app: AppHandle<R>,
+    payload: PickFolderRequest,
+) -> Result<PickFolderResponse> {
+    app.device().pick_folder(payload)
+}

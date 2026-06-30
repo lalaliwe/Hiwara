@@ -44,6 +44,8 @@ const followNum = ref<number>(0);
 const fansNum = ref<number>(0);
 const historyList = ref<any[]>([]);
 const historyContainer = ref<HTMLElement | null>(null);
+const contentRef = ref<HTMLElement | null>(null);
+let contentScrollTop = 0;
 
 // 注入父组件提供的isTab响应式引用
 const isTab = inject<Ref<string>>('isTab');
@@ -71,6 +73,10 @@ onMounted(() => {
 onActivated(() => {
   // 当组件被激活(从缓存中恢复)时重新获取历史记录
   getHistoryList();
+  // 恢复滚动条位置
+  if (contentRef.value) {
+    contentRef.value.scrollTop = contentScrollTop;
+  }
 });
 
 // 监听isTab变化,当切换到my时重新获取数据
@@ -159,6 +165,11 @@ function handleWheelScroll(event: WheelEvent) {
   }
 }
 
+// 处理内容区域滚动，保存滚动位置
+function handleContentScroll(e: Event) {
+  contentScrollTop = (e.target as HTMLElement).scrollTop;
+}
+
 // 未实现功能
 function handleUnimplemented() {
   showShortToast(t('功能未开放'));
@@ -209,7 +220,7 @@ function handleUnimplemented() {
         </div>
       </div>
     </div>
-    <div class="content">
+    <div class="content" ref="contentRef" @scroll="handleContentScroll">
       <div class="card">
         <div class="label">
           <div class="left" @click="routerGoTo('/history')">{{ t('home.my.history') }}</div>
@@ -245,7 +256,7 @@ function handleUnimplemented() {
             </div>
             <div class="text">{{ t('home.my.playlist') }}</div>
           </div>
-          <div class="btn" @click="handleUnimplemented">
+          <div class="btn" @click="routerGoTo('/offline-cache')">
             <div class="icon">
               <iconDownload theme="outline" size="22" />
             </div>

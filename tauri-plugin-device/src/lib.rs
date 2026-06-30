@@ -54,6 +54,7 @@ pub fn init<R: Runtime>() -> TauriPlugin<R> {
       commands::get_screen_brightness,
       commands::set_volume,
       commands::get_volume,
+      commands::pick_folder,
     ])
     .setup(|app, api| {
       #[cfg(mobile)]

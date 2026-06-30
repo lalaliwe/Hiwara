@@ -22,6 +22,7 @@ Default permissions for the plugin
 - `allow-get-screen-brightness`
 - `allow-set-volume`
 - `allow-get-volume`
+- `allow-pick-folder`
 
 ## Permission Table
 
@@ -340,6 +341,32 @@ Enables the unlock_orientation command without any pre-configured scope.
 <td>
 
 Denies the unlock_orientation command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`device:allow-pick-folder`
+
+</td>
+<td>
+
+Enables the pick_folder command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`device:deny-pick-folder`
+
+</td>
+<td>
+
+Denies the pick_folder command without any pre-configured scope.
 
 </td>
 </tr>

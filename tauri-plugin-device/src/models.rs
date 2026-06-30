@@ -159,3 +159,16 @@ pub struct GetVolumeResponse {
   pub volume: f32,      // 0.0 ~ 1.0, normalized
   pub max_volume: f32,  // system max volume value
 }
+
+// ========== Folder Picker 相关 =========
+#[derive(Debug, Deserialize, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct PickFolderRequest {
+  pub initial_path: Option<String>, // 初始路径，用于 SAF 定位到上次选择的目录
+}
+
+#[derive(Debug, Clone, Default, Deserialize, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct PickFolderResponse {
+  pub path: Option<String>, // 选择的目录路径，取消则为 None
+}

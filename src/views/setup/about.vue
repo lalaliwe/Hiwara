@@ -87,6 +87,17 @@ async function checkForUpdate() {
   }
 }
 
+// 打开开源许可页面
+const openLicense = () => {
+  router.push({
+    path: '/webview',
+    query: {
+      url: 'https://github.com/shanmaomaoymmm/hiwara/blob/master/LICENSE',
+      title: t('setup.aboutPage.openSourceLicense')
+    }
+  })
+}
+
 // 确认下载更新
 const confirmDownload = async () => {
   showUpdateDialog.value = false
@@ -267,7 +278,7 @@ onMounted(() => {
         <font-awesome-icon v-else icon="fa-solid fa-angle-right" />
       </div>
     </div>
-    <div class="item">
+    <div class="item" @click="openLicense">
       <div class="label">{{ t('setup.aboutPage.openSourceLicense') }}</div>
       <div class="value">
         <font-awesome-icon icon="fa-solid fa-angle-right" />

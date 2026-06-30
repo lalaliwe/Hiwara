@@ -1,5 +1,6 @@
 import Database from '@tauri-apps/plugin-sql';
-import { videoDir, pictureDir, join } from '@tauri-apps/api/path';
+import { videoDir, pictureDir, downloadDir, join } from '@tauri-apps/api/path';
+import { isTauri } from '@tauri-apps/api/core';
 const sqlDB = await Database.load('sqlite:database.db');
 
 // 生成UUID的辅助函数
@@ -80,11 +81,31 @@ export function initDatabase(): Promise<void> {
           aria2_switch BOOLEAN
         );`);
 
-        // 获取系统默认路径并构建iwara目录
-        const videoPath = await videoDir();
-        const imagePath = await pictureDir();
-        const videoSavePath = await join(videoPath, 'iwara');
-        const imageSavePath = await join(imagePath, 'iwara');
+        // 根据平台获取合适的默认下载路径
+        let videoSavePath: string;
+        let imageSavePath: string;
+
+        if (isTauri()) {
+          // 检测是否为 Android 平台
+          const isAndroid = /android/i.test(navigator.userAgent);
+          if (isAndroid) {
+            // Android: 使用公共存储路径（用户可通过设置页面修改）
+            videoSavePath = '/storage/emulated/0/Movies/iwara';
+            imageSavePath = '/storage/emulated/0/Pictures/iwara';
+          } else {
+            // 桌面端: 使用系统标准目录
+            const videoPath = await downloadDir();
+            const imagePath = await pictureDir();
+            videoSavePath = await join(videoPath, 'iwara');
+            imageSavePath = await join(imagePath, 'iwara');
+          }
+        } else {
+          // 非 Tauri 环境（浏览器开发）: 使用 videoDir/pictureDir 作为兜底
+          const videoPath = await videoDir();
+          const imagePath = await pictureDir();
+          videoSavePath = await join(videoPath, 'iwara');
+          imageSavePath = await join(imagePath, 'iwara');
+        }
 
         // 插入默认设置数据
         await sqlDB.execute(`INSERT INTO setup (auto_play, reconnect, definition, search_mode, language, video_save_path, image_save_path, aria2_rpc, aria2_token, aria2_download, aria2_switch) VALUES (TRUE, 1, 'Source', 0, 'auto', ?, ?, '', '', '', FALSE);`, [videoSavePath, imageSavePath]);
@@ -140,6 +161,31 @@ export function initDatabase(): Promise<void> {
           search_time INTEGER
         );`);
         console.log('历史搜索表创建成功');
+      }
+
+      // 独立检查并创建下载缓存表
+      const downloadCacheResult: Array<{ name: string }> = await sqlDB.select(
+        `SELECT name FROM sqlite_master WHERE type='table' AND name='download_cache'`
+      );
+      if (downloadCacheResult.length === 0) {
+        await sqlDB.execute(`CREATE TABLE IF NOT EXISTS download_cache (
+          id TEXT PRIMARY KEY,
+          title TEXT,
+          author TEXT,
+          cover_url TEXT,
+          long_num INTEGER,
+          view_num INTEGER DEFAULT 0,
+          like_num INTEGER DEFAULT 0,
+          is_r18 INTEGER DEFAULT 0,
+          ai INTEGER DEFAULT 0,
+          file_path TEXT,
+          file_size INTEGER DEFAULT 0,
+          progress INTEGER DEFAULT 0,
+          status TEXT DEFAULT 'downloading',
+          cache_time INTEGER,
+          url TEXT
+        );`);
+        console.log('下载缓存表创建成功');
       }
 
       resolve();
@@ -273,15 +319,18 @@ export async function getSetupData(): Promise<any> {
     if (result.length > 0) {
       return result[0];
     } else {
-      // 如果没有找到设置数据，返回默认值
+      // 如果没有找到设置数据，根据平台返回合适的默认路径
+      const isAndroid = isTauri() && /android/i.test(navigator.userAgent);
+      const defaultVideoPath = isAndroid ? '/storage/emulated/0/Movies/iwara' : '';
+      const defaultImagePath = isAndroid ? '/storage/emulated/0/Pictures/iwara' : '';
       return {
         auto_play: true,
         reconnect: 1,
         definition: 'Source',
         search_mode: 0,
         language: 'auto',
-        video_save_path: '',
-        image_save_path: '',
+        video_save_path: defaultVideoPath,
+        image_save_path: defaultImagePath,
         aria2_rpc: '',
         aria2_token: '',
         aria2_download: '~/Downloads/Iwara',
@@ -290,15 +339,16 @@ export async function getSetupData(): Promise<any> {
     }
   } catch (error) {
     console.error('Error fetching setup data:', error);
-    // 发生错误时返回默认值
+    // 发生错误时返回默认值（根据平台使用合适的默认路径）
+    const isAndroid = isTauri() && /android/i.test(navigator.userAgent);
     return {
       auto_play: true,
       reconnect: 1,
       definition: 'Source',
       search_mode: 0,
       language: 'auto',
-      video_save_path: '',
-      image_save_path: '',
+      video_save_path: isAndroid ? '/storage/emulated/0/Movies/iwara' : '',
+      image_save_path: isAndroid ? '/storage/emulated/0/Pictures/iwara' : '',
       aria2_rpc: '',
       aria2_token: '',
       aria2_download: '~/Downloads/Iwara',
@@ -538,6 +588,128 @@ export function getSearchHistoryList(limit?: number): Promise<string[]> {
       resolve(searchTexts);
     } catch (error) {
       console.error('获取历史搜索记录失败:', error);
+      reject(error);
+    }
+  });
+}
+
+// ========== 下载缓存相关 =========
+
+// 插入或更新下载缓存记录
+export function upsertDownloadCache(
+  id: string,
+  title: string,
+  author: string,
+  coverUrl: string,
+  longNum: number,
+  viewNum: number,
+  likeNum: number,
+  isR18: boolean,
+  ai: boolean,
+  url: string
+): Promise<void> {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const cacheTime = Date.now();
+      await sqlDB.execute(
+        `INSERT OR REPLACE INTO download_cache (id, title, author, cover_url, long_num, view_num, like_num, is_r18, ai, progress, status, cache_time, url)
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 0, 'downloading', ?, ?)`,
+        [id, title, author, coverUrl, longNum, viewNum, likeNum, isR18 ? 1 : 0, ai ? 1 : 0, cacheTime, url]
+      );
+      console.log('下载缓存记录已添加:', id);
+      resolve();
+    } catch (error) {
+      console.error('插入下载缓存记录失败:', error);
+      reject(error);
+    }
+  });
+}
+
+// 更新下载进度
+export function updateDownloadProgress(
+  id: string,
+  progress: number,
+  status: 'downloading' | 'completed' | 'failed',
+  filePath?: string,
+  fileSize?: number
+): Promise<void> {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const updates: string[] = ['progress = ?', 'status = ?'];
+      const params: any[] = [progress, status];
+
+      if (filePath !== undefined) {
+        updates.push('file_path = ?');
+        params.push(filePath);
+      }
+      if (fileSize !== undefined) {
+        updates.push('file_size = ?');
+        params.push(fileSize);
+      }
+
+      params.push(id);
+      await sqlDB.execute(
+        `UPDATE download_cache SET ${updates.join(', ')} WHERE id = ?`,
+        params
+      );
+      resolve();
+    } catch (error) {
+      console.error('更新下载进度失败:', error);
+      reject(error);
+    }
+  });
+}
+
+// 获取下载缓存列表
+export function getDownloadCacheList(
+  page: number,
+  pageSize: number = 15
+): Promise<any[]> {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const offset = page * pageSize;
+      const result: Array<any> = await sqlDB.select(
+        `SELECT id, title, author, cover_url, long_num, view_num, like_num, is_r18, ai,
+                file_path, file_size, progress, status, cache_time, url
+         FROM download_cache
+         ORDER BY cache_time DESC
+         LIMIT ? OFFSET ?`,
+        [pageSize, offset]
+      );
+      const formattedResult = result.map(item => ({
+        id: item.id,
+        title: item.title,
+        author: item.author,
+        img: item.cover_url,
+        longNum: item.long_num ? item.long_num.toString() : '',
+        viewNum: item.view_num?.toString() || '0',
+        likeNum: item.like_num?.toString() || '0',
+        isR18: !!item.is_r18,
+        ai: !!item.ai,
+        filePath: item.file_path || '',
+        fileSize: item.file_size || 0,
+        progress: item.progress || 0,
+        status: item.status || 'downloading',
+        cacheDate: item.cache_time ? new Date(item.cache_time).toISOString().split('T')[0] : '',
+        url: item.url || '',
+      }));
+      resolve(formattedResult);
+    } catch (error) {
+      console.error('获取下载缓存列表失败:', error);
+      reject(error);
+    }
+  });
+}
+
+// 删除下载缓存记录
+export function deleteDownloadCache(id: string): Promise<void> {
+  return new Promise(async (resolve, reject) => {
+    try {
+      await sqlDB.execute(`DELETE FROM download_cache WHERE id = ?`, [id]);
+      console.log('下载缓存记录已删除:', id);
+      resolve();
+    } catch (error) {
+      console.error('删除下载缓存记录失败:', error);
       reject(error);
     }
   });

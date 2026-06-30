@@ -1,10 +1,17 @@
 <script setup lang="ts">
 import { ref, watch, onMounted, onUnmounted, computed } from 'vue'
+import { useI18n } from 'vue-i18n'
 import Hammer from 'hammerjs'
 import { exitImmersive } from '../../plugins/immersive'
 import { lockPortraitOnMobile } from '../../plugins/useOrientation'
 import { getNetworkInfo, getBatteryInfo } from '../../plugins/deviceInfo'
+import { likeVideo, unlikeVideo } from '../../core/api'
+import { ai } from '../../core/store'
+import { showShortToast } from '../../core/toast'
 import customRange from './customRange.vue'
+
+const { t } = useI18n()
+const aiStore = ai()
 
 // Props - 接收父组件传递的数据
 const props = defineProps<{
@@ -21,6 +28,9 @@ const props = defineProps<{
   currentDefinitionIndex?: number // 当前选中的清晰度索引
   videoEnded?: boolean // 视频是否播放完成
   isRefreshingServer?: boolean // 是否正在切换服务器
+  isLike?: boolean // 是否已点赞
+  vid?: string // 视频ID
+  likeNum?: number // 点赞数
 }>()
 
 // Emits - 向父组件事件
@@ -33,6 +43,7 @@ const emit = defineEmits<{
   (e: 'replay'): void
   (e: 'refreshServer'): void // 刷新服务器列表
   (e: 'definitionChange', index: number): void // 切换清晰度
+  (e: 'like', isLiked: boolean): void // 点赞状态变化
 }>()
 
 // 本地进度状态，用于UI实时更新
@@ -472,6 +483,57 @@ const handleRefreshServer = () => {
   emit('refreshServer')
 }
 
+// 点赞操作进行中状态
+const isLiking = ref(false)
+
+// 点赞/取消点赞
+const clickLike = () => {
+  // 如果正在执行点赞操作或没有视频ID，直接返回
+  if (isLiking.value || !props.vid) return
+
+  isLiking.value = true
+
+  if (props.isLike) {
+    // 取消点赞
+    emit('like', false)
+    unlikeVideo(props.vid, aiStore.value).then((res) => {
+      if (res.ok && res.status === 204) {
+        console.log('取消点赞成功')
+        showShortToast(t('common.unliked'))
+      } else {
+        console.log('取消点赞失败')
+        showShortToast(t('common.unlikeFailed'))
+        emit('like', true)
+      }
+    }).catch((error) => {
+      console.error('取消点赞请求失败:', error)
+      showShortToast(t('common.unlikeFailed'))
+      emit('like', true)
+    }).finally(() => {
+      isLiking.value = false
+    })
+  } else {
+    // 点赞
+    emit('like', true)
+    likeVideo(props.vid, aiStore.value).then((res) => {
+      if (res.ok && res.status === 201) {
+        console.log('点赞成功')
+        showShortToast(t('common.liked'))
+      } else {
+        console.log('点赞失败')
+        showShortToast(t('common.likeFailed'))
+        emit('like', false)
+      }
+    }).catch((error) => {
+      console.error('点赞请求失败:', error)
+      showShortToast(t('common.likeFailed'))
+      emit('like', false)
+    }).finally(() => {
+      isLiking.value = false
+    })
+  }
+}
+
 // 格式化清晰度文本
 const definitionTextFormat = (text: string): string => {
   // 如果输入是数字，返回值后面加个P
@@ -632,8 +694,9 @@ onUnmounted(() => {
         <span>{{ currentSystemTime }}</span>
       </div>
       <div>
-        <span class="btn">
-          <font-awesome-icon icon="fa-regular fa-heart" />
+        <span class="btn" :class="{ liked: props.isLike }" @click="clickLike">
+          <font-awesome-icon v-if="props.isLike" icon="fa-solid fa-heart" />
+          <font-awesome-icon v-else icon="fa-regular fa-heart" />
         </span>
         <span class="btn">
           <font-awesome-icon icon="fa-regular fa-camera" />
@@ -832,6 +895,10 @@ onUnmounted(() => {
     font-size: 1.4rem;
     cursor: pointer;
     user-select: none;
+
+    &.liked {
+      color: #FF1744;
+    }
   }
 
   .drawer {

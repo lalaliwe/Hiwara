@@ -22,6 +22,8 @@ tauri = { version = "2", features = ["unstable"] }
 tauri-plugin-opener = "2"
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
+reqwest = { version = "0.12", features = ["stream"] }
+tokio = { version = "1", features = ["io-util"] }
 
 tauri-plugin-device = { path = "../tauri-plugin-device" }
 tauri-plugin-mwebview = { path = "../tauri-plugin-mwebview" }
@@ -32,3 +34,4 @@ tauri-plugin-http = "2"
 flate2 = "1.0"
 brotli = "6.0.0"
 tauri-plugin-dialog = "2"
+futures-util = "0.3"

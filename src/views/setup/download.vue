@@ -1,9 +1,11 @@
 <script setup lang="ts">
+import { computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { setupStore } from '../../core/store'
 import { storeToRefs } from 'pinia'
-// 导入Tauri的dialog插件
+import { isTauri, invoke } from '@tauri-apps/api/core'
+// 导入Tauri的dialog插件（仅桌面端使用）
 import { open } from '@tauri-apps/plugin-dialog'
 
 defineOptions({
@@ -15,6 +17,12 @@ const router = useRouter()
 const setup = setupStore()
 const { videoSavePath, imageSavePath } = storeToRefs(setup)
 
+// 是否为 Android 平台
+const isAndroid = computed(() => {
+  if (!isTauri()) return false
+  return /android/i.test(navigator.userAgent)
+})
+
 // 返回上一页
 const goBack = () => {
   router.back();
@@ -22,29 +30,57 @@ const goBack = () => {
 
 // 选择视频保存路径
 const selectVideoSavePath = async () => {
-  const selectedPath = await open({
-    directory: true,  // 只能选择目录
-    multiple: false,  // 只能选择单个目录
-    title: t('setup.downloadPage.selectVideoPath')
-  });
+  let selectedPath: string | null = null
+
+  if (isAndroid.value) {
+    // Android 使用原生 SAF 目录选择器（通过 tauri-plugin-device）
+    try {
+      const result = await invoke<{ path?: string }>('plugin:device|pick_folder', {
+        payload: { initialPath: videoSavePath.value || undefined }
+      })
+      selectedPath = result?.path ?? null
+    } catch (error) {
+      console.error('选择目录失败:', error)
+      return
+    }
+  } else {
+    // 桌面端使用系统对话框
+    selectedPath = await open({
+      directory: true,
+      multiple: false,
+      title: t('setup.downloadPage.selectVideoPath')
+    }) as string | null
+  }
 
   if (selectedPath) {
-    // 将选择的路径更新到store中
-    await setup.updateSetting('videoSavePath', selectedPath as string);
+    await setup.updateSetting('videoSavePath', selectedPath)
   }
 }
 
 // 选择图片保存路径
 const selectImageSavePath = async () => {
-  const selectedPath = await open({
-    directory: true,  // 只能选择目录
-    multiple: false,  // 只能选择单个目录
-    title: t('setup.downloadPage.selectImagePath')
-  });
+  let selectedPath: string | null = null
+
+  if (isAndroid.value) {
+    try {
+      const result = await invoke<{ path?: string }>('plugin:device|pick_folder', {
+        payload: { initialPath: imageSavePath.value || undefined }
+      })
+      selectedPath = result?.path ?? null
+    } catch (error) {
+      console.error('选择目录失败:', error)
+      return
+    }
+  } else {
+    selectedPath = await open({
+      directory: true,
+      multiple: false,
+      title: t('setup.downloadPage.selectImagePath')
+    }) as string | null
+  }
 
   if (selectedPath) {
-    // 将选择的路径更新到store中
-    await setup.updateSetting('imageSavePath', selectedPath as string);
+    await setup.updateSetting('imageSavePath', selectedPath)
   }
 }
 </script>
