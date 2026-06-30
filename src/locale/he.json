@@ -59,7 +59,16 @@
       "checkUpdate": "בדוק עדכונים",
       "openSourceLicense": "רישיון קוד פתוח",
       "unknown": "לא ידוע",
-      "loading": "טוען נתונים"
+      "loading": "טוען נתונים",
+      "alreadyLatest": "כבר הגרסה העדכנית ביותר",
+      "devVersion": "גרסה נוכחית היא גרסת פיתוח, טרם שוחררה (הגרסה היציבה האחרונה: {latest})",
+      "updateCheckFailed": "בדיקת העדכון נכשלה, אנא בדוק את החיבור לרשת",
+      "updateDialog": {
+        "title": "גרסה חדשה זמינה",
+        "message": "גרסה חדשה {version} זמינה. להורדה?",
+        "cancel": "ביטול",
+        "confirm": "להורדה"
+      }
     },
     "aria2Page": {
       "title": "הגדרות Aria2",

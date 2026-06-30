@@ -24,6 +24,9 @@
       "allow": [
         {
           "url": "https://api.iwara.tv/*"
+        },
+        {
+          "url": "https://api.github.com/*"
         }
       ]
     },

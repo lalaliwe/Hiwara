@@ -59,7 +59,16 @@
       "checkUpdate": "Vérifier les mises à jour",
       "openSourceLicense": "Licence open source",
       "unknown": "Inconnu",
-      "loading": "Chargement des données"
+      "loading": "Chargement des données",
+      "alreadyLatest": "Déjà la dernière version",
+      "devVersion": "Version de développement actuelle, pas encore publiée (dernière stable: {latest})",
+      "updateCheckFailed": "Échec de la vérification des mises à jour, veuillez vérifier votre réseau",
+      "updateDialog": {
+        "title": "Nouvelle version disponible",
+        "message": "La nouvelle version {version} est disponible. Aller télécharger ?",
+        "cancel": "Annuler",
+        "confirm": "Aller au téléchargement"
+      }
     },
     "aria2Page": {
       "title": "Paramètres Aria2",

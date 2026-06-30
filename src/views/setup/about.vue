@@ -3,6 +3,8 @@ import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { getDeviceInfo } from '../../plugins/deviceInfo'
+import { showShortToast } from '../../core/toast'
+import { getSendRequest } from '../../core/api'
 
 defineOptions({
   name: 'SetupAbout'
@@ -19,6 +21,77 @@ const osName = ref(t('setup.aboutPage.loading'))
 const osVersion = ref(t('setup.aboutPage.loading'))
 const webViewName = ref(t('setup.aboutPage.loading'))
 const webViewVersion = ref('')
+
+// 检查更新相关
+const showUpdateDialog = ref(false)
+const latestVersion = ref('')
+const isCheckingUpdate = ref(false)
+
+// 版本号比较
+function compareVersions(v1: string, v2: string): number {
+  const parts1 = v1.replace(/^v/, '').split('.').map(Number)
+  const parts2 = v2.replace(/^v/, '').split('.').map(Number)
+  
+  for (let i = 0; i < Math.max(parts1.length, parts2.length); i++) {
+    const num1 = parts1[i] || 0
+    const num2 = parts2[i] || 0
+    if (num1 > num2) return 1
+    if (num1 < num2) return -1
+  }
+  return 0
+}
+
+// 打开外部链接
+async function openExternalUrl(url: string) {
+  try {
+    const { openUrl } = await import('@tauri-apps/plugin-opener')
+    await openUrl(url)
+  } catch {
+    // 非 Tauri 环境使用 window.open
+    window.open(url, '_blank')
+  }
+}
+
+// 检查更新
+async function checkForUpdate() {
+  if (isCheckingUpdate.value) return
+  
+  isCheckingUpdate.value = true
+  try {
+    const response = await getSendRequest('https://api.github.com/repos/shanmaomaoymmm/hiwara/releases/latest')
+    if (!response.ok) {
+      showShortToast(t('setup.aboutPage.updateCheckFailed'))
+      return
+    }
+    
+    const remoteVersion = response.data?.tag_name || ''
+    latestVersion.value = remoteVersion
+    
+    const compare = compareVersions(version.value, remoteVersion)
+    
+    if (compare < 0) {
+      // 当前版本低于远程版本
+      showUpdateDialog.value = true
+    } else if (compare === 0) {
+      // 版本相同
+      showShortToast(t('setup.aboutPage.alreadyLatest'))
+    } else {
+      // 当前版本高于远程版本（开发版）
+      showShortToast(t('setup.aboutPage.devVersion', { latest: remoteVersion }))
+    }
+  } catch (error) {
+    console.error('检查更新失败:', error)
+    showShortToast(t('setup.aboutPage.updateCheckFailed'))
+  } finally {
+    isCheckingUpdate.value = false
+  }
+}
+
+// 确认下载更新
+const confirmDownload = async () => {
+  showUpdateDialog.value = false
+  await openExternalUrl('https://github.com/shanmaomaoymmm/hiwara/releases/latest')
+}
 
 // 返回上一页
 const goBack = () => {
@@ -187,10 +260,11 @@ onMounted(() => {
       <div class="label">{{ t('setup.aboutPage.webviewVersion') }}</div>
       <div class="value">{{ webViewVersion }}</div>
     </div>
-    <div class="item">
+    <div class="item" @click="checkForUpdate">
       <div class="label">{{ t('setup.aboutPage.checkUpdate') }}</div>
       <div class="value">
-        <font-awesome-icon icon="fa-solid fa-angle-right" />
+        <font-awesome-icon v-if="isCheckingUpdate" icon="fa-solid fa-spinner" spin />
+        <font-awesome-icon v-else icon="fa-solid fa-angle-right" />
       </div>
     </div>
     <div class="item">
@@ -199,6 +273,27 @@ onMounted(() => {
         <font-awesome-icon icon="fa-solid fa-angle-right" />
       </div>
     </div>
+
+    <!-- 更新确认弹窗 -->
+    <v-dialog v-model="showUpdateDialog" max-width="320" scrim="transparent">
+      <v-card>
+        <v-card-title>
+          {{ t('setup.aboutPage.updateDialog.title') }}
+        </v-card-title>
+        <v-card-text>
+          {{ t('setup.aboutPage.updateDialog.message', { version: latestVersion }) }}
+        </v-card-text>
+        <v-divider></v-divider>
+        <v-card-actions class="justify-end">
+          <v-btn variant="text" @click="showUpdateDialog = false">
+            {{ t('setup.aboutPage.updateDialog.cancel') }}
+          </v-btn>
+          <v-btn variant="text" color="#00796B" @click="confirmDownload">
+            {{ t('setup.aboutPage.updateDialog.confirm') }}
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 

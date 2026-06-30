@@ -59,7 +59,16 @@
       "checkUpdate": "업데이트 확인",
       "openSourceLicense": "오픈소스 라이선스",
       "unknown": "알 수 없음",
-      "loading": "데이터 로딩 중"
+      "loading": "데이터 로딩 중",
+      "alreadyLatest": "이미 최신 버전입니다",
+      "devVersion": "현재 개발 버전으로, 아직 공식 출시되지 않았습니다 (최신 안정 버전: {latest})",
+      "updateCheckFailed": "업데이트 확인에 실패했습니다. 네트워크를 확인해주세요",
+      "updateDialog": {
+        "title": "새 버전이 있습니다",
+        "message": "새 버전 {version}이(가) 있습니다. 다운로드하시겠습니까?",
+        "cancel": "취소",
+        "confirm": "다운로드"
+      }
     },
     "aria2Page": {
       "title": "Aria2 설정",

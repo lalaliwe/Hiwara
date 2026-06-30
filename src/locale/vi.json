@@ -59,7 +59,16 @@
       "checkUpdate": "Kiểm tra cập nhật",
       "openSourceLicense": "Giấy phép mã nguồn mở",
       "unknown": "Không xác định",
-      "loading": "Đang tải dữ liệu"
+      "loading": "Đang tải dữ liệu",
+      "alreadyLatest": "Đã là phiên bản mới nhất",
+      "devVersion": "Phiên bản hiện tại là bản phát triển, chưa được phát hành (phiên bản ổn định mới nhất: {latest})",
+      "updateCheckFailed": "Kiểm tra cập nhật thất bại, vui lòng kiểm tra kết nối mạng",
+      "updateDialog": {
+        "title": "Đã có phiên bản mới",
+        "message": "Phiên bản mới {version} đã có sẵn. Tải xuống ngay?",
+        "cancel": "Hủy",
+        "confirm": "Tải xuống"
+      }
     },
     "aria2Page": {
       "title": "Cài đặt Aria2",

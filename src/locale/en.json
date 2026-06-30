@@ -59,7 +59,16 @@
       "checkUpdate": "Check Update",
       "openSourceLicense": "Open Source License",
       "unknown": "Unknown",
-      "loading": "Loading data"
+      "loading": "Loading data",
+      "alreadyLatest": "Already the latest version",
+      "devVersion": "Current version is a development build (latest stable: {latest}), not yet released",
+      "updateCheckFailed": "Update check failed, please check your network",
+      "updateDialog": {
+        "title": "New Version Available",
+        "message": "New version {version} is available. Go to download?",
+        "cancel": "Cancel",
+        "confirm": "Go to Download"
+      }
     },
     "aria2Page": {
       "title": "Aria2 Settings",

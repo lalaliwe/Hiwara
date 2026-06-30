@@ -59,7 +59,16 @@
       "checkUpdate": "アップデートを確認",
       "openSourceLicense": "オープンソースライセンス",
       "unknown": "不明",
-      "loading": "データ読み込み中"
+      "loading": "データ読み込み中",
+      "alreadyLatest": "すでに最新バージョンです",
+      "devVersion": "現在は開発版です、まだ正式リリースされていません（最新安定版: {latest}）",
+      "updateCheckFailed": "アップデートの確認に失敗しました。ネットワークを確認してください",
+      "updateDialog": {
+        "title": "新しいバージョンがあります",
+        "message": "新しいバージョン {version} が利用可能です。ダウンロードしますか？",
+        "cancel": "キャンセル",
+        "confirm": "ダウンロードへ"
+      }
     },
     "aria2Page": {
       "title": "Aria2設定",

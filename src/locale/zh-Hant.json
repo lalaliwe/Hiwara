@@ -59,7 +59,16 @@
       "checkUpdate": "檢查更新",
       "openSourceLicense": "開源許可",
       "unknown": "未知",
-      "loading": "數據載入中"
+      "loading": "數據載入中",
+      "alreadyLatest": "已是最新版本",
+      "devVersion": "當前為開發版，尚未正式發布，最新正式版為 {latest}",
+      "updateCheckFailed": "檢查更新失敗，請檢查網絡連接",
+      "updateDialog": {
+        "title": "發現新版本",
+        "message": "發現新版本 {version}，是否前往下載？",
+        "cancel": "取消",
+        "confirm": "前往下載"
+      }
     },
     "aria2Page": {
       "title": "Aria2設定",

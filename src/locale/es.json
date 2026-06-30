@@ -59,7 +59,16 @@
       "checkUpdate": "Buscar actualizaciones",
       "openSourceLicense": "Licencia de código abierto",
       "unknown": "Desconocido",
-      "loading": "Cargando datos"
+      "loading": "Cargando datos",
+      "alreadyLatest": "Ya es la última versión",
+      "devVersion": "Versión de desarrollo actual, aún no publicada (última estable: {latest})",
+      "updateCheckFailed": "Error al buscar actualizaciones, verifique su red",
+      "updateDialog": {
+        "title": "Nueva versión disponible",
+        "message": "La nueva versión {version} está disponible. ¿Ir a descargar?",
+        "cancel": "Cancelar",
+        "confirm": "Ir a descargar"
+      }
     },
     "aria2Page": {
       "title": "Configuración de Aria2",
