@@ -336,24 +336,8 @@ function toZone() {
     path: `/zone/${props.username}`,
   });
 }
-// 下载缓存（缓存视频文件到本机，通过 Rust 后端下载）
+// 下载缓存（只负责发起下载，管理在离线缓存页）
 const isDownloading = ref(false)
-const isPaused = ref(false)
-const downloadSpeed = ref(0)
-const downloadProgress = ref(0)
-let unlisten: (() => void) | null = null
-
-// 格式化速度显示
-const formattedSpeed = computed(() => {
-  const speed = downloadSpeed.value
-  if (speed === 0) return ''
-  if (speed > 1024 * 1024) {
-    return `${(speed / (1024 * 1024)).toFixed(1)} MB/s`
-  } else if (speed > 1024) {
-    return `${(speed / 1024).toFixed(0)} KB/s`
-  }
-  return `${speed} B/s`
-})
 
 async function downloadVideo() {
   if (isDownloading.value) return
@@ -362,10 +346,16 @@ async function downloadVideo() {
     return
   }
 
+  // 检查是否已在下载队列中或等待队列中
+  try {
+    const alreadyDownloading: boolean = await invoke('is_downloading', { downloadId: props.vid })
+    if (alreadyDownloading) {
+      showShortToast(t('player.alreadyCaching'))
+      return
+    }
+  } catch { /* 忽略检查错误 */ }
+
   isDownloading.value = true
-  isPaused.value = false
-  downloadSpeed.value = 0
-  downloadProgress.value = 0
 
   const filename = buildAria2Filename(props.title, props.vid, props.username, '.mp4')
   const setup = setupStore()
@@ -378,7 +368,7 @@ async function downloadVideo() {
   }
 
   try {
-    // 记录到数据库
+    // 写入数据库（离线缓存页根据此记录展示状态）
     await upsertDownloadCache(
       props.vid,
       props.title,
@@ -392,26 +382,18 @@ async function downloadVideo() {
       props.download
     )
 
-    // 监听 Rust 下载进度
-    unlisten = await listen<{ downloaded: number; total: number; percentage: number; speed: number }>(
-      'download-progress',
-      (event) => {
-        downloadProgress.value = event.payload.percentage
-        downloadSpeed.value = event.payload.speed || 0
-        updateDownloadProgress(props.vid, event.payload.percentage, 'downloading')
-      }
-    )
+    showShortToast(t('player.cacheQueued'))
 
-    showShortToast(t('player.cacheStart'))
-
-    // 调用 Rust 命令下载文件到本地
-    await invoke('download_video', {
+    // 发起 Rust 下载，传入 download_id 实现并发隔离，不等待完成
+    invoke('download_video', {
       url: props.download,
       filePath: filePath,
+      downloadId: props.vid,
+      maxConcurrent: setupStore().maxConcurrentDownloads,
+    }).catch((e) => {
+      console.error('发起下载失败:', e)
+      updateDownloadProgress(props.vid, 0, 'failed')
     })
-
-    await updateDownloadProgress(props.vid, 100, 'completed', filename)
-    showShortToast(t('player.cacheComplete'))
   } catch (error) {
     const errMsg = String(error)
     if (errMsg.includes('已取消')) {
@@ -423,32 +405,7 @@ async function downloadVideo() {
     }
   } finally {
     isDownloading.value = false
-    isPaused.value = false
-    downloadSpeed.value = 0
-    downloadProgress.value = 0
-    if (unlisten) {
-      unlisten()
-      unlisten = null
-    }
   }
-}
-
-// 暂停下载
-async function pauseDownload() {
-  await invoke('pause_download')
-  isPaused.value = true
-}
-
-// 恢复下载
-async function resumeDownload() {
-  await invoke('resume_download')
-  isPaused.value = false
-}
-
-// 取消下载
-async function cancelDownload() {
-  await invoke('cancel_download')
-  isPaused.value = false
 }
 
 // 暗色模式响应式检测
@@ -578,25 +535,8 @@ function detectDarkMode(): boolean {
         <div @click="shareDownloadLink">
           <iconShareOne theme="two-tone" size="22" :fill="[iconFirstFill, '#00796B']" /><br>{{ t('player.share') }}
         </div>
-        <div @click="downloadVideo" v-if="!isDownloading">
+        <div @click="downloadVideo">
           <iconDownloadFour theme="two-tone" size="22" :fill="[iconFirstFill, '#00796B']" /><br>{{ t('player.cache') }}
-        </div>
-        <div v-else class="download-controls">
-          <div class="download-info">
-            <v-progress-circular :model-value="downloadProgress" :size="18" :width="2" color="#00796B" indeterminate />
-            <span class="download-speed">{{ formattedSpeed }}</span>
-          </div>
-          <div class="download-actions">
-            <span v-if="!isPaused" @click.stop="pauseDownload">
-              <font-awesome-icon icon="fa-solid fa-pause" />
-            </span>
-            <span v-else @click.stop="resumeDownload">
-              <font-awesome-icon icon="fa-solid fa-play" />
-            </span>
-            <span @click.stop="cancelDownload">
-              <font-awesome-icon icon="fa-solid fa-stop" style="color:#FF3D00" />
-            </span>
-          </div>
         </div>
         <div @click="copyDownloadLink">
           <iconCopyLink theme="multi-color" size="22" :fill="[iconFirstFill, '#00796B', '#FFF', '#00796B']" /><br>{{

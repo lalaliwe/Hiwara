@@ -78,7 +78,8 @@ export function initDatabase(): Promise<void> {
           aria2_rpc TEXT,
           aria2_token TEXT,
           aria2_download TEXT,
-          aria2_switch BOOLEAN
+          aria2_switch BOOLEAN,
+          max_concurrent_downloads INTEGER DEFAULT 2
         );`);
 
         // 根据平台获取合适的默认下载路径
@@ -86,29 +87,26 @@ export function initDatabase(): Promise<void> {
         let imageSavePath: string;
 
         if (isTauri()) {
-          // 检测是否为 Android 平台
           const isAndroid = /android/i.test(navigator.userAgent);
           if (isAndroid) {
-            // Android: 使用公共存储路径（用户可通过设置页面修改）
             videoSavePath = '/storage/emulated/0/Movies/iwara';
             imageSavePath = '/storage/emulated/0/Pictures/iwara';
           } else {
-            // 桌面端: 使用系统标准目录
             const videoPath = await downloadDir();
             const imagePath = await pictureDir();
             videoSavePath = await join(videoPath, 'iwara');
             imageSavePath = await join(imagePath, 'iwara');
           }
         } else {
-          // 非 Tauri 环境（浏览器开发）: 使用 videoDir/pictureDir 作为兜底
           const videoPath = await videoDir();
           const imagePath = await pictureDir();
           videoSavePath = await join(videoPath, 'iwara');
           imageSavePath = await join(imagePath, 'iwara');
         }
 
-        // 插入默认设置数据
         await sqlDB.execute(`INSERT INTO setup (auto_play, reconnect, definition, search_mode, language, video_save_path, image_save_path, aria2_rpc, aria2_token, aria2_download, aria2_switch) VALUES (TRUE, 1, 'Source', 0, 'auto', ?, ?, '', '', '', FALSE);`, [videoSavePath, imageSavePath]);
+      } else {
+        await migrateTable('setup', { max_concurrent_downloads: 'max_concurrent_downloads INTEGER DEFAULT 2' });
       }
 
       // 独立检查并创建视频历史表
@@ -629,7 +627,7 @@ export function upsertDownloadCache(
 export function updateDownloadProgress(
   id: string,
   progress: number,
-  status: 'downloading' | 'completed' | 'failed',
+  status: 'downloading' | 'completed' | 'failed' | 'cancelled' | 'paused',
   filePath?: string,
   fileSize?: number
 ): Promise<void> {

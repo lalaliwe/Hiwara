@@ -200,22 +200,6 @@ defineExpose({
         <MediaItem v-for="(item, index) in groupItems" :key="index" :item="item" type="video" />
       </v-list>
     </div>
-    <!-- 加载失败提示 -->
-    <template v-slot:error="{ props }">
-      <div class="load-more-failed">
-        <span>{{ t('history.video.loadFailed') }}</span>
-        <!-- 加载失败， -->
-        <span class="retry-btn" v-bind="props">{{ t('history.video.retry') }}</span>
-        <!-- 点击重试 -->
-      </div>
-    </template>
-    <!-- 已到底部提示 -->
-    <template v-slot:empty>
-      <div class="listEnd">
-        {{ t('history.video.reachedBottom') }}
-        <!-- 已经到底了喵~ -->
-      </div>
-    </template>
   </v-infinite-scroll>
 </template>
 
@@ -227,6 +211,11 @@ defineExpose({
   padding-top: $top;
   padding-bottom: $bottom;
   overflow: auto;
+
+  // 隐藏 Vuetify 内建的 "No more" 提示
+  :deep(.v-infinite-scroll__side) {
+    display: none;
+  }
 
   &::-webkit-scrollbar-track {
     margin: calc($top + 4px) 0 calc($bottom + 4px) 0;

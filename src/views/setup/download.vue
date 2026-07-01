@@ -15,7 +15,7 @@ defineOptions({
 const { t } = useI18n()
 const router = useRouter()
 const setup = setupStore()
-const { videoSavePath, imageSavePath } = storeToRefs(setup)
+const { videoSavePath, imageSavePath, maxConcurrentDownloads } = storeToRefs(setup)
 
 // 是否为 Android 平台
 const isAndroid = computed(() => {
@@ -104,6 +104,14 @@ const selectImageSavePath = async () => {
       <div class="label">{{ t('setup.downloadPage.imageSavePath') }}</div>
       <div class="path-display">{{ imageSavePath || t('setup.downloadPage.notSet') }}</div>
     </div>
+    <div class="item">
+      <div class="label">{{ t('setup.downloadPage.maxConcurrent') }}</div>
+      <div class="slider-row">
+        <span class="slider-value">{{ maxConcurrentDownloads }}</span>
+        <v-slider v-model="maxConcurrentDownloads" min="1" max="8" step="1" thumb-label color="#00796B"
+          @update:model-value="setup.updateSetting('maxConcurrentDownloads', $event)" class="slider"></v-slider>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -179,6 +187,25 @@ const selectImageSavePath = async () => {
     font-size: 0.8rem;
     color: var(--color-text-muted-light);
     word-break: break-all;
+  }
+
+  .slider-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+
+    .slider-value {
+      font-size: 1.1rem;
+      font-weight: 500;
+      color: var(--color-primary);
+      min-width: 24px;
+      text-align: center;
+    }
+
+    .slider {
+      flex: 1;
+    }
   }
 }
 </style>

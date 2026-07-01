@@ -148,6 +148,7 @@ interface SetupState {
   aria2Token: string;
   aria2Download: string;
   aria2Switch: boolean;
+  maxConcurrentDownloads: number;
 }
 
 // 设置相关的 store
@@ -164,6 +165,7 @@ export const setupStore = defineStore('setup', {
     aria2Token: '',
     aria2Download: '~/Downloads/Iwara',
     aria2Switch: false,
+    maxConcurrentDownloads: 2,
   }),
   actions: {
     // 从数据库加载设置
@@ -182,6 +184,7 @@ export const setupStore = defineStore('setup', {
         this.aria2Token = dbData.aria2_token ?? this.aria2Token;
         this.aria2Download = dbData.aria2_download ?? this.aria2Download;
         this.aria2Switch = Boolean(dbData.aria2_switch) ?? this.aria2Switch;
+        this.maxConcurrentDownloads = dbData.max_concurrent_downloads ?? this.maxConcurrentDownloads;
       } catch (error) {
         console.error('Failed to load setup from database:', error);
       }
@@ -215,7 +218,8 @@ export const setupStore = defineStore('setup', {
           aria2_rpc: this.aria2Rpc,
           aria2_token: this.aria2Token,
           aria2_download: this.aria2Download,
-          aria2_switch: this.aria2Switch ? 1 : 0
+          aria2_switch: this.aria2Switch ? 1 : 0,
+          max_concurrent_downloads: this.maxConcurrentDownloads
         };
 
         await updateSetupData(dbFormatData);

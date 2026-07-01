@@ -14,6 +14,10 @@
     "core:webview:allow-get-all-webviews",
     "core:webview:allow-webview-close",
     "opener:default",
+    {
+      "identifier": "opener:allow-open-path",
+      "allow": [{ "path": "" }, { "path": "*" }, { "path": "**" }]
+    },
     "device:default",
     "process:default",
     "notification:default",

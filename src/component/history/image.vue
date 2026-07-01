@@ -208,20 +208,7 @@ loadImageDataInternal();
       </v-list>
     </div>
     
-    <!-- 加载失败提示 -->
-    <template v-slot:error="{ props }">
-      <div class="load-more-failed">
-        <span>{{ t('history.image.loadFailed') }}</span>
-        <span class="retry-btn" v-bind="props">{{ t('history.image.retry') }}</span>
-      </div>
-    </template>
     
-    <!-- 已到底部提示 -->
-    <template v-slot:empty>
-      <div class="listEnd">
-        {{ t('history.image.reachedBottom') }}
-      </div>
-    </template>
   </v-infinite-scroll>
 </template>
 
@@ -233,6 +220,11 @@ loadImageDataInternal();
   padding-top: $top;
   padding-bottom: $bottom;
   overflow: auto;
+
+  // 隐藏 Vuetify 内建的 "No more" 提示
+  :deep(.v-infinite-scroll__side) {
+    display: none;
+  }
 
   &::-webkit-scrollbar-track {
     margin: calc($top + 4px) 0 calc($bottom + 4px) 0;

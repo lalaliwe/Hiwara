@@ -1727,6 +1727,7 @@ dependencies = [
  "brotli 6.0.0",
  "flate2",
  "futures-util",
+ "once_cell",
  "reqwest 0.12.28",
  "serde",
  "serde_json",

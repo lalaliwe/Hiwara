@@ -24,6 +24,7 @@ serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 reqwest = { version = "0.12", default-features = false, features = ["stream", "rustls-tls"] }
 tokio = { version = "1", features = ["io-util"] }
+once_cell = "1"
 
 tauri-plugin-device = { path = "../tauri-plugin-device" }
 tauri-plugin-mwebview = { path = "../tauri-plugin-mwebview" }
