@@ -545,7 +545,7 @@ onUnmounted(() => {
               <infoView :title="title" :synopsis="synopsis" :playNum="playNum" :likeNum="likeNum" :createdAt="createdAt"
                 :isLike="isLike" :tags="tags" :authorname="authorname" :username="username" :avatar="avatar"
                 :fansNum="fansNum" :videoNum="videoNum" :isFollow="isFollow" :vid="id as string" :uid="uid"
-                :download="currentDownloadUrl" :slug="slug" @like="likeTrigger" @follow="followTrigger" />
+                :download="currentDownloadUrl" :slug="slug" :poster="poster" @like="likeTrigger" @follow="followTrigger" />
             </swiper-slide>
             <swiper-slide v-if="!isDesktop">
               <commentView :vid="id as string" />

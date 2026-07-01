@@ -21,7 +21,7 @@ import {
 import recommend from './recommend.vue';
 import { showShortToast } from '../../core/toast';
 import { upsertDownloadCache, updateDownloadProgress } from '../../core/database'
-import { buildAria2Filename } from '../../core/api'
+import { buildAria2Filename, getVideoFileSQ } from '../../core/api'
 import { listen } from '@tauri-apps/api/event'
 import { invoke } from '@tauri-apps/api/core'
 import { setupStore } from '../../core/store'
@@ -54,7 +54,7 @@ interface Props {
   tags: string[], // 标签
   authorname: string, // 作者昵称
   username: string, // 用户名
-  avatar: string, // 作者头像    
+  avatar: string, // 作者头像
   fansNum: number, // 粉丝数
   videoNum: number, // 视频数
   isFollow: boolean,  // 是否已关注
@@ -63,6 +63,7 @@ interface Props {
   uid: string, // 用户ID
   download: string, // 下载链接
   slug: string, // 视频slug
+  poster?: string, // 视频封面URL
 }
 
 const props = defineProps<Props>()
@@ -337,7 +338,22 @@ function toZone() {
 }
 // 下载缓存（缓存视频文件到本机，通过 Rust 后端下载）
 const isDownloading = ref(false)
+const isPaused = ref(false)
+const downloadSpeed = ref(0)
+const downloadProgress = ref(0)
 let unlisten: (() => void) | null = null
+
+// 格式化速度显示
+const formattedSpeed = computed(() => {
+  const speed = downloadSpeed.value
+  if (speed === 0) return ''
+  if (speed > 1024 * 1024) {
+    return `${(speed / (1024 * 1024)).toFixed(1)} MB/s`
+  } else if (speed > 1024) {
+    return `${(speed / 1024).toFixed(0)} KB/s`
+  }
+  return `${speed} B/s`
+})
 
 async function downloadVideo() {
   if (isDownloading.value) return
@@ -347,11 +363,19 @@ async function downloadVideo() {
   }
 
   isDownloading.value = true
+  isPaused.value = false
+  downloadSpeed.value = 0
+  downloadProgress.value = 0
 
   const filename = buildAria2Filename(props.title, props.vid, props.username, '.mp4')
   const setup = setupStore()
-  const saveDir = setup.videoSavePath || ''
-  const filePath = saveDir ? `${saveDir}/${filename}` : filename
+  const saveDir = setup.videoSavePath
+  let filePath: string
+  if (saveDir) {
+    filePath = `${saveDir}/${filename}`
+  } else {
+    filePath = filename
+  }
 
   try {
     // 记录到数据库
@@ -359,7 +383,7 @@ async function downloadVideo() {
       props.vid,
       props.title,
       props.authorname,
-      '',
+      props.poster || '',
       0,
       props.playNum,
       props.likeNum,
@@ -369,9 +393,11 @@ async function downloadVideo() {
     )
 
     // 监听 Rust 下载进度
-    unlisten = await listen<{ downloaded: number; total: number; percentage: number }>(
+    unlisten = await listen<{ downloaded: number; total: number; percentage: number; speed: number }>(
       'download-progress',
       (event) => {
+        downloadProgress.value = event.payload.percentage
+        downloadSpeed.value = event.payload.speed || 0
         updateDownloadProgress(props.vid, event.payload.percentage, 'downloading')
       }
     )
@@ -387,16 +413,42 @@ async function downloadVideo() {
     await updateDownloadProgress(props.vid, 100, 'completed', filename)
     showShortToast(t('player.cacheComplete'))
   } catch (error) {
-    console.error('缓存失败:', error)
-    await updateDownloadProgress(props.vid, 0, 'failed')
-    showShortToast(t('player.cacheFailed'))
+    const errMsg = String(error)
+    if (errMsg.includes('已取消')) {
+      showShortToast(t('player.cacheCancelled'))
+    } else {
+      console.error('缓存失败:', error)
+      await updateDownloadProgress(props.vid, 0, 'failed')
+      showShortToast(t('player.cacheFailed'))
+    }
   } finally {
     isDownloading.value = false
+    isPaused.value = false
+    downloadSpeed.value = 0
+    downloadProgress.value = 0
     if (unlisten) {
       unlisten()
       unlisten = null
     }
   }
+}
+
+// 暂停下载
+async function pauseDownload() {
+  await invoke('pause_download')
+  isPaused.value = true
+}
+
+// 恢复下载
+async function resumeDownload() {
+  await invoke('resume_download')
+  isPaused.value = false
+}
+
+// 取消下载
+async function cancelDownload() {
+  await invoke('cancel_download')
+  isPaused.value = false
 }
 
 // 暗色模式响应式检测
@@ -526,8 +578,25 @@ function detectDarkMode(): boolean {
         <div @click="shareDownloadLink">
           <iconShareOne theme="two-tone" size="22" :fill="[iconFirstFill, '#00796B']" /><br>{{ t('player.share') }}
         </div>
-        <div @click="downloadVideo">
+        <div @click="downloadVideo" v-if="!isDownloading">
           <iconDownloadFour theme="two-tone" size="22" :fill="[iconFirstFill, '#00796B']" /><br>{{ t('player.cache') }}
+        </div>
+        <div v-else class="download-controls">
+          <div class="download-info">
+            <v-progress-circular :model-value="downloadProgress" :size="18" :width="2" color="#00796B" indeterminate />
+            <span class="download-speed">{{ formattedSpeed }}</span>
+          </div>
+          <div class="download-actions">
+            <span v-if="!isPaused" @click.stop="pauseDownload">
+              <font-awesome-icon icon="fa-solid fa-pause" />
+            </span>
+            <span v-else @click.stop="resumeDownload">
+              <font-awesome-icon icon="fa-solid fa-play" />
+            </span>
+            <span @click.stop="cancelDownload">
+              <font-awesome-icon icon="fa-solid fa-stop" style="color:#FF3D00" />
+            </span>
+          </div>
         </div>
         <div @click="copyDownloadLink">
           <iconCopyLink theme="multi-color" size="22" :fill="[iconFirstFill, '#00796B', '#FFF', '#00796B']" /><br>{{
