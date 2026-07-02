@@ -256,4 +256,15 @@ impl<R: Runtime> Device<R> {
     // Desktop: 由前端 @tauri-apps/plugin-dialog 处理
     Ok(PickFolderResponse { path: None })
   }
+
+  pub fn share(&self, _payload: ShareRequest) -> crate::Result<ShareResponse> {
+    // Desktop: 不支持原生分享，由前端使用 Web Share API 处理
+    Ok(ShareResponse { success: false })
+  }
+
+  pub fn open_file(&self, payload: OpenFileRequest) -> crate::Result<OpenFileResponse> {
+    open::that(&payload.path)
+      .map_err(|e| crate::Error::Io(std::io::Error::new(std::io::ErrorKind::Other, e.to_string())))?;
+    Ok(OpenFileResponse { success: true })
+  }
 }

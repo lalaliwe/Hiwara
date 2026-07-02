@@ -160,6 +160,21 @@ pub struct GetVolumeResponse {
   pub max_volume: f32,  // system max volume value
 }
 
+// ========== Share 相关 =========
+#[derive(Debug, Deserialize, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct ShareRequest {
+    pub title: String,
+    pub text: String,
+    pub url: String,
+}
+
+#[derive(Debug, Clone, Default, Deserialize, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct ShareResponse {
+    pub success: bool,
+}
+
 // ========== Folder Picker 相关 =========
 #[derive(Debug, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
@@ -171,4 +186,17 @@ pub struct PickFolderRequest {
 #[serde(rename_all = "camelCase")]
 pub struct PickFolderResponse {
   pub path: Option<String>, // 选择的目录路径，取消则为 None
+}
+
+// ========== Open File 相关 =========
+#[derive(Debug, Deserialize, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct OpenFileRequest {
+  pub path: String,
+}
+
+#[derive(Debug, Clone, Default, Deserialize, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct OpenFileResponse {
+  pub success: bool,
 }

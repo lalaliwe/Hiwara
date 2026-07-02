@@ -12,6 +12,7 @@ links = "tauri-plugin-device"
 tauri = { version = "2.10.3" }
 serde = "1.0"
 thiserror = "2"
+open = "5"
 
 [build-dependencies]
 tauri-plugin = { version = "2.5.4", features = ["build"] }

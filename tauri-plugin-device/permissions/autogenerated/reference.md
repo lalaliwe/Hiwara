@@ -23,6 +23,8 @@ Default permissions for the plugin
 - `allow-set-volume`
 - `allow-get-volume`
 - `allow-pick-folder`
+- `allow-share`
+- `allow-open-file`
 
 ## Permission Table
 
@@ -296,6 +298,32 @@ Denies the get_network_info command without any pre-configured scope.
 <tr>
 <td>
 
+`device:allow-open-file`
+
+</td>
+<td>
+
+Enables the open_file command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`device:deny-open-file`
+
+</td>
+<td>
+
+Denies the open_file command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
 `device:allow-lock-orientation`
 
 </td>
@@ -445,6 +473,32 @@ Enables the set_volume command without any pre-configured scope.
 <td>
 
 Denies the set_volume command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`device:allow-share`
+
+</td>
+<td>
+
+Enables the share command without any pre-configured scope.
+
+</td>
+</tr>
+
+<tr>
+<td>
+
+`device:deny-share`
+
+</td>
+<td>
+
+Denies the share command without any pre-configured scope.
 
 </td>
 </tr>

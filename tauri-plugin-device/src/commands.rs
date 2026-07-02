@@ -136,3 +136,19 @@ pub(crate) async fn pick_folder<R: Runtime>(
 ) -> Result<PickFolderResponse> {
     app.device().pick_folder(payload)
 }
+
+#[command]
+pub(crate) async fn share<R: Runtime>(
+    app: AppHandle<R>,
+    payload: ShareRequest,
+) -> Result<ShareResponse> {
+    app.device().share(payload)
+}
+
+#[command]
+pub(crate) async fn open_file<R: Runtime>(
+    app: AppHandle<R>,
+    payload: OpenFileRequest,
+) -> Result<OpenFileResponse> {
+    app.device().open_file(payload)
+}

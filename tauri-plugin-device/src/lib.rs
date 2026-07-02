@@ -55,6 +55,8 @@ pub fn init<R: Runtime>() -> TauriPlugin<R> {
       commands::set_volume,
       commands::get_volume,
       commands::pick_folder,
+      commands::share,
+      commands::open_file,
     ])
     .setup(|app, api| {
       #[cfg(mobile)]

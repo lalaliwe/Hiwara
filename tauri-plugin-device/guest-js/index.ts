@@ -175,3 +175,40 @@ export async function pickFolder(initialPath?: string): Promise<PickFolderRespon
     payload: { initialPath }
   });
 }
+
+export interface ShareRequest {
+  title: string;
+  text: string;
+  url: string;
+}
+
+export interface ShareResponse {
+  success: boolean;
+}
+
+/**
+ * 使用系统原生分享功能分享内容（文字、链接等）
+ * Android 调用 Intent.ACTION_SEND，桌面端回退到 Web Share API
+ */
+export async function share(payload: ShareRequest): Promise<ShareResponse> {
+  return await invoke('plugin:device|share', { payload });
+}
+
+export interface OpenFileRequest {
+  path: string;
+}
+
+export interface OpenFileResponse {
+  success: boolean;
+}
+
+/**
+ * 使用系统默认应用打开文件
+ * Android 使用 Intent.ACTION_VIEW，桌面端使用系统默认应用
+ * @param path 要打开的文件路径
+ */
+export async function openFile(path: string): Promise<OpenFileResponse> {
+  return await invoke('plugin:device|open_file', {
+    payload: { path }
+  });
+}

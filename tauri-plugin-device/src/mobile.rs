@@ -157,4 +157,18 @@ impl<R: Runtime> Device<R> {
       .run_mobile_plugin("pickFolder", payload)
       .map_err(Into::into)
   }
+
+  pub fn share(&self, payload: ShareRequest) -> crate::Result<ShareResponse> {
+    self
+      .0
+      .run_mobile_plugin("share", payload)
+      .map_err(Into::into)
+  }
+
+  pub fn open_file(&self, payload: OpenFileRequest) -> crate::Result<OpenFileResponse> {
+    self
+      .0
+      .run_mobile_plugin("openFile", payload)
+      .map_err(Into::into)
+  }
 }

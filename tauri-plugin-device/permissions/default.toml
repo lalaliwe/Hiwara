@@ -20,4 +20,6 @@ permissions = [
     "allow-set-volume",
     "allow-get-volume",
     "allow-pick-folder",
+    "allow-share",
+    "allow-open-file",
 ]

@@ -8,7 +8,6 @@ import { getImageIwara, buildAria2Filename } from '../core/api'
 import iwaraSVG from '../assets/svg/iwara.svg'
 import { listen } from '@tauri-apps/api/event'
 import { invoke } from '@tauri-apps/api/core'
-import { openPath } from '@tauri-apps/plugin-opener'
 import { sep } from '@tauri-apps/api/path'
 import { showShortToast } from '../core/toast'
 import { ai } from '../core/store'
@@ -383,7 +382,7 @@ function handleItemClick(item: CacheItem) {
       // 统一路径分隔符为平台原生格式
       const normalizedPath = item.filePath.replace(/[/\\]/g, sep)
       console.log('打开文件:', normalizedPath)
-      openPath(normalizedPath).catch((err) => {
+      invoke('plugin:device|open_file', { payload: { path: normalizedPath } }).catch((err) => {
         console.error('打开文件失败:', normalizedPath, err)
         showShortToast(t('offlineCache.openFailed'))
       })

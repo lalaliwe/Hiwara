@@ -88,29 +88,50 @@ async function copyDownloadLink() {
   }
 }
 
-// 使用 Web Share API 分享下载链接
+// 使用系统原生分享（Android）或 Web Share API 分享下载链接
 async function shareDownloadLink() {
   if (!props.download) {
     showShortToast(t('common.fetchDownloadFailed'));
     return;
   }
-  // 检查浏览器是否支持 Web Share API
+
+  let shareUrl: string;
+  if (props.slug === '')
+    shareUrl = `https://iwara.tv/video/${props.vid}`;
+  else
+    shareUrl = `https://iwara.tv/video/${props.vid}/${props.slug}`;
+
+  const shareText = `${props.title} - ${props.authorname} - ${shareUrl}`;
+
+  // 1. Android: 尝试使用 Tauri 原生分享（Intent.ACTION_SEND）
+  try {
+    const { invoke } = await import('@tauri-apps/api/core');
+    const result = await invoke('plugin:device|share', {
+      payload: {
+        title: props.title || '',
+        text: shareText,
+        url: shareUrl,
+      }
+    }) as { success: boolean };
+    if (result.success) {
+      // 原生分享成功，系统已提供分享面板反馈，无需额外 toast
+      return;
+    }
+  } catch {
+    // 原生分享不可用（桌面端或非 Tauri 环境），静默回退
+  }
+
+  // 2. 回退: 使用 Web Share API
   if (!navigator.share) {
     showShortToast(t('common.shareNotSupported'));
     return;
   }
   try {
-    let shareUrl: string;
-    if (props.slug === '')
-      shareUrl = `https://iwara.tv/video/${props.vid}`;
-    else
-      shareUrl = `https://iwara.tv/video/${props.vid}/${props.slug}`;
     await navigator.share({
       title: props.title || t('player.shareTitle'),
-      text: t('player.shareText', { title: props.title }),
-      url: shareUrl,
+      text: shareText,
     });
-    showShortToast(t('common.shareSuccess'));
+    // Web Share API 分享成功，系统已提供分享面板反馈，无需额外 toast
   } catch (err) {
     // 用户取消分享不显示错误提示
     if ((err as Error).name !== 'AbortError') {

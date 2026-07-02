@@ -23,6 +23,8 @@ class DevicePlugin(activity: Activity) : Plugin(activity) {
     private val toastHandler = ToastHandler(activity)
     private val brightnessHandler = BrightnessHandler(activity)
     private val volumeHandler = VolumeHandler(activity)
+    private val shareHandler = ShareHandler(activity)
+    private val openFileHandler = OpenFileHandler(activity)
 
     // ===== 目录选择器 =====
     private var pendingInvoke: Invoke? = null
@@ -179,4 +181,12 @@ class DevicePlugin(activity: Activity) : Plugin(activity) {
 
     @Command
     fun getVolume(invoke: Invoke) = volumeHandler.getVolume(invoke)
+
+    // ===== Share =====
+    @Command
+    fun share(invoke: Invoke) = shareHandler.share(invoke)
+
+    // ===== Open File =====
+    @Command
+    fun openFile(invoke: Invoke) = openFileHandler.openFile(invoke)
 }
