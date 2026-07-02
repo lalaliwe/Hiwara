@@ -116,6 +116,7 @@ const goToSetup = () => {
   flex-direction: column;
   background-color: var(--color-bg-section);
   box-shadow: var(--shadow-vertical-nav);
+  padding-top: env(safe-area-inset-top, 0);
   padding-bottom: env(safe-area-inset-bottom, 0);
   width: 100%;
   z-index: 500;

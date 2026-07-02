@@ -328,46 +328,16 @@ function formatDate(dateStr: string): string {
       }
     }
 
-    // ========== Iwara 内部链接卡片 ==========
+    // ========== Iwara 内部链接 ==========
     :deep(.iwara-link) {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 6px 12px;
-      background-color: var(--color-bg-section);
-      border: 1px solid var(--color-border-light);
-      border-radius: 8px;
-      font-size: 0.85rem;
       color: var(--color-primary);
+      font-weight: 600;
       cursor: pointer;
-      margin: 0.2em 0.1em;
-      white-space: nowrap;
-      user-select: none;
-      transition: background-color 0.15s;
 
       &:hover {
-        background-color: var(--color-bg-page);
-        text-decoration: none;
-      }
-
-      // 通过伪元素展示图标
-      &::before {
-        display: inline-block;
-        font-family: 'Font Awesome 6 Free';
-        font-weight: 900;
-        font-size: 0.85rem;
+        text-decoration: underline;
       }
     }
-
-    // 各类型图标
-    :deep(.iwara-link--user::before)     { content: '\f2bd'; } /* fa-circle-user */
-    :deep(.iwara-link--video::before)    { content: '\f03d'; } /* fa-video */
-    :deep(.iwara-link--image::before)    { content: '\f302'; } /* fa-images */
-    :deep(.iwara-link--forum::before)    { content: '\f086'; } /* fa-comments */
-    :deep(.iwara-link--playlist::before) { content: '\f50a'; } /* fa-forward-fast */
-    :deep(.iwara-link--rule::before)     { content: '\f0e3'; } /* fa-gavel */
-    :deep(.iwara-link--page::before)     { content: '\f15c'; } /* fa-file-lines */
-    :deep(.iwara-link--poll::before)     { content: '\f0ca'; } /* fa-chart-simple (using list) */
   }
 
   .info {

@@ -2,6 +2,7 @@
 import { useRouter } from 'vue-router';
 import { ref, computed, onActivated, onDeactivated, onMounted, onUnmounted } from 'vue';
 import { useI18n } from 'vue-i18n';
+import { SettingOne as iconDownloadSetup } from '@icon-park/vue-next';
 import { useAutoStatusBar } from '../composables/useAutoStatusBar'
 import { getDownloadCacheList, deleteDownloadCache, updateDownloadProgress, upsertDownloadCache } from '../core/database'
 import { getImageIwara, buildAria2Filename } from '../core/api'
@@ -27,6 +28,10 @@ useAutoStatusBar({ cssVar: '--color-primary-90' })
 
 const goBack = () => {
   router.back();
+}
+
+const goToSetupDownload = () => {
+  router.push('/setup/download');
 }
 
 // 定义列表项接口
@@ -661,6 +666,9 @@ onDeactivated(() => {
         <div class="label">
           {{ t('offlineCache.title') }}
         </div>
+        <div class="setup-btn" @click="goToSetupDownload">
+          <iconDownloadSetup theme="outline" :size="24" />
+        </div>
       </div>
     </div>
 
@@ -852,6 +860,24 @@ onDeactivated(() => {
     .label {
       font-size: 1.2rem;
       font-weight: 500;
+      flex: 1;
+    }
+
+    .setup-btn {
+      padding: 0 16px;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+
+      svg {
+        font-size: 1.3rem;
+        color: white;
+      }
+
+      &:active {
+        opacity: 0.7;
+      }
     }
   }
 }

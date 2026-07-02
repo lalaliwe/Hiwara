@@ -107,9 +107,9 @@ const selectImageSavePath = async () => {
     <div class="item">
       <div class="label">{{ t('setup.downloadPage.maxConcurrent') }}</div>
       <div class="slider-row">
-        <span class="slider-value">{{ maxConcurrentDownloads }}</span>
-        <v-slider v-model="maxConcurrentDownloads" min="1" max="8" step="1" thumb-label color="#00796B"
+        <v-slider v-model="maxConcurrentDownloads" min="1" max="8" step="1" thumb-label color="#00796B" hide-details
           @update:model-value="setup.updateSetting('maxConcurrentDownloads', $event)" class="slider"></v-slider>
+        <span class="slider-value">{{ maxConcurrentDownloads }}</span>
       </div>
     </div>
   </div>
