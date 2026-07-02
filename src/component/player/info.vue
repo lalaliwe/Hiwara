@@ -369,8 +369,11 @@ async function downloadVideo() {
 
   // 检查是否已在下载队列中或等待队列中
   try {
-    const alreadyDownloading: boolean = await invoke('is_downloading', { downloadId: props.vid })
-    if (alreadyDownloading) {
+    const [inDownloading, inQueue] = await Promise.all([
+      invoke<boolean>('is_downloading', { downloadId: props.vid }),
+      invoke<boolean>('is_in_queue', { downloadId: props.vid }),
+    ])
+    if (inDownloading || inQueue) {
       showShortToast(t('player.alreadyCaching'))
       return
     }

@@ -319,7 +319,7 @@
     "cacheFailed": "缓存失败",
     "cacheCancelled": "缓存已取消",
     "alreadyCaching": "该视频已在缓存队列中",
-    "cacheQueued": "已加入等待队列",
+    "cacheQueued": "已添加至下载队列",
     "downloadLimitReached": "同时下载数量已达上限",
     "downloadLink": "下载链接",
     "authorOtherVideos": "该作者其他视频",

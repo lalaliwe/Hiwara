@@ -100,47 +100,42 @@ async function syncDownloadStates() {
           if (pos > 0) {
             newQueuePositions.set(item.id, pos)
           } else {
-            // 既不在活跃也不在队列 — 可能是应用重启导致内存队列丢失
-            // 清理不完整文件后重新下载（如果有 url）
+            // 既不在活跃也不在队列 — 应用重启后 Rust 内存队列丢失
+            // 清理局部文件，重新下载
+            const restorePath = item.filePath || item.id
+            // 先等待文件清理完成，避免与 download_video 并发操作同一文件
+            await invoke('remove_file', { filePath: restorePath }).catch(() => {})
+
             if (item.url) {
-              const restoreId = item.id
-              const restoreUrl = item.url
-              const restorePath = item.filePath || restoreId
-              // 1. 先清理可能存在的不完整文件
-              invoke('remove_file', { filePath: restorePath }).catch(() => {})
-              // 2. 再加入下载队列
               const setup = (await import('../core/store')).setupStore()
               const maxConcurrent = setup.maxConcurrentDownloads || 2
               invoke('download_video', {
-                url: restoreUrl,
+                url: item.url,
                 filePath: restorePath,
-                downloadId: restoreId,
+                downloadId: item.id,
                 maxConcurrent,
               }).then((result: string) => {
                 if (result === 'queued') {
-                  // 已加入等待队列，查询位置
-                  invoke<number>('get_queue_position', { downloadId: restoreId }).then(pos => {
-                    if (pos > 0) {
-                      queuePositions.value.set(restoreId, pos)
+                  invoke<number>('get_queue_position', { downloadId: item.id }).then(qpos => {
+                    if (qpos > 0) {
+                      queuePositions.value.set(item.id, qpos)
                       queuePositions.value = new Map(queuePositions.value)
                     }
                   })
                 }
-                // 重置进度到 0
                 videoCache.value = videoCache.value.map(i =>
-                  i.id === restoreId ? { ...i, progress: 0 } : i
+                  i.id === item.id ? { ...i, progress: 0 } : i
                 )
-                updateDownloadProgress(restoreId, 0, 'downloading')
-                console.log(`下载 ${restoreId} 已恢复: ${result}`)
+                updateDownloadProgress(item.id, 0, 'downloading')
+                console.log(`下载 ${item.id} 已恢复: ${result}`)
               }).catch((e: any) => {
-                console.error(`恢复下载 ${restoreId} 失败:`, e)
+                console.error(`恢复下载 ${item.id} 失败:`, e)
                 videoCache.value = videoCache.value.map(i =>
-                  i.id === restoreId ? { ...i, status: 'failed', progress: 0 } : i
+                  i.id === item.id ? { ...i, status: 'failed', progress: 0 } : i
                 )
-                updates.push(updateDownloadProgress(restoreId, 0, 'failed'))
+                updates.push(updateDownloadProgress(item.id, 0, 'failed'))
               })
             } else {
-              // 没有 url，无法恢复 → 标记为 failed
               console.warn(`下载 ${item.id} 无下载链接且不在队列中，标记为失败`)
               videoCache.value = videoCache.value.map(i =>
                 i.id === item.id ? { ...i, status: 'failed', progress: 0 } : i
@@ -178,51 +173,75 @@ async function togglePause(downloadId: string) {
   try {
     const inQueue = await invoke<boolean>('is_in_queue', { downloadId })
     const isActivePaused = await invoke<boolean>('is_paused', { downloadId })
+    const isActiveTask = await invoke<boolean>('is_downloading', { downloadId })
     // 从 DB 获取当前项的信息（用于恢复）
     const cacheItem = videoCache.value.find(i => i.id === downloadId)
 
-    if (inQueue || cacheItem?.status === 'paused') {
-      // 在等待队列中或已暂停 → 恢复下载
+    // 优先处理前端管理的暂停状态（DB/内存中 status 明确为 paused）
+    if (cacheItem?.status === 'paused') {
       const setup = (await import('../core/store')).setupStore()
       const maxConcurrent = setup.maxConcurrentDownloads || 2
-      let result: string
       if (inQueue) {
-        result = await invoke<string>('resume_download', {
-          url: cacheItem?.url || '',
-          filePath: cacheItem?.filePath || downloadId,
+        // 已在队列中（暂停让出后未移除队列）→ 直接恢复（设 paused=false）
+        const result = await invoke<string>('resume_download', {
           downloadId,
           maxConcurrent,
         })
-      } else {
-        // status === 'paused'（不在队列中，由前端管理）
-        result = await invoke<string>('download_video', {
-          url: cacheItem?.url || '',
-          filePath: cacheItem?.filePath || downloadId,
-          downloadId,
-          maxConcurrent,
-        })
-      }
-      pauseStates.value.set(downloadId, false)
-      if (result === 'queued') {
-        // 加入等待队列，标记为等待状态
-        queuePositions.value.set(downloadId, 1)
-        showShortToast(t('player.cacheQueued'))
-      } else {
+        pauseStates.value.set(downloadId, false)
         queuePositions.value.delete(downloadId)
+        if (result === 'queued') {
+          queuePositions.value.set(downloadId, 1)
+          showShortToast(t('player.cacheQueued'))
+        }
+        videoCache.value = videoCache.value.map(item =>
+          item.id === downloadId ? { ...item, status: 'downloading', progress: 0 } : item
+        )
+      } else {
+        // 不在队列中（如应用重启后）→ 重新加入下载队列
+        const result = await invoke<string>('download_video', {
+          url: cacheItem?.url || '',
+          filePath: cacheItem?.filePath || downloadId,
+          downloadId,
+          maxConcurrent,
+        })
+        pauseStates.value.set(downloadId, false)
+        queuePositions.value.delete(downloadId)
+        if (result === 'queued') {
+          queuePositions.value.set(downloadId, 1)
+          showShortToast(t('player.cacheQueued'))
+        }
+        videoCache.value = videoCache.value.map(item =>
+          item.id === downloadId ? { ...item, status: 'downloading', progress: 0 } : item
+        )
       }
-      // 更新前端状态为 downloading
-      videoCache.value = videoCache.value.map(item =>
-        item.id === downloadId ? { ...item, status: 'downloading', progress: 0 } : item
-      )
     } else if (isActivePaused) {
-      // 已暂停但下载循环尚未让出 → 直接取消暂停信号
+      // Rust 端已标记暂停但下载循环尚未让出 → 取消暂停信号
       await invoke('unpause_download', { downloadId })
       pauseStates.value.set(downloadId, false)
-    } else {
-      // 活跃下载中 → 暂停下载
-      await invoke('pause_download', { downloadId })
-      // 乐观更新：立即显示暂停状态
+    } else if (isActiveTask) {
+      // 有活跃 execute_download 任务正在运行 → 暂停下载
+      const setup = (await import('../core/store')).setupStore()
+      const maxConcurrent = setup.maxConcurrentDownloads || 2
+      await invoke('pause_download', { downloadId, maxConcurrent })
       pauseStates.value.set(downloadId, true)
+    } else if (inQueue) {
+      // 在等待队列中（有 spawned task=false，即尚未开始下载）→ 取消排队，标记暂停
+      await invoke('cancel_download', { downloadId })
+      queuePositions.value.delete(downloadId)
+      pauseStates.value.set(downloadId, true)
+      videoCache.value = videoCache.value.map(item =>
+        item.id === downloadId ? { ...item, status: 'paused', progress: 0 } : item
+      )
+      updateDownloadProgress(downloadId, 0, 'paused')
+      showShortToast(t('offlineCache.cachePaused'))
+    } else if (cacheItem) {
+      // 兜底：项在 DB 中但不在 Rust 内存队列（如重启后 syncDownloadStates 尚未执行完）
+      // 标记为暂停，等待 syncDownloadStates 的恢复流程处理
+      pauseStates.value.set(downloadId, true)
+      videoCache.value = videoCache.value.map(item =>
+        item.id === downloadId ? { ...item, status: 'paused', progress: 0 } : item
+      )
+      updateDownloadProgress(downloadId, 0, 'paused')
     }
     pauseStates.value = new Map(pauseStates.value)
     queuePositions.value = new Map(queuePositions.value)
@@ -292,16 +311,6 @@ const loadMoreData = async ({ done }: any = { done: () => {} }) => {
   }
 }
 
-// 暂停下载
-async function pauseDownload() {
-  await invoke('pause_download')
-}
-
-// 恢复下载
-async function resumeDownload() {
-  await invoke('resume_download')
-}
-
 // 弹出停止确认（按下载ID）
 const confirmStop = (id: string) => {
   stopTargetId.value = id
@@ -317,10 +326,15 @@ const cancelStop = () => {
 // 执行停止下载（按下载ID）
 async function confirmStopDownload() {
   if (!stopTargetId.value) return
+  const targetItem = videoCache.value.find(i => i.id === stopTargetId.value)
   try {
     await invoke('cancel_download', { downloadId: stopTargetId.value })
   } catch (e) {
     console.error('取消下载命令失败:', e)
+  }
+  // 清理可能残留的局部文件（队列中的项没有执行中的任务来清理文件）
+  if (targetItem?.filePath) {
+    invoke('remove_file', { filePath: targetItem.filePath }).catch(() => {})
   }
   try {
     await updateDownloadProgress(stopTargetId.value, 0, 'cancelled')
@@ -354,14 +368,11 @@ async function retryDownload(id: string) {
       maxConcurrent: setup.maxConcurrentDownloads,
     })
     if (result === 'queued') {
-      // 加入等待队列，由 progress 事件监听器更新状态
+      // 加入等待队列，由 progress 事件监听器更新进度和状态
       showShortToast(t('player.cacheQueued'))
     } else {
-      // 'downloading' — execute_download 已完成，直接标记完成
-      videoCache.value = videoCache.value.map(i =>
-        i.id === id ? { ...i, status: 'completed', progress: 100 } : i
-      )
-      await updateDownloadProgress(item.id, 100, 'completed', item.filePath)
+      // 'downloading' — 下载已启动，等待 download-progress 事件更新进度
+      // 状态已在函数开头设置为 'downloading'，无需额外标记
     }
   } catch (e) {
     console.error('重试下载失败:', e)
@@ -408,14 +419,20 @@ const cancelDelete = () => {
   deleteTargetId.value = null
 }
 
-// 执行删除（含清理封面URL）
+// 执行删除（含清理封面URL和文件）
 const removeCache = async () => {
   if (!deleteTargetId.value) return
+  const targetItem = videoCache.value.find(i => i.id === deleteTargetId.value)
   try {
     const url = coverUrls.value.get(deleteTargetId.value)
     if (url) URL.revokeObjectURL(url)
     coverUrls.value.delete(deleteTargetId.value)
     coverUrls.value = new Map(coverUrls.value)
+
+    // 清理磁盘文件
+    if (targetItem?.filePath) {
+      await invoke('remove_file', { filePath: targetItem.filePath }).catch(() => {})
+    }
 
     await deleteDownloadCache(deleteTargetId.value)
     videoCache.value = videoCache.value.filter(item => item.id !== deleteTargetId.value)
@@ -484,7 +501,8 @@ async function setupProgressListener() {
             ...item,
             progress: percentage,
             status: item.status === 'downloading' ? (isComplete ? 'completed' : 'downloading') : item.status,
-            filePath: isComplete && file_path ? file_path : item.filePath
+            // 只要有 file_path 就更新（暂停恢复后需要磁盘路径）
+            filePath: file_path ? file_path : item.filePath
           }
         }
         return item
@@ -498,9 +516,9 @@ async function setupProgressListener() {
         }
       } else {
         // 非完成：节流保存（每 2% 写一次 DB，避免过于频繁）
+        // 同时持久化 file_path，暂停/重启后恢复下载时可用
         videoCache.value.forEach(item => {
           if (item.id === download_id && item.progress % 2 < 1) {
-            // 使用 setTimeout 避免阻塞事件处理
             setTimeout(() => updateDownloadProgress(download_id, item.progress, 'downloading', item.filePath), 0)
           }
         })
@@ -537,8 +555,13 @@ async function setupProgressListener() {
     'download-queued',
     (event) => {
       const { download_id } = event.payload
-      queuePositions.value.set(download_id, 1)
-      queuePositions.value = new Map(queuePositions.value)
+      // 查询实际队列位置
+      invoke<number>('get_queue_position', { downloadId: download_id }).then(pos => {
+        if (pos > 0) {
+          queuePositions.value.set(download_id, pos)
+          queuePositions.value = new Map(queuePositions.value)
+        }
+      })
     }
   )
 
