@@ -172,6 +172,12 @@ async function login() {
   width: 100%;
   padding: 20vh 12px 12px 12px;
 
+  // 大屏时居中
+  @include up(md) {
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
   .title {
     font-size: 1.4rem;
     padding: 22px 0;
