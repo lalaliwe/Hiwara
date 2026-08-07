@@ -12,19 +12,46 @@ dist
 dist-ssr
 *.local
 
+# Vite / TypeScript build artifacts
+.vite/
+*.tsbuildinfo
+coverage/
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
 .idea
-.DS_Store
+.fleet/
 *.suo
 *.ntvs*
 *.njsproj
 *.sln
 *.sw?
 
-tmp
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Environment variables (may contain sensitive credentials)
+.env
+.env.*
+!.env.example
+
+# Local dev scratch / mock test files (root level only)
+/tmp/
 plans
+/test/
+
+# Temporary / backup files
+*.tmp
+*.temp
+*.bak
 
 # Docker build output & logs
 docker/release/

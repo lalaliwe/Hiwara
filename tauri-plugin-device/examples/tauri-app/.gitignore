@@ -12,13 +12,26 @@ dist
 dist-ssr
 *.local
 
+# Vite / TypeScript build artifacts
+.vite/
+*.tsbuildinfo
+coverage/
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
 .idea
+.fleet/
 .DS_Store
+Thumbs.db
+Desktop.ini
 *.suo
 *.ntvs*
 *.njsproj
 *.sln
 *.sw?
+
+# Environment variables
+.env
+.env.*
+!.env.example
