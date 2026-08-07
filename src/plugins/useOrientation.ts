@@ -62,11 +62,12 @@ export const unlockOrientation = async (): Promise<boolean> => {
 const TABLET_BREAKPOINT = 720;
 
 /**
- * 判断当前设备是否为平板（屏幕宽度 ≥ 720px）
- * 用于区分手机与平板，平板不锁定竖屏，允许自由旋转
+ * 判断当前设备是否为平板（短边 ≥ 720px）
+ * 使用 min(宽,高) 避免手机横屏时（宽 ≥720）被误判为平板，
+ * 否则退出全屏后手机无法重新锁定竖屏，界面会停留在平板/PC 布局。
  */
 export const isTablet = (): boolean => {
-  return window.innerWidth >= TABLET_BREAKPOINT;
+  return Math.min(window.innerWidth, window.innerHeight) >= TABLET_BREAKPOINT;
 };
 
 /**

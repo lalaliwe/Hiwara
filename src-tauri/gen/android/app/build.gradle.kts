@@ -33,10 +33,10 @@ android {
                 keystoreProperties.load(FileInputStream(keystorePropertiesFile))
             }
 
-            keyAlias = keystoreProperties["keyAlias"] as String
-            keyPassword = keystoreProperties["password"] as String
-            storeFile = rootProject.file(keystoreProperties["storeFile"] as String)
-            storePassword = keystoreProperties["password"] as String
+            keyAlias = keystoreProperties["key.alias"] as String
+            keyPassword = keystoreProperties["key.alias.password"] as String
+            storeFile = rootProject.file(keystoreProperties["key.store"] as String)
+            storePassword = keystoreProperties["key.store.password"] as String
         }
     }
     buildTypes {

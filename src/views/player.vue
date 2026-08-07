@@ -145,7 +145,15 @@ const goHome = () => {
 provide('goHome', goHome);
 
 // 自动状态栏文字颜色自适应（根据 --color-primary-90 亮度判断）
-useAutoStatusBar({ cssVar: '--color-primary-90' })
+const { forceUpdate: forceStatusBarStyle } = useAutoStatusBar({ cssVar: '--color-primary-90' })
+
+// 全屏进入/退出后：重新应用状态栏样式 + 同步桌面/移动端布局状态
+// 1) 避免退出沉浸模式时系统把状态栏图标颜色重置回默认（浅色模式下为黑色）；
+// 2) 避免退出全屏后 isDesktop 残留 true，界面停留在平板/PC 布局。
+const onFullscreenChange = () => {
+  forceStatusBarStyle();
+  updateDesktopState();
+};
 
 // 获取视频信息
 const fetchVideoInfo = async () => {
@@ -480,19 +488,36 @@ const followTrigger = (val: boolean) => {
 
 // 桌面端检测（>=720px），用于条件渲染
 const isDesktop = ref(window.innerWidth >= 720);
-const mql = window.matchMedia('(min-width: 720px)');
-const onMqlChange = (e: MediaQueryListEvent) => {
-  isDesktop.value = e.matches;
+
+// 统一同步桌面/移动端布局状态。
+// 同时依赖 mql change、resize、orientationchange、fullscreenchange 多个信号，
+// 避免 Android WebView 在全屏/横竖屏切换时 matchMedia change 事件漏发，
+// 导致退出全屏后 isDesktop 残留 true，界面停留在平板/PC 布局。
+const updateDesktopState = () => {
+  const desktop = window.innerWidth >= 720;
+  isDesktop.value = desktop;
   // 从桌面切回移动端时，重置 tab 防止评论 slide 仍处于选中状态
-  if (!e.matches && tab.value === 'comment') {
+  if (!desktop && tab.value === 'comment') {
     tab.value = 'info';
   }
 };
+
+const mql = window.matchMedia('(min-width: 720px)');
+const onMqlChange = () => {
+  updateDesktopState();
+};
+
 onMounted(() => {
   mql.addEventListener('change', onMqlChange);
+  document.addEventListener('fullscreenchange', onFullscreenChange);
+  window.addEventListener('resize', updateDesktopState);
+  window.addEventListener('orientationchange', updateDesktopState);
 });
 onUnmounted(() => {
   mql.removeEventListener('change', onMqlChange);
+  document.removeEventListener('fullscreenchange', onFullscreenChange);
+  window.removeEventListener('resize', updateDesktopState);
+  window.removeEventListener('orientationchange', updateDesktopState);
 });
 </script>
 <template>
@@ -503,6 +528,7 @@ onUnmounted(() => {
         <videoPlayer class="video-player" :poster="poster" :src="currentVideoSrc" :title="title" :server="currentServer"
           :video-files="videoFile" :current-definition-index="videoSelect" :is-refreshing-server="isRefreshingServer"
           :is-like="isLike" :vid="id as string" :like-num="likeNum"
+          :username="username" :author-name="authorname" :play-num="playNum"
           @refresh-server="refreshVideoFile" @definition-change="selectDefinition" @like="likeTrigger" />
       </div>
 

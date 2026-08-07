@@ -189,4 +189,17 @@ class DevicePlugin(activity: Activity) : Plugin(activity) {
     // ===== Open File =====
     @Command
     fun openFile(invoke: Invoke) = openFileHandler.openFile(invoke)
+
+    // ===== Move Task To Back =====
+    // 将应用任务退到后台（等价于按 Home 键），供“双击返回键退出”使用。
+    // 前端：plugin:device|move_task_to_back → run_mobile_plugin("moveTaskToBack")
+    @Command
+    fun moveTaskToBack(invoke: Invoke) {
+        // 注意：不能直接访问构造参数 activity（基类字段为 private），
+        // 需使用类属性 compatActivity（AppCompatActivity 是 Activity 的子类）。
+        compatActivity.moveTaskToBack(true)
+        val ret = JSObject()
+        ret.put("success", true)
+        invoke.resolve(ret)
+    }
 }

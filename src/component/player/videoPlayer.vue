@@ -31,6 +31,9 @@ const props = defineProps<{
   isLike?: boolean // 是否已点赞
   vid?: string // 视频ID
   likeNum?: number // 点赞数
+  username?: string // 作者用户名（用于下载文件名）
+  authorName?: string // 作者昵称（用于下载记录）
+  playNum?: number // 播放数
 }>()
 
 // 定义 emits
@@ -224,8 +227,12 @@ const onProgressChangeEnd = () => {
 const enterFullscreen = async () => {
   if (!videoPlayerRef.value) return;
   try {
-    // 进入沉浸式
-    enterImmersive();
+    // 进入沉浸式（等待完成，避免与 requestFullscreen 竞态导致系统栏重新弹出）
+    try {
+      await enterImmersive();
+    } catch (e) {
+      console.error('进入沉浸模式失败:', e);
+    }
     // 锁定屏幕为横向
     lockLandscape();
     // 请求全屏
@@ -467,11 +474,15 @@ const handleGestureEvent = async (event: { type: string; value?: number; isEnd?:
     case 'rewind':
       // 快退10秒 - 双击操作，延迟隐藏
       videoRef.value.currentTime = Math.max(0, videoRef.value.currentTime - 10)
+      // 立即刷新进度显示：加载/暂停/缓冲中 timeupdate 不会触发，进度条会滞后于实际播放进度
+      updateTime()
       showGestureMessageDelayed(t('player.rewind10s'))
       break
     case 'forward':
       // 快进10秒 - 双击操作，延迟隐藏
       videoRef.value.currentTime = Math.min(videoRef.value.duration, videoRef.value.currentTime + 10)
+      // 立即刷新进度显示
+      updateTime()
       showGestureMessageDelayed(t('player.forward10s'))
       break
   }
@@ -502,13 +513,14 @@ defineExpose({ replay });
 
 <template>
   <div class="video-player" ref="videoPlayerRef">
+    <!-- 不在此处绑定点击暂停：控制层(control/controlFullscreen)已全屏覆盖并统一处理单击/双击，
+         若视频本身再绑定 @click="togglePlay"，首次点击（尤其控制栏隐藏时）会被误判为暂停 -->
     <video ref="videoRef" :src="videoSrc" :autoplay="setup.autoPlay" playsinline
-      :poster="setup.autoPlay ? '../../static/img/transparent.png' : (localPosterUrl || '../../static/img/transparent.png')"
-      @click="togglePlay"></video>
+      :poster="setup.autoPlay ? '../../static/img/transparent.png' : (localPosterUrl || '../../static/img/transparent.png')"></video>
     <!-- 视频暗色遮罩（播放完成时显示） -->
     <div v-if="videoEnded" class="black-overlay"></div>
-    <!-- 缓冲加载指示器 -->
-    <div v-if="isLoading && !gestureMessage" class="msg-view">
+    <!-- 缓冲加载指示器（底层，与手势提示解耦，可同时显示） -->
+    <div v-if="isLoading" class="msg-view msg-loading">
       <v-progress-circular color="#00796B" bg-color="#ffffff66" :size="70" :width="7"
         indeterminate></v-progress-circular>
     </div>
@@ -520,8 +532,8 @@ defineExpose({ replay });
         <span>重新加载</span>
       </div>
     </div>
-    <!-- 手势操作消息显示 -->
-    <div v-if="gestureMessage" class="msg-view">
+    <!-- 手势操作消息显示（顶层，位于加载转圈之上） -->
+    <div v-if="gestureMessage" class="msg-view msg-gesture">
       <div class="msg">{{ gestureMessage }}</div>
     </div>
     <!-- 使用 fullscreenState 控制显示 -->
@@ -533,6 +545,7 @@ defineExpose({ replay });
       :is-refreshing-server="props.isRefreshingServer" @refresh-server="handleRefreshServer"
       @definition-change="handleDefinitionChange" @replay="replay"
       :video-ended="videoEnded" :is-like="props.isLike" :vid="props.vid" :like-num="props.likeNum"
+      :username="props.username" :author-name="props.authorName" :poster="props.poster" :play-num="props.playNum"
       @like="(val: boolean) => emit('like', val)" />
     <control v-else :is-playing="isPlaying" :progress="displayProgress" :buffered="buffered" :current-time="currentTime"
       :total-time="totalTime" :metadataLoaded="metadataLoaded" @toggle-play="togglePlay" @progress-change="onProgressChange"
@@ -575,6 +588,16 @@ defineExpose({ replay });
     align-items: center;
     justify-content: center;
     pointer-events: none; // 确保点击事件可以穿透到视频
+
+    // 加载转圈在底层
+    &.msg-loading {
+      z-index: 18;
+    }
+
+    // 手势操作提示在顶层
+    &.msg-gesture {
+      z-index: 21;
+    }
 
     .msg {
       color: #fff;

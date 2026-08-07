@@ -190,11 +190,21 @@ export function useAutoStatusBar(options: UseAutoStatusBarOptions): {
   }
 
   /**
-   * 强制更新（无视节流）
+   * 强制更新（无视节流），并始终重新调用原生接口
+   *
+   * 注意：不依赖 updateWithThrottle 的 `style !== currentStyle.value` 守卫，
+   * 以确保退出沉浸/全屏等场景下即使样式未变化，也能把正确的状态栏外观
+   * 重新下发给原生端（否则系统在 hide/show 系统栏后可能把图标颜色重置回默认）。
    */
   function forceUpdate() {
     lastCallTime = 0
-    updateWithThrottle()
+    const color = getCurrentColor()
+    if (!color) return
+    const style = getBarStyleFromColor(color)
+    if (style) {
+      currentStyle.value = style
+      setStatusBarTextStyle(style)
+    }
   }
 
   // 如果传入了响应式 color ref，建立 watch

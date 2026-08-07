@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted, watch, nextTick, onActivated } from 'vue'
+import { ref, provide, onMounted, onUnmounted, watch, nextTick, onActivated } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { Swiper, SwiperSlide } from 'swiper/vue';
@@ -25,6 +25,19 @@ import errorHuawu from '../component/errorHuawu.vue';
 
 const aiStore = ai();
 const { t } = useI18n();
+
+// 新增：用于通知子组件刷新的令牌（AI 状态切换后刷新数据）
+const refreshToken = ref(0);
+
+// 切换 AI 状态（参考 searchBar.vue）
+function toggleAI(val: boolean) {
+  // 设置 ai store 的值
+  aiStore.value = val;
+  // 递增刷新令牌，触发所有 zone 子组件重新获取数据
+  refreshToken.value++;
+}
+
+provide('refreshToken', refreshToken)
 
 defineOptions({
   name: 'Zone'
@@ -413,12 +426,19 @@ async function getData() {
 <template>
   <div id="zoneView">
     <div class="top" :class="{ 'top-green': isTopGreen }" @click="scrollToTop">
-      <span class="btn" @click.stop="goBack">
-        <font-awesome-icon icon="fa-solid fa-angle-left" />
-      </span>
-      <span class="btn" @click.stop="goHome">
-        <font-awesome-icon icon="fa-regular fa-house" />
-      </span>
+      <div class="top-left">
+        <span class="btn" @click.stop="goBack">
+          <font-awesome-icon icon="fa-solid fa-angle-left" />
+        </span>
+        <span class="btn" @click.stop="goHome">
+          <font-awesome-icon icon="fa-regular fa-house" />
+        </span>
+      </div>
+      <div class="top-right" @click.stop>
+        <v-switch :model-value="aiStore.value" @update:model-value="toggleAI" color="#80deea" hide-details
+          density="compact" inset />
+        <span class="ai-text">AI</span>
+      </div>
     </div>
 
     <div v-if="state === 'loading'" class="state-container">
@@ -471,6 +491,15 @@ async function getData() {
 </template>
 
 <style lang="scss" scoped>
+/* 使用与搜索栏一致的多重字体加载方案，确保兼容性 */
+@font-face {
+  font-family: 'riwenlogo';
+  /* 优先使用相对路径（Android assets目录） */
+  src: url('/fonts/riwenlogo.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
 #zoneView {
   height: 100%;
   display: flex;
@@ -504,7 +533,50 @@ async function getData() {
   color: #fff;
   filter: drop-shadow(1px 1px 1px rgba(0, 0, 0, 0.5));
   width: 100%;
+  display: flex;
+  justify-content: space-between;
   transition: background-color 0.3s ease-in-out;
+
+  .top-left {
+    display: flex;
+    align-items: center;
+  }
+
+  .top-right {
+    display: inline-flex;
+    align-items: center;
+    margin: 4px 8px 4px 4px;
+
+    .ai-text {
+      display: inline-flex;
+      align-items: center;
+      margin: 0 6px;
+      font-family: 'riwenlogo', sans-serif;
+      font-size: 1.2rem;
+      color: #fff;
+      transition: color 0.3s ease-in-out;
+
+      &.ai-on {
+        color: #80deea;
+      }
+    }
+
+    :deep(.v-switch) {
+      /* 缩小开关尺寸 */
+      --v-switch-track-width: 34px;
+      --v-switch-track-height: 18px;
+      --v-switch-track-radius: 9px;
+
+      .v-selection-control {
+        min-height: 24px;
+      }
+
+      /* 未选中时 track 增加亮色边框，与深色背景区分 */
+      .v-switch__track {
+        border: 1px solid rgba(255, 255, 255, 0.7);
+      }
+    }
+  }
 
   .btn {
     display: inline-flex;

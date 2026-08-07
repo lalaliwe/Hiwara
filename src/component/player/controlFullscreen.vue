@@ -5,9 +5,11 @@ import Hammer from 'hammerjs'
 import { exitImmersive } from '../../plugins/immersive'
 import { lockPortraitOnMobile } from '../../plugins/useOrientation'
 import { getNetworkInfo, getBatteryInfo } from '../../plugins/deviceInfo'
-import { likeVideo, unlikeVideo } from '../../core/api'
-import { ai } from '../../core/store'
+import { likeVideo, unlikeVideo, buildAria2Filename } from '../../core/api'
+import { ai, setupStore } from '../../core/store'
 import { showShortToast } from '../../core/toast'
+import { upsertDownloadCache, updateDownloadProgress } from '../../core/database'
+import { invoke } from '@tauri-apps/api/core'
 import customRange from './customRange.vue'
 
 const { t } = useI18n()
@@ -31,7 +33,93 @@ const props = defineProps<{
   isLike?: boolean // 是否已点赞
   vid?: string // 视频ID
   likeNum?: number // 点赞数
+  username?: string // 作者用户名（用于下载文件名）
+  authorName?: string // 作者昵称（用于下载记录）
+  poster?: string // 视频封面
+  playNum?: number // 播放数
 }>()
+
+// 当前选中清晰度对应的下载链接
+const currentDownloadUrl = computed(() => {
+  if (!props.videoFiles || props.currentDefinitionIndex === undefined) return ''
+  return props.videoFiles[props.currentDefinitionIndex]?.download || ''
+})
+
+// 下载缓存（只负责发起下载，管理在离线缓存页）——参考 info.vue
+const isDownloading = ref(false)
+
+async function downloadVideo() {
+  if (isDownloading.value) return
+  if (!props.vid) {
+    showShortToast(t('common.fetchDownloadFailed'))
+    return
+  }
+  const download = currentDownloadUrl.value
+  if (!download) {
+    showShortToast(t('common.fetchDownloadFailed'))
+    return
+  }
+  const vid = props.vid
+
+  // 检查是否已在下载队列中或等待队列中
+  try {
+    const [inDownloading, inQueue] = await Promise.all([
+      invoke<boolean>('is_downloading', { downloadId: vid }),
+      invoke<boolean>('is_in_queue', { downloadId: vid }),
+    ])
+    if (inDownloading || inQueue) {
+      showShortToast(t('player.alreadyCaching'))
+      return
+    }
+  } catch { /* 忽略检查错误 */ }
+
+  isDownloading.value = true
+
+  const filename = buildAria2Filename(props.title || '', vid, props.username || '', '.mp4')
+  const setup = setupStore()
+  const saveDir = setup.videoSavePath
+  const filePath = saveDir ? `${saveDir}/${filename}` : filename
+
+  try {
+    // 写入数据库（离线缓存页根据此记录展示状态）
+    await upsertDownloadCache(
+      vid,
+      props.title || '',
+      props.authorName || '',
+      props.poster || '',
+      0,
+      props.playNum || 0,
+      props.likeNum || 0,
+      false,
+      aiStore.value,
+      download
+    )
+
+    showShortToast(t('player.cacheQueued'))
+
+    // 发起 Rust 下载，传入 download_id 实现并发隔离，不等待完成
+    invoke('download_video', {
+      url: download,
+      filePath: filePath,
+      downloadId: vid,
+      maxConcurrent: setup.maxConcurrentDownloads,
+    }).catch((e) => {
+      console.error('发起下载失败:', e)
+      updateDownloadProgress(vid, 0, 'failed')
+    })
+  } catch (error) {
+    const errMsg = String(error)
+    if (errMsg.includes('已取消')) {
+      showShortToast(t('player.cacheCancelled'))
+    } else {
+      console.error('缓存失败:', error)
+      await updateDownloadProgress(vid, 0, 'failed')
+      showShortToast(t('player.cacheFailed'))
+    }
+  } finally {
+    isDownloading.value = false
+  }
+}
 
 // Emits - 向父组件事件
 const emit = defineEmits<{
@@ -81,7 +169,12 @@ let clickCount = 0
 let doubleTapResetTimer: number | null = null
 // 上次点击时间戳，用于过滤硬件噪声导致的假双击（如 10ms 间隔的触点抖动）
 let lastClickTime = 0
-const pointerType = ref<'mouse' | 'touch' | 'pen'>('mouse')
+// 根据设备是否支持触摸初始化指针类型，避免手机等触摸设备被误判为 mouse，
+// 否则单次点击会被当作鼠标单击而 emit('togglePlay')（暂停），
+// 而不是切换控制栏显示。
+const pointerType = ref<'mouse' | 'touch' | 'pen'>(
+  typeof window !== 'undefined' && (('ontouchstart' in window) || navigator.maxTouchPoints > 0) ? 'touch' : 'mouse'
+)
 
 // Hammer.js 实例
 let hammerMiddle: InstanceType<typeof Hammer> | null = null
@@ -345,8 +438,9 @@ const setupHammerGestures = (mc: InstanceType<typeof Hammer>) => {
     const elementWidth = (ev.target as HTMLElement).offsetWidth
     const tapX = ev.center.x
 
-    // 定义边缘区域为左右各 20% 的区域
-    const edgeThreshold = elementWidth * 0.2
+    // 定义边缘区域为屏幕两端各 3cm（CSS 单位：1cm = 96/2.54 px ≈ 37.8px，3cm ≈ 113.4px）。
+    // 使用固定物理距离而非百分比，避免全面屏/超宽屏手机上左右判定区域过大。
+    const edgeThreshold = (3 * 96) / 2.54
     const isLeftEdge = tapX < edgeThreshold
     const isRightEdge = tapX > (elementWidth - edgeThreshold)
 
@@ -701,7 +795,7 @@ onUnmounted(() => {
         <span class="btn">
           <font-awesome-icon icon="fa-regular fa-camera" />
         </span>
-        <span class="btn">
+        <span class="btn" @click="downloadVideo">
           <font-awesome-icon icon="fa-solid fa-download" />
         </span>
         <span class="btn">
@@ -780,7 +874,8 @@ onUnmounted(() => {
       </div>
     </div>
   </div>
-  <div class="touch" v-show="!showControl" @click="handleMiddleClick" @mousemove="handleMouseMove"></div>
+  <div class="touch" v-show="!showControl" @pointerdown="handlePointerDown" @click="handleMiddleClick"
+    @mousemove="handleMouseMove"></div>
 </template>
 
 <style lang="scss" scoped>

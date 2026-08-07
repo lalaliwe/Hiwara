@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import cardButton from '../../component/cardButton.vue';
-import { ref, watch } from 'vue';
+import { ref, watch, inject } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { ai } from '../../core/store';
 import { getImageList as api_getImageList } from '../../core/api';
@@ -42,6 +42,12 @@ const imageState = ref<ListState>('loading');
 watch(() => props.uid, () => {
   refreshData();
 }, { immediate: true });
+
+// 注入刷新令牌，AI 状态切换后重新获取数据
+const refreshToken = inject('refreshToken') as { value: number };
+watch(refreshToken, () => {
+  refreshData();
+});
 
 // 刷新数据
 function refreshData() {

@@ -35,6 +35,17 @@ class NavbarStyleHandler(private val activity: Activity) {
         }
     }
 
+    // 惰性获取系统栏 InsetsController：即使 load() 未被调用也能正常设置状态栏样式，
+    // 否则 insetsController 为 null 时所有 isAppearanceLightStatusBars 赋值都会静默失效。
+    private fun getInsetsController(): WindowInsetsControllerCompat? {
+        insetsController?.let { return it }
+        return activity.window?.let { window ->
+            WindowCompat.getInsetsController(window, window.decorView).also {
+                insetsController = it
+            }
+        }
+    }
+
     fun setStatusBarTextStyle(invoke: Invoke) {
         val args = invoke.parseArgs(SetStatusBarTextStyleArgs::class.java)
         val style = args.style ?: "dark"
@@ -43,7 +54,7 @@ class NavbarStyleHandler(private val activity: Activity) {
             try {
                 activity.window?.let { window ->
                     val isLight = style == "dark"
-                    insetsController?.isAppearanceLightStatusBars = isLight
+                    getInsetsController()?.isAppearanceLightStatusBars = isLight
 
                     val ret = JSObject()
                     ret.put("success", true)
@@ -65,7 +76,7 @@ class NavbarStyleHandler(private val activity: Activity) {
                     val isLight = style == "dark"
                     
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                        insetsController?.isAppearanceLightNavigationBars = isLight
+                        getInsetsController()?.isAppearanceLightNavigationBars = isLight
                     }
 
                     val ret = JSObject()
@@ -92,7 +103,7 @@ class NavbarStyleHandler(private val activity: Activity) {
                         // 根据背景色亮度自动调整文字颜色
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                             val isDark = isDarkColor(color)
-                            insetsController?.isAppearanceLightStatusBars = !isDark
+                            getInsetsController()?.isAppearanceLightStatusBars = !isDark
                         }
                     }
 
@@ -120,7 +131,7 @@ class NavbarStyleHandler(private val activity: Activity) {
                         // 根据背景色亮度自动调整按钮颜色
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                             val isDark = isDarkColor(color)
-                            insetsController?.isAppearanceLightNavigationBars = !isDark
+                            getInsetsController()?.isAppearanceLightNavigationBars = !isDark
                         }
                     }
 
@@ -136,7 +147,17 @@ class NavbarStyleHandler(private val activity: Activity) {
     
     private fun parseColor(hexColor: String): Int {
         return try {
-            val hex = hexColor.trimStart('#')
+            val trimmed = hexColor.trim()
+            // 支持 rgb(r,g,b) / rgba(r,g,b,a) 格式（忽略 alpha）
+            val rgbaMatch = Regex("rgba?\\(\\s*(\\d+)\\s*,\\s*(\\d+)\\s*,\\s*(\\d+)\\s*(?:,\\s*[\\d.]+\\s*)?\\)")
+                .find(trimmed)
+            if (rgbaMatch != null) {
+                val r = rgbaMatch.groupValues[1].toInt().coerceIn(0, 255)
+                val g = rgbaMatch.groupValues[2].toInt().coerceIn(0, 255)
+                val b = rgbaMatch.groupValues[3].toInt().coerceIn(0, 255)
+                return Color.rgb(r, g, b)
+            }
+            val hex = trimmed.trimStart('#')
             when {
                 hex.length == 6 -> Color.parseColor("#FF$hex")
                 hex.length == 8 -> Color.parseColor("#$hex")

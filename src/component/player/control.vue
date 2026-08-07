@@ -47,7 +47,12 @@ let clickCount = 0
 let doubleTapResetTimer: number | null = null
 // 上次点击时间戳，用于过滤硬件噪声导致的假双击（如 10ms 间隔的触点抖动）
 let lastClickTime = 0
-const pointerType = ref<'mouse' | 'touch' | 'pen'>('mouse')
+// 根据设备是否支持触摸初始化指针类型，避免手机等触摸设备被误判为 mouse，
+// 否则单次点击会被当作鼠标单击而 emit('togglePlay')（暂停），
+// 而不是切换控制栏显示。
+const pointerType = ref<'mouse' | 'touch' | 'pen'>(
+  typeof window !== 'undefined' && (('ontouchstart' in window) || navigator.maxTouchPoints > 0) ? 'touch' : 'mouse'
+)
 
 // Hammer.js 实例
 let hammerMiddle: InstanceType<typeof Hammer> | null = null
@@ -270,34 +275,15 @@ const setupHammerGestures = (mc: InstanceType<typeof Hammer>) => {
     panType = null
   })
 
-  // 处理双击
+  // 处理双击（非全屏模式）
+  // 已按需求取消左右边缘双击快进/快退10s，双击统一为播放/暂停
   mc.on('doubletap', (ev: HammerInput) => {
     // 只在触摸屏上响应，且元数据加载完成才能操作
     if (pointerType.value !== 'touch' || !props.metadataLoaded) return
 
-    const elementWidth = (ev.target as HTMLElement).offsetWidth
-    const tapX = ev.center.x
-
-    // 定义边缘区域为左右各 20% 的区域
-    const edgeThreshold = elementWidth * 0.2
-    const isLeftEdge = tapX < edgeThreshold
-    const isRightEdge = tapX > (elementWidth - edgeThreshold)
-
-    // 根据点击位置触发不同操作
-    if (isLeftEdge) {
-      // 左边边缘双击 - 快退10s
-      // console.log('[control.vue] 左边边缘双击 - 快退')
-      emit('gesture', { type: 'rewind' })
-    } else if (isRightEdge) {
-      // 右边边缘双击 - 快进10s
-      // console.log('[control.vue] 右边边缘双击 - 快进')
-      emit('gesture', { type: 'forward' })
-    } else {
-      // 中间区域双击 - 播放/暂停
-      // console.log('[control.vue] 中间区域双击 - 播放/暂停')
-      emit('togglePlay')
-      resetHideTimer()
-    }
+    // 双击 - 播放/暂停
+    emit('togglePlay')
+    resetHideTimer()
 
     // 阻止后续 DOM click 触发新的单击定时器
     // Hammer 处理原始 touch 事件比 DOM click 快，
@@ -469,7 +455,8 @@ const handleEnterFullscreen = () => {
       </div>
     </div>
   </div>
-  <div class="touch" v-show="!showControl" @click="handleMiddleClick" @mousemove="handleMouseMove"></div>
+  <div class="touch" v-show="!showControl" @pointerdown="handlePointerDown" @click="handleMiddleClick"
+    @mousemove="handleMouseMove"></div>
   <!-- 当控制栏隐藏时显示底部进度指示条 -->
   <div class="progress-indicator" v-show="!showControl && metadataLoaded">
     <div class="progress-indicator-bar" :style="{ width: localProgress + '%' }"></div>
