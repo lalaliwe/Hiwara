@@ -194,7 +194,7 @@ if ($ForceAll) {
     $scriptArgs += "-F"
 }
 
-$scriptArgsStr = [string]::Join(" ", ($scriptArgs | ForEach-Object {
+$scriptArgsStr = [string]::Join(" ", @($scriptArgs | ForEach-Object {
     if ($_ -match "[\s""]") { "`"$_`"" } else { $_ }
 }))
 
