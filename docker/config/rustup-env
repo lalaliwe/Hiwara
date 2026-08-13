@@ -2,8 +2,8 @@
 # 如需更换镜像源，仅需修改此文件，无需修改 Dockerfile
 
 # 中科大
-#RUSTUP_DIST_SERVER=https://mirrors.ustc.edu.cn/rust-static
-#RUSTUP_UPDATE_ROOT=https://mirrors.ustc.edu.cn/rust-static/rustup
+# RUSTUP_DIST_SERVER=https://mirrors.ustc.edu.cn/rust-static
+# RUSTUP_UPDATE_ROOT=https://mirrors.ustc.edu.cn/rust-static/rustup
 
 # 清华（备选，注意路径为 /rustup/rustup/ 而非 /rustup/）
 RUSTUP_DIST_SERVER=https://mirrors.tuna.tsinghua.edu.cn/rustup

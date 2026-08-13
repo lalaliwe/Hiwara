@@ -12,11 +12,11 @@ registry = "sparse+https://mirrors.tuna.tsinghua.edu.cn/crates.io-index/"
 index = "sparse+https://mirrors.tuna.tsinghua.edu.cn/crates.io-index/"
 
 # 中科大（备选）
-#[source.crates-io]
-#replace-with = 'ustc'
-#
-#[source.ustc]
-#registry = "sparse+https://mirrors.ustc.edu.cn/crates.io-index/"
-#
-#[registries.ustc]
-#index = "sparse+https://mirrors.ustc.edu.cn/crates.io-index/"
+# [source.crates-io]
+# replace-with = 'ustc'
+
+# [source.ustc]
+# registry = "sparse+https://mirrors.ustc.edu.cn/crates.io-index/"
+
+# [registries.ustc]
+# index = "sparse+https://mirrors.ustc.edu.cn/crates.io-index/"

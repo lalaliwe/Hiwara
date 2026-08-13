@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n';
 import { useRouter } from 'vue-router';
+import { isTrustedWebviewUrl, openExternalUrl } from '../../utils/external';
 import { ai } from '../../core/store';
 
 const aiStore = ai();
@@ -112,6 +113,15 @@ function handleLinkClick(e: MouseEvent) {
 
   e.preventDefault();
   e.stopPropagation();
+
+  // 安全校验（V-01 修复）：仅受信任的 Hiwara/Iwara HTTPS origin 才在应用内
+  // WebView 打开（该 WebView 会注入登录 token）。其它外部链接一律用系统浏览器
+  // 打开，避免 token 泄露到不受信任的 WebView origin。
+  if (!isTrustedWebviewUrl(url)) {
+    openExternalUrl(url);
+    return;
+  }
+
   router.push({ path: '/webview', query: { url, title: url } });
 }
 

@@ -87,15 +87,9 @@ async function checkForUpdate() {
   }
 }
 
-// 打开开源许可页面
+// 打开开源许可页面（GitHub 为外部链接，直接用系统浏览器打开，不进入应用内 WebView）
 const openLicense = () => {
-  router.push({
-    path: '/webview',
-    query: {
-      url: 'https://github.com/shanmaomaoymmm/hiwara/blob/master/LICENSE',
-      title: t('setup.aboutPage.openSourceLicense')
-    }
-  })
+  openExternalUrl('https://github.com/shanmaomaoymmm/hiwara/blob/master/LICENSE')
 }
 
 // 确认下载更新

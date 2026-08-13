@@ -5,8 +5,8 @@ import { useI18n } from 'vue-i18n'
 import { useAutoStatusBar } from '../composables/useAutoStatusBar'
 import { Webview } from '@tauri-apps/api/webview'
 import { getCurrentWebviewWindow } from '@tauri-apps/api/webviewWindow'
-import { openUrl } from '@tauri-apps/plugin-opener'
 import { LogicalPosition, LogicalSize } from '@tauri-apps/api/dpi'
+import { isTrustedWebviewUrl, openExternalUrl } from '../utils/external'
 import { invoke } from '@tauri-apps/api/core'
 import { getUserToken } from '../core/database'
 import LoadingHuawu from '../component/loadingHuawu.vue'
@@ -121,10 +121,12 @@ const buildTokenScript = (token: string | null): string | null => {
     console.log('[WebView] Token 为空，跳过 token 注入')
     return null
   }
+  // 使用 JSON.stringify 安全序列化 token，避免字符串插值转义/脚本注入
+  const serializedToken = JSON.stringify(token)
   return `
     (function() {
       try {
-        localStorage.setItem('token', '${token}');
+        localStorage.setItem('token', ${serializedToken});
         console.log('[WebView] Auth token injected to localStorage');
       } catch (e) {
         console.error('[WebView] Failed to set localStorage:', e);
@@ -136,6 +138,13 @@ const buildTokenScript = (token: string | null): string | null => {
 /** 注入 CSS 和 token 到 WebView（通用逻辑，平台无关） */
 const injectContentToWebview = async () => {
   try {
+    // 安全校验（V-01 修复）：仅对受信任的 Hiwara/Iwara HTTPS origin 注入内容（含 token）。
+    // 即使有其它路径误入此 WebView，也绝不向不受信任的 origin 注入 token。
+    if (!isTrustedWebviewUrl(url.value)) {
+      console.warn('[WebView] 拒绝向不受信任的 origin 注入内容:', url.value)
+      return
+    }
+
     const token = await getUserToken()
     console.log('获取到 token:', token ? '存在' : '不存在')
 
@@ -285,7 +294,7 @@ const initDesktopWebview = async () => {
     console.error('创建桌面端 webview 失败:', error)
     loadState.value = 'failed'
     try {
-      await openUrl(url.value)
+      await openExternalUrl(url.value)
     } catch (openError) {
       console.error('在浏览器中打开失败:', openError)
     }
@@ -344,7 +353,7 @@ const initMobileWebview = async () => {
     console.error('MWebview 插件不可用，回退到系统浏览器')
     loadState.value = 'failed'
     try {
-      await openUrl(url.value)
+      await openExternalUrl(url.value)
     } catch (openError) {
       console.error('在浏览器中打开失败:', openError)
     }
@@ -405,7 +414,7 @@ const initMobileWebview = async () => {
     console.error('创建移动端 webview 失败:', error)
     loadState.value = 'failed'
     try {
-      await openUrl(url.value)
+      await openExternalUrl(url.value)
     } catch (openError) {
       console.error('在浏览器中打开失败:', openError)
     }
@@ -436,6 +445,16 @@ const updateWebviewBounds = async () => {
 /** 初始化 WebView（平台自适应） */
 const initWebview = async () => {
   await nextTick()
+
+  // 安全校验（V-01 修复）：本组件只负责在应用内 WebView 打开受信任的
+  // Hiwara/Iwara HTTPS origin 并注入 token。外部链接应在进入本组件之前由
+  // 调用方直接用系统浏览器打开；此处对任何误入的不受信任 URL 一律拒绝创建
+  // WebView，绝不注入 token。
+  if (!isTrustedWebviewUrl(url.value)) {
+    console.warn('[WebView] 拒绝在应用内 WebView 打开不受信任的 URL:', url.value)
+    loadState.value = 'failed'
+    return
+  }
 
   if (!webviewContainer.value) {
     console.error('webviewContainer 未找到')
