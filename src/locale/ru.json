@@ -20,7 +20,13 @@
     "fetchRecommendFailed": "Не удалось загрузить рекомендации",
     "fetchVideoListFailed": "Не удалось загрузить список видео",
     "fetchImageListFailed": "Не удалось загрузить список изображений",
-    "fetchUserInfoFailed": "Не удалось получить информацию о пользователе"
+    "fetchUserInfoFailed": "Не удалось получить информацию о пользователе",
+    "loading": "Загрузка...",
+    "retry": "Нажмите для повторной попытки",
+    "loadFailedSuffix": "Не удалось загрузить, ",
+    "reachedBottomCat": "Достигнут конец~",
+    "today": "Сегодня",
+    "error": "Ошибка"
   },
   "setup": {
     "title": "Настройки",
@@ -215,7 +221,8 @@
       "faq": "Часто задаваемые вопросы",
       "links": "Ссылки",
       "aboutText": "Это приложение следует лицензии с открытым исходным кодом MPL-2.0. Пожалуйста, не используйте его в коммерческих целях.",
-      "noRecords": "Нет записей {type}"
+      "noRecords": "Нет записей {type}",
+      "notImplemented": "Функция недоступна"
     },
     "forum": {
       "listLoadFailed": "Не удалось загрузить список",
@@ -330,7 +337,11 @@
     "volume": "Громкость: {n}%",
     "rewind10s": "Назад 10с",
     "forward10s": "Вперед 10с",
-    "switchComplete": "Переключение сервера завершено"
+    "switchComplete": "Переключение сервера завершено",
+    "recommendTab": "Рекомендации",
+    "replay": "Повторить воспроизведение",
+    "reload": "Перезагрузить",
+    "unknownTitle": "Неизвестное название"
   },
   "imageView": {
     "loading": "Загрузка данных",
@@ -350,19 +361,32 @@
     "imageId": "ID изображения {id}",
     "resolution": "Разрешение {res}",
     "expandAll": "Развернуть все",
-    "collapse": "Свернуть"
+    "collapse": "Свернуть",
+    "noImage": "Нет изображения"
   },
   "favorites": {
     "title": "Мои избранные",
     "videoTab": "Видео",
-    "imageTab": "Изображения"
+    "imageTab": "Изображения",
+    "videoLoadFailed": "Не удалось загрузить избранные видео",
+    "imageLoadFailed": "Не удалось загрузить избранные изображения",
+    "videoLoadFailedTip": "Не удалось загрузить избранные видео~",
+    "imageLoadFailedTip": "Не удалось загрузить избранные изображения~",
+    "videoEmpty": "Нет избранных видео",
+    "imageEmpty": "Нет избранных изображений"
   },
   "friends": {
     "title": "{type}",
     "followTab": "Подписки",
     "fansTab": "Подписчики",
     "friendTab": "Друзья",
-    "loading": "Загрузка данных"
+    "loading": "Загрузка данных",
+    "friendListFailed": "Не удалось загрузить список друзей~",
+    "friendEmpty": "Нет содержимого друзей",
+    "followListFailed": "Не удалось загрузить список подписок~",
+    "followEmpty": "Нет содержимого подписок",
+    "fansListFailed": "Не удалось загрузить список подписчиков~",
+    "fansEmpty": "Нет содержимого подписчиков"
   },
   "offlineCache": {
     "title": "Офлайн-кеш",
@@ -400,12 +424,27 @@
     "loadingImageFailed": "Не удалось загрузить результаты поиска изображений",
     "loadingUserFailed": "Не удалось загрузить результаты поиска пользователей",
     "historyLabel": "История поиска",
-    "recommendLabel": "Рекомендации"
+    "recommendLabel": "Рекомендации",
+    "videoFailedTip": "Не удалось загрузить список видео~",
+    "videoEmpty": "Нет содержимого видео",
+    "imageFailedTip": "Не удалось загрузить список изображений~",
+    "imageEmpty": "Нет содержимого изображений",
+    "userFailedTip": "Не удалось загрузить список пользователей~",
+    "userEmpty": "Нет содержимого пользователей",
+    "reachedBottom": "Достигнут конец~"
   },
   "zone": {
     "videoTab": "Видео",
     "imageTab": "Изображения",
-    "publishTab": "Опубликовать"
+    "publishTab": "Опубликовать",
+    "videoFailedTip": "Не удалось загрузить список видео~",
+    "videoEmpty": "Нет содержимого видео",
+    "imageFailedTip": "Не удалось загрузить список изображений~",
+    "imageEmpty": "Нет содержимого изображений",
+    "followers": "Подписки",
+    "fans": "Подписчики",
+    "editProfile": "Редактировать профиль",
+    "detail": "Подробнее"
   },
   "forum": {
     "sections": {
@@ -441,7 +480,23 @@
     "publishTitlePlaceholder": "Введите заголовок",
     "publishBody": "Содержание",
     "publishBodyPlaceholder": "Введите содержание, поддерживается Markdown",
-    "publishSubmit": "Опубликовать"
+    "publishSubmit": "Опубликовать",
+    "fetchListFailed": "Не удалось загрузить публикации форума",
+    "fetchDetailFailed": "Не удалось загрузить детали публикации",
+    "fetchSectionsFailed": "Не удалось загрузить разделы",
+    "fetchDataFailed": "Не удалось загрузить данные форума",
+    "postDetail": "Детали публикации",
+    "titleRequired": "Введите заголовок",
+    "bodyRequired": "Введите содержание",
+    "sectionRequired": "Выберите раздел",
+    "publishSuccess": "Публикация создана",
+    "publishFailedRetry": "Ошибка публикации, попробуйте позже",
+    "publishFailed": "Ошибка публикации",
+    "replySuccess": "Ответ опубликован",
+    "replyFailed": "Ошибка ответа",
+    "floorOwner": "Автор",
+    "floorNumber": "{n} этаж",
+    "publishSectionPlaceholder": "Выберите раздел"
   },
   "comment": {
     "justNow": "Только что",

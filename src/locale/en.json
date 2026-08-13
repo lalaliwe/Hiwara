@@ -20,7 +20,13 @@
     "fetchRecommendFailed": "Failed to load recommendations",
     "fetchVideoListFailed": "Failed to load video list",
     "fetchImageListFailed": "Failed to load image list",
-    "fetchUserInfoFailed": "Failed to get user info"
+    "fetchUserInfoFailed": "Failed to get user info",
+    "loading": "Loading...",
+    "retry": "Click to retry",
+    "loadFailedSuffix": "Load failed, ",
+    "reachedBottomCat": "Reached the end~",
+    "today": "Today",
+    "error": "Error"
   },
   "setup": {
     "title": "Settings",
@@ -94,7 +100,7 @@
       "maxConcurrent": "Max Concurrent Downloads"
     },
     "languagePage": {
-      "title": "Language (Language)",
+      "title": "Language",
       "followSystem": "Follow System",
       "english": "English",
       "simplifiedChinese": "Simplified Chinese",
@@ -215,7 +221,8 @@
       "faq": "FAQ",
       "links": "Links",
       "aboutText": "This application follows the MPL-2.0 open source license. Please do not use it for any commercial purposes.",
-      "noRecords": "No {type} records"
+      "noRecords": "No {type} records",
+      "notImplemented": "Feature not available"
     },
     "forum": {
       "listLoadFailed": "List load failed",
@@ -330,7 +337,11 @@
     "volume": "Volume: {n}%",
     "rewind10s": "Rewind 10s",
     "forward10s": "Forward 10s",
-    "switchComplete": "Server switch complete"
+    "switchComplete": "Server switch complete",
+    "recommendTab": "Recommended",
+    "replay": "Replay",
+    "reload": "Reload",
+    "unknownTitle": "Unknown title"
   },
   "imageView": {
     "loading": "Loading data",
@@ -350,19 +361,32 @@
     "imageId": "Image ID {id}",
     "resolution": "Resolution {res}",
     "expandAll": "Expand All",
-    "collapse": "Collapse"
+    "collapse": "Collapse",
+    "noImage": "No image"
   },
   "favorites": {
     "title": "My Favorites",
     "videoTab": "Video",
-    "imageTab": "Image"
+    "imageTab": "Image",
+    "videoLoadFailed": "Failed to load video favorites",
+    "imageLoadFailed": "Failed to load image favorites",
+    "videoLoadFailedTip": "Failed to load video favorites~",
+    "imageLoadFailedTip": "Failed to load image favorites~",
+    "videoEmpty": "No video favorites",
+    "imageEmpty": "No image favorites"
   },
   "friends": {
     "title": "{type}",
     "followTab": "Following",
     "fansTab": "Fans",
     "friendTab": "Friends",
-    "loading": "Loading data"
+    "loading": "Loading data",
+    "friendListFailed": "Failed to load friends list~",
+    "friendEmpty": "No friends content",
+    "followListFailed": "Failed to load following list~",
+    "followEmpty": "No following content",
+    "fansListFailed": "Failed to load fans list~",
+    "fansEmpty": "No fans content"
   },
   "offlineCache": {
     "title": "Offline Cache",
@@ -400,12 +424,27 @@
     "loadingImageFailed": "Failed to load image search results",
     "loadingUserFailed": "Failed to load user search results",
     "historyLabel": "Search History",
-    "recommendLabel": "Discover"
+    "recommendLabel": "Discover",
+    "videoFailedTip": "Failed to load video list~",
+    "videoEmpty": "No video content",
+    "imageFailedTip": "Failed to load image list~",
+    "imageEmpty": "No image content",
+    "userFailedTip": "Failed to load user list~",
+    "userEmpty": "No user content",
+    "reachedBottom": "Reached the end~"
   },
   "zone": {
     "videoTab": "Video",
     "imageTab": "Image",
-    "publishTab": "Publish"
+    "publishTab": "Publish",
+    "videoFailedTip": "Failed to load video list~",
+    "videoEmpty": "No video content",
+    "imageFailedTip": "Failed to load image list~",
+    "imageEmpty": "No image content",
+    "followers": "Following",
+    "fans": "Fans",
+    "editProfile": "Edit Profile",
+    "detail": "Details"
   },
   "forum": {
     "sections": {
@@ -441,7 +480,23 @@
     "publishTitlePlaceholder": "Enter post title",
     "publishBody": "Content",
     "publishBodyPlaceholder": "Enter post content, Markdown syntax supported",
-    "publishSubmit": "Submit Post"
+    "publishSubmit": "Submit Post",
+    "fetchListFailed": "Failed to load forum posts",
+    "fetchDetailFailed": "Failed to load post details",
+    "fetchSectionsFailed": "Failed to load sections",
+    "fetchDataFailed": "Failed to load forum data",
+    "postDetail": "Post Details",
+    "titleRequired": "Please enter a title",
+    "bodyRequired": "Please enter content",
+    "sectionRequired": "Please select a section",
+    "publishSuccess": "Post published",
+    "publishFailedRetry": "Failed to publish, please try again later",
+    "publishFailed": "Failed to publish",
+    "replySuccess": "Reply posted",
+    "replyFailed": "Failed to reply",
+    "floorOwner": "OP",
+    "floorNumber": "Floor {n}",
+    "publishSectionPlaceholder": "Please select a section"
   },
   "comment": {
     "justNow": "Just now",

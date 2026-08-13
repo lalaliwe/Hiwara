@@ -20,7 +20,13 @@
     "fetchRecommendFailed": "འོས་སྦྱོར་ཐོབ་མ་ཐུབ།",
     "fetchVideoListFailed": "བརྙན་ཐུང་ཐོ་བྱང་ཐོབ་མ་ཐུབ།",
     "fetchImageListFailed": "པར་རིས་ཐོ་བྱང་ཐོབ་མ་ཐུབ།",
-    "fetchUserInfoFailed": "བེད་སྤྱོད་མཁན་གྱི་གནས་ཚུལ་ཐོབ་མ་ཐུབ།"
+    "fetchUserInfoFailed": "བེད་སྤྱོད་མཁན་གྱི་གནས་ཚུལ་ཐོབ་མ་ཐུབ།",
+    "loading": "འཇུག་བཞིན་པ...",
+    "retry": "ཡང་བསྐྱར་འདིར་ནོན།",
+    "loadFailedSuffix": "འཇུག་མ་ཐུབ། ",
+    "reachedBottomCat": "མཐའ་རུ་སོན~",
+    "today": "དེ་རིང",
+    "error": "ནོར་འཁྲུལ"
   },
   "setup": {
     "title": "སྒྲིག་བཀོད།",
@@ -215,7 +221,8 @@
       "faq": "མང་དུ་དྲིས་པའི་དྲི་བ",
       "links": "འབྲེལ་ཐག",
       "aboutText": "ཉེར་སྤྱོད་འདི MPL-2.0 སྒོ་འབྱེད་མོས་གཞིའི་ལག་ཁྱེར་ལ་བརྩི་སྲུང་ཞུ། ཚོང་དོན་དམིགས་ཡུལ་དུ་སྤྱོད་པར་མི་འོས།",
-      "noRecords": "{type} ཟིན་ཐོ་མེད"
+      "noRecords": "{type} ཟིན་ཐོ་མེད",
+      "notImplemented": "ལས་འགུལ་འདི་ད་དུང་མེད།"
     },
     "forum": {
       "listLoadFailed": "རེའུ་མིག་ལེན་བཞེས་མ་བྱུང་།",
@@ -330,7 +337,11 @@
     "volume": "སྒྲ་ཚད། {n}%",
     "rewind10s": "ཕྱིར་འཐེན 10s",
     "forward10s": "མདུན་སྐྱོད 10s",
-    "switchComplete": "མཛོད་འཕྲུལ་བརྗེ་བ་རྫོགས་ཟིན།"
+    "switchComplete": "མཛོད་འཕྲུལ་བརྗེ་བ་རྫོགས་ཟིན།",
+    "recommendTab": "འོས་སྦྱོར།",
+    "replay": "ཡང་བསྐྱར་བརྙན་གཏོང་བ།",
+    "reload": "ཡང་བསྐྱར་འཇུག་པ།",
+    "unknownTitle": "མི་གསལ་བའི་བརྗོད་བྱ།"
   },
   "imageView": {
     "loading": "གཞི་གྲངས་འཇུག་བཞིན་ཡོད།",
@@ -350,19 +361,32 @@
     "imageId": "པར་རིས་ཨང་ {id}",
     "resolution": "དབྱེ་ཚད། {res}",
     "expandAll": "ཚང་མ་རྒྱས་པར་བྱེད།",
-    "collapse": "བསྡུ་བ།"
+    "collapse": "བསྡུ་བ།",
+    "noImage": "པར་རིས་མེད།"
   },
   "favorites": {
     "title": "ངའི་དགའ་མོས།",
     "videoTab": "བརྙན་ཐུང",
-    "imageTab": "པར་རིས"
+    "imageTab": "པར་རིས",
+    "videoLoadFailed": "དགའ་མོས་བརྙན་ཐུང་འཇུག་མ་ཐུབ།",
+    "imageLoadFailed": "དགའ་མོས་པར་རིས་འཇུག་མ་ཐུབ།",
+    "videoLoadFailedTip": "དགའ་མོས་བརྙན་ཐུང་འཇུག་མ་ཐུབ།~",
+    "imageLoadFailedTip": "དགའ་མོས་པར་རིས་འཇུག་མ་ཐུབ།~",
+    "videoEmpty": "དགའ་མོས་བརྙན་ཐུང་མེད།",
+    "imageEmpty": "དགའ་མོས་པར་རིས་མེད།"
   },
   "friends": {
     "title": "{type}",
     "followTab": "རྗེས་སུ་འབྲངས།",
     "fansTab": "དགའ་མཁན།",
     "friendTab": "གྲོགས་པོ།",
-    "loading": "གཞི་གྲངས་འཇུག་བཞིན་ཡོད།"
+    "loading": "གཞི་གྲངས་འཇུག་བཞིན་ཡོད།",
+    "friendListFailed": "གྲོགས་པོའི་ཐོ་བྱང་འཇུག་མ་ཐུབ།~",
+    "friendEmpty": "གྲོགས་པོའི་ནང་དོན་མེད།",
+    "followListFailed": "རྗེས་སུ་འབྲངས་པའི་ཐོ་བྱང་འཇུག་མ་ཐུབ།~",
+    "followEmpty": "རྗེས་སུ་འབྲངས་པའི་ནང་དོན་མེད།",
+    "fansListFailed": "དགའ་མཁན་གྱི་ཐོ་བྱང་འཇུག་མ་ཐུབ།~",
+    "fansEmpty": "དགའ་མཁན་གྱི་ནང་དོན་མེད།"
   },
   "offlineCache": {
     "title": "དྲ་མེད་མཛོད།",
@@ -400,12 +424,27 @@
     "loadingImageFailed": "པར་རིས་འཚོལ་ཞིབ་མཇུག་འབྲས་འཇུག་མ་ཐུབ།",
     "loadingUserFailed": "བེད་སྤྱོད་མཁན་འཚོལ་ཞིབ་མཇུག་འབྲས་འཇུག་མ་ཐུབ།",
     "historyLabel": "འཚོལ་ཞིབ་ལོ་རྒྱུས།",
-    "recommendLabel": "འཚོལ་ཞིབ་ཐོབ་ཐང།"
+    "recommendLabel": "འཚོལ་ཞིབ་ཐོབ་ཐང།",
+    "videoFailedTip": "བརྙན་ཐུང་ཐོ་བྱང་འཇུག་མ་ཐུབ།~",
+    "videoEmpty": "བརྙན་ཐུང་ནང་དོན་མེད།",
+    "imageFailedTip": "པར་རིས་ཐོ་བྱང་འཇུག་མ་ཐུབ།~",
+    "imageEmpty": "པར་རིས་ནང་དོན་མེད།",
+    "userFailedTip": "བེད་སྤྱོད་མཁན་ཐོ་བྱང་འཇུག་མ་ཐུབ།~",
+    "userEmpty": "བེད་སྤྱོད་མཁན་ནང་དོན་མེད།",
+    "reachedBottom": "མཐའ་རུ་སོན~"
   },
   "zone": {
     "videoTab": "བརྙན་ཐུང",
     "imageTab": "པར་རིས",
-    "publishTab": "སྤེལ་བ།"
+    "publishTab": "སྤེལ་བ།",
+    "videoFailedTip": "བརྙན་ཐུང་ཐོ་བྱང་འཇུག་མ་ཐུབ།~",
+    "videoEmpty": "བརྙན་ཐུང་ནང་དོན་མེད།",
+    "imageFailedTip": "པར་རིས་ཐོ་བྱང་འཇུག་མ་ཐུབ།~",
+    "imageEmpty": "པར་རིས་ནང་དོན་མེད།",
+    "followers": "རྗེས་སུ་འབྲངས།",
+    "fans": "དགའ་མཁན།",
+    "editProfile": "ཐོ་ཤོག་བསྒྱུར་བ།",
+    "detail": "ཞིབ་ཕྲ།"
   },
   "forum": {
     "sections": {
@@ -441,7 +480,23 @@
     "publishTitlePlaceholder": "སྤེལ་བའི་བརྗོད་བྱ་ཞུགས",
     "publishBody": "ནང་དོན",
     "publishBodyPlaceholder": "སྤེལ་བའི་ནང་དོན་ཞུགས། Markdown རྒྱབ་སྐྱོར",
-    "publishSubmit": "སྤེལ་བར་འབུལ"
+    "publishSubmit": "སྤེལ་བར་འབུལ",
+    "fetchListFailed": "གླེང་སྟེགས་སྤེལ་བའི་ཐོ་བྱང་འཇུག་མ་ཐུབ།",
+    "fetchDetailFailed": "སྤེལ་བའི་ཞིབ་ཕྲ་འཇུག་མ་ཐུབ།",
+    "fetchSectionsFailed": "ཁག་གི་ཐོ་བྱང་འཇུག་མ་ཐུབ།",
+    "fetchDataFailed": "གླེང་སྟེགས་གནས་ཚུལ་འཇུག་མ་ཐུབ།",
+    "postDetail": "སྤེལ་བའི་ཞིབ་ཕྲ།",
+    "titleRequired": "བརྗོད་བྱ་ཞུགས་རོགས།",
+    "bodyRequired": "ནང་དོན་ཞུགས་རོགས།",
+    "sectionRequired": "ཁག་འདེམས་རོགས།",
+    "publishSuccess": "སྤེལ་བ་ལེགས་པར་གྲུབ།",
+    "publishFailedRetry": "སྤེལ་མ་ཐུབ། ཕྱིས་ཡང་བསྐྱར་ཞུས།",
+    "publishFailed": "སྤེལ་མ་ཐུབ།",
+    "replySuccess": "ལན་འདེབས་ལེགས་པར་གྲུབ།",
+    "replyFailed": "ལན་འདེབས་མ་ཐུབ།",
+    "floorOwner": "སྤེལ་མཁན།",
+    "floorNumber": "ཐོག {n}",
+    "publishSectionPlaceholder": "ཁག་འདེམས་རོགས།"
   },
   "comment": {
     "justNow": "ད་ལྟ་བཞིན།",

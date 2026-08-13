@@ -20,7 +20,13 @@
     "fetchRecommendFailed": "插画推荐获取失败",
     "fetchVideoListFailed": "获取视频列表失败",
     "fetchImageListFailed": "获取插画列表失败",
-    "fetchUserInfoFailed": "获取用户信息失败"
+    "fetchUserInfoFailed": "获取用户信息失败",
+    "loading": "数据加载中",
+    "retry": "点击重试",
+    "loadFailedSuffix": "加载失败，",
+    "reachedBottomCat": "已经到底了喵~",
+    "today": "今天",
+    "error": "错误"
   },
   "setup": {
     "title": "设置",
@@ -215,7 +221,8 @@
       "faq": "常见问题",
       "links": "相关链接",
       "aboutText": "本应用遵循MPL-2.0开源协议，请勿用于任何商业用途。",
-      "noRecords": "{type}暂无记录"
+      "noRecords": "{type}暂无记录",
+      "notImplemented": "功能未开放"
     },
     "forum": {
       "listLoadFailed": "列表加载失败",
@@ -330,7 +337,11 @@
     "volume": "音量: {n}%",
     "rewind10s": "快退 10s",
     "forward10s": "快进 10s",
-    "switchComplete": "服务器切换完成"
+    "switchComplete": "服务器切换完成",
+    "recommendTab": "推荐",
+    "replay": "重新播放",
+    "reload": "重新加载",
+    "unknownTitle": "未知标题"
   },
   "imageView": {
     "loading": "正在加载数据",
@@ -350,19 +361,32 @@
     "imageId": "插画ID {id}",
     "resolution": "分辨率 {res}",
     "expandAll": "展开全部",
-    "collapse": "收起"
+    "collapse": "收起",
+    "noImage": "暂无图片"
   },
   "favorites": {
     "title": "我的收藏",
     "videoTab": "视频",
-    "imageTab": "插画"
+    "imageTab": "插画",
+    "videoLoadFailed": "加载视频收藏失败",
+    "imageLoadFailed": "加载插画收藏失败",
+    "videoLoadFailedTip": "视频收藏加载失败了喵~",
+    "imageLoadFailedTip": "插画收藏加载失败了喵~",
+    "videoEmpty": "暂无视频收藏",
+    "imageEmpty": "暂无插画收藏"
   },
   "friends": {
     "title": "{type}",
     "followTab": "关注",
     "fansTab": "粉丝",
     "friendTab": "好友",
-    "loading": "数据加载中"
+    "loading": "数据加载中",
+    "friendListFailed": "好友列表加载失败了喵~",
+    "friendEmpty": "暂无好友内容",
+    "followListFailed": "关注列表加载失败了喵~",
+    "followEmpty": "暂无关注内容",
+    "fansListFailed": "粉丝列表加载失败了喵~",
+    "fansEmpty": "暂无粉丝内容"
   },
   "offlineCache": {
     "title": "离线缓存",
@@ -400,12 +424,27 @@
     "loadingImageFailed": "加载插画搜索结果失败",
     "loadingUserFailed": "加载用户搜索结果失败",
     "historyLabel": "搜索历史",
-    "recommendLabel": "搜索发现"
+    "recommendLabel": "搜索发现",
+    "videoFailedTip": "视频列表加载失败了喵~",
+    "videoEmpty": "暂无视频内容",
+    "imageFailedTip": "插画列表加载失败了喵~",
+    "imageEmpty": "暂无插画内容",
+    "userFailedTip": "用户列表加载失败了喵~",
+    "userEmpty": "暂无用户内容",
+    "reachedBottom": "已经到底了喵~"
   },
   "zone": {
     "videoTab": "视频",
     "imageTab": "插画",
-    "publishTab": "发布"
+    "publishTab": "发布",
+    "videoFailedTip": "视频列表加载失败了喵~",
+    "videoEmpty": "暂无视频内容",
+    "imageFailedTip": "插画列表加载失败了喵~",
+    "imageEmpty": "暂无插画内容",
+    "followers": "关注",
+    "fans": "粉丝",
+    "editProfile": "编辑资料",
+    "detail": "详情"
   },
   "forum": {
     "sections": {
@@ -437,11 +476,27 @@
     "noMore": "没有更多了",
     "publish": "发帖",
     "publishSection": "选择版块",
+    "publishSectionPlaceholder": "请选择版块",
     "publishTitle": "标题",
     "publishTitlePlaceholder": "请输入帖子标题",
     "publishBody": "内容",
     "publishBodyPlaceholder": "请输入帖子内容，支持 Markdown 语法",
-    "publishSubmit": "发布帖子"
+    "publishSubmit": "发布帖子",
+    "fetchListFailed": "获取论坛帖子列表失败",
+    "fetchDetailFailed": "获取帖子详情失败",
+    "fetchSectionsFailed": "获取版块列表失败",
+    "fetchDataFailed": "获取论坛数据失败",
+    "postDetail": "帖子详情",
+    "titleRequired": "请输入标题",
+    "bodyRequired": "请输入内容",
+    "sectionRequired": "请选择版块",
+    "publishSuccess": "发帖成功",
+    "publishFailedRetry": "发帖失败，请稍后重试",
+    "publishFailed": "发帖失败",
+    "replySuccess": "回复成功",
+    "replyFailed": "回复失败",
+    "floorOwner": "楼主",
+    "floorNumber": "第{n}楼"
   },
   "comment": {
     "justNow": "刚刚",

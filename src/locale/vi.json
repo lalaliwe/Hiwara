@@ -20,7 +20,13 @@
     "fetchRecommendFailed": "Tải đề xuất thất bại",
     "fetchVideoListFailed": "Tải danh sách video thất bại",
     "fetchImageListFailed": "Tải danh sách hình ảnh thất bại",
-    "fetchUserInfoFailed": "Lấy thông tin người dùng thất bại"
+    "fetchUserInfoFailed": "Lấy thông tin người dùng thất bại",
+    "loading": "Đang tải...",
+    "retry": "Nhấp để thử lại",
+    "loadFailedSuffix": "Tải thất bại, ",
+    "reachedBottomCat": "Đã đến cuối~",
+    "today": "Hôm nay",
+    "error": "Lỗi"
   },
   "setup": {
     "title": "Cài đặt",
@@ -215,7 +221,8 @@
       "faq": "Câu hỏi thường gặp",
       "links": "Liên kết",
       "aboutText": "Ứng dụng này tuân theo giấy phép mã nguồn mở MPL-2.0. Vui lòng không sử dụng cho mục đích thương mại.",
-      "noRecords": "Không có bản ghi {type}"
+      "noRecords": "Không có bản ghi {type}",
+      "notImplemented": "Chức năng chưa được hỗ trợ"
     },
     "forum": {
       "listLoadFailed": "Tải danh sách thất bại",
@@ -330,7 +337,11 @@
     "volume": "Âm lượng: {n}%",
     "rewind10s": "Lùi 10s",
     "forward10s": "Tiến 10s",
-    "switchComplete": "Chuyển đổi máy chủ hoàn tất"
+    "switchComplete": "Chuyển đổi máy chủ hoàn tất",
+    "recommendTab": "Gợi ý",
+    "replay": "Phát lại",
+    "reload": "Tải lại",
+    "unknownTitle": "Tiêu đề không xác định"
   },
   "imageView": {
     "loading": "Đang tải dữ liệu",
@@ -350,19 +361,32 @@
     "imageId": "ID hình ảnh {id}",
     "resolution": "Độ phân giải {res}",
     "expandAll": "Mở rộng tất cả",
-    "collapse": "Thu gọn"
+    "collapse": "Thu gọn",
+    "noImage": "Không có hình ảnh"
   },
   "favorites": {
     "title": "Yêu thích của tôi",
     "videoTab": "Video",
-    "imageTab": "Hình ảnh"
+    "imageTab": "Hình ảnh",
+    "videoLoadFailed": "Tải video yêu thích thất bại",
+    "imageLoadFailed": "Tải hình ảnh yêu thích thất bại",
+    "videoLoadFailedTip": "Tải video yêu thích thất bại~",
+    "imageLoadFailedTip": "Tải hình ảnh yêu thích thất bại~",
+    "videoEmpty": "Không có video yêu thích",
+    "imageEmpty": "Không có hình ảnh yêu thích"
   },
   "friends": {
     "title": "{type}",
     "followTab": "Đang theo dõi",
     "fansTab": "Người hâm mộ",
     "friendTab": "Bạn bè",
-    "loading": "Đang tải dữ liệu"
+    "loading": "Đang tải dữ liệu",
+    "friendListFailed": "Tải danh sách bạn bè thất bại~",
+    "friendEmpty": "Không có nội dung bạn bè",
+    "followListFailed": "Tải danh sách đang theo dõi thất bại~",
+    "followEmpty": "Không có nội dung đang theo dõi",
+    "fansListFailed": "Tải danh sách người hâm mộ thất bại~",
+    "fansEmpty": "Không có nội dung người hâm mộ"
   },
   "offlineCache": {
     "title": "Bộ nhớ đệm ngoại tuyến",
@@ -400,12 +424,27 @@
     "loadingImageFailed": "Tải kết quả tìm kiếm hình ảnh thất bại",
     "loadingUserFailed": "Tải kết quả tìm kiếm người dùng thất bại",
     "historyLabel": "Lịch sử tìm kiếm",
-    "recommendLabel": "Khám phá"
+    "recommendLabel": "Khám phá",
+    "videoFailedTip": "Tải danh sách video thất bại~",
+    "videoEmpty": "Không có nội dung video",
+    "imageFailedTip": "Tải danh sách hình ảnh thất bại~",
+    "imageEmpty": "Không có nội dung hình ảnh",
+    "userFailedTip": "Tải danh sách người dùng thất bại~",
+    "userEmpty": "Không có nội dung người dùng",
+    "reachedBottom": "Đã đến cuối~"
   },
   "zone": {
     "videoTab": "Video",
     "imageTab": "Hình ảnh",
-    "publishTab": "Xuất bản"
+    "publishTab": "Xuất bản",
+    "videoFailedTip": "Tải danh sách video thất bại~",
+    "videoEmpty": "Không có nội dung video",
+    "imageFailedTip": "Tải danh sách hình ảnh thất bại~",
+    "imageEmpty": "Không có nội dung hình ảnh",
+    "followers": "Đang theo dõi",
+    "fans": "Người hâm mộ",
+    "editProfile": "Chỉnh sửa hồ sơ",
+    "detail": "Chi tiết"
   },
   "forum": {
     "sections": {
@@ -441,7 +480,23 @@
     "publishTitlePlaceholder": "Nhập tiêu đề bài đăng",
     "publishBody": "Nội dung",
     "publishBodyPlaceholder": "Nhập nội dung bài đăng, hỗ trợ Markdown",
-    "publishSubmit": "Đăng bài"
+    "publishSubmit": "Đăng bài",
+    "fetchListFailed": "Tải danh sách bài đăng diễn đàn thất bại",
+    "fetchDetailFailed": "Tải chi tiết bài đăng thất bại",
+    "fetchSectionsFailed": "Tải danh sách mục thất bại",
+    "fetchDataFailed": "Tải dữ liệu diễn đàn thất bại",
+    "postDetail": "Chi tiết bài đăng",
+    "titleRequired": "Vui lòng nhập tiêu đề",
+    "bodyRequired": "Vui lòng nhập nội dung",
+    "sectionRequired": "Vui lòng chọn mục",
+    "publishSuccess": "Đăng bài thành công",
+    "publishFailedRetry": "Đăng bài thất bại, vui lòng thử lại sau",
+    "publishFailed": "Đăng bài thất bại",
+    "replySuccess": "Trả lời thành công",
+    "replyFailed": "Trả lời thất bại",
+    "floorOwner": "Chủ thớt",
+    "floorNumber": "Tầng {n}",
+    "publishSectionPlaceholder": "Vui lòng chọn mục"
   },
   "comment": {
     "justNow": "Vừa xong",

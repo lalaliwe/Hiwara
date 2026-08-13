@@ -20,7 +20,13 @@
     "fetchRecommendFailed": "טעינת ההמלצות נכשלה",
     "fetchVideoListFailed": "טעינת רשימת הסרטונים נכשלה",
     "fetchImageListFailed": "טעינת רשימת התמונות נכשלה",
-    "fetchUserInfoFailed": "קבלת פרטי המשתמש נכשלה"
+    "fetchUserInfoFailed": "קבלת פרטי המשתמש נכשלה",
+    "loading": "טוען...",
+    "retry": "לחץ לניסיון חוזר",
+    "loadFailedSuffix": "טעינה נכשלה, ",
+    "reachedBottomCat": "הגעת לסוף~",
+    "today": "היום",
+    "error": "שגיאה"
   },
   "setup": {
     "title": "הגדרות",
@@ -215,7 +221,8 @@
       "faq": "שאלות נפוצות",
       "links": "קישורים",
       "aboutText": "אפליקציה זו פועלת לפי רישיון הקוד הפתוח MPL-2.0. אנא אל תשתמש בה למטרות מסחריות.",
-      "noRecords": "אין רשומות {type}"
+      "noRecords": "אין רשומות {type}",
+      "notImplemented": "הפונקציה אינה זמינה"
     },
     "forum": {
       "listLoadFailed": "טעינת הרשימה נכשלה",
@@ -330,7 +337,11 @@
     "volume": "עוצמת קול: {n}%",
     "rewind10s": "הרץ אחורה 10s",
     "forward10s": "הרץ קדימה 10s",
-    "switchComplete": "החלפת השרת הושלמה"
+    "switchComplete": "החלפת השרת הושלמה",
+    "recommendTab": "מומלץ",
+    "replay": "נגן שוב",
+    "reload": "טען מחדש",
+    "unknownTitle": "כותרת לא ידועה"
   },
   "imageView": {
     "loading": "טוען נתונים",
@@ -350,19 +361,32 @@
     "imageId": "מזהה תמונה {id}",
     "resolution": "רזולוציה {res}",
     "expandAll": "הרחב הכל",
-    "collapse": "כווץ"
+    "collapse": "כווץ",
+    "noImage": "אין תמונה"
   },
   "favorites": {
     "title": "המועדפים שלי",
     "videoTab": "וידאו",
-    "imageTab": "תמונה"
+    "imageTab": "תמונה",
+    "videoLoadFailed": "טעינת הסרטונים המועדפים נכשלה",
+    "imageLoadFailed": "טעינת התמונות המועדפות נכשלה",
+    "videoLoadFailedTip": "טעינת הסרטונים המועדפים נכשלה~",
+    "imageLoadFailedTip": "טעינת התמונות המועדפות נכשלה~",
+    "videoEmpty": "אין סרטונים מועדפים",
+    "imageEmpty": "אין תמונות מועדפות"
   },
   "friends": {
     "title": "{type}",
     "followTab": "מעקב",
     "fansTab": "מעריצים",
     "friendTab": "חברים",
-    "loading": "טוען נתונים"
+    "loading": "טוען נתונים",
+    "friendListFailed": "טעינת רשימת החברים נכשלה~",
+    "friendEmpty": "אין תוכן חברים",
+    "followListFailed": "טעינת רשימת המעקב נכשלה~",
+    "followEmpty": "אין תוכן מעקב",
+    "fansListFailed": "טעינת רשימת המעריצים נכשלה~",
+    "fansEmpty": "אין תוכן מעריצים"
   },
   "offlineCache": {
     "title": "מטמון לא מקוון",
@@ -400,12 +424,27 @@
     "loadingImageFailed": "טעינת תוצאות חיפוש התמונה נכשלה",
     "loadingUserFailed": "טעינת תוצאות חיפוש המשתמש נכשלה",
     "historyLabel": "היסטוריית חיפוש",
-    "recommendLabel": "גלה"
+    "recommendLabel": "גלה",
+    "videoFailedTip": "טעינת רשימת הסרטונים נכשלה~",
+    "videoEmpty": "אין תוכן סרטונים",
+    "imageFailedTip": "טעינת רשימת התמונות נכשלה~",
+    "imageEmpty": "אין תוכן תמונות",
+    "userFailedTip": "טעינת רשימת המשתמשים נכשלה~",
+    "userEmpty": "אין תוכן משתמשים",
+    "reachedBottom": "הגעת לסוף~"
   },
   "zone": {
     "videoTab": "וידאו",
     "imageTab": "תמונה",
-    "publishTab": "פרסם"
+    "publishTab": "פרסם",
+    "videoFailedTip": "טעינת רשימת הסרטונים נכשלה~",
+    "videoEmpty": "אין תוכן סרטונים",
+    "imageFailedTip": "טעינת רשימת התמונות נכשלה~",
+    "imageEmpty": "אין תוכן תמונות",
+    "followers": "עוקבים אחרי",
+    "fans": "מעריצים",
+    "editProfile": "ערוך פרופיל",
+    "detail": "פרטים"
   },
   "forum": {
     "sections": {
@@ -441,7 +480,23 @@
     "publishTitlePlaceholder": "הכנס כותרת",
     "publishBody": "תוכן",
     "publishBodyPlaceholder": "הכנס תוכן, תומך Markdown",
-    "publishSubmit": "פרסם הודעה"
+    "publishSubmit": "פרסם הודעה",
+    "fetchListFailed": "טעינת הפוסטים בפורום נכשלה",
+    "fetchDetailFailed": "טעינת פרטי הפוסט נכשלה",
+    "fetchSectionsFailed": "טעינת הקטגוריות נכשלה",
+    "fetchDataFailed": "טעינת נתוני הפורום נכשלה",
+    "postDetail": "פרטי הפוסט",
+    "titleRequired": "אנא הכנס כותרת",
+    "bodyRequired": "אנא הכנס תוכן",
+    "sectionRequired": "אנא בחר קטגוריה",
+    "publishSuccess": "הפוסט פורסם",
+    "publishFailedRetry": "הפרסום נכשל, אנא נסה שוב מאוחר יותר",
+    "publishFailed": "הפרסום נכשל",
+    "replySuccess": "התשובה פורסמה",
+    "replyFailed": "התשובה נכשלה",
+    "floorOwner": "מפרסם",
+    "floorNumber": "קומה {n}",
+    "publishSectionPlaceholder": "אנא בחר קטגוריה"
   },
   "comment": {
     "justNow": "זה עתה",

@@ -20,7 +20,13 @@
     "fetchRecommendFailed": "ការទាញយកអនុសាសន៍បរាជ័យ",
     "fetchVideoListFailed": "ការទាញយកបញ្ជីវីដេអូបរាជ័យ",
     "fetchImageListFailed": "ការទាញយកបញ្ជីរូបភាពបរាជ័យ",
-    "fetchUserInfoFailed": "ការទាញយកព័ត៌មានអ្នកប្រើប្រាស់បរាជ័យ"
+    "fetchUserInfoFailed": "ការទាញយកព័ត៌មានអ្នកប្រើប្រាស់បរាជ័យ",
+    "loading": "កំពុងផ្ទុក...",
+    "retry": "ចុចដើម្បីសាកល្បងម្តងទៀត",
+    "loadFailedSuffix": "ការផ្ទុកបរាជ័យ, ",
+    "reachedBottomCat": "បានដល់ទីបញ្ចប់~",
+    "today": "ថ្ងៃនេះ",
+    "error": "កំហុស"
   },
   "setup": {
     "title": "ការកំណត់",
@@ -215,7 +221,8 @@
       "faq": "សំណួរដែលគេសួរញឹកញាប់",
       "links": "តំណភ្ជាប់",
       "aboutText": "កម្មវិធីនេះអនុវត្តតាមអាជ្ញាប័ណ្ណប្រភពបើក MPL-2.0។ សូមកុំប្រើវាសម្រាប់គោលបំណងពាណិជ្ជកម្ម។",
-      "noRecords": "គ្មានកំណត់ត្រា {type}"
+      "noRecords": "គ្មានកំណត់ត្រា {type}",
+      "notImplemented": "មុខងារមិនទាន់មានទេ"
     },
     "forum": {
       "listLoadFailed": "ការផ្ទុកបញ្ជីបរាជ័យ",
@@ -330,7 +337,11 @@
     "volume": "សំឡេង: {n}%",
     "rewind10s": "ថយក្រោយ 10s",
     "forward10s": "ទៅមុខ 10s",
-    "switchComplete": "ការប្តូរម៉ាស៊ីនមេបានបញ្ចប់"
+    "switchComplete": "ការប្តូរម៉ាស៊ីនមេបានបញ្ចប់",
+    "recommendTab": "ណែនាំ",
+    "replay": "ចាក់ម្តងទៀត",
+    "reload": "ផ្ទុកឡើងវិញ",
+    "unknownTitle": "ចំណងជើងមិនស្គាល់"
   },
   "imageView": {
     "loading": "កំពុងផ្ទុកទិន្នន័យ",
@@ -350,19 +361,32 @@
     "imageId": "លេខសម្គាល់រូបភាព {id}",
     "resolution": "គុណភាពបង្ហាញ {res}",
     "expandAll": "ពង្រីកទាំងអស់",
-    "collapse": "បង្រួម"
+    "collapse": "បង្រួម",
+    "noImage": "គ្មានរូបភាព"
   },
   "favorites": {
     "title": "ចំណូលចិត្តរបស់ខ្ញុំ",
     "videoTab": "វីដេអូ",
-    "imageTab": "រូបភាព"
+    "imageTab": "រូបភាព",
+    "videoLoadFailed": "ការទាញយកវីដេអូដែលពេញចិត្តបរាជ័យ",
+    "imageLoadFailed": "ការទាញយករូបភាពដែលពេញចិត្តបរាជ័យ",
+    "videoLoadFailedTip": "ការទាញយកវីដេអូដែលពេញចិត្តបរាជ័យ~",
+    "imageLoadFailedTip": "ការទាញយករូបភាពដែលពេញចិត្តបរាជ័យ~",
+    "videoEmpty": "គ្មានវីដេអូដែលពេញចិត្ត",
+    "imageEmpty": "គ្មានរូបភាពដែលពេញចិត្ត"
   },
   "friends": {
     "title": "{type}",
     "followTab": "កំពុងតាមដាន",
     "fansTab": "អ្នកគាំទ្រ",
     "friendTab": "មិត្តភក្តិ",
-    "loading": "កំពុងផ្ទុកទិន្នន័យ"
+    "loading": "កំពុងផ្ទុកទិន្នន័យ",
+    "friendListFailed": "ការទាញយកបញ្ជីមិត្តបរាជ័យ~",
+    "friendEmpty": "គ្មានខ្លឹមសារមិត្ត",
+    "followListFailed": "ការទាញយកបញ្ជីកំពុងតាមដានបរាជ័យ~",
+    "followEmpty": "គ្មានខ្លឹមសារកំពុងតាមដាន",
+    "fansListFailed": "ការទាញយកបញ្ជីអ្នកគាំទ្របរាជ័យ~",
+    "fansEmpty": "គ្មានខ្លឹមសារអ្នកគាំទ្រ"
   },
   "offlineCache": {
     "title": "ឃ្លាំងសម្ងាត់ក្រៅបណ្តាញ",
@@ -400,12 +424,27 @@
     "loadingImageFailed": "ការផ្ទុកលទ្ធផលស្វែងរករូបភាពបរាជ័យ",
     "loadingUserFailed": "ការផ្ទុកលទ្ធផលស្វែងរកអ្នកប្រើប្រាស់បរាជ័យ",
     "historyLabel": "ប្រវត្តិស្វែងរក",
-    "recommendLabel": "រកឃើញ"
+    "recommendLabel": "រកឃើញ",
+    "videoFailedTip": "ការទាញយកបញ្ជីវីដេអូបរាជ័យ~",
+    "videoEmpty": "គ្មានខ្លឹមសារវីដេអូ",
+    "imageFailedTip": "ការទាញយកបញ្ជីរូបភាពបរាជ័យ~",
+    "imageEmpty": "គ្មានខ្លឹមសាររូបភាព",
+    "userFailedTip": "ការទាញយកបញ្ជីអ្នកប្រើប្រាស់បរាជ័យ~",
+    "userEmpty": "គ្មានខ្លឹមសារអ្នកប្រើប្រាស់",
+    "reachedBottom": "បានដល់ទីបញ្ចប់~"
   },
   "zone": {
     "videoTab": "វីដេអូ",
     "imageTab": "រូបភាព",
-    "publishTab": "បោះពុម្ព"
+    "publishTab": "បោះពុម្ព",
+    "videoFailedTip": "ការទាញយកបញ្ជីវីដេអូបរាជ័យ~",
+    "videoEmpty": "គ្មានខ្លឹមសារវីដេអូ",
+    "imageFailedTip": "ការទាញយកបញ្ជីរូបភាពបរាជ័យ~",
+    "imageEmpty": "គ្មានខ្លឹមសាររូបភាព",
+    "followers": "កំពុងតាមដាន",
+    "fans": "អ្នកគាំទ្រ",
+    "editProfile": "កែសម្រួលប្រវត្តិរូប",
+    "detail": "លម្អិត"
   },
   "forum": {
     "sections": {
@@ -441,7 +480,23 @@
     "publishTitlePlaceholder": "បញ្ចូលចំណងជើង",
     "publishBody": "ខ្លឹមសារ",
     "publishBodyPlaceholder": "បញ្ចូលខ្លឹមសារ គាំទ្រ Markdown",
-    "publishSubmit": "ដាក់ស្នើការបង្ហោះ"
+    "publishSubmit": "ដាក់ស្នើការបង្ហោះ",
+    "fetchListFailed": "ការទាញយកការបង្ហោះវេទិកាបរាជ័យ",
+    "fetchDetailFailed": "ការទាញយកលម្អិតការបង្ហោះបរាជ័យ",
+    "fetchSectionsFailed": "ការទាញយកផ្នែកបរាជ័យ",
+    "fetchDataFailed": "ការទាញយកទិន្នន័យវេទិកាបរាជ័យ",
+    "postDetail": "លម្អិតការបង្ហោះ",
+    "titleRequired": "សូមបញ្ចូលចំណងជើង",
+    "bodyRequired": "សូមបញ្ចូលខ្លឹមសារ",
+    "sectionRequired": "សូមជ្រើសរើសផ្នែក",
+    "publishSuccess": "ការបង្ហោះបានជោគជ័យ",
+    "publishFailedRetry": "ការបង្ហោះបរាជ័យ សូមព្យាយាមម្តងទៀតនៅពេលក្រោយ",
+    "publishFailed": "ការបង្ហោះបរាជ័យ",
+    "replySuccess": "ការឆ្លើយតបបានជោគជ័យ",
+    "replyFailed": "ការឆ្លើយតបបរាជ័យ",
+    "floorOwner": "ម្ចាស់ប្រធានបទ",
+    "floorNumber": "ជាន់ {n}",
+    "publishSectionPlaceholder": "សូមជ្រើសរើសផ្នែក"
   },
   "comment": {
     "justNow": "ទើបតែឥឡូវ",

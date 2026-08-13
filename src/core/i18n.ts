@@ -59,10 +59,13 @@ const messages = {
   'mn-Mong': mnMong,
 };
 
+// 全局 i18n 实例引用（由 createI18nInstance 创建后保存，供 setLanguage / initI18nLanguage 使用）
+let i18nInstance: ReturnType<typeof createI18nInstance> | null = null;
+
 // 检测浏览器语言并转换为 BCP 47 标签
 function detectBrowserLanguage(): ResolvedLocale {
   const browserLang = navigator.language;
-  
+
   // 匹配简体中文 (zh-CN, zh-SG, zh)
   if (browserLang === 'zh' || browserLang.startsWith('zh-CN') || browserLang.startsWith('zh-SG')) {
     return 'zh-Hans';
@@ -166,14 +169,15 @@ function detectBrowserLanguage(): ResolvedLocale {
 // 获取当前语言
 function getCurrentLocale(): ResolvedLocale {
   const storeLanguage = setupStore().language;
-  
+
   // 如果设置为 auto,则检测浏览器语言
   if (storeLanguage === 'auto') {
     return detectBrowserLanguage();
   }
-  
+
   // 否则使用设置的语言,如果不在支持列表中则返回默认值
-  return (messages[storeLanguage as keyof typeof messages] ? storeLanguage : 'zh-Hans') as ResolvedLocale;
+  // 回退值与 fallbackLocale 保持一致（en）
+  return (messages[storeLanguage as keyof typeof messages] ? storeLanguage : 'en') as ResolvedLocale;
 }
 
 // 创建 i18n 实例的工厂函数
@@ -181,29 +185,35 @@ export function createI18nInstance() {
   const i18n = createI18n({
     legacy: false, // 使用 Composition API 模式
     locale: getCurrentLocale(), // 初始语言
-    fallbackLocale: 'en', // 回退语言改为英语
+    fallbackLocale: 'en', // 回退语言
     messages: messages as any, // 语言包
   });
-  
+
+  // 保存实例引用，供 setLanguage / initI18nLanguage 使用
+  i18nInstance = i18n;
+
   return i18n;
 }
 
 // 导出语言切换函数
-export function setLanguage(i18n: ReturnType<typeof createI18nInstance>, locale: SupportedLocale) {
+export function setLanguage(locale: SupportedLocale) {
+  if (!i18nInstance) return;
+
   // 如果设置为 auto,则检测浏览器语言
   let resolvedLocale: ResolvedLocale;
   if (locale === 'auto') {
     resolvedLocale = detectBrowserLanguage();
   } else {
-    resolvedLocale = (messages[locale as keyof typeof messages] ? locale : 'zh-Hans') as ResolvedLocale;
+    resolvedLocale = (messages[locale as keyof typeof messages] ? locale : 'en') as ResolvedLocale;
   }
-  
+
   // 更新 i18n 实例的语言
-  i18n.global.locale.value = resolvedLocale;
+  i18nInstance.global.locale.value = resolvedLocale;
 }
 
 // 导出初始化函数(用于在应用启动时根据 store 设置语言)
-export function initI18nLanguage(i18n: ReturnType<typeof createI18nInstance>) {
+export function initI18nLanguage() {
+  if (!i18nInstance) return;
   const currentLocale = getCurrentLocale();
-  i18n.global.locale.value = currentLocale;
+  i18nInstance.global.locale.value = currentLocale;
 }

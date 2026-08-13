@@ -41,7 +41,7 @@
 
 ### 4. 集成配置
 - ✅ 在 `src/main.ts` 中集成 i18n
-- ✅ 在 `src/vite-env.d.ts` 中添加 TypeScript 类型声明
+- ✅ 在 `src/types/i18n.d.ts` 中添加 TypeScript 类型声明
 - ✅ 语言设置与 `setupStore` 和数据库同步
 - ✅ 所有语言已在 `i18n.ts` 中注册
 
@@ -109,7 +109,7 @@ setLanguage('en')
 ## 注意事项
 
 - ✅ 所有 23 种语言的基础框架已搭建完成
-- ✅ 语言文件位于 `src/locales/` 目录
+- ✅ 语言文件位于 `src/locale/` 目录
 - ✅ 语言代码使用 BCP 47 标准
 - ⚠️ 当前翻译内容为基础示例，可根据项目需求完善
 - 📖 详细的使用指南请查看 `docs/i18n-guide.md`

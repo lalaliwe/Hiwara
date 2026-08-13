@@ -20,7 +20,13 @@
     "fetchRecommendFailed": "अनुशंसाएँ लोड करने में विफल",
     "fetchVideoListFailed": "वीडियो सूची लोड करने में विफल",
     "fetchImageListFailed": "छवि सूची लोड करने में विफल",
-    "fetchUserInfoFailed": "उपयोगकर्ता जानकारी प्राप्त करने में विफल"
+    "fetchUserInfoFailed": "उपयोगकर्ता जानकारी प्राप्त करने में विफल",
+    "loading": "लोड हो रहा है...",
+    "retry": "पुनः प्रयास करने के लिए क्लिक करें",
+    "loadFailedSuffix": "लोड करने में विफल, ",
+    "reachedBottomCat": "अंत तक पहुंच गए~",
+    "today": "आज",
+    "error": "त्रुटि"
   },
   "setup": {
     "title": "सेटिंग्स",
@@ -215,7 +221,8 @@
       "faq": "अक्सर पूछे जाने वाले प्रश्न",
       "links": "लिंक",
       "aboutText": "यह एप्लिकेशन MPL-2.0 ओपन सोर्स लाइसेंस का पालन करता है। कृपया इसे व्यावसायिक उद्देश्यों के लिए उपयोग न करें।",
-      "noRecords": "{type} कोई रिकॉर्ड नहीं"
+      "noRecords": "{type} कोई रिकॉर्ड नहीं",
+      "notImplemented": "यह सुविधा उपलब्ध नहीं है"
     },
     "forum": {
       "listLoadFailed": "सूची लोड करने में विफल",
@@ -330,7 +337,11 @@
     "volume": "आवाज़: {n}%",
     "rewind10s": "10 सेकंड पीछे",
     "forward10s": "10 सेकंड आगे",
-    "switchComplete": "सर्वर स्विच पूर्ण"
+    "switchComplete": "सर्वर स्विच पूर्ण",
+    "recommendTab": "अनुशंसित",
+    "replay": "फिर से चलाएँ",
+    "reload": "पुनः लोड करें",
+    "unknownTitle": "अज्ञात शीर्षक"
   },
   "imageView": {
     "loading": "डेटा लोड हो रहा है",
@@ -350,19 +361,32 @@
     "imageId": "छवि आईडी {id}",
     "resolution": "रिज़ॉल्यूशन {res}",
     "expandAll": "सभी का विस्तार करें",
-    "collapse": "संक्षिप्त करें"
+    "collapse": "संक्षिप्त करें",
+    "noImage": "कोई छवि नहीं"
   },
   "favorites": {
     "title": "मेरे पसंदीदा",
     "videoTab": "वीडियो",
-    "imageTab": "छवि"
+    "imageTab": "छवि",
+    "videoLoadFailed": "पसंदीदा वीडियो लोड करने में विफल",
+    "imageLoadFailed": "पसंदीदा छवियाँ लोड करने में विफल",
+    "videoLoadFailedTip": "पसंदीदा वीडियो लोड करने में विफल~",
+    "imageLoadFailedTip": "पसंदीदा छवियाँ लोड करने में विफल~",
+    "videoEmpty": "कोई पसंदीदा वीडियो नहीं",
+    "imageEmpty": "कोई पसंदीदा छवियाँ नहीं"
   },
   "friends": {
     "title": "{type}",
     "followTab": "फ़ॉलो कर रहे हैं",
     "fansTab": "प्रशंसक",
     "friendTab": "मित्र",
-    "loading": "डेटा लोड हो रहा है"
+    "loading": "डेटा लोड हो रहा है",
+    "friendListFailed": "मित्र सूची लोड करने में विफल~",
+    "friendEmpty": "कोई मित्र सामग्री नहीं",
+    "followListFailed": "फ़ॉलो सूची लोड करने में विफल~",
+    "followEmpty": "कोई फ़ॉलो सामग्री नहीं",
+    "fansListFailed": "प्रशंसक सूची लोड करने में विफल~",
+    "fansEmpty": "कोई प्रशंसक सामग्री नहीं"
   },
   "offlineCache": {
     "title": "ऑफ़लाइन कैश",
@@ -400,12 +424,27 @@
     "loadingImageFailed": "छवि खोज परिणाम लोड करने में विफल",
     "loadingUserFailed": "उपयोगकर्ता खोज परिणाम लोड करने में विफल",
     "historyLabel": "खोज इतिहास",
-    "recommendLabel": "खोजें"
+    "recommendLabel": "खोजें",
+    "videoFailedTip": "वीडियो सूची लोड करने में विफल~",
+    "videoEmpty": "कोई वीडियो सामग्री नहीं",
+    "imageFailedTip": "छवि सूची लोड करने में विफल~",
+    "imageEmpty": "कोई छवि सामग्री नहीं",
+    "userFailedTip": "उपयोगकर्ता सूची लोड करने में विफल~",
+    "userEmpty": "कोई उपयोगकर्ता सामग्री नहीं",
+    "reachedBottom": "अंत तक पहुंच गए~"
   },
   "zone": {
     "videoTab": "वीडियो",
     "imageTab": "छवि",
-    "publishTab": "प्रकाशित करें"
+    "publishTab": "प्रकाशित करें",
+    "videoFailedTip": "वीडियो सूची लोड करने में विफल~",
+    "videoEmpty": "कोई वीडियो सामग्री नहीं",
+    "imageFailedTip": "छवि सूची लोड करने में विफल~",
+    "imageEmpty": "कोई छवि सामग्री नहीं",
+    "followers": "फ़ॉलो कर रहे हैं",
+    "fans": "प्रशंसक",
+    "editProfile": "प्रोफ़ाइल संपादित करें",
+    "detail": "विवरण"
   },
   "forum": {
     "sections": {
@@ -441,7 +480,23 @@
     "publishTitlePlaceholder": "पोस्ट का शीर्षक दर्ज करें",
     "publishBody": "सामग्री",
     "publishBodyPlaceholder": "पोस्ट सामग्री दर्ज करें, Markdown समर्थित",
-    "publishSubmit": "पोस्ट सबमिट करें"
+    "publishSubmit": "पोस्ट सबमिट करें",
+    "fetchListFailed": "फ़ोरम पोस्ट सूची लोड करने में विफल",
+    "fetchDetailFailed": "पोस्ट विवरण लोड करने में विफल",
+    "fetchSectionsFailed": "अनुभाग सूची लोड करने में विफल",
+    "fetchDataFailed": "फ़ोरम डेटा लोड करने में विफल",
+    "postDetail": "पोस्ट विवरण",
+    "titleRequired": "कृपया शीर्षक दर्ज करें",
+    "bodyRequired": "कृपया सामग्री दर्ज करें",
+    "sectionRequired": "कृपया अनुभाग चुनें",
+    "publishSuccess": "पोस्ट प्रकाशित",
+    "publishFailedRetry": "पोस्ट करने में विफल, कृपया बाद में पुनः प्रयास करें",
+    "publishFailed": "पोस्ट करने में विफल",
+    "replySuccess": "उत्तर प्रकाशित",
+    "replyFailed": "उत्तर देने में विफल",
+    "floorOwner": "पोस्टकर्ता",
+    "floorNumber": "मंज़िल {n}",
+    "publishSectionPlaceholder": "कृपया अनुभाग चुनें"
   },
   "comment": {
     "justNow": "अभी अभी",

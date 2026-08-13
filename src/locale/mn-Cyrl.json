@@ -20,7 +20,13 @@
     "fetchRecommendFailed": "Зөвлөмжүүдийг ачаалж чадсангүй",
     "fetchVideoListFailed": "Видео жагсаалтыг ачаалж чадсангүй",
     "fetchImageListFailed": "Зургийн жагсаалтыг ачаалж чадсангүй",
-    "fetchUserInfoFailed": "Хэрэглэгчийн мэдээллийг авахад алдаа гарлаа"
+    "fetchUserInfoFailed": "Хэрэглэгчийн мэдээллийг авахад алдаа гарлаа",
+    "loading": "Ачааллаж байна...",
+    "retry": "Дахин оролдох",
+    "loadFailedSuffix": "Ачаалалт амжилтгүй, ",
+    "reachedBottomCat": "Төгсгөлд хүрлээ~",
+    "today": "Өнөөдөр",
+    "error": "Алдаа"
   },
   "setup": {
     "title": "Тохиргоо",
@@ -215,7 +221,8 @@
       "faq": "Түгээмэл асуултууд",
       "links": "Холбоосууд",
       "aboutText": "Энэхүү програм нь MPL-2.0 нээлттэй эхийн лицензийг дагаж мөрддөг. Үүнийг арилжааны зорилгоор бүү ашиглаарай.",
-      "noRecords": "{type} бичлэг байхгүй"
+      "noRecords": "{type} бичлэг байхгүй",
+      "notImplemented": "Энэ функц боломжгүй"
     },
     "forum": {
       "listLoadFailed": "Жагсаалтыг ачаалахад амжилтгүй боллоо",
@@ -330,7 +337,11 @@
     "volume": "Дуу: {n}%",
     "rewind10s": "10с урагш",
     "forward10s": "10с хойш",
-    "switchComplete": "Сервер солих амжилттай"
+    "switchComplete": "Сервер солих амжилттай",
+    "recommendTab": "Зөвлөмж",
+    "replay": "Дахин тоглуулах",
+    "reload": "Дахин ачаалах",
+    "unknownTitle": "Тодорхойгүй гарчиг"
   },
   "imageView": {
     "loading": "Өгөгдөл ачааллаж байна",
@@ -350,19 +361,32 @@
     "imageId": "Зураг ID {id}",
     "resolution": "Тодорхойлолт {res}",
     "expandAll": "Бүгдийг дэлгэх",
-    "collapse": "Хураах"
+    "collapse": "Хураах",
+    "noImage": "Зураг байхгүй"
   },
   "favorites": {
     "title": "Миний дуртай",
     "videoTab": "Видео",
-    "imageTab": "Зураг"
+    "imageTab": "Зураг",
+    "videoLoadFailed": "Дуртай видеонуудыг ачаалахад алдаа гарлаа",
+    "imageLoadFailed": "Дуртай зургуудыг ачаалахад алдаа гарлаа",
+    "videoLoadFailedTip": "Дуртай видеонуудыг ачаалахад алдаа гарлаа~",
+    "imageLoadFailedTip": "Дуртай зургуудыг ачаалахад алдаа гарлаа~",
+    "videoEmpty": "Дуртай видео байхгүй",
+    "imageEmpty": "Дуртай зураг байхгүй"
   },
   "friends": {
     "title": "{type}",
     "followTab": "Дагаж буй",
     "fansTab": "Фанууд",
     "friendTab": "Найзууд",
-    "loading": "Өгөгдөл ачааллаж байна"
+    "loading": "Өгөгдөл ачааллаж байна",
+    "friendListFailed": "Найзуудын жагсаалтыг ачаалахад алдаа гарлаа~",
+    "friendEmpty": "Найзуудын агуулга байхгүй",
+    "followListFailed": "Дагаж буй жагсаалтыг ачаалахад алдаа гарлаа~",
+    "followEmpty": "Дагаж буй агуулга байхгүй",
+    "fansListFailed": "Фануудын жагсаалтыг ачаалахад алдаа гарлаа~",
+    "fansEmpty": "Фануудын агуулга байхгүй"
   },
   "offlineCache": {
     "title": "Офлайн кэш",
@@ -400,12 +424,27 @@
     "loadingImageFailed": "Зураг хайлтын үр дүнг ачаалахад алдаа гарлаа",
     "loadingUserFailed": "Хэрэглэгч хайлтын үр дүнг ачаалахад алдаа гарлаа",
     "historyLabel": "Хайлтын түүх",
-    "recommendLabel": "Нээх"
+    "recommendLabel": "Нээх",
+    "videoFailedTip": "Видео жагсаалтыг ачаалахад алдаа гарлаа~",
+    "videoEmpty": "Видео агуулга байхгүй",
+    "imageFailedTip": "Зургийн жагсаалтыг ачаалахад алдаа гарлаа~",
+    "imageEmpty": "Зургийн агуулга байхгүй",
+    "userFailedTip": "Хэрэглэгчдийн жагсаалтыг ачаалахад алдаа гарлаа~",
+    "userEmpty": "Хэрэглэгчийн агуулга байхгүй",
+    "reachedBottom": "Төгсгөлд хүрлээ~"
   },
   "zone": {
     "videoTab": "Видео",
     "imageTab": "Зураг",
-    "publishTab": "Нийтлэх"
+    "publishTab": "Нийтлэх",
+    "videoFailedTip": "Видео жагсаалтыг ачаалахад алдаа гарлаа~",
+    "videoEmpty": "Видео агуулга байхгүй",
+    "imageFailedTip": "Зургийн жагсаалтыг ачаалахад алдаа гарлаа~",
+    "imageEmpty": "Зургийн агуулга байхгүй",
+    "followers": "Дагаж буй",
+    "fans": "Фанууд",
+    "editProfile": "Профайл засах",
+    "detail": "Дэлгэрэнгүй"
   },
   "forum": {
     "sections": {
@@ -441,7 +480,23 @@
     "publishTitlePlaceholder": "Нийтлэлийн гарчигаа оруулна уу",
     "publishBody": "Агуулга",
     "publishBodyPlaceholder": "Нийтлэлийн текстээ оруулна уу, Markdown дэмждэг",
-    "publishSubmit": "Нийтлэлийг илгээх"
+    "publishSubmit": "Нийтлэлийг илгээх",
+    "fetchListFailed": "Форумын нийтлэлүүдийг ачаалахад алдаа гарлаа",
+    "fetchDetailFailed": "Нийтлэлийн дэлгэрэнгүйг ачаалахад алдаа гарлаа",
+    "fetchSectionsFailed": "Хэсгүүдийг ачаалахад алдаа гарлаа",
+    "fetchDataFailed": "Форумын өгөгдлийг ачаалахад алдаа гарлаа",
+    "postDetail": "Нийтлэлийн дэлгэрэнгүй",
+    "titleRequired": "Гарчиг оруулна уу",
+    "bodyRequired": "Агуулга оруулна уу",
+    "sectionRequired": "Хэсэг сонгоно уу",
+    "publishSuccess": "Нийтлэл илгээгдсэн",
+    "publishFailedRetry": "Нийтлэхэд алдаа гарлаа, дараа дахин оролдоно уу",
+    "publishFailed": "Нийтлэхэд алдаа гарлаа",
+    "replySuccess": "Хариулт нийтлэгдсэн",
+    "replyFailed": "Хариулах амжилтгүй",
+    "floorOwner": "Зохиогч",
+    "floorNumber": "{n} давхар",
+    "publishSectionPlaceholder": "Хэсэг сонгоно уу"
   },
   "comment": {
     "justNow": "Саяхан",

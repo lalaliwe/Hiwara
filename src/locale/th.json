@@ -20,7 +20,13 @@
     "fetchRecommendFailed": "โหลดคำแนะนำไม่สำเร็จ",
     "fetchVideoListFailed": "โหลดรายการวิดีโอไม่สำเร็จ",
     "fetchImageListFailed": "โหลดรายการรูปภาพไม่สำเร็จ",
-    "fetchUserInfoFailed": "รับข้อมูลผู้ใช้ไม่สำเร็จ"
+    "fetchUserInfoFailed": "รับข้อมูลผู้ใช้ไม่สำเร็จ",
+    "loading": "กำลังโหลด...",
+    "retry": "คลิกเพื่อลองอีกครั้ง",
+    "loadFailedSuffix": "โหลดไม่สำเร็จ ",
+    "reachedBottomCat": "ถึงจุดสิ้นสุดแล้ว~",
+    "today": "วันนี้",
+    "error": "ข้อผิดพลาด"
   },
   "setup": {
     "title": "การตั้งค่า",
@@ -215,7 +221,8 @@
       "faq": "คำถามที่พบบ่อย",
       "links": "ลิงก์ที่เกี่ยวข้อง",
       "aboutText": "แอปนี้ปฏิบัติตามสัญญาอนุญาตโอเพนซอร์ส MPL-2.0 โปรดอย่าใช้เพื่อวัตถุประสงค์ทางการค้า",
-      "noRecords": "ไม่มีบันทึก {type}"
+      "noRecords": "ไม่มีบันทึก {type}",
+      "notImplemented": "ยังไม่รองรับฟังก์ชันนี้"
     },
     "forum": {
       "listLoadFailed": "โหลดรายการไม่สำเร็จ",
@@ -330,7 +337,11 @@
     "volume": "ระดับเสียง: {n}%",
     "rewind10s": "ย้อนกลับ 10วินาที",
     "forward10s": "ไปข้างหน้า 10วินาที",
-    "switchComplete": "เปลี่ยนเซิร์ฟเวอร์เสร็จสมบูรณ์"
+    "switchComplete": "เปลี่ยนเซิร์ฟเวอร์เสร็จสมบูรณ์",
+    "recommendTab": "แนะนำ",
+    "replay": "เล่นซ้ำ",
+    "reload": "โหลดใหม่",
+    "unknownTitle": "ไม่ทราบชื่อ"
   },
   "imageView": {
     "loading": "กำลังโหลดข้อมูล",
@@ -350,19 +361,32 @@
     "imageId": "ID รูปภาพ {id}",
     "resolution": "ความละเอียด {res}",
     "expandAll": "ขยายทั้งหมด",
-    "collapse": "ยุบ"
+    "collapse": "ยุบ",
+    "noImage": "ไม่มีรูปภาพ"
   },
   "favorites": {
     "title": "รายการโปรดของฉัน",
     "videoTab": "วิดีโอ",
-    "imageTab": "รูปภาพ"
+    "imageTab": "รูปภาพ",
+    "videoLoadFailed": "โหลดวิดีโอโปรดไม่สำเร็จ",
+    "imageLoadFailed": "โหลดรูปภาพโปรดไม่สำเร็จ",
+    "videoLoadFailedTip": "โหลดวิดีโอโปรดไม่สำเร็จ~",
+    "imageLoadFailedTip": "โหลดรูปภาพโปรดไม่สำเร็จ~",
+    "videoEmpty": "ไม่มีวิดีโอโปรด",
+    "imageEmpty": "ไม่มีรูปภาพโปรด"
   },
   "friends": {
     "title": "{type}",
     "followTab": "กำลังติดตาม",
     "fansTab": "แฟน",
     "friendTab": "เพื่อน",
-    "loading": "กำลังโหลดข้อมูล"
+    "loading": "กำลังโหลดข้อมูล",
+    "friendListFailed": "โหลดรายการเพื่อนไม่สำเร็จ~",
+    "friendEmpty": "ไม่มีเนื้อหาเพื่อน",
+    "followListFailed": "โหลดรายการติดตามไม่สำเร็จ~",
+    "followEmpty": "ไม่มีเนื้อหาการติดตาม",
+    "fansListFailed": "โหลดรายการแฟนไม่สำเร็จ~",
+    "fansEmpty": "ไม่มีเนื้อหาแฟน"
   },
   "offlineCache": {
     "title": "แคชออฟไลน์",
@@ -400,12 +424,27 @@
     "loadingImageFailed": "โหลดผลการค้นหารูปภาพไม่สำเร็จ",
     "loadingUserFailed": "โหลดผลการค้นหาผู้ใช้ไม่สำเร็จ",
     "historyLabel": "ประวัติการค้นหา",
-    "recommendLabel": "การค้นพบ"
+    "recommendLabel": "การค้นพบ",
+    "videoFailedTip": "โหลดรายการวิดีโอไม่สำเร็จ~",
+    "videoEmpty": "ไม่มีเนื้อหาวิดีโอ",
+    "imageFailedTip": "โหลดรายการรูปภาพไม่สำเร็จ~",
+    "imageEmpty": "ไม่มีเนื้อหารูปภาพ",
+    "userFailedTip": "โหลดรายการผู้ใช้ไม่สำเร็จ~",
+    "userEmpty": "ไม่มีเนื้อหาผู้ใช้",
+    "reachedBottom": "ถึงจุดสิ้นสุดแล้ว~"
   },
   "zone": {
     "videoTab": "วิดีโอ",
     "imageTab": "รูปภาพ",
-    "publishTab": "เผยแพร่"
+    "publishTab": "เผยแพร่",
+    "videoFailedTip": "โหลดรายการวิดีโอไม่สำเร็จ~",
+    "videoEmpty": "ไม่มีเนื้อหาวิดีโอ",
+    "imageFailedTip": "โหลดรายการรูปภาพไม่สำเร็จ~",
+    "imageEmpty": "ไม่มีเนื้อหารูปภาพ",
+    "followers": "กำลังติดตาม",
+    "fans": "แฟน",
+    "editProfile": "แก้ไขโปรไฟล์",
+    "detail": "รายละเอียด"
   },
   "forum": {
     "sections": {
@@ -441,7 +480,23 @@
     "publishTitlePlaceholder": "ป้อนหัวข้อโพสต์",
     "publishBody": "เนื้อหา",
     "publishBodyPlaceholder": "ป้อนเนื้อหาโพสต์ รองรับ Markdown",
-    "publishSubmit": "ส่งโพสต์"
+    "publishSubmit": "ส่งโพสต์",
+    "fetchListFailed": "โหลดโพสต์ฟอรัมไม่สำเร็จ",
+    "fetchDetailFailed": "โหลดรายละเอียดโพสต์ไม่สำเร็จ",
+    "fetchSectionsFailed": "โหลดหมวดไม่สำเร็จ",
+    "fetchDataFailed": "โหลดข้อมูลฟอรัมไม่สำเร็จ",
+    "postDetail": "รายละเอียดโพสต์",
+    "titleRequired": "กรุณาป้อนหัวข้อ",
+    "bodyRequired": "กรุณาป้อนเนื้อหา",
+    "sectionRequired": "กรุณาเลือกหมวด",
+    "publishSuccess": "โพสต์สำเร็จ",
+    "publishFailedRetry": "โพสต์ไม่สำเร็จ โปรดลองอีกครั้งภายหลัง",
+    "publishFailed": "โพสต์ไม่สำเร็จ",
+    "replySuccess": "ตอบสำเร็จ",
+    "replyFailed": "ตอบไม่สำเร็จ",
+    "floorOwner": "ผู้ตั้งกระทู้",
+    "floorNumber": "ชั้น {n}",
+    "publishSectionPlaceholder": "กรุณาเลือกหมวด"
   },
   "comment": {
     "justNow": "เมื่อสักครู่",

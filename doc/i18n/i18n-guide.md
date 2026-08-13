@@ -36,7 +36,7 @@
 
 ## 当前已实现的语言文件
 
-位于 `src/locales/` 目录下：
+位于 `src/locale/` 目录下：
 - `en.json` - 英语
 - `zh-Hans.json` - 简体中文
 - `zh-Hant.json` - 繁体中文
@@ -138,7 +138,7 @@ setLanguage('auto')
 }
 ```
 
-2. 更新 TypeScript 类型声明 (`src/vite-env.d.ts`)
+2. 更新 TypeScript 类型声明 (`src/types/i18n.d.ts`)
 
 3. 在组件中使用：
 ```vue
@@ -149,7 +149,7 @@ setLanguage('auto')
 
 ## 添加新的语言支持
 
-1. 在 `src/locales/` 目录下创建新的语言文件，如 `ko.json`（韩语）
+1. 在 `src/locale/` 目录下创建新的语言文件，如 `ko.json`（韩语）
 
 2. 在 `src/core/i18n.ts` 中导入并注册：
 
@@ -191,7 +191,7 @@ if (browserLang.startsWith('ko')) {
 1. **语言代码规范**: 必须使用 BCP 47 标准（如 `zh-Hans` 而非 `zh-CN`）
 2. **语言切换时机**: 建议在用户明确操作后切换语言（如设置页面）
 3. **持久化**: 语言设置会自动保存到数据库，下次启动时恢复
-4. **默认回退**: 如果某个翻译键不存在，会回退到 `zh-Hans`
+4. **默认回退**: 如果某个翻译键不存在，会回退到 `en`
 5. **类型安全**: 所有翻译键都有 TypeScript 类型提示
 
 ## 示例：完整的使用场景

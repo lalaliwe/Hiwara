@@ -81,7 +81,7 @@ const getLanguageLabel = (lang: string) => {
     'mn-Cyrl': t('setup.languagePage.mongolian'),
     'mn-Mong': t('setup.languagePage.mongolian')
   }
-  return langMap[lang] || 'English'
+  return langMap[lang] || t('setup.languagePage.english')
 }
 </script>
 

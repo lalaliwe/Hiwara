@@ -20,7 +20,13 @@
     "fetchRecommendFailed": "تەۋسىيەلەرنى يۈكلىيەلمىدى",
     "fetchVideoListFailed": "سىن تىزىملىكىنى يۈكلىيەلمىدى",
     "fetchImageListFailed": "رەسىم تىزىملىكىنى يۈكلىيەلمىدى",
-    "fetchUserInfoFailed": "ئىشلەتكۈچى ئۇچۇرىنى ئالالمىدى"
+    "fetchUserInfoFailed": "ئىشلەتكۈچى ئۇچۇرىنى ئالالمىدى",
+    "loading": "يۈكلەۋاتىدۇ...",
+    "retry": "قايتا سىناش ئۈچۈن چېكىڭ",
+    "loadFailedSuffix": "يۈكلەش مەغلۇب بولدى، ",
+    "reachedBottomCat": "ئاستىغا يەتتى~",
+    "today": "بۈگۈن",
+    "error": "خاتالىق"
   },
   "setup": {
     "title": "تەڭشەكلەر",
@@ -215,7 +221,8 @@
       "faq": "كۆپ سورالغان سوئاللار",
       "links": "ئۇلانما",
       "aboutText": "بۇ قوللانما MPL-2.0 ئوچۇق مەنبە ئىجازەتنامىسىگە ئەمەل قىلىدۇ. سودا مەقسىتىدە ئىشلەتمەڭ.",
-      "noRecords": "{type} خاتىرىسى يوق"
+      "noRecords": "{type} خاتىرىسى يوق",
+      "notImplemented": "بۇ ئىقتىدار ھازىرچە يوق"
     },
     "forum": {
       "listLoadFailed": "تىزىملىكنى يۈكلەش مەغلۇب بولدى",
@@ -330,7 +337,11 @@
     "volume": "ئاۋاز: {n}%",
     "rewind10s": "10s كەينىگە",
     "forward10s": "10s ئالدىغا",
-    "switchComplete": "مۇلازىمېتىر ئالماشتۇرۇش تاماملاندى"
+    "switchComplete": "مۇلازىمېتىر ئالماشتۇرۇش تاماملاندى",
+    "recommendTab": "تەۋسىيە",
+    "replay": "قايتا قويۇش",
+    "reload": "قايتا يۈكلەش",
+    "unknownTitle": "نامەلۇم ماۋزۇ"
   },
   "imageView": {
     "loading": "سانلىق مەلۇمات يۈكلىنىۋاتىدۇ",
@@ -350,19 +361,32 @@
     "imageId": "رەسىم ID {id}",
     "resolution": "ئېنىقلىق {res}",
     "expandAll": "ھەممىنى كېڭەيتىش",
-    "collapse": "يىغىش"
+    "collapse": "يىغىش",
+    "noImage": "رەسىم يوق"
   },
   "favorites": {
     "title": "مېنىڭ ياقتۇرىدىغانلىرىم",
     "videoTab": "سىن",
-    "imageTab": "رەسىم"
+    "imageTab": "رەسىم",
+    "videoLoadFailed": "ياقتۇرغان سىنلارنى يۈكلەش مەغلۇب بولدى",
+    "imageLoadFailed": "ياقتۇرغان رەسىملەرنى يۈكلەش مەغلۇب بولدى",
+    "videoLoadFailedTip": "ياقتۇرغان سىنلارنى يۈكلەش مەغلۇب بولدى~",
+    "imageLoadFailedTip": "ياقتۇرغان رەسىملەرنى يۈكلەش مەغلۇب بولدى~",
+    "videoEmpty": "ياقتۇرغان سىن يوق",
+    "imageEmpty": "ياقتۇرغان رەسىم يوق"
   },
   "friends": {
     "title": "{type}",
     "followTab": "ئەگىشىۋاتقان",
     "fansTab": "مەستانىلەر",
     "friendTab": "دوستلار",
-    "loading": "سانلىق مەلۇمات يۈكلىنىۋاتىدۇ"
+    "loading": "سانلىق مەلۇمات يۈكلىنىۋاتىدۇ",
+    "friendListFailed": "دوستلار تىزىملىكىنى يۈكلەش مەغلۇب بولدى~",
+    "friendEmpty": "دوست مەزمۇنى يوق",
+    "followListFailed": "ئەگىشىۋاتقانلار تىزىملىكىنى يۈكلەش مەغلۇب بولدى~",
+    "followEmpty": "ئەگىشىش مەزمۇنى يوق",
+    "fansListFailed": "مەستانىلەر تىزىملىكىنى يۈكلەش مەغلۇب بولدى~",
+    "fansEmpty": "مەستانە مەزمۇنى يوق"
   },
   "offlineCache": {
     "title": "تورسىز كەش",
@@ -400,12 +424,27 @@
     "loadingImageFailed": "رەسىم ئىزدەش نەتىجىسىنى يۈكلەش مەغلۇب بولدى",
     "loadingUserFailed": "ئىشلەتكۈچى ئىزدەش نەتىجىسىنى يۈكلەش مەغلۇب بولدى",
     "historyLabel": "ئىزدەش تارىخى",
-    "recommendLabel": "بايقاش"
+    "recommendLabel": "بايقاش",
+    "videoFailedTip": "سىن تىزىملىكىنى يۈكلەش مەغلۇب بولدى~",
+    "videoEmpty": "سىن مەزمۇنى يوق",
+    "imageFailedTip": "رەسىم تىزىملىكىنى يۈكلەش مەغلۇب بولدى~",
+    "imageEmpty": "رەسىم مەزمۇنى يوق",
+    "userFailedTip": "ئىشلەتكۈچىلەر تىزىملىكىنى يۈكلەش مەغلۇب بولدى~",
+    "userEmpty": "ئىشلەتكۈچى مەزمۇنى يوق",
+    "reachedBottom": "ئاستىغا يەتتى~"
   },
   "zone": {
     "videoTab": "سىن",
     "imageTab": "رەسىم",
-    "publishTab": "يوللاش"
+    "publishTab": "يوللاش",
+    "videoFailedTip": "سىن تىزىملىكىنى يۈكلەش مەغلۇب بولدى~",
+    "videoEmpty": "سىن مەزمۇنى يوق",
+    "imageFailedTip": "رەسىم تىزىملىكىنى يۈكلەش مەغلۇب بولدى~",
+    "imageEmpty": "رەسىم مەزمۇنى يوق",
+    "followers": "ئەگىشىۋاتقان",
+    "fans": "مەستانىلەر",
+    "editProfile": "ئارخىپ تەھرىرلەش",
+    "detail": "تەپسىلات"
   },
   "forum": {
     "sections": {
@@ -441,7 +480,23 @@
     "publishTitlePlaceholder": "يازما ماۋزۇسىنى كىرگۈزۈڭ",
     "publishBody": "مەزمۇن",
     "publishBodyPlaceholder": "يازما مەزمۇنىنى كىرگۈزۈڭ، Markdown قوللايدۇ",
-    "publishSubmit": "يازما يوللاش"
+    "publishSubmit": "يازما يوللاش",
+    "fetchListFailed": "مۇنبەر يازمىلىرى تىزىملىكىنى يۈكلەش مەغلۇب بولدى",
+    "fetchDetailFailed": "يازما تەپسىلاتىنى يۈكلەش مەغلۇب بولدى",
+    "fetchSectionsFailed": "بۆلەكلەر تىزىملىكىنى يۈكلەش مەغلۇب بولدى",
+    "fetchDataFailed": "مۇنبەر سانلىق مەلۇماتىنى يۈكلەش مەغلۇب بولدى",
+    "postDetail": "يازما تەپسىلاتى",
+    "titleRequired": "ماۋزۇ كىرگۈزۈڭ",
+    "bodyRequired": "مەزمۇن كىرگۈزۈڭ",
+    "sectionRequired": "بۆلەك تاللاڭ",
+    "publishSuccess": "يازما يوللاندى",
+    "publishFailedRetry": "يازما يوللاش مەغلۇب بولدى، كېيىن قايتا سىناڭ",
+    "publishFailed": "يازما يوللاش مەغلۇب بولدى",
+    "replySuccess": "جاۋاب يوللاندى",
+    "replyFailed": "جاۋاب يوللاش مەغلۇب بولدى",
+    "floorOwner": "يازغۇچى",
+    "floorNumber": "{n} قەۋەت",
+    "publishSectionPlaceholder": "بۆلەك تاللاڭ"
   },
   "comment": {
     "justNow": "ھازىرلا",

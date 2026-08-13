@@ -71,7 +71,7 @@ app.directive('ripple', Ripple);
 await initializeAllStores();
 
 // 初始化 i18n 语言（根据 store 中的设置）
-initI18nLanguage(i18n);
+initI18nLanguage();
 
 app.mount("#app");
 

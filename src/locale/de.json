@@ -20,7 +20,13 @@
     "fetchRecommendFailed": "Empfehlungen konnten nicht geladen werden",
     "fetchVideoListFailed": "Videoliste konnte nicht geladen werden",
     "fetchImageListFailed": "Bildliste konnte nicht geladen werden",
-    "fetchUserInfoFailed": "Benutzerinformationen konnten nicht abgerufen werden"
+    "fetchUserInfoFailed": "Benutzerinformationen konnten nicht abgerufen werden",
+    "loading": "Laden...",
+    "retry": "Klicken zum Wiederholen",
+    "loadFailedSuffix": "Laden fehlgeschlagen, ",
+    "reachedBottomCat": "Ende erreicht~",
+    "today": "Heute",
+    "error": "Fehler"
   },
   "setup": {
     "title": "Einstellungen",
@@ -215,7 +221,8 @@
       "faq": "Häufige Fragen",
       "links": "Links",
       "aboutText": "Diese App folgt der MPL-2.0 Open-Source-Lizenz. Bitte nicht für kommerzielle Zwecke nutzen.",
-      "noRecords": "Keine {type}-Aufzeichnungen"
+      "noRecords": "Keine {type}-Aufzeichnungen",
+      "notImplemented": "Funktion nicht verfügbar"
     },
     "forum": {
       "listLoadFailed": "Liste konnte nicht geladen werden",
@@ -330,7 +337,11 @@
     "volume": "Lautstärke: {n}%",
     "rewind10s": "10s zurück",
     "forward10s": "10s vor",
-    "switchComplete": "Serverwechsel abgeschlossen"
+    "switchComplete": "Serverwechsel abgeschlossen",
+    "recommendTab": "Empfohlen",
+    "replay": "Erneut abspielen",
+    "reload": "Neu laden",
+    "unknownTitle": "Unbekannter Titel"
   },
   "imageView": {
     "loading": "Lade Daten",
@@ -350,19 +361,32 @@
     "imageId": "Bild-ID {id}",
     "resolution": "Auflösung {res}",
     "expandAll": "Alle erweitern",
-    "collapse": "Einklappen"
+    "collapse": "Einklappen",
+    "noImage": "Kein Bild"
   },
   "favorites": {
     "title": "Meine Favoriten",
     "videoTab": "Video",
-    "imageTab": "Bild"
+    "imageTab": "Bild",
+    "videoLoadFailed": "Video-Favoriten konnten nicht geladen werden",
+    "imageLoadFailed": "Bild-Favoriten konnten nicht geladen werden",
+    "videoLoadFailedTip": "Video-Favoriten konnten nicht geladen werden~",
+    "imageLoadFailedTip": "Bild-Favoriten konnten nicht geladen werden~",
+    "videoEmpty": "Keine Video-Favoriten",
+    "imageEmpty": "Keine Bild-Favoriten"
   },
   "friends": {
     "title": "{type}",
     "followTab": "Folge ich",
     "fansTab": "Fans",
     "friendTab": "Freunde",
-    "loading": "Daten werden geladen"
+    "loading": "Daten werden geladen",
+    "friendListFailed": "Freundesliste konnte nicht geladen werden~",
+    "friendEmpty": "Keine Freundesinhalte",
+    "followListFailed": "Abonnementliste konnte nicht geladen werden~",
+    "followEmpty": "Keine Abonnementinhalte",
+    "fansListFailed": "Fanliste konnte nicht geladen werden~",
+    "fansEmpty": "Keine Faninhalte"
   },
   "offlineCache": {
     "title": "Offline-Cache",
@@ -400,12 +424,27 @@
     "loadingImageFailed": "Bildsuchergebnisse konnten nicht geladen werden",
     "loadingUserFailed": "Benutzersuchergebnisse konnten nicht geladen werden",
     "historyLabel": "Suchverlauf",
-    "recommendLabel": "Entdecken"
+    "recommendLabel": "Entdecken",
+    "videoFailedTip": "Videoliste konnte nicht geladen werden~",
+    "videoEmpty": "Keine Videoinhalte",
+    "imageFailedTip": "Bildliste konnte nicht geladen werden~",
+    "imageEmpty": "Keine Bildinhalte",
+    "userFailedTip": "Benutzerliste konnte nicht geladen werden~",
+    "userEmpty": "Keine Benutzerinhalte",
+    "reachedBottom": "Ende erreicht~"
   },
   "zone": {
     "videoTab": "Video",
     "imageTab": "Bild",
-    "publishTab": "Veröffentlichen"
+    "publishTab": "Veröffentlichen",
+    "videoFailedTip": "Videoliste konnte nicht geladen werden~",
+    "videoEmpty": "Keine Videoinhalte",
+    "imageFailedTip": "Bildliste konnte nicht geladen werden~",
+    "imageEmpty": "Keine Bildinhalte",
+    "followers": "Folge ich",
+    "fans": "Fans",
+    "editProfile": "Profil bearbeiten",
+    "detail": "Details"
   },
   "forum": {
     "sections": {
@@ -441,7 +480,23 @@
     "publishTitlePlaceholder": "Beitragstitel eingeben",
     "publishBody": "Inhalt",
     "publishBodyPlaceholder": "Beitragsinhalt eingeben, Markdown unterstützt",
-    "publishSubmit": "Beitrag veröffentlichen"
+    "publishSubmit": "Beitrag veröffentlichen",
+    "fetchListFailed": "Forum-Beiträge konnten nicht geladen werden",
+    "fetchDetailFailed": "Beitragsdetails konnten nicht geladen werden",
+    "fetchSectionsFailed": "Bereiche konnten nicht geladen werden",
+    "fetchDataFailed": "Forum-Daten konnten nicht geladen werden",
+    "postDetail": "Beitragsdetails",
+    "titleRequired": "Bitte geben Sie einen Titel ein",
+    "bodyRequired": "Bitte geben Sie Inhalt ein",
+    "sectionRequired": "Bitte wählen Sie einen Bereich",
+    "publishSuccess": "Beitrag veröffentlicht",
+    "publishFailedRetry": "Veröffentlichung fehlgeschlagen, bitte später erneut versuchen",
+    "publishFailed": "Veröffentlichung fehlgeschlagen",
+    "replySuccess": "Antwort veröffentlicht",
+    "replyFailed": "Antwort fehlgeschlagen",
+    "floorOwner": "OP",
+    "floorNumber": "Etage {n}",
+    "publishSectionPlaceholder": "Bitte wählen Sie einen Bereich"
   },
   "comment": {
     "justNow": "Gerade eben",

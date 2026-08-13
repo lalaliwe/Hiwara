@@ -20,7 +20,13 @@
     "fetchRecommendFailed": "Échec du chargement des recommandations",
     "fetchVideoListFailed": "Échec du chargement de la liste des vidéos",
     "fetchImageListFailed": "Échec du chargement de la liste des images",
-    "fetchUserInfoFailed": "Échec de l'obtention des informations utilisateur"
+    "fetchUserInfoFailed": "Échec de l'obtention des informations utilisateur",
+    "loading": "Chargement...",
+    "retry": "Cliquez pour réessayer",
+    "loadFailedSuffix": "Échec du chargement, ",
+    "reachedBottomCat": "Vous avez atteint la fin~",
+    "today": "Aujourd'hui",
+    "error": "Erreur"
   },
   "setup": {
     "title": "Paramètres",
@@ -215,7 +221,8 @@
       "faq": "FAQ",
       "links": "Liens",
       "aboutText": "Cette application suit la licence open source MPL-2.0. Veuillez ne pas l'utiliser à des fins commerciales.",
-      "noRecords": "Aucun enregistrement {type}"
+      "noRecords": "Aucun enregistrement {type}",
+      "notImplemented": "Fonctionnalité non disponible"
     },
     "forum": {
       "listLoadFailed": "Échec du chargement de la liste",
@@ -330,7 +337,11 @@
     "volume": "Volume: {n}%",
     "rewind10s": "Reculer 10s",
     "forward10s": "Avancer 10s",
-    "switchComplete": "Changement de serveur terminé"
+    "switchComplete": "Changement de serveur terminé",
+    "recommendTab": "Recommandé",
+    "replay": "Rejouer",
+    "reload": "Recharger",
+    "unknownTitle": "Titre inconnu"
   },
   "imageView": {
     "loading": "Chargement des données",
@@ -350,19 +361,32 @@
     "imageId": "ID de l'image {id}",
     "resolution": "Résolution {res}",
     "expandAll": "Tout développer",
-    "collapse": "Réduire"
+    "collapse": "Réduire",
+    "noImage": "Aucune image"
   },
   "favorites": {
     "title": "Mes favoris",
     "videoTab": "Vidéo",
-    "imageTab": "Image"
+    "imageTab": "Image",
+    "videoLoadFailed": "Échec du chargement des vidéos favorites",
+    "imageLoadFailed": "Échec du chargement des images favorites",
+    "videoLoadFailedTip": "Échec du chargement des vidéos favorites~",
+    "imageLoadFailedTip": "Échec du chargement des images favorites~",
+    "videoEmpty": "Aucune vidéo favorite",
+    "imageEmpty": "Aucune image favorite"
   },
   "friends": {
     "title": "{type}",
     "followTab": "Abonnements",
     "fansTab": "Fans",
     "friendTab": "Amis",
-    "loading": "Chargement des données"
+    "loading": "Chargement des données",
+    "friendListFailed": "Échec du chargement de la liste d'amis~",
+    "friendEmpty": "Aucun contenu d'amis",
+    "followListFailed": "Échec du chargement de la liste des abonnements~",
+    "followEmpty": "Aucun contenu d'abonnements",
+    "fansListFailed": "Échec du chargement de la liste des fans~",
+    "fansEmpty": "Aucun contenu de fans"
   },
   "offlineCache": {
     "title": "Cache hors ligne",
@@ -400,12 +424,27 @@
     "loadingImageFailed": "Échec du chargement des résultats de recherche d'image",
     "loadingUserFailed": "Échec du chargement des résultats de recherche d'utilisateur",
     "historyLabel": "Historique de recherche",
-    "recommendLabel": "Découvrir"
+    "recommendLabel": "Découvrir",
+    "videoFailedTip": "Échec du chargement de la liste vidéo~",
+    "videoEmpty": "Aucun contenu vidéo",
+    "imageFailedTip": "Échec du chargement de la liste d'images~",
+    "imageEmpty": "Aucun contenu d'image",
+    "userFailedTip": "Échec du chargement de la liste d'utilisateurs~",
+    "userEmpty": "Aucun contenu d'utilisateur",
+    "reachedBottom": "Vous avez atteint la fin~"
   },
   "zone": {
     "videoTab": "Vidéo",
     "imageTab": "Image",
-    "publishTab": "Publier"
+    "publishTab": "Publier",
+    "videoFailedTip": "Échec du chargement de la liste vidéo~",
+    "videoEmpty": "Aucun contenu vidéo",
+    "imageFailedTip": "Échec du chargement de la liste d'images~",
+    "imageEmpty": "Aucun contenu d'image",
+    "followers": "Abonnements",
+    "fans": "Fans",
+    "editProfile": "Modifier le profil",
+    "detail": "Détails"
   },
   "forum": {
     "sections": {
@@ -441,7 +480,23 @@
     "publishTitlePlaceholder": "Entrez le titre de la publication",
     "publishBody": "Contenu",
     "publishBodyPlaceholder": "Entrez le contenu, Markdown supporté",
-    "publishSubmit": "Soumettre la publication"
+    "publishSubmit": "Soumettre la publication",
+    "fetchListFailed": "Échec du chargement des publications du forum",
+    "fetchDetailFailed": "Échec du chargement des détails de la publication",
+    "fetchSectionsFailed": "Échec du chargement des sections",
+    "fetchDataFailed": "Échec du chargement des données du forum",
+    "postDetail": "Détails de la publication",
+    "titleRequired": "Veuillez saisir un titre",
+    "bodyRequired": "Veuillez saisir le contenu",
+    "sectionRequired": "Veuillez sélectionner une section",
+    "publishSuccess": "Publication publiée",
+    "publishFailedRetry": "Échec de la publication, veuillez réessayer plus tard",
+    "publishFailed": "Échec de la publication",
+    "replySuccess": "Réponse publiée",
+    "replyFailed": "Échec de la réponse",
+    "floorOwner": "OP",
+    "floorNumber": "Étage {n}",
+    "publishSectionPlaceholder": "Veuillez sélectionner une section"
   },
   "comment": {
     "justNow": "À l'instant",

@@ -20,7 +20,13 @@
     "fetchRecommendFailed": "おすすめの取得に失敗しました",
     "fetchVideoListFailed": "動画リストの取得に失敗しました",
     "fetchImageListFailed": "画像リストの取得に失敗しました",
-    "fetchUserInfoFailed": "ユーザー情報の取得に失敗しました"
+    "fetchUserInfoFailed": "ユーザー情報の取得に失敗しました",
+    "loading": "読み込み中...",
+    "retry": "クリックして再試行",
+    "loadFailedSuffix": "読み込み失敗、",
+    "reachedBottomCat": "最後まで表示しました~",
+    "today": "今日",
+    "error": "エラー"
   },
   "setup": {
     "title": "設定",
@@ -215,7 +221,8 @@
       "faq": "よくある質問",
       "links": "関連リンク",
       "aboutText": "本アプリはMPL-2.0オープンソースライセンスに従います。商業目的での使用はご遠慮ください。",
-      "noRecords": "{type}の記録がありません"
+      "noRecords": "{type}の記録がありません",
+      "notImplemented": "この機能はまだ利用できません"
     },
     "forum": {
       "listLoadFailed": "リストの読み込みに失敗しました",
@@ -330,7 +337,11 @@
     "volume": "音量: {n}%",
     "rewind10s": "10秒戻す",
     "forward10s": "10秒進む",
-    "switchComplete": "サーバー切り替え完了"
+    "switchComplete": "サーバー切り替え完了",
+    "recommendTab": "おすすめ",
+    "replay": "もう一度再生",
+    "reload": "再読み込み",
+    "unknownTitle": "不明なタイトル"
   },
   "imageView": {
     "loading": "データを読み込み中",
@@ -350,19 +361,32 @@
     "imageId": "画像ID {id}",
     "resolution": "解像度 {res}",
     "expandAll": "すべて展開",
-    "collapse": "折りたたむ"
+    "collapse": "折りたたむ",
+    "noImage": "画像がありません"
   },
   "favorites": {
     "title": "マイお気に入り",
     "videoTab": "動画",
-    "imageTab": "画像"
+    "imageTab": "画像",
+    "videoLoadFailed": "動画お気に入りの読み込みに失敗しました",
+    "imageLoadFailed": "画像お気に入りの読み込みに失敗しました",
+    "videoLoadFailedTip": "動画お気に入りの読み込みに失敗しました~",
+    "imageLoadFailedTip": "画像お気に入りの読み込みに失敗しました~",
+    "videoEmpty": "動画お気に入りがありません",
+    "imageEmpty": "画像お気に入りがありません"
   },
   "friends": {
     "title": "{type}",
     "followTab": "フォロー",
     "fansTab": "ファン",
     "friendTab": "フレンド",
-    "loading": "データ読み込み中"
+    "loading": "データ読み込み中",
+    "friendListFailed": "フレンドリストの読み込みに失敗しました~",
+    "friendEmpty": "フレンドの内容がありません",
+    "followListFailed": "フォローリストの読み込みに失敗しました~",
+    "followEmpty": "フォロー中の内容がありません",
+    "fansListFailed": "ファンリストの読み込みに失敗しました~",
+    "fansEmpty": "ファンの内容がありません"
   },
   "offlineCache": {
     "title": "オフラインキャッシュ",
@@ -400,12 +424,27 @@
     "loadingImageFailed": "画像検索結果の読み込みに失敗しました",
     "loadingUserFailed": "ユーザー検索結果の読み込みに失敗しました",
     "historyLabel": "検索履歴",
-    "recommendLabel": "おすすめ検索"
+    "recommendLabel": "おすすめ検索",
+    "videoFailedTip": "動画リストの読み込みに失敗しました~",
+    "videoEmpty": "動画の内容がありません",
+    "imageFailedTip": "画像リストの読み込みに失敗しました~",
+    "imageEmpty": "画像の内容がありません",
+    "userFailedTip": "ユーザーリストの読み込みに失敗しました~",
+    "userEmpty": "ユーザーの内容がありません",
+    "reachedBottom": "最後まで表示しました~"
   },
   "zone": {
     "videoTab": "動画",
     "imageTab": "画像",
-    "publishTab": "公開"
+    "publishTab": "公開",
+    "videoFailedTip": "動画リストの読み込みに失敗しました~",
+    "videoEmpty": "動画の内容がありません",
+    "imageFailedTip": "画像リストの読み込みに失敗しました~",
+    "imageEmpty": "画像の内容がありません",
+    "followers": "フォロー",
+    "fans": "ファン",
+    "editProfile": "プロフィール編集",
+    "detail": "詳細"
   },
   "forum": {
     "sections": {
@@ -441,7 +480,23 @@
     "publishTitlePlaceholder": "投稿のタイトルを入力",
     "publishBody": "内容",
     "publishBodyPlaceholder": "投稿内容を入力（Markdown対応）",
-    "publishSubmit": "投稿する"
+    "publishSubmit": "投稿する",
+    "fetchListFailed": "フォーラム投稿リストの読み込みに失敗しました",
+    "fetchDetailFailed": "投稿詳細の読み込みに失敗しました",
+    "fetchSectionsFailed": "セクションリストの読み込みに失敗しました",
+    "fetchDataFailed": "フォーラムデータの読み込みに失敗しました",
+    "postDetail": "投稿詳細",
+    "titleRequired": "タイトルを入力してください",
+    "bodyRequired": "内容を入力してください",
+    "sectionRequired": "セクションを選択してください",
+    "publishSuccess": "投稿しました",
+    "publishFailedRetry": "投稿に失敗しました。しばらくしてからお試しください",
+    "publishFailed": "投稿に失敗しました",
+    "replySuccess": "返信しました",
+    "replyFailed": "返信に失敗しました",
+    "floorOwner": "スレ主",
+    "floorNumber": "{n}階",
+    "publishSectionPlaceholder": "セクションを選択してください"
   },
   "comment": {
     "justNow": "たった今",

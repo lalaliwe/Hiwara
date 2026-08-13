@@ -20,7 +20,13 @@
     "fetchRecommendFailed": "Ұсыныстарды жүктеу сәтсіз аяқталды",
     "fetchVideoListFailed": "Бейне тізімін жүктеу сәтсіз аяқталды",
     "fetchImageListFailed": "Сурет тізімін жүктеу сәтсіз аяқталды",
-    "fetchUserInfoFailed": "Пайдаланушы ақпаратын алу сәтсіз аяқталды"
+    "fetchUserInfoFailed": "Пайдаланушы ақпаратын алу сәтсіз аяқталды",
+    "loading": "Жүктелуде...",
+    "retry": "Қайталау үшін басыңыз",
+    "loadFailedSuffix": "Жүктеу сәтсіз аяқталды, ",
+    "reachedBottomCat": "Соңына жетті~",
+    "today": "Бүгін",
+    "error": "Қате"
   },
   "setup": {
     "title": "Параметрлер",
@@ -215,7 +221,8 @@
       "faq": "Жиі қойылатын сұрақтар",
       "links": "Сілтемелер",
       "aboutText": "Бұл қосымша MPL-2.0 ашық бастапқы код лицензиясын сақтайды. Оны коммерциялық мақсаттарда пайдаланбаңыз.",
-      "noRecords": "{type} жазбалары жоқ"
+      "noRecords": "{type} жазбалары жоқ",
+      "notImplemented": "Бұл функция қолжетімсіз"
     },
     "forum": {
       "listLoadFailed": "Тізімді жүктеу сәтсіз аяқталды",
@@ -330,7 +337,11 @@
     "volume": "Дыбыс: {n}%",
     "rewind10s": "10с артқа",
     "forward10s": "10с алға",
-    "switchComplete": "Сервер ауыстыру аяқталды"
+    "switchComplete": "Сервер ауыстыру аяқталды",
+    "recommendTab": "Ұсынылады",
+    "replay": "Қайта ойнату",
+    "reload": "Қайта жүктеу",
+    "unknownTitle": "Белгісіз тақырып"
   },
   "imageView": {
     "loading": "Деректер жүктелуде",
@@ -350,19 +361,32 @@
     "imageId": "Сурет ID {id}",
     "resolution": "Рұқсат {res}",
     "expandAll": "Барлығын кеңейту",
-    "collapse": "Жию"
+    "collapse": "Жию",
+    "noImage": "Сурет жоқ"
   },
   "favorites": {
     "title": "Менің таңдаулым",
     "videoTab": "Бейне",
-    "imageTab": "Сурет"
+    "imageTab": "Сурет",
+    "videoLoadFailed": "Таңдаулы бейнелерді жүктеу сәтсіз",
+    "imageLoadFailed": "Таңдаулы суреттерді жүктеу сәтсіз",
+    "videoLoadFailedTip": "Таңдаулы бейнелерді жүктеу сәтсіз~",
+    "imageLoadFailedTip": "Таңдаулы суреттерді жүктеу сәтсіз~",
+    "videoEmpty": "Таңдаулы бейнелер жоқ",
+    "imageEmpty": "Таңдаулы суреттер жоқ"
   },
   "friends": {
     "title": "{type}",
     "followTab": "Жазылымдар",
     "fansTab": "Фанаттар",
     "friendTab": "Достар",
-    "loading": "Деректер жүктелуде"
+    "loading": "Деректер жүктелуде",
+    "friendListFailed": "Достар тізімін жүктеу сәтсіз~",
+    "friendEmpty": "Достар мазмұны жоқ",
+    "followListFailed": "Жазылымдар тізімін жүктеу сәтсіз~",
+    "followEmpty": "Жазылым мазмұны жоқ",
+    "fansListFailed": "Фанаттар тізімін жүктеу сәтсіз~",
+    "fansEmpty": "Фанаттар мазмұны жоқ"
   },
   "offlineCache": {
     "title": "Офлайн кэш",
@@ -400,12 +424,27 @@
     "loadingImageFailed": "Сурет іздеу нәтижелерін жүктеу сәтсіз аяқталды",
     "loadingUserFailed": "Пайдаланушы іздеу нәтижелерін жүктеу сәтсіз аяқталды",
     "historyLabel": "Іздеу тарихы",
-    "recommendLabel": "Табу"
+    "recommendLabel": "Табу",
+    "videoFailedTip": "Бейне тізімін жүктеу сәтсіз~",
+    "videoEmpty": "Бейне мазмұны жоқ",
+    "imageFailedTip": "Сурет тізімін жүктеу сәтсіз~",
+    "imageEmpty": "Сурет мазмұны жоқ",
+    "userFailedTip": "Пайдаланушылар тізімін жүктеу сәтсіз~",
+    "userEmpty": "Пайдаланушы мазмұны жоқ",
+    "reachedBottom": "Соңына жетті~"
   },
   "zone": {
     "videoTab": "Бейне",
     "imageTab": "Сурет",
-    "publishTab": "Жариялау"
+    "publishTab": "Жариялау",
+    "videoFailedTip": "Бейне тізімін жүктеу сәтсіз~",
+    "videoEmpty": "Бейне мазмұны жоқ",
+    "imageFailedTip": "Сурет тізімін жүктеу сәтсіз~",
+    "imageEmpty": "Сурет мазмұны жоқ",
+    "followers": "Жазылымдар",
+    "fans": "Фанаттар",
+    "editProfile": "Профильді өңдеу",
+    "detail": "Толығырақ"
   },
   "forum": {
     "sections": {
@@ -441,7 +480,23 @@
     "publishTitlePlaceholder": "Жарияланым тақырыбын енгізіңіз",
     "publishBody": "Мазмұны",
     "publishBodyPlaceholder": "Жарияланым мәтінін енгізіңіз, Markdown қолдайды",
-    "publishSubmit": "Жарияланымды жіберу"
+    "publishSubmit": "Жарияланымды жіберу",
+    "fetchListFailed": "Форум жарияланымдарын жүктеу сәтсіз",
+    "fetchDetailFailed": "Жарияланым егжей-тегжейін жүктеу сәтсіз",
+    "fetchSectionsFailed": "Бөлімдерді жүктеу сәтсіз",
+    "fetchDataFailed": "Форум деректерін жүктеу сәтсіз",
+    "postDetail": "Жарияланым егжей-тегжейі",
+    "titleRequired": "Тақырып енгізіңіз",
+    "bodyRequired": "Мазмұн енгізіңіз",
+    "sectionRequired": "Бөлімді таңдаңыз",
+    "publishSuccess": "Жарияланым жіберілді",
+    "publishFailedRetry": "Жариялау сәтсіз, кейінірек қайталап көріңіз",
+    "publishFailed": "Жариялау сәтсіз",
+    "replySuccess": "Жауап жарияланды",
+    "replyFailed": "Жауап сәтсіз",
+    "floorOwner": "Автор",
+    "floorNumber": "{n} қабат",
+    "publishSectionPlaceholder": "Бөлімді таңдаңыз"
   },
   "comment": {
     "justNow": "Дәл қазір",

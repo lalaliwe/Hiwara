@@ -20,7 +20,13 @@
     "fetchRecommendFailed": "ۇسىنىستاردى جۇكتەۋ ساتسىز اياقتالدى",
     "fetchVideoListFailed": "بەينە تىزىمىن جۇكتەۋ ساتسىز اياقتالدى",
     "fetchImageListFailed": "سۋرەت تىزىمىن جۇكتەۋ ساتسىز اياقتالدى",
-    "fetchUserInfoFailed": "پايدالانۋشى اقپاراتىن الۋ ساتسىز اياقتالدى"
+    "fetchUserInfoFailed": "پايدالانۋشى اقپاراتىن الۋ ساتسىز اياقتالدى",
+    "loading": "جۇكتەلۋدە...",
+    "retry": "قايتالاۋ ءۇشىن باسىڭىز",
+    "loadFailedSuffix": "جۇكتەۋ ساتسىز اياقتالدى، ",
+    "reachedBottomCat": "سوڭىنا جەتتى~",
+    "today": "بۇگىن",
+    "error": "قاتە"
   },
   "setup": {
     "title": "پارامەتىرلەر",
@@ -215,7 +221,8 @@
       "faq": "جىى قويىلاتىن سۇراقتار",
       "links": "سىلتەمەلەر",
       "aboutText": "بۇل قوسىمشا MPL-2.0 اشىق باستاپقى كود ليتسەنزياسىن ساقتايدى. ونى كوممەرتسيالىق ماقساتتاردا پايدالانباڭىز.",
-      "noRecords": "{type} جازبالارى جوق"
+      "noRecords": "{type} جازبالارى جوق",
+      "notImplemented": "بۇل فۋنكتسيا قولجەتىمسىز"
     },
     "forum": {
       "listLoadFailed": "تىزىمدى جۇكتەۋ ساتسىز اياقتالدى",
@@ -330,7 +337,11 @@
     "volume": "دىبىس: {n}%",
     "rewind10s": "10s ارتقا",
     "forward10s": "10s العا",
-    "switchComplete": "سەرۆەر اۋىستىرۋ اياقتالدى"
+    "switchComplete": "سەرۆەر اۋىستىرۋ اياقتالدى",
+    "recommendTab": "ۇسىنىلادى",
+    "replay": "قايتا ويناتۋ",
+    "reload": "قايتا جۇكتەۋ",
+    "unknownTitle": "بەلگىسىز تاقىرىپ"
   },
   "imageView": {
     "loading": "دەرەكتەر جۇكتەلۋدە",
@@ -350,19 +361,32 @@
     "imageId": "سۋرەت ID {id}",
     "resolution": "رۇقسات {res}",
     "expandAll": "بارلىعىن كەڭەيتۋ",
-    "collapse": "جيۋ"
+    "collapse": "جيۋ",
+    "noImage": "سۋرەت جوق"
   },
   "favorites": {
     "title": "مەنىڭ تاڭداۋلىم",
     "videoTab": "بەينە",
-    "imageTab": "سۋرەت"
+    "imageTab": "سۋرەت",
+    "videoLoadFailed": "تاڭداۋلى بەينەلەردى جۇكتەۋ ساتسىز",
+    "imageLoadFailed": "تاڭداۋلى سۋرەتتەردى جۇكتەۋ ساتسىز",
+    "videoLoadFailedTip": "تاڭداۋلى بەينەلەردى جۇكتەۋ ساتسىز~",
+    "imageLoadFailedTip": "تاڭداۋلى سۋرەتتەردى جۇكتەۋ ساتسىز~",
+    "videoEmpty": "تاڭداۋلى بەينەلەر جوق",
+    "imageEmpty": "تاڭداۋلى سۋرەتتەر جوق"
   },
   "friends": {
     "title": "{type}",
     "followTab": "جازىلىمدار",
     "fansTab": "فاناتتار",
     "friendTab": "دوستار",
-    "loading": "دەرەكتەر جۇكتەلۋدە"
+    "loading": "دەرەكتەر جۇكتەلۋدە",
+    "friendListFailed": "دوستار تىزىمىن جۇكتەۋ ساتسىز~",
+    "friendEmpty": "دوستار مازمۇنى جوق",
+    "followListFailed": "جازىلىمدار تىزىمىن جۇكتەۋ ساتسىز~",
+    "followEmpty": "جازىلىم مازمۇنى جوق",
+    "fansListFailed": "فاناتتار تىزىمىن جۇكتەۋ ساتسىز~",
+    "fansEmpty": "فاناتتار مازمۇنى جوق"
   },
   "offlineCache": {
     "title": "وفلاين كەش",
@@ -400,12 +424,27 @@
     "loadingImageFailed": "سۋرەت ىزدەۋ ناتيجەلەرىن جۇكتەۋ ساتسىز اياقتالدى",
     "loadingUserFailed": "پايدالانۋشى ىزدەۋ ناتيجەلەرىن جۇكتەۋ ساتسىز اياقتالدى",
     "historyLabel": "ىزدەۋ تاريحى",
-    "recommendLabel": "تابۋ"
+    "recommendLabel": "تابۋ",
+    "videoFailedTip": "بەينە تىزىمىن جۇكتەۋ ساتسىز~",
+    "videoEmpty": "بەينە مازمۇنى جوق",
+    "imageFailedTip": "سۋرەت تىزىمىن جۇكتەۋ ساتسىز~",
+    "imageEmpty": "سۋرەت مازمۇنى جوق",
+    "userFailedTip": "پايدالانۋشىلار تىزىمىن جۇكتەۋ ساتسىز~",
+    "userEmpty": "پايدالانۋشى مازمۇنى جوق",
+    "reachedBottom": "سوڭىنا جەتتى~"
   },
   "zone": {
     "videoTab": "بەينە",
     "imageTab": "سۋرەت",
-    "publishTab": "جاريالاۋ"
+    "publishTab": "جاريالاۋ",
+    "videoFailedTip": "بەينە تىزىمىن جۇكتەۋ ساتسىز~",
+    "videoEmpty": "بەينە مازمۇنى جوق",
+    "imageFailedTip": "سۋرەت تىزىمىن جۇكتەۋ ساتسىز~",
+    "imageEmpty": "سۋرەت مازمۇنى جوق",
+    "followers": "جازىلىمدار",
+    "fans": "فاناتتار",
+    "editProfile": "پروفيلدى وڭدەۋ",
+    "detail": "تولىعىراق"
   },
   "forum": {
     "sections": {
@@ -441,7 +480,23 @@
     "publishTitlePlaceholder": "جاريالانىم تاقىرىبىن ەنگىزىڭىز",
     "publishBody": "مازمۇنى",
     "publishBodyPlaceholder": "جاريالانىم ماتىنىن ەنگىزىڭىز، Markdown قولدايدى",
-    "publishSubmit": "جاريالانىمدى جىبەرۋ"
+    "publishSubmit": "جاريالانىمدى جىبەرۋ",
+    "fetchListFailed": "فورۋم جاريالانىمدارىن جۇكتەۋ ساتسىز",
+    "fetchDetailFailed": "جاريالانىم ەگجەي-تەگجەيىن جۇكتەۋ ساتسىز",
+    "fetchSectionsFailed": "بولىمدەردى جۇكتەۋ ساتسىز",
+    "fetchDataFailed": "فورۋم دەرەكتەرىن جۇكتەۋ ساتسىز",
+    "postDetail": "جاريالانىم ەگجەي-تەگجەيى",
+    "titleRequired": "تاقىرىپ ەنگىزىڭىز",
+    "bodyRequired": "مازمۇن ەنگىزىڭىز",
+    "sectionRequired": "بولىمدى تاڭداڭىز",
+    "publishSuccess": "جاريالانىم جىبەرىلدى",
+    "publishFailedRetry": "جاريالاۋ ساتسىز، كەيىنىرەك قايتالاپ كورىڭىز",
+    "publishFailed": "جاريالاۋ ساتسىز",
+    "replySuccess": "جاۋاپ جاريالاندى",
+    "replyFailed": "جاۋاپ ساتسىز",
+    "floorOwner": "اۆتور",
+    "floorNumber": "{n} قابات",
+    "publishSectionPlaceholder": "بولىمدى تاڭداڭىز"
   },
   "comment": {
     "justNow": "دال قازىر",

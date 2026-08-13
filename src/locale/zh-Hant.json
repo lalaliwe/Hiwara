@@ -20,7 +20,13 @@
     "fetchRecommendFailed": "插畫推薦獲取失敗",
     "fetchVideoListFailed": "獲取影片列表失敗",
     "fetchImageListFailed": "獲取插畫列表失敗",
-    "fetchUserInfoFailed": "獲取使用者資訊失敗"
+    "fetchUserInfoFailed": "獲取使用者資訊失敗",
+    "loading": "載入中...",
+    "retry": "點擊重試",
+    "loadFailedSuffix": "載入失敗，",
+    "reachedBottomCat": "已經到底了喵~",
+    "today": "今天",
+    "error": "錯誤"
   },
   "setup": {
     "title": "設定",
@@ -215,7 +221,8 @@
       "faq": "常見問題",
       "links": "相關連結",
       "aboutText": "本應用程式遵循MPL-2.0開源協議，請勿用於任何商業用途。",
-      "noRecords": "{type}暫無記錄"
+      "noRecords": "{type}暫無記錄",
+      "notImplemented": "功能未開放"
     },
     "forum": {
       "listLoadFailed": "列表載入失敗",
@@ -330,7 +337,11 @@
     "volume": "音量: {n}%",
     "rewind10s": "快退 10s",
     "forward10s": "快進 10s",
-    "switchComplete": "伺服器切換完成"
+    "switchComplete": "伺服器切換完成",
+    "recommendTab": "推薦",
+    "replay": "重新播放",
+    "reload": "重新載入",
+    "unknownTitle": "未知標題"
   },
   "imageView": {
     "loading": "正在載入數據",
@@ -350,19 +361,32 @@
     "imageId": "插畫ID {id}",
     "resolution": "解析度 {res}",
     "expandAll": "展開全部",
-    "collapse": "收起"
+    "collapse": "收起",
+    "noImage": "暫無圖片"
   },
   "favorites": {
     "title": "我的收藏",
     "videoTab": "影片",
-    "imageTab": "插畫"
+    "imageTab": "插畫",
+    "videoLoadFailed": "載入影片收藏失敗",
+    "imageLoadFailed": "載入插畫收藏失敗",
+    "videoLoadFailedTip": "影片收藏載入失敗了喵~",
+    "imageLoadFailedTip": "插畫收藏載入失敗了喵~",
+    "videoEmpty": "暫無影片收藏",
+    "imageEmpty": "暫無插畫收藏"
   },
   "friends": {
     "title": "{type}",
     "followTab": "關注",
     "fansTab": "粉絲",
     "friendTab": "好友",
-    "loading": "數據載入中"
+    "loading": "數據載入中",
+    "friendListFailed": "好友列表載入失敗了喵~",
+    "friendEmpty": "暫無好友內容",
+    "followListFailed": "關注列表載入失敗了喵~",
+    "followEmpty": "暫無關注內容",
+    "fansListFailed": "粉絲列表載入失敗了喵~",
+    "fansEmpty": "暫無粉絲內容"
   },
   "offlineCache": {
     "title": "離線快取",
@@ -400,12 +424,27 @@
     "loadingImageFailed": "載入插畫搜尋結果失敗",
     "loadingUserFailed": "載入使用者搜尋結果失敗",
     "historyLabel": "搜尋歷史",
-    "recommendLabel": "搜尋發現"
+    "recommendLabel": "搜尋發現",
+    "videoFailedTip": "影片列表載入失敗了喵~",
+    "videoEmpty": "暫無影片內容",
+    "imageFailedTip": "插畫列表載入失敗了喵~",
+    "imageEmpty": "暫無插畫內容",
+    "userFailedTip": "使用者列表載入失敗了喵~",
+    "userEmpty": "暫無使用者內容",
+    "reachedBottom": "已經到底了喵~"
   },
   "zone": {
     "videoTab": "影片",
     "imageTab": "插畫",
-    "publishTab": "發布"
+    "publishTab": "發布",
+    "videoFailedTip": "影片列表載入失敗了喵~",
+    "videoEmpty": "暫無影片內容",
+    "imageFailedTip": "插畫列表載入失敗了喵~",
+    "imageEmpty": "暫無插畫內容",
+    "followers": "關注",
+    "fans": "粉絲",
+    "editProfile": "編輯資料",
+    "detail": "詳情"
   },
   "forum": {
     "sections": {
@@ -441,7 +480,23 @@
     "publishTitlePlaceholder": "請輸入帖子標題",
     "publishBody": "內容",
     "publishBodyPlaceholder": "請輸入帖子內容，支援 Markdown 語法",
-    "publishSubmit": "發布帖子"
+    "publishSubmit": "發布帖子",
+    "fetchListFailed": "獲取論壇帖子列表失敗",
+    "fetchDetailFailed": "獲取帖子詳情失敗",
+    "fetchSectionsFailed": "獲取版塊列表失敗",
+    "fetchDataFailed": "獲取論壇數據失敗",
+    "postDetail": "帖子詳情",
+    "titleRequired": "請輸入標題",
+    "bodyRequired": "請輸入內容",
+    "sectionRequired": "請選擇版塊",
+    "publishSuccess": "發帖成功",
+    "publishFailedRetry": "發帖失敗，請稍後重試",
+    "publishFailed": "發帖失敗",
+    "replySuccess": "回覆成功",
+    "replyFailed": "回覆失敗",
+    "floorOwner": "樓主",
+    "floorNumber": "第{n}樓",
+    "publishSectionPlaceholder": "請選擇版塊"
   },
   "comment": {
     "justNow": "剛剛",

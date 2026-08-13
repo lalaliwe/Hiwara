@@ -20,7 +20,13 @@
     "fetchRecommendFailed": "Falha ao carregar recomendações",
     "fetchVideoListFailed": "Falha ao carregar lista de vídeos",
     "fetchImageListFailed": "Falha ao carregar lista de imagens",
-    "fetchUserInfoFailed": "Falha ao obter informações do usuário"
+    "fetchUserInfoFailed": "Falha ao obter informações do usuário",
+    "loading": "Carregando...",
+    "retry": "Clique para tentar novamente",
+    "loadFailedSuffix": "Falha ao carregar, ",
+    "reachedBottomCat": "Chegou ao fim~",
+    "today": "Hoje",
+    "error": "Erro"
   },
   "setup": {
     "title": "Configurações",
@@ -215,7 +221,8 @@
       "faq": "Perguntas frequentes",
       "links": "Links",
       "aboutText": "Este aplicativo segue a licença de código aberto MPL-2.0. Não o utilize para fins comerciais.",
-      "noRecords": "Nenhum registro de {type}"
+      "noRecords": "Nenhum registro de {type}",
+      "notImplemented": "Recurso não disponível"
     },
     "forum": {
       "listLoadFailed": "Falha ao carregar a lista",
@@ -330,7 +337,11 @@
     "volume": "Volume: {n}%",
     "rewind10s": "Retroceder 10s",
     "forward10s": "Avançar 10s",
-    "switchComplete": "Troca de servidor concluída"
+    "switchComplete": "Troca de servidor concluída",
+    "recommendTab": "Recomendado",
+    "replay": "Reproduzir novamente",
+    "reload": "Recarregar",
+    "unknownTitle": "Título desconhecido"
   },
   "imageView": {
     "loading": "Carregando dados",
@@ -350,19 +361,32 @@
     "imageId": "ID da imagem {id}",
     "resolution": "Resolução {res}",
     "expandAll": "Expandir tudo",
-    "collapse": "Recolher"
+    "collapse": "Recolher",
+    "noImage": "Nenhuma imagem"
   },
   "favorites": {
     "title": "Meus favoritos",
     "videoTab": "Vídeo",
-    "imageTab": "Imagem"
+    "imageTab": "Imagem",
+    "videoLoadFailed": "Falha ao carregar vídeos favoritos",
+    "imageLoadFailed": "Falha ao carregar imagens favoritas",
+    "videoLoadFailedTip": "Falha ao carregar vídeos favoritos~",
+    "imageLoadFailedTip": "Falha ao carregar imagens favoritas~",
+    "videoEmpty": "Nenhum vídeo favorito",
+    "imageEmpty": "Nenhuma imagem favorita"
   },
   "friends": {
     "title": "{type}",
     "followTab": "Seguindo",
     "fansTab": "Fãs",
     "friendTab": "Amigos",
-    "loading": "Carregando dados"
+    "loading": "Carregando dados",
+    "friendListFailed": "Falha ao carregar a lista de amigos~",
+    "friendEmpty": "Nenhum conteúdo de amigos",
+    "followListFailed": "Falha ao carregar a lista de seguidos~",
+    "followEmpty": "Nenhum conteúdo de seguidos",
+    "fansListFailed": "Falha ao carregar a lista de fãs~",
+    "fansEmpty": "Nenhum conteúdo de fãs"
   },
   "offlineCache": {
     "title": "Cache offline",
@@ -400,12 +424,27 @@
     "loadingImageFailed": "Falha ao carregar resultados de pesquisa de imagem",
     "loadingUserFailed": "Falha ao carregar resultados de pesquisa de usuário",
     "historyLabel": "Histórico de pesquisa",
-    "recommendLabel": "Descobrir"
+    "recommendLabel": "Descobrir",
+    "videoFailedTip": "Falha ao carregar a lista de vídeos~",
+    "videoEmpty": "Nenhum conteúdo de vídeo",
+    "imageFailedTip": "Falha ao carregar a lista de imagens~",
+    "imageEmpty": "Nenhum conteúdo de imagem",
+    "userFailedTip": "Falha ao carregar a lista de usuários~",
+    "userEmpty": "Nenhum conteúdo de usuário",
+    "reachedBottom": "Chegou ao fim~"
   },
   "zone": {
     "videoTab": "Vídeo",
     "imageTab": "Imagem",
-    "publishTab": "Publicar"
+    "publishTab": "Publicar",
+    "videoFailedTip": "Falha ao carregar a lista de vídeos~",
+    "videoEmpty": "Nenhum conteúdo de vídeo",
+    "imageFailedTip": "Falha ao carregar a lista de imagens~",
+    "imageEmpty": "Nenhum conteúdo de imagem",
+    "followers": "Seguindo",
+    "fans": "Fãs",
+    "editProfile": "Editar perfil",
+    "detail": "Detalhes"
   },
   "forum": {
     "sections": {
@@ -441,7 +480,23 @@
     "publishTitlePlaceholder": "Insira o título da publicação",
     "publishBody": "Conteúdo",
     "publishBodyPlaceholder": "Insira o conteúdo, suporta Markdown",
-    "publishSubmit": "Enviar publicação"
+    "publishSubmit": "Enviar publicação",
+    "fetchListFailed": "Falha ao carregar as publicações do fórum",
+    "fetchDetailFailed": "Falha ao carregar os detalhes da publicação",
+    "fetchSectionsFailed": "Falha ao carregar as seções",
+    "fetchDataFailed": "Falha ao carregar os dados do fórum",
+    "postDetail": "Detalhes da publicação",
+    "titleRequired": "Digite um título",
+    "bodyRequired": "Digite o conteúdo",
+    "sectionRequired": "Selecione uma seção",
+    "publishSuccess": "Publicação criada",
+    "publishFailedRetry": "Falha ao publicar, tente novamente mais tarde",
+    "publishFailed": "Falha ao publicar",
+    "replySuccess": "Resposta publicada",
+    "replyFailed": "Falha ao responder",
+    "floorOwner": "OP",
+    "floorNumber": "Andar {n}",
+    "publishSectionPlaceholder": "Selecione uma seção"
   },
   "comment": {
     "justNow": "Agora mesmo",

@@ -20,7 +20,13 @@
     "fetchRecommendFailed": "فشل تحميل التوصيات",
     "fetchVideoListFailed": "فشل تحميل قائمة الفيديو",
     "fetchImageListFailed": "فشل تحميل قائمة الصور",
-    "fetchUserInfoFailed": "فشل الحصول على معلومات المستخدم"
+    "fetchUserInfoFailed": "فشل الحصول على معلومات المستخدم",
+    "loading": "جارٍ التحميل...",
+    "retry": "انقر لإعادة المحاولة",
+    "loadFailedSuffix": "فشل التحميل، ",
+    "reachedBottomCat": "وصلت إلى النهاية~",
+    "today": "اليوم",
+    "error": "خطأ"
   },
   "setup": {
     "title": "الإعدادات",
@@ -215,7 +221,8 @@
       "faq": "الأسئلة الشائعة",
       "links": "روابط ذات صلة",
       "aboutText": "هذا التطبيق يتبع رخصة المصدر المفتوح MPL-2.0. يُرجى عدم استخدامه لأي أغراض تجارية.",
-      "noRecords": "لا توجد سجلات {type}"
+      "noRecords": "لا توجد سجلات {type}",
+      "notImplemented": "الوظيفة غير متوفرة"
     },
     "forum": {
       "listLoadFailed": "فشل تحميل القائمة",
@@ -330,7 +337,11 @@
     "volume": "الصوت: {n}%",
     "rewind10s": "رجوع 10ث",
     "forward10s": "تقديم 10ث",
-    "switchComplete": "تم تبديل الخادم بنجاح"
+    "switchComplete": "تم تبديل الخادم بنجاح",
+    "recommendTab": "موصى به",
+    "replay": "إعادة التشغيل",
+    "reload": "إعادة التحميل",
+    "unknownTitle": "عنوان غير معروف"
   },
   "imageView": {
     "loading": "جارٍ تحميل البيانات",
@@ -350,19 +361,32 @@
     "imageId": "معرف الصورة {id}",
     "resolution": "الدقة {res}",
     "expandAll": "عرض الكل",
-    "collapse": "طي"
+    "collapse": "طي",
+    "noImage": "لا توجد صورة"
   },
   "favorites": {
     "title": "المفضلة",
     "videoTab": "فيديو",
-    "imageTab": "صور"
+    "imageTab": "صور",
+    "videoLoadFailed": "فشل تحميل الفيديوهات المفضلة",
+    "imageLoadFailed": "فشل تحميل الصور المفضلة",
+    "videoLoadFailedTip": "فشل تحميل الفيديوهات المفضلة~",
+    "imageLoadFailedTip": "فشل تحميل الصور المفضلة~",
+    "videoEmpty": "لا توجد فيديوهات مفضلة",
+    "imageEmpty": "لا توجد صور مفضلة"
   },
   "friends": {
     "title": "{type}",
     "followTab": "متابعة",
     "fansTab": "معجبون",
     "friendTab": "أصدقاء",
-    "loading": "جارٍ تحميل البيانات"
+    "loading": "جارٍ تحميل البيانات",
+    "friendListFailed": "فشل تحميل قائمة الأصدقاء~",
+    "friendEmpty": "لا يوجد محتوى أصدقاء",
+    "followListFailed": "فشل تحميل قائمة المتابَعين~",
+    "followEmpty": "لا يوجد محتوى متابعة",
+    "fansListFailed": "فشل تحميل قائمة المعجبين~",
+    "fansEmpty": "لا يوجد محتوى معجبين"
   },
   "offlineCache": {
     "title": "ذاكرة تخزين مؤقت غير متصل",
@@ -400,12 +424,27 @@
     "loadingImageFailed": "فشل تحميل نتائج بحث الصور",
     "loadingUserFailed": "فشل تحميل نتائج بحث المستخدم",
     "historyLabel": "سجل البحث",
-    "recommendLabel": "اكتشاف"
+    "recommendLabel": "اكتشاف",
+    "videoFailedTip": "فشل تحميل قائمة الفيديو~",
+    "videoEmpty": "لا يوجد محتوى فيديو",
+    "imageFailedTip": "فشل تحميل قائمة الصور~",
+    "imageEmpty": "لا يوجد محتوى صور",
+    "userFailedTip": "فشل تحميل قائمة المستخدمين~",
+    "userEmpty": "لا يوجد محتوى مستخدم",
+    "reachedBottom": "وصلت إلى النهاية~"
   },
   "zone": {
     "videoTab": "فيديو",
     "imageTab": "صور",
-    "publishTab": "نشر"
+    "publishTab": "نشر",
+    "videoFailedTip": "فشل تحميل قائمة الفيديو~",
+    "videoEmpty": "لا يوجد محتوى فيديو",
+    "imageFailedTip": "فشل تحميل قائمة الصور~",
+    "imageEmpty": "لا يوجد محتوى صور",
+    "followers": "المتابَعون",
+    "fans": "المعجبون",
+    "editProfile": "تعديل الملف الشخصي",
+    "detail": "التفاصيل"
   },
   "forum": {
     "sections": {
@@ -441,7 +480,23 @@
     "publishTitlePlaceholder": "أدخل عنوان المنشور",
     "publishBody": "المحتوى",
     "publishBodyPlaceholder": "أدخل محتوى المنشور، يدعم Markdown",
-    "publishSubmit": "نشر المنشور"
+    "publishSubmit": "نشر المنشور",
+    "fetchListFailed": "فشل تحميل منشورات المنتدى",
+    "fetchDetailFailed": "فشل تحميل تفاصيل المنشور",
+    "fetchSectionsFailed": "فشل تحميل الأقسام",
+    "fetchDataFailed": "فشل تحميل بيانات المنتدى",
+    "postDetail": "تفاصيل المنشور",
+    "titleRequired": "يرجى إدخال عنوان",
+    "bodyRequired": "يرجى إدخال المحتوى",
+    "sectionRequired": "يرجى اختيار القسم",
+    "publishSuccess": "تم نشر المنشور",
+    "publishFailedRetry": "فشل النشر، حاول مرة أخرى لاحقاً",
+    "publishFailed": "فشل النشر",
+    "replySuccess": "تم نشر الرد",
+    "replyFailed": "فشل الرد",
+    "floorOwner": "صاحب الموضوع",
+    "floorNumber": "الطابق {n}",
+    "publishSectionPlaceholder": "يرجى اختيار القسم"
   },
   "comment": {
     "justNow": "الآن",

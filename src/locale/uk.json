@@ -20,7 +20,13 @@
     "fetchRecommendFailed": "Не вдалося завантажити рекомендації",
     "fetchVideoListFailed": "Не вдалося завантажити список відео",
     "fetchImageListFailed": "Не вдалося завантажити список зображень",
-    "fetchUserInfoFailed": "Не вдалося отримати інформацію про користувача"
+    "fetchUserInfoFailed": "Не вдалося отримати інформацію про користувача",
+    "loading": "Завантаження...",
+    "retry": "Натисніть для повторної спроби",
+    "loadFailedSuffix": "Не вдалося завантажити, ",
+    "reachedBottomCat": "Досягнуто кінця~",
+    "today": "Сьогодні",
+    "error": "Помилка"
   },
   "setup": {
     "title": "Налаштування",
@@ -215,7 +221,8 @@
       "faq": "Часті запитання",
       "links": "Посилання",
       "aboutText": "Цей додаток слідує ліцензії з відкритим кодом MPL-2.0. Будь ласка, не використовуйте його в комерційних цілях.",
-      "noRecords": "Немає записів {type}"
+      "noRecords": "Немає записів {type}",
+      "notImplemented": "Функцію не реалізовано"
     },
     "forum": {
       "listLoadFailed": "Не вдалося завантажити список",
@@ -330,7 +337,11 @@
     "volume": "Гучність: {n}%",
     "rewind10s": "Назад 10с",
     "forward10s": "Вперед 10с",
-    "switchComplete": "Перемикання сервера завершено"
+    "switchComplete": "Перемикання сервера завершено",
+    "recommendTab": "Рекомендації",
+    "replay": "Відтворити знову",
+    "reload": "Перезавантажити",
+    "unknownTitle": "Невідома назва"
   },
   "imageView": {
     "loading": "Завантаження даних",
@@ -350,19 +361,32 @@
     "imageId": "ID зображення {id}",
     "resolution": "Роздільна здатність {res}",
     "expandAll": "Розгорнути все",
-    "collapse": "Згорнути"
+    "collapse": "Згорнути",
+    "noImage": "Немає зображення"
   },
   "favorites": {
     "title": "Моє обране",
     "videoTab": "Відео",
-    "imageTab": "Зображення"
+    "imageTab": "Зображення",
+    "videoLoadFailed": "Не вдалося завантажити відео з обраного",
+    "imageLoadFailed": "Не вдалося завантажити зображення з обраного",
+    "videoLoadFailedTip": "Не вдалося завантажити відео з обраного~",
+    "imageLoadFailedTip": "Не вдалося завантажити зображення з обраного~",
+    "videoEmpty": "Немає відео в обраному",
+    "imageEmpty": "Немає зображень в обраному"
   },
   "friends": {
     "title": "{type}",
     "followTab": "Підписки",
     "fansTab": "Фанати",
     "friendTab": "Друзі",
-    "loading": "Завантаження даних"
+    "loading": "Завантаження даних",
+    "friendListFailed": "Не вдалося завантажити список друзів~",
+    "friendEmpty": "Немає вмісту друзів",
+    "followListFailed": "Не вдалося завантажити список підписок~",
+    "followEmpty": "Немає вмісту підписок",
+    "fansListFailed": "Не вдалося завантажити список фанатів~",
+    "fansEmpty": "Немає вмісту фанатів"
   },
   "offlineCache": {
     "title": "Офлайн-кеш",
@@ -400,12 +424,27 @@
     "loadingImageFailed": "Не вдалося завантажити результати пошуку зображень",
     "loadingUserFailed": "Не вдалося завантажити результати пошуку користувачів",
     "historyLabel": "Історія пошуку",
-    "recommendLabel": "Рекомендації"
+    "recommendLabel": "Рекомендації",
+    "videoFailedTip": "Не вдалося завантажити список відео~",
+    "videoEmpty": "Немає вмісту відео",
+    "imageFailedTip": "Не вдалося завантажити список зображень~",
+    "imageEmpty": "Немає вмісту зображень",
+    "userFailedTip": "Не вдалося завантажити список користувачів~",
+    "userEmpty": "Немає вмісту користувачів",
+    "reachedBottom": "Досягнуто кінця~"
   },
   "zone": {
     "videoTab": "Відео",
     "imageTab": "Зображення",
-    "publishTab": "Опублікувати"
+    "publishTab": "Опублікувати",
+    "videoFailedTip": "Не вдалося завантажити список відео~",
+    "videoEmpty": "Немає вмісту відео",
+    "imageFailedTip": "Не вдалося завантажити список зображень~",
+    "imageEmpty": "Немає вмісту зображень",
+    "followers": "Підписки",
+    "fans": "Фанати",
+    "editProfile": "Редагувати профіль",
+    "detail": "Деталі"
   },
   "forum": {
     "sections": {
@@ -441,7 +480,23 @@
     "publishTitlePlaceholder": "Введіть заголовок",
     "publishBody": "Зміст",
     "publishBodyPlaceholder": "Введіть вміст, підтримується Markdown",
-    "publishSubmit": "Опублікувати"
+    "publishSubmit": "Опублікувати",
+    "fetchListFailed": "Не вдалося завантажити публікації форуму",
+    "fetchDetailFailed": "Не вдалося завантажити деталі публікації",
+    "fetchSectionsFailed": "Не вдалося завантажити розділи",
+    "fetchDataFailed": "Не вдалося завантажити дані форуму",
+    "postDetail": "Деталі публікації",
+    "titleRequired": "Введіть заголовок",
+    "bodyRequired": "Введіть вміст",
+    "sectionRequired": "Виберіть розділ",
+    "publishSuccess": "Публікацію створено",
+    "publishFailedRetry": "Помилка публікації, спробуйте пізніше",
+    "publishFailed": "Помилка публікації",
+    "replySuccess": "Відповідь опубліковано",
+    "replyFailed": "Помилка відповіді",
+    "floorOwner": "Автор",
+    "floorNumber": "{n} поверх",
+    "publishSectionPlaceholder": "Виберіть розділ"
   },
   "comment": {
     "justNow": "Щойно",
