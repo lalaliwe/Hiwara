@@ -1,0 +1,116 @@
+name: Build Sideloadable iOS IPA
+
+on:
+  push:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  build-ipa:
+    name: Build Sideloadable iOS IPA
+    runs-on: macos-14
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Setup Rust Toolchain
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: aarch64-apple-ios
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Initialize Tauri iOS Project
+        run: |
+          CI=true npx tauri ios init
+
+      - name: Build Web Assets
+        run: npm run build
+
+      - name: Build Xcode Archive (.app)
+        run: |
+          set +e
+          PROJECT_FILE=$(find src-tauri/gen/apple -name "*.xcodeproj" -maxdepth 1 | head -n 1)
+          WORKSPACE_FILE=$(find src-tauri/gen/apple -name "*.xcworkspace" -maxdepth 1 | head -n 1)
+
+          if [ -n "$WORKSPACE_FILE" ]; then
+            TARGET_ARG="-workspace $WORKSPACE_FILE"
+          else
+            TARGET_ARG="-project $PROJECT_FILE"
+          fi
+
+          echo "Target argument: $TARGET_ARG"
+
+          # Determine scheme name dynamically (e.g. Hiwara_iOS)
+          SCHEME=$(xcodebuild $TARGET_ARG -list -json | node -e '
+            const fs = require("fs");
+            try {
+              const input = JSON.parse(fs.readFileSync(0, "utf-8"));
+              const schemes = input.project?.schemes || input.workspace?.schemes || [];
+              const target = schemes.find(s => s.toLowerCase().includes("ios")) || schemes[0] || "Hiwara_iOS";
+              console.log(target);
+            } catch (e) {
+              console.log("Hiwara_iOS");
+            }
+          ')
+
+          echo "Building scheme: $SCHEME"
+
+          xcodebuild \
+            $TARGET_ARG \
+            -scheme "$SCHEME" \
+            -configuration Release \
+            -sdk iphoneos \
+            -destination 'generic/platform=iOS' \
+            -derivedDataPath build \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGN_IDENTITY="" \
+            CODE_SIGN_STYLE="Manual" \
+            DEVELOPMENT_TEAM="" \
+            ONLY_ACTIVE_ARCH=NO \
+            ARCHS=arm64 \
+            VALIDATE_PRODUCT=NO \
+            COMPILER_INDEX_STORE_ENABLE=NO \
+            clean build > build_output.log 2>&1
+
+          BUILD_STATUS=$?
+          if [ $BUILD_STATUS -ne 0 ]; then
+            echo "::error::Xcode build failed with status $BUILD_STATUS"
+            echo "========== XCODEBUILD ERROR LOG =========="
+            grep -E "error:|fatal error:|BUILD FAILED|failed with exit code" build_output.log -B 2 -A 4 || tail -n 120 build_output.log
+            echo "=========================================="
+            cat build_output.log | tail -n 120
+            exit $BUILD_STATUS
+          fi
+          echo "Xcode build succeeded!"
+
+      - name: Package .ipa File
+        run: |
+          mkdir -p build/Payload
+          APP_PATH=$(find build/Build/Products/Release-iphoneos -name "*.app" -maxdepth 1 | head -n 1)
+          echo "Found app bundle at: $APP_PATH"
+          if [ -z "$APP_PATH" ]; then
+            echo "::error::Could not find compiled .app bundle"
+            exit 1
+          fi
+          cp -r "$APP_PATH" build/Payload/
+          cd build
+          zip -r -9 Hiwara.ipa Payload
+          cd ..
+          echo "IPA successfully packaged at build/Hiwara.ipa"
+
+      - name: Upload IPA Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Hiwara-iOS-Sideloadable
+          path: build/Hiwara.ipa
+          retention-days: 14
