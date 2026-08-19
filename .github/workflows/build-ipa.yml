@@ -58,12 +58,7 @@ jobs:
 
       - name: Build iOS App with Tauri CLI
         run: |
-          CI=true npx tauri ios build --target aarch64 --verbose -- \
-            CODE_SIGNING_ALLOWED=NO \
-            CODE_SIGNING_REQUIRED=NO \
-            CODE_SIGN_IDENTITY="" \
-            CODE_SIGN_STYLE="Manual" \
-            DEVELOPMENT_TEAM=""
+          CI=true npx tauri ios build --target aarch64 --verbose
 
       - name: Package .ipa File
         run: |
