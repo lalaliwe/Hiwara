@@ -30,17 +30,20 @@ class ToastHandler {
         let displayDuration: TimeInterval = duration.lowercased() == "long" ? 3.5 : 2.0
         
         // Get the key window's root view controller
-        guard let viewController = UIApplication.shared.windows.first?.rootViewController else {
+        guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+              let window = windowScene.windows.first(where: { $0.isKeyWindow }),
+              let viewController = window.rootViewController else {
             print("Could not find root view controller to present toast")
             return
         }
         
         // Create the toast view
+        let font = UIFont.systemFont(ofSize: 16)
         let toastLabel = UILabel()
         toastLabel.backgroundColor = UIColor.black.withAlphaComponent(0.6)
         toastLabel.textColor = UIColor.white
         toastLabel.textAlignment = .center
-        toastLabel.font = UIFont.systemFont(ofSize: 16)
+        toastLabel.font = font
         toastLabel.text = message
         toastLabel.alpha = 0.0
         toastLabel.layer.cornerRadius = 8
@@ -52,7 +55,7 @@ class ToastHandler {
         let requiredSize = message.boundingRect(
             with: maxSize,
             options: [.usesLineFragmentOrigin, .usesFontLeading],
-            attributes: [NSAttributedString.Key.font: toastLabel.font],
+            attributes: [NSAttributedString.Key.font: font],
             context: nil
         ).size
         

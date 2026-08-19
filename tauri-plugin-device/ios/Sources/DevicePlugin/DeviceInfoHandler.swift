@@ -16,7 +16,6 @@ class DeviceInfoHandler: NSObject {
         let deviceModel = UIDevice.current.model
         #elseif os(macOS)
         let osName = "macOS"
-        // 获取macOS详细版本号,如 "14.2.1" 或 "Sonoma 14.2.1"
         let version = ProcessInfo.processInfo.operatingSystemVersion
         let osVersion = "\(version.majorVersion).\(version.minorVersion).\(version.patchVersion)"
         let deviceModel = "Mac"
@@ -43,7 +42,7 @@ class DeviceInfoHandler: NSObject {
         UIDevice.current.isBatteryMonitoringEnabled = true
         
         let level: Int
-        if UIDevice.current.batteryLevel == UIDevice.BatteryLevel.unknown {
+        if UIDevice.current.batteryLevel < 0 {
             level = 100
         } else {
             level = Int(UIDevice.current.batteryLevel * 100)
