@@ -39,6 +39,20 @@ jobs:
         run: |
           CI=true npx tauri ios init
 
+      - name: Patch Xcode Project for Unsigned Sideloading
+        run: |
+          # Switch signing style from Automatic to Manual and disable signing requirements
+          find src-tauri/gen/apple -name "project.pbxproj" -exec sed -i '' 's/CODE_SIGN_STYLE = Automatic;/CODE_SIGN_STYLE = Manual;/g' {} +
+          find src-tauri/gen/apple -name "project.pbxproj" -exec sed -i '' 's/CODE_SIGN_IDENTITY = "iPhone Developer";/CODE_SIGN_IDENTITY = "";/g' {} +
+          find src-tauri/gen/apple -name "project.pbxproj" -exec sed -i '' 's/CODE_SIGNING_REQUIRED = YES;/CODE_SIGNING_REQUIRED = NO;/g' {} +
+          find src-tauri/gen/apple -name "project.pbxproj" -exec sed -i '' '/buildSettings = {/a\
+          				CODE_SIGNING_ALLOWED = NO;\
+          				CODE_SIGNING_REQUIRED = NO;\
+          				CODE_SIGN_IDENTITY = "";\
+          				CODE_SIGN_STYLE = Manual;\
+          ' {} +
+          echo "Patched project.pbxproj for manual unsigned build."
+
       - name: Build Web Assets
         run: npm run build
 
