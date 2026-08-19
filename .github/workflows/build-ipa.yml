@@ -45,6 +45,12 @@ jobs:
       - name: Build Xcode Archive (.app)
         run: |
           set +e
+
+          # Create dummy addr files in temp dirs as a safeguard against Tauri CLI dev-server addr check
+          mkdir -p "$TMPDIR"
+          echo "http://127.0.0.1:1420" > "$TMPDIR/com.qisato.hiwara-server-addr"
+          echo "http://127.0.0.1:1420" > "/tmp/com.qisato.hiwara-server-addr"
+
           PROJECT_FILE=$(find src-tauri/gen/apple -name "*.xcodeproj" -maxdepth 1 | head -n 1)
           WORKSPACE_FILE=$(find src-tauri/gen/apple -name "*.xcworkspace" -maxdepth 1 | head -n 1)
 
@@ -73,7 +79,7 @@ jobs:
 
           mkdir -p build
 
-          # Use xcodebuild archive to ensure Release configuration and packaging
+          # Use xcodebuild archive with Release configuration and clean preprocessor definitions
           xcodebuild archive \
             $TARGET_ARG \
             -scheme "$SCHEME" \
@@ -85,6 +91,7 @@ jobs:
             CODE_SIGN_IDENTITY="" \
             CODE_SIGN_STYLE="Manual" \
             DEVELOPMENT_TEAM="" \
+            GCC_PREPROCESSOR_DEFINITIONS="" \
             CONFIGURATION=Release \
             clean archive > build_output.log 2>&1
 
