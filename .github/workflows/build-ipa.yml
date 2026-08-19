@@ -8,16 +8,21 @@ on:
 jobs:
   build-ipa:
     name: Build Sideloadable iOS IPA
-    runs-on: macos-14
+    runs-on: macos-15
 
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
 
+      - name: Select Xcode 16
+        uses: maxim-lobarev/setup-xcode@v1
+        with:
+          xcode-version: 'latest-stable'
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: 'npm'
 
       - name: Setup Rust Toolchain
@@ -49,7 +54,7 @@ jobs:
 
           echo "Target argument: $TARGET_ARG"
 
-          # Determine scheme name dynamically (e.g. Hiwara_iOS)
+          # Determine scheme name dynamically (e.g. Hiwara_iOS or hiwara_iOS)
           SCHEME=$(xcodebuild $TARGET_ARG -list -json | node -e '
             const fs = require("fs");
             try {
